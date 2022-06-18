@@ -1,0 +1,267 @@
+/* Dechir */
+
+.left{
+    float:left
+}
+
+li{
+    float:left;
+    list-style-type:none;
+}
+
+ul{
+    float:left;
+    width:100%;
+}
+
+html,body{
+    margin:0;
+    padding:0;
+    flex-direction:column;
+}
+
+body{
+    margin-top:100px;
+    width:100%;
+    background-image:url('https://www.wallpaperuse.com/wallp/48-481854_m.jpg');
+    background-size:cover;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+    position:relative;
+}
+
+.VerticalText{
+    writing-mode:vertical-rl;
+}
+
+.liCaptured{
+    background-color:rgba(219,199,12,0.829)!important;
+}
+
+.divReglement{
+    margin:auto;
+    padding: 40px;
+    text-align: center;
+    width:800px;
+    min-height: max-content;
+    background-color: rgba(148, 148, 148, 0.829);
+    border-color: rgb(53, 77, 78);
+    border:2px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    box-shadow:2px 2px 2px rgb(0, 0, 0); 
+    -webkit-box-shadow:2px 2px 2px rgb(0, 0, 0);
+}
+
+.Action a{
+    color: black;
+    text-shadow: grey 1px 1px;
+}
+
+.bodyAccueil{
+    width: 100%;
+    position: relative;
+}
+
+input[value='Deco!']{
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 4px 15px;
+    background-color: rgb(170, 39, 39);
+    border: solid black 1px;
+    border-radius: 10px;
+    color: white;
+}
+
+.bodyAccueil input[value='Deco!']:hover{
+    background-color: rgb(212, 40, 40);
+}
+
+
+/* • Formulaire Login • */
+
+.formlogin{
+    margin:100px auto;
+    padding:20px;
+    width:600px;
+    background-color: rgba(192, 192, 192, 0.8);
+    border-color: rgb(0, 0, 0);
+    border:2px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    box-shadow:2px 2px 2px rgb(0, 0, 0); 
+    -webkit-box-shadow:2px 2px 2px rgb(0, 0, 0);
+    text-align: center;
+}
+
+.formlogin label[for=login], .formlogin label[for=password]{
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    margin: 20px 0px 5px 0px;
+}
+
+.formlogin label[for=name]{
+    text-align: center;
+    font-weight: bold;
+    margin: 20px 0px 5px 0px;
+}
+
+.formlogin input{
+    margin: 0px auto;
+    text-align: center;
+}
+
+#logSubsubmit{
+    margin: 12px auto;
+    padding: 4px 15px;
+    border: solid black 1px;
+    border-radius: 10px;
+    background-color: rgb(35, 149, 255);
+    color: white;
+}
+
+#logSubsubmit:hover{
+    border: solid black 1px;
+    background-color: rgb(25, 111, 192);
+    color: white;
+}
+
+.inscriptionShow{
+    display:block;
+}
+.inscriptionHide{
+    display:none;
+}
+
+
+/* • Menu nav • */
+
+.navMenu{
+    display: block;
+    position: fixed;
+    z-index: 3;
+    top: 0px;
+    left: 10%;
+    width: 80%;
+    min-height: max-content;
+    height: 60px;
+    background: rgb(194,194,194);
+    background: linear-gradient(90deg, rgba(194,194,194,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 75%, rgba(65,65,65,0) 100%);
+}
+
+.ulMenu{
+    margin: 0px;
+    padding: 0px;
+}
+
+.navMenu, .ulMenu{
+    list-style: none;
+    text-align: center;
+}
+
+.ulMenu li{
+    display: inline-block;
+    float: none;
+    margin: 0px 0.5%;
+    padding: 0px 0.5%;
+    height: 60px;
+    line-height: 60px;
+    width: auto;
+    min-width: max-content;
+    font-size: 1vw;
+}
+
+@media (max-width: 880px) 
+{
+    .ulMenu li {
+        font-size: 1.5vw;
+    }
+}
+
+@media (max-width: 560px) 
+{
+    .ulMenu li {
+      font-size: 1.8vw;
+    }
+}
+
+@media (min-width: 1921px) 
+{
+    .ulMenu li {
+        font-size: 0.7vw;
+    }
+}
+
+.ulMenu li:hover{
+    background-color: grey;
+}
+
+.ulMenu li:hover ul{
+    height: 50px;
+    line-height: 50px;
+    overflow: visible;
+}
+
+.ulSousMenu{
+    padding: 0px;
+    position:relative;
+    z-index: 1000;
+    max-height:0;
+    left: 0;
+    right: 0;
+    overflow:hidden;
+}
+
+.ulSousMenu li{
+    background-color: black;
+    display: block;
+    margin: 0px auto;
+    padding: 0px;
+}
+
+.ulSousMenu li:hover{
+    background-color: grey;
+}
+
+
+/* • les liens • */
+
+.ulMenu a{
+    text-decoration: none;
+    display: block;
+    color: #fff;
+    font-size: larger;
+}
+
+.ulMenu li:hover li a{
+    color: #fff;
+    text-transform: inherit;
+}
+
+.ulMenu li:hover a, .ulMenu li li:hover a{
+    color: #fff;
+}
+
+
+/* • Footer • */
+
+footer{
+    height:90px;
+    background:black;
+    width:100%;
+    text-align:center;
+    position:absolute;
+    margin-top:40px;
+}
+.divFooter{
+    color:white;
+    text-align:center;
+}
+
+.Copyright1, .Copyright2{
+    color:white;
+}
+ 
+footer a{
+    color:white;
+}

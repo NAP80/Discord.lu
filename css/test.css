@@ -1,0 +1,15 @@
+.TestIntegration{
+    float:left;
+    width:100%;
+    background-color:rgba(198,201,32,0.623);
+    margin:20px;
+    border:1px solid black;
+}
+
+.testUnitaire{
+    margin:10px;
+    float:left;
+    width:100%;
+    background-color:rgba(201,156,32,0.623);
+    border:1px solid black;
+}

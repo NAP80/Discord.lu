@@ -1,0 +1,58 @@
+/* Deneufgermain */
+
+.barreDeVie{
+    width:170px;
+    height:26px;
+    display:block;
+    float:left;
+    background-color:darkgray;
+    text-align: left;
+}
+
+.vie{
+    float:left;
+    white-space:nowrap;
+    background:rgb(34,190,34);
+}
+
+img.Entite{
+    height:150px;
+    width:150px;
+}
+
+.Arme{
+    float:left;
+    white-space:nowrap;
+    
+    height:20px;
+    padding:3px;
+    font-size:smaller;
+}
+
+
+.ArmureNom{
+    float:left;
+    white-space:nowrap;
+    width:100%;
+    background:rgba(247,232,25,0.555);
+    font-size:smaller;
+}
+
+.armureAll{
+    float:right;
+    width:100%;
+    margin-top:-26px;
+}
+
+.armure{
+    float:right;
+    padding-top:5px;
+    padding-right:35px;
+    height:21px;
+    text-align:right;
+    background-color:rgba(177,255,0,0.53);
+    background-image:url(https://got-wic.ovh/wp-content/uploads/2019/09/game-of-thrones-winter-is-coming-arumure-champion.png);
+    background-size:20px;
+    background-repeat:no-repeat;
+    background-position:right;
+}

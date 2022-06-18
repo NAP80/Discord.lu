@@ -1,0 +1,133 @@
+.perso{
+    display: block;
+    width:150px;
+    background-color:rgb(195, 206, 207);
+    padding:5px;
+    margin:10px;
+    border:2px solid rgb(109, 107, 107);
+    border-radius: 10px;
+    box-shadow:2px 2px 2px rgb(0, 0, 0);
+    -webkit-box-shadow:2px 2px 2px rgb(0, 0, 0);
+}
+.ulMob li{
+    padding:5px;
+    margin:10px;
+}
+
+/* Deneufgermain */
+
+ul .perso{
+    display: inline-block;
+    width:170px;
+    background-color:rgb(151,161,137);
+    border:1px solid rgb(219,184,25);
+    box-shadow:2px 2px 2px rgb(133,228,145);
+    -webkit-box-shadow:2px 2px 2px rgb(37,124,41);
+}
+
+.attaque{
+    background-image:url('https://www.pngmart.com/files/16/Power-Hand-Punch-PNG-Clipart.png');
+    float:left;
+    color:rgb(250,212,0);
+    background-size:22px;
+    background-repeat:no-repeat;
+    padding-left:20px;
+    height:26px;
+    background-color:rgb(240, 129, 246);
+}
+.coef{
+    font-size: 8px;
+    float:left;
+}
+.standard{
+    background-image:url('https://findicons.com/files/icons/286/legendora/256/sword.png');
+    background-color:rgba(136, 104, 0, 0.642);
+}
+.magic{
+    background-color:rgba(0, 114, 214, 0.726);
+    background-image:url('https://www.icone-png.com/png/46/45737.png');
+ 
+}
+.bouclier{
+    background-color:rgba(50, 0, 214, 0.42);
+   
+ 
+}
+
+
+.divAvatar .perso{
+    float:left;
+    text-align: center;
+    width:170px;
+    background-color:rgb(110,184,13);
+    padding:5px;
+    margin:3px;
+    border:1px solid rgb(219,184,25);
+    box-shadow:2px 2px 2px rgb(133,228,145);
+    -webkit-box-shadow:2px 2px 2px rgb(37,124,41);
+}
+
+ul .AutrePersos li{
+    background-color:rgb(129,129,129);
+    padding:5px;
+    border-radius:10px;
+    margin:3px;
+    border:1px solid gray;
+    box-shadow:2px 2px 2px gray;
+    -webkit-box-shadow:2px 2px 2px gray;
+}
+
+ul .perso:hover{
+    cursor:url('epee.cur'),pointer;
+    background-color:rgb(206, 171, 90);
+}
+
+li.liAdverse{
+    width: 170px;
+    margin-left:30px;
+}
+
+.ulMob li{
+    background-color:rgba(201,58,58,0.705);
+    border-radius:10px;
+    border:1px solid gray;
+    box-shadow:2px 2px 2px gray;
+    -webkit-box-shadow:2px 2px 2px gray;
+    width:170px;
+}
+
+.ulMob .liAdverse:hover{
+    cursor:url('epee.cur'),pointer;
+    background-color:rgb(187,37,37);
+}
+
+.classEpee{
+    background-image:url('https://static.wikia.nocookie.net/minecraft_fr_gamepedia/images/b/b1/Épée_en_or.png/revision/latest/scale-to-width-down/150?cb=20180527151432');
+    background-size:cover;
+    background-repeat:no-repeat;
+}
+
+.bouclier{
+    background-image:url('https://static.wikia.nocookie.net/minecraft_fr_gamepedia/images/b/b1/Épée_en_or.png/revision/latest/scale-to-width-down/150?cb=20180527151432');
+    background-size:cover;
+    background-repeat:no-repeat;
+}
+
+
+.Perso img{
+    height:100px;
+}
+
+img .Personnage{
+    height:120px;
+    width:135px;
+}
+
+
+.persoXP{
+    float:left;
+}
+
+.mobCoef{
+    float:left;
+}

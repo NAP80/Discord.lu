@@ -1,0 +1,401 @@
+/* dechir */
+
+
+.divChoixPersonnageap{
+    display:flex;
+}
+.pAppelPersonnage{
+    margin-top:0;
+    margin-bottom:10px;
+    margin-right:5px;
+    margin-left:10px;
+}
+
+.divMapPage{
+    margin:0% 20% 0% 20%;
+}
+
+.Red{
+    background-color:rgba(255,88,88,0.733);
+    padding:5px;
+    border-radius:10px;
+    margin:3px;
+    border:1px solid gray;
+    box-shadow:2px 2px 2px gray;
+    -webkit-box-shadow:2px 2px 2px gray;
+}
+
+.divEntete{
+    display: flex;
+}
+
+.divEntity{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color:rgba(65, 75, 218, 0.308);
+    border-style: double;
+    border-radius: 10px;
+    margin-top: 20px;
+    padding: 20px;
+}
+.divObjets{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color:rgba(79, 112, 83, 0.308);
+    border-style: double;
+    border-radius: 10px;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.divAllPerso{
+    display: flex;
+    flex-direction: column;
+}
+.divAllMobs{
+    display: flex;
+    flex-direction: column;
+}
+
+.divMapEquipments{
+    display: flex;
+    flex-direction: column;
+}
+.divMapItem{
+    display: flex;
+    flex-direction: column;
+}
+
+.divInfoPlayers{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.divInfoMobs{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.divInfoEquipement{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.divInfoItem{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.divObjets p, .divEntity p{
+    margin-top:0px;
+    margin-bottom:0px;
+}
+
+.pItem{
+    margin-right: 5px;
+}
+.pEquipement{
+    margin-right: 5px;
+}
+
+.ulPersonnages{
+   
+    justify-content: center;
+    margin: 5px;
+    padding: 0px;
+}
+.ulMob{
+    
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 5px;
+    padding: 0px;
+}
+
+.ulItem{
+    margin: 5px;
+    padding: 0px;
+}
+.ulEquipement{
+    margin: 5px;
+    padding: 0px;
+}
+
+.divInformation{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.divInformationMap{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.divMap{
+    display:flex;
+    flex-direction: column;
+}
+.Map1{
+    flex-direction: column;
+}
+.Map2{
+    align-content:center;
+}
+
+.divMap a{
+    color:white;
+}
+
+.divMapOuest{
+    justify-items:flex-start;
+    display:flex;
+}
+
+.divMapEst{
+    justify-items:flex-end;
+    display:flex;
+}
+
+.divMapCentre{
+    justify-items:center;
+    display:flex;
+}
+
+.sud{
+    width:298px;
+    background-color:rgba(0,81,255,0.767);
+    height:30px;
+    text-align:center;
+    line-height:30px;
+    z-index: 2;
+}
+
+.nord{
+    width:298px;
+    background-color:rgba(0,81,255,0.767);
+    height:30px;
+    text-align:center;
+    line-height:30px;
+    z-index: 2;
+}
+
+.est{
+    display:flex;
+    width:30px;
+    background-color:rgba(0,81,255,0.767);
+    text-align:center;
+    height:230px;
+    margin-left:26px;
+    padding-left: 4px;
+    z-index: 2;
+}
+
+.ouest{
+    display:flex;
+    width:30px;
+    background-color:rgba(0,81,255,0.767);
+    text-align:center;
+    height:230px;
+    padding-left: 4px;
+    z-index: 2;
+}
+
+.map DIV{
+    border:1px solid rgba(254,251,255,0.47);
+}
+
+.map{
+    width:264px;
+}
+
+.mapLigne{
+    width:100%;
+    width:264px;
+    height:20px;
+    float:left;
+}
+
+.mapVerte{
+    float:left;
+    width: 20px;
+    height: 20px;
+    background-color:rgba(4,155,12,0.685);
+}
+.mapMob{
+    float:left;
+    width: 20px;
+    height: 20px;
+    background-color:rgba(255,0,0,0.664);
+}
+
+.mapClear{
+    float:left;
+    width: 20px;
+    height: 20px;
+    background-color:rgba(255,251,0,0.603);
+}
+
+.mapRouge{
+    float:left;
+    width: 20px;
+    height: 20px;
+    background-color:rgba(255,8,0,0.144);
+}
+
+.mapOrigine{
+    float:left;
+    width: 20px;
+    height: 20px;
+    background-color:rgb(255,0,221);
+}
+
+.mapPositionUser{
+    float:left;
+    width: 20px;
+    height: 20px;
+    background-color:rgba(21,255,0,0.801);
+}
+
+.cardinalite div{
+    background-color:cadetblue;
+    border-color:rgb(53,77,78);
+    border:1px solid rgb(119,150,236);
+    box-shadow:2px 2px 2px rgb(83,95,235);
+    -webkit-box-shadow:2px 2px 2px rgb(66,53,185);
+}
+
+.divInfoMap{
+    padding:10px;
+    width:200px;
+    background-color:rgba(172, 210, 69, 0.83);
+    border:1px solid rgba(119, 158, 11, 0.829);
+    border-radius: 10px;
+    box-shadow:2px 2px 2px rgb(134, 170, 37);
+    -webkit-box-shadow:2px 2px 2px rgb(134, 170, 37);
+    margin-left: 10%;
+}
+
+.effect {
+    position: absolute;
+}
+
+.sword-slash {
+    border-right: 10px solid white;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    filter: drop-shadow(0 0 5px #87bfff) drop-shadow(0 0 15px #87bfff) drop-shadow(0 0 10px rgba(135, 191, 255, 0.5)) drop-shadow(0 0 20px rgba(135, 191, 255, 0.25));
+    transform-origin: center;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.busy {
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    animation: gradient 2s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+
+.sword-slash.play {
+    animation: slash 250ms ease-out;
+}
+
+@keyframes slash {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0) rotate(-195deg);
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1) rotate(75deg);
+    }
+}
+
+.divLog{
+    background-color:rgba(97, 97, 97, 0.75);
+    border: solid black 3px;
+    border-radius: 10px;
+    height: 200px;
+    margin-top: 20px;
+    padding: 10px;
+    text-align: left;
+    overflow-y: scroll;
+    overflow-x: clip;
+    color: white;
+}
+
+#log li{
+    float: none;
+    margin-top: 10px;
+}
+
+.OtherPerso{
+    float:left;
+}
+.AllMobs{
+    float:left;
+}
+
+.divRarete{
+    width:105px;
+    border:1px black;
+    background:linear-gradient(to right,rgb(200,255,34),rgb(255,2,2));
+    border-radius: 6px;
+}
+
+.VerticalText{
+    writing-mode:vertical-rl;
+    rotate: 180deg;
+}
+
+.map{
+    float:left;
+    right:10px;
+    top:10px;
+}
+
+.divTooltip{
+    float:left;
+    margin:auto;
+    padding:10px;
+    background-color:rgba(224, 160, 42, 0.829);
+    border:1px solid rgba(190, 187, 9, 0.829);
+    box-shadow:2px 2px 2px rgb(91, 100, 9);
+    -webkit-box-shadow:2px 2px 2px rgb(91, 100, 9);
+}
+
+.NESO{
+    background-size:cover;
+    background-repeat:no-repeat;
+    opacity: 0.5;
+    position: absolute;
+    margin-top: 31px;
+    margin-bottom: 31px;
+    margin-left: 36px;
+    z-index: 1;
+}

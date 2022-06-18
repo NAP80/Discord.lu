@@ -1,0 +1,92 @@
+/* Marrocchi */
+
+.divSac{
+    display:inline-block;
+    text-align:center;
+    height:250px;
+    width:100%;
+    background-color:rgb(82, 44, 29);
+    padding:5px;
+    margin:4px auto 4px 18px;
+    border:2px solid rgb(54, 27, 16);
+    border-radius:10px;
+    box-shadow:3px 3px 3px rgb(59, 26, 13);
+    -webkit-box-shadow:3px 3px 3px rgb(59, 26, 13);
+    overflow-y:scroll;
+}
+
+.pTitleSac{
+    color:white;
+    text-shadow:black 1px 1px;
+    padding-bottom:10px;
+    border-bottom:solid rgb(255, 255, 255) 2px;
+}
+
+.pTitleSacItems, .pTitleSacEquipement{
+    color:white;
+    width:60%;
+    margin: 30px auto;
+    text-shadow:black 1px 1px;
+    padding-bottom:10px;
+    border-bottom:dashed rgb(255, 255, 255) 2px;
+}
+
+.ulItem li, .ulEquipement li{
+    display:inline-block;
+    background-color:rgb(207,207,207);
+    padding:5px;
+    border-radius:10px;
+    margin:3px;
+    border:1px solid gray;
+    box-shadow:2px 2px 2px gray;
+    -webkit-box-shadow:2px 2px 2px gray;
+}
+
+.ulSac{
+    padding: 0%;
+    width: 100%;
+    text-align: center;
+}
+
+.ulSac li{
+    float: none;
+    display: inline-block;
+    border-radius:10px;
+    width: max-content;
+    height: 40px;
+    padding:0px;
+    margin:3px;
+    border:2px solid rgb(0, 0, 0);
+    box-shadow:2px 2px 2px rgb(0, 0, 0);
+    -webkit-box-shadow:2px 2px 2px rgb(0, 0, 0);
+    overflow: hidden;
+}
+
+.ulSac li:hover{
+    cursor:url('baguette.cur'),pointer;
+    background-color: rgb(97, 90, 87);
+}
+
+.ulItem li:hover, .ulEquipement li:hover{
+    cursor:url('hand-grab.cur'),pointer;
+    background-color:rgb(231,231,231);
+}
+
+.imgItemSac, .imgEquipementSac {
+  width: 25px;
+}
+
+/* Taille à définir, provisoire */
+.imgItemSac, .imgEquipementSac {
+    width: 34px;
+    height: 34px;
+    margin: 3px;
+}
+
+.imgItemSac, .spanItemSac, .spanEquipementSac{
+    display: inline;
+}
+
+.spanItemSac, .spanEquipementSac{
+    color: white;
+}
