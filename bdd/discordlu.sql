@@ -504,7 +504,7 @@ CREATE TABLE IF NOT EXISTS `typemob` (
   `rarete` int NOT NULL,
   `chance` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `typemob`
@@ -520,10 +520,10 @@ INSERT INTO `typemob` (`id`, `nom`, `rarete`, `chance`) VALUES
 (7, 'Démon', 6, 100),
 (8, 'Ange', 6, 100),
 (9, 'Dragon', 7, 200),
-(9, 'Archidémon', 8, 600),
-(9, 'Archange', 8, 600),
-(10, 'Idole', 9, 1500),
-(11, 'Divinité', 10, 3000);
+(10, 'Archidémon', 8, 600),
+(11, 'Archange', 8, 600),
+(12, 'Idole', 9, 1500),
+(13, 'Divinité', 10, 3000);
 
 -- --------------------------------------------------------
 
