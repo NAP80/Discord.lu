@@ -12,6 +12,8 @@ Refonte du projet scolaire https://github.com/EnseignantLapro/Covid.
 - Système d'amis.
 - Refonte des Monstres.
 - Système de ville.
+- Réalisation du système de Faction
+- Réalisation du système de Classe
 - Intégration Forge.
 - Intégration des Pouvoirs.
 - Refonte des objets.
@@ -23,3 +25,4 @@ Refonte du projet scolaire https://github.com/EnseignantLapro/Covid.
 
 ## Fait :
 - Récupération du projet.
+- Mise à jours des crédits.

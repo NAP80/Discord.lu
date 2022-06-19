@@ -13,7 +13,6 @@
             </ul>
         </li>
         <li><a href="classement.php">Classement</a></li>
-        <li><a href="credit.php">Crédit</a></li>
         <?php
             if($Joueur1->isAdmin() == true){
                 ?>

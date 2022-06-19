@@ -1,6 +1,6 @@
 <footer>
     <div class="divFooter">
-        <p class="Copyright1">Copyright : 2020 - <?= date("Y") ?> - Tous droits réservés.</p>
-        <p class="Copyright2">Réalisé par les BTS SN1 et SN2 de <a href="http://www.la-providence.net/">La Providence - Amiens</a>.</p>
+        <p class="Copyright1">Copyright : 2022 - <?= date("Y") ?> - Tous droits réservés.</p>
+        <p class="Copyright2">Réalisé par <a href="https://github.com/Piebleu/">Piebleu</a> : <a href="https://github.com/Piebleu/Discord.lu">github.com/Piebleu/Discord.lu</a>.</p>
     </div>
 </footer>
