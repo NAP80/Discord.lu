@@ -4,6 +4,7 @@ class User{
     private $_login;
     private $_mdp;
     private $_name;
+    private $_faction;
     private $_MonPersonnage;
     private $_admin;
 
@@ -44,6 +45,9 @@ class User{
     }
     public function getId(){
         return $this->_id;
+    }
+    public function getFaction(){
+        return $this->_faction;
     }
     public function getNomPersonnage(){
         return $this->_MonPersonnage->getNom();
@@ -377,13 +381,15 @@ class User{
                     ?>
                         <p>Mot de passe changé.</p>
                     <?php
-                }else{
-                    ?>
+                }
+                else{
                     //erreur a l'update dans la base
+                    ?>
                         <p>Une erreur est survenue.</p>
                     <?php
                 }
-            } else{
+            }
+            else{
                 //message d'erreur
                 ?>
                     <p>Les mot de passe ne correspondent pas.</p>
@@ -407,24 +413,6 @@ class User{
                     <p>Une erreur est survenue.</p>
                 <?php
             }
-        }
-    }
-    
-    //retourne normalement la faction du Joueur
-    public function getFaction(){
-        $req="SELECT Faction.id, Faction.nom 
-            FROM `Faction` ,`Personnage`, `User` , `TypePersonnage` 
-            WHERE User.idPersonnage = Personnage.id 
-            AND Personnage.idTypePersonnage = TypePersonnage.id 
-            AND TypePersonnage.idFaction = Faction.id 
-            AND User.id = '".$this->_id."' ";
-        $Result = $this->_bdd->query($req);
-        if($tab=$Result->fetch()){
-           $Faction = new Faction($this->_bdd);
-           $Faction->setFactionById($tab['id']);
-           return $Faction;
-        }else{
-            return null;
         }
     }
 
@@ -455,6 +443,31 @@ class User{
         }else if($dataAdmin['admin'] == 1){
             $req = 'UPDATE `user` SET `admin`= "0" WHERE id ='.$id.'';
             $excuteReq = $this->_bdd->query($req);
+        }
+    }
+
+    /** Assigne une Faction à l'User */
+    public function setFaction($idFaction){
+        $IdUser = $this->_id;
+        /* Check isset IdFaction in BDD */
+        $req = "SELECT COUNT(*) FROM `faction` WHERE `id` = '".$idFaction."'";
+        $Result = $this->_bdd->query($req);
+        $Result = $Result->fetch();
+        if($Result['COUNT(*)'] != NULL){
+            // Si existe en BDD
+            $req = "UPDATE `user` SET `idFaction` = '".$idFaction."' WHERE `id` = '".$IdUser."'";
+            $Result = $this->_bdd->query($req);
+            $Result = $Result->fetch();
+            $Faction = new Faction($this->_bdd);
+            $Faction->setFactionById($_SESSION['Faction']);
+            $FactionUser = $Faction;
+            $RepMSG = "Vous êtes maintenant dans la faction ".$FactionUser->getNom()." .";
+            echo $RepMSG;
+        }
+        else{
+            // Si n'existe pas
+            $RepMSG = "La faction n'existe pas.";
+            echo $RepMSG;
         }
     }
 }
