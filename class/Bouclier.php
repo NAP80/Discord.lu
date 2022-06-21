@@ -1,11 +1,7 @@
 <?php
-    //cette classe est développé par :  Liénard
-
     class Bouclier extends Equipement{
-
+        /** Création Aléatoire d'un Bouclier */
         public function createBouclierAleatoire(){
-
-            //attention la catérogie id bouclier doit etre = 4
             $req="SELECT * FROM TypeEquipement Where idCategorie = 4 order by rarete ASC"; 
             $Result = $this->_bdd->query($req);
 
@@ -38,10 +34,10 @@
                 $this->setEquipement($lastID,$newType,$newNom,$newValeur,$efficacite,1);
                 $this->_bdd->commit();
                 return $this;
-            }else{
+            }
+            else{
                 $this->_bdd->rollback();
                 echo "erreur anormale createEquipementAleatoire equipement.php ".$req;
-
                 return null;
             }
         }

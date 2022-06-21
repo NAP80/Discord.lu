@@ -1,13 +1,7 @@
 <?php
-    //la classe Arme est une enfant de la classe Equipement
-    //est représente la catégorie Arme d'un type Equipement
-    // Il est existe donc plusieurs class d'arme 
-    //une arme envoi des degat brute suplémentaire
-
     class Arme extends Equipement{
-
+        /** Création Aléatoire d'une arme */
         public function createArmeAleatoire(){
-            //attention la catérogie id arme doit etre = 1
             $req="SELECT * FROM TypeEquipement Where idCategorie = 1 order by rarete ASC";
             $Result = $this->_bdd->query($req);
 
@@ -39,15 +33,17 @@
                 $this->setEquipement($lastID,$newType,$newNom,$newValeur,$efficacite,1);
                 $this->_bdd->commit();
                 return $this;
-            }else{
+            }
+            else{
                 $this->_bdd->rollback();
                 echo "erreur anormal createEquipementAleatoire equipement.php ".$req;
                 return null;
             }
         }
 
+        /** Return la force d'une arme */
         public function getForce(){
-        return $val = $this->getLvl()*$this->getValeur();
+            return $val = $this->getLvl()*$this->getValeur();
         }
     }
 ?>

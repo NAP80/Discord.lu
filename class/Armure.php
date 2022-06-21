@@ -1,13 +1,7 @@
 <?php
-    //la classe Armure est une enfant de la classe Equipement
-    //est représente la catégorie Armure d'un type Equipement
-    // Il est existe donc plusieurs class d'armure 
-    //une armure envoi des degat brute suplémentaire
-
     class Armure extends Equipement{
-
+        /** Création Aléatoire d'une armure */
         public function createArmureAleatoire(){
-            //attention la catérogie id armure doit etre = 2
             $req="SELECT * FROM TypeEquipement Where idCategorie = 2 order by rarete ASC";
             $Result = $this->_bdd->query($req);
 
@@ -40,13 +34,15 @@
                 $this->setEquipement($lastID,$newType,$newNom,$newValeur,$efficacite,1);
                 $this->_bdd->commit();
                 return $this;
-            }else{
+            }
+            else{
                 $this->_bdd->rollback();
                 echo "erreur anormal createEquipementAleatoire equipement.php ".$req;
                 return null;
             }
         }
 
+        /** Return la force d'une armure */
         public function getForce(){
             return $val = $this->getLvl()*$this->getValeur();
         }
