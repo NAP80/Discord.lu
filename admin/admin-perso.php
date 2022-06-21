@@ -29,7 +29,6 @@
     <body class="AdminPanel">
         <?php
             include "../session.php";
-
             // Vérifie que la Session est Valide avec le bon Mot de Passe.
             if($access === true){
                 $access = $Joueur1->DeconnectToi();
@@ -47,10 +46,12 @@
                             <p class='TC'>Texte.</p>
                         </div>
                     <?php
-                }else{
+                }
+                else{
                     include "non_acces.php";
                 }
-            }else{
+            }
+            else{
                 echo $errorMessage;
             }
         ?>

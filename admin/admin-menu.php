@@ -1,5 +1,5 @@
 <nav class="navMenu">
-    <ul class="ulMenu">                
+    <ul class="ulMenu">
         <li><a href="../index.php">Accueil</a></li>
         <li><a href="../reglement.php">Règlement</a></li>
         <li><a href="../combat.php">Combat</a></li>

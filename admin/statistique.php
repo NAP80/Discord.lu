@@ -1,6 +1,5 @@
 <?php
     session_start();
-
     // Attention, Function et code temporaire :
     // Optimisation avec des Boucles For dès que possible.
     Function ReturnTest(){
@@ -35,7 +34,6 @@
     <body class="AdminPanel">
         <?php
             include "../session.php";
-
             // Vérifie que la Session est Valide avec le bon Mot de Passe.
             if($access === true){
                 $access = $Joueur1->DeconnectToi();
@@ -256,14 +254,15 @@
                                 <p class='TC'>Nombre d'équipement de type <b>Cape invisible</b> : <?= ReturnTest() ?>.</p>
                                 <p class='TC'>Nombre d'équipement de type <b>Exosquelettes</b> : <?= ReturnTest() ?>.</p>
                                 <p class='TC'>Nombre d'équipement de type <b>L'Amour</b> : <?= ReturnTest() ?>.</p>
-
                             </div>
                         </div>
                     <?php
-                }else{
+                }
+                else{
                     include "non_acces.php";
                 }
-            }else{
+            }
+            else{
                 echo $errorMessage;
             }
         ?>
