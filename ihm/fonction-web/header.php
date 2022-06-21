@@ -1,8 +1,8 @@
 <?php
     // Définition des variables du site.
-        $NameWebsite    = "Conflicts Simulator 2021";
+        $NameWebsite    = "Discord.lu";
         $NameIcon       = "favicon.ico";
-        $NameAutor      = "La Providence - Amiens";
+        $NameAutor      = "Discord.lu";
 ?>
     <!-- Compatible / UTF / Viewport-->
         <meta charset="UTF-8">
