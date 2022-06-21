@@ -1,4 +1,5 @@
 <?php
+    /** NOTE : À dégager de la BDD et mettre dans le code même */
     class Tooltip{
         private $_id;
         private $_tooltip;
