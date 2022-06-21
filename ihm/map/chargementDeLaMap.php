@@ -9,7 +9,8 @@
     if($map->LogVisiteMap($Personnage) === true){
         if(isset($_GET["position"]) && $Personnage->getVie() > 0){
             $map = $map->loadMap($_GET["position"],$cardinalite,$Joueur1);
-        }else{
+        }
+        else{
             if($Personnage->getVie() == 0){
                 $Personnage->resurection();
                 $map = $Personnage->getMap();
