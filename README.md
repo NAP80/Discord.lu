@@ -2,6 +2,7 @@
 Refonte du projet scolaire https://github.com/EnseignantLapro/Covid.
 
 # Avancement :
+- Début Uniformisation Code + Commentaires
 
 ## Todo List :
 - Refonte Inscription/Connexion FRONT.
@@ -22,6 +23,7 @@ Refonte du projet scolaire https://github.com/EnseignantLapro/Covid.
 - Refonte de la Map.
 - Refonte de Session.php.
 - Intégration Panel Admin.
+- Mise à jours Admin -> Rôle.
 
 ## Fait :
 - Récupération du projet.
