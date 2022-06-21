@@ -14,7 +14,6 @@
     <body class="bodyRules">
         <?php
             include "session.php";
-
             // Vérifie que la Session est Valide avec le bon Mot de Passe.
             if($access === true){
                 $access = $Joueur1->DeconnectToi();
@@ -29,7 +28,8 @@
                         <p><b>2</b> - Ne pas être méchant</p>
                     </div>
                 <?php
-            }else{
+            }
+            else{
                 echo $errorMessage;
             }
             include "ihm/fonction-web/footer.php";

@@ -36,7 +36,8 @@
                         <p>Cliquez sur l'item dans l'onglet équipement pour selectioner une armure ou objet d'attaque.</p>
                     </div>
                 <?php
-            }else{
+            }
+            else{
                 echo $errorMessage;
             }
             include "ihm/fonction-web/footer.php";

@@ -55,7 +55,8 @@
                                             ?>
                                                 <p><a href="combat.php">Viens combattre avec <?= $PersoChoisie->getNom() ?></a></p>
                                             <?php
-                                        }else{
+                                        }
+                                        else{
                                             ?>
                                                 <p><a href="combat.php">Viens combattre avec <?= $Joueur1->getNomPersonnage() ?></a></p>
                                             <?php
@@ -67,7 +68,8 @@
                         ?>
                     </div>
                 <?php
-            }else{
+            }
+            else{
                 echo $errorMessage;
             }
             include "ihm/fonction-web/footer.php";

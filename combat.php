@@ -97,7 +97,6 @@
             }
             include "ihm/fonction-web/footer.php";
             include "ihm/jsDesPages/jsMap.php";
-            include "ihm/jsDesPages/jsSac.php";
             include "ihm/jsDesPages/jsAnimation.php";
         ?>
     </body>

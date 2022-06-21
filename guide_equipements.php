@@ -35,7 +35,8 @@
                         <p>Neuf.</p>
                     </div>
                 <?php
-            }else{
+            }
+            else{
                 echo $errorMessage;
             }
             include "ihm/fonction-web/footer.php";

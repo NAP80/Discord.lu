@@ -34,7 +34,8 @@
                             <p><a href="index.php">Retour à l'origine du tout</a></p>
                         </div>
                     <?php
-                }else{
+                }
+                else{
                     include "ihm/map/chargementDeLaMap.php";
                     ?>
                         <div class="divMapPage">
@@ -154,7 +155,8 @@
                         </div>
                     <?php
                 }
-            }else{
+            }
+            else{
                 echo $errorMessage;
             }
             include "ihm/fonction-web/footer.php";
@@ -162,7 +164,6 @@
     </body>
     <?php
         include "ihm/jsDesPages/jsMap.php";
-        include "ihm/jsDesPages/jsSac.php";
         include "ihm/jsDesPages/jsAnimation.php";
     ?>
     <script src="Javascript/map.js"></script>

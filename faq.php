@@ -34,7 +34,8 @@
                         <p>Pour créer un nouveau personnage allez dans accueil.</p>
                     </div>
                 <?php
-            }else{
+            }
+            else{
                 echo $errorMessage;
             }
             include "ihm/fonction-web/footer.php";
