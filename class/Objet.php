@@ -1,34 +1,43 @@
 <?php
     class Objet{
-        //valeurs
+        protected $_bdd;
         protected $_id;
         protected $_type;
         protected $_nom;
         protected $_valeur;
         protected $_efficacite;
         protected $_lvl;
-        protected $_bdd;
-        //fonctions
+
+        /** Return Lvl */
+        public function getLvl(){
+            return $this->_lvl;
+        }
+
+        /** Return Name */
+        public function getNom(){
+            return $this->_nom;
+        }
+
+        /** Return ID */
+        public function getId(){
+            return $this->_id;
+        }
+
+        /** Return Valeur */
+        public function getValeur(){
+            return $this->_valeur;
+        }
+
+        /** Return Éfficacité */
         public function getEfficacite(){
             $req="SELECT * FROM Efficacite where id = '".$this->_efficacite."'";
             $Result = $this->_bdd->query($req);
             if($tab=$Result->fetch()){
                 return $tab['coef'];
             }
-                return 0;
+            return 0;
         }
-        public function getLvl(){
-            return $this->_lvl;
-        }
-        public function getNom(){
-            return $this->_nom;
-        }
-        public function getId(){
-            return $this->_id;
-        }
-        public function getValeur(){
-            return $this->_valeur;
-        }
+        
         protected function getEfficaceAleatoire(){
             $req="SELECT * FROM Efficacite ORDER BY ordre ASC";
             $Result = $this->_bdd->query($req);

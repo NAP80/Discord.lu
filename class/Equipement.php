@@ -1,11 +1,14 @@
 <?php
-    //dev by rapidecho
     class Equipement extends Objet{
-
         protected $_idCategorie; //1 = Arme / 2 = Armure / 3 = Sort / 4 = Bouclcier
         protected $coolDownMS_;
         protected $LastUse_;
 
+        public function __construct($bdd){
+            $this->_bdd = $bdd;
+        }
+
+        /** Récupère un Équipement by ID */
         public function setEquipementByID($id){
             $req="SELECT Equipement.id,
                         Equipement.type,
@@ -22,27 +25,29 @@
             ";
             $Result = $this->_bdd->query($req);
             if($tab = $Result->fetch()){
-                $this->setEquipement($tab["id"],
-                            $tab["type"],
-                            $tab["nom"],
-                            $tab["valeur"],
-                            $tab["efficacite"],
-                            $tab["lvl"],
-                            $tab["coolDownMS"],
-                            $tab["LastUse"]
-                            );
+                $this->setEquipement(
+                    $tab["id"],
+                    $tab["type"],
+                    $tab["nom"],
+                    $tab["valeur"],
+                    $tab["efficacite"],
+                    $tab["lvl"],
+                    $tab["coolDownMS"],
+                    $tab["LastUse"]
+                );
                 $this->_idCategorie = $tab["idCategorie"];
             }
         }
         //retourne un tableau avec id , bool attaque , bool defense , bool magie , nom
         public function getCategorie(){
-            if (!is_null($this->_idCategorie)){
+            if(!is_null($this->_idCategorie)){
                 $req="SELECT * From Categorie where id = '".$this->_idCategorie."'";
                 $Result = $this->_bdd->query($req);
                 if($tab = $Result->fetch()){
                     return $tab;
                 }
-            }else{
+            }
+            else{
                 return null;
             }
         }
@@ -88,22 +93,24 @@
             $Result = $this->_bdd->query($req);
             if($tab = $Result->fetch()){
                 return $tab;
-            }else{
+            }
+            else{
                 return null;
             }
         }
 
-        //retourne le lien image du type d'item
+        /** Return le lien Image de l'équipement */
         public function getLienImage(){
             $tab = $this->getType();
             if(!is_null($tab)){
                 return $tab['lienImage'];
-            }else{
+            }
+            else{
                 return "https://th.bing.com/th/id/OIP.I57H91s35hsrBcImYVt90AHaE8?w=247&h=180&c=7&r=0&o=5&pid=1.7";
             }
         }
 
-        //retour le style de couleur de la rareté d'un equipement
+        /** Return la couleur de rareté de l'équipement */
         public function getClassRarete(){
             $req="SELECT rarete FROM TypeEquipement where id = '".$this->_type."'";
             $Result = $this->_bdd->query($req);
@@ -116,7 +123,8 @@
                     //        à 255 255 0
                     $val = round((($tab[0]/8)*((255-100)+100))+95);
                     $colorRarete .= $val . ',255,0';
-                }else{
+                }
+                else{
                     //on par de 255 255 0
                     //        à 255 0   0
                     //et les valeur vont de 8 à 16
@@ -124,7 +132,8 @@
                     $val = 255-$val ;
                     $colorRarete .= '255,'.$val . ',0';
                 }
-            }else{
+            }
+            else{
                 //poussiere
                 $colorRarete .= '255,255,255';
             }
@@ -134,10 +143,7 @@
             return $colorRarete.','.$Transparence.') !important';
         }
 
-        public function __construct($bdd){
-            $this->_bdd = $bdd;
-        }
-
+        /** Création d'un équipement aléatoire */
         public function createEquipementAleatoire(){
             $newEquipement = new Equipement($this->_bdd);
             $req="SELECT * FROM TypeEquipement ORDER BY rarete ASC";
@@ -150,14 +156,13 @@
             $newTypeNom='cuillère ';
             while($tab=$Result->fetch()){
                 if(rand(0,$tab['chance'])==1){
-                $newType = $tab['id'];
-                $newTypeNom = $tab['nom'];
-                $coef=$tab['rarete'];
-                $coolDown=$tab['coolDown'];
-                break;
+                    $newType = $tab['id'];
+                    $newTypeNom = $tab['nom'];
+                    $coef=$tab['rarete'];
+                    $coolDown=$tab['coolDown'];
+                    break;
                 }
             }
-
             $getEfficace = $this->getEfficaceAleatoire();
             $newNom = $newTypeNom." ".$getEfficace['adjectif'];
             $efficacite = $getEfficace['id'];
@@ -172,7 +177,8 @@
                 $newEquipement->setEquipementByID($lastID);
                 $this->_bdd->commit();
                 return $newEquipement;
-            }else{
+            }
+            else{
                 $this->_bdd->rollback();
                 echo "erreur anormal createEquipementAleatoire equipement.php ".$req;
                 return null;
@@ -188,8 +194,8 @@
         
             if($timeReel < ($timeLastUes+$cooldown)){
                 return -1;
-            }else
-            {
+            }
+            else{
                 return $this->coolDownMS_;
             }
             
@@ -226,31 +232,6 @@
                 //fonction recursif tant qu'on peut fusionner on fusionne
                 $this->fusionEquipement($Entite,$TabIDRemoved);
             }
-        }
-        //affiche le nombre d'équipement existant par efficacité'
-        public function nbequipement(){
-            $Result = $this->_bdd->query("SELECT COUNT(*) FROM `equipement`WHERE efficacite=".$value."");
-            $nbequipement = $Result->fetch();
-            echo $nbequipement;
-        }
-        
-        //affiche le nombre d'item existant par type'
-        public function nbitemtype(){
-            $Result = $this->_bdd->query("SELECT COUNT(*) FROM `equipement` WHERE type=".$value."");
-            $nbitemtype = $Result->fetch();
-            echo $nbitemtype;
-        }
-
-        /*
-        fonction qui retourne le nombre d'équipement total dans la base de donner
-        elle demende en paramètre la connection a la base de donné
-        */
-        public function getNombreEquipement($bdd)
-        {
-            $req = 'SELECT COUNT(*) as "NB" FROM equipement';
-            $excuteReq = $this->_bdd->query($req);
-            $data = $excuteReq->fetch();
-            return $data['NB'];
         }
     }
 ?>

@@ -1,10 +1,5 @@
 <?php
-    //cette classe est développé Cauet :
-
     class Forge extends Map{
-        /* PRIVATE */
-
-        /* METHOD */
         public function __construct($bdd){
             parent::__construct($bdd);
         }
@@ -54,7 +49,8 @@
                     ?>
                         <p>Vous n'avez pas assez d'argent.</p>
                     <?php
-                }else{
+                }
+                else{
                     $entite->addEquipement($equipement);
                     $this->removeEquipementById($checkId);
                     $money -= $valeur;
@@ -106,6 +102,7 @@
             $RequetStatement = $this->_bdd->query($req);
         }
 
+        /** Return Name Forge */
         public function getNomForge(){
             return 'Je suis la forge '.$this->_nom;
         }

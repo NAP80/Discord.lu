@@ -1,9 +1,6 @@
 <?php
-    // TODO MOB ET PERSONNAGE ON TROP DE SIMILITUDE
-    //IL FAUT REFACTORISER AVEC DE LhERITAGE
-
+    // Beaucoup de Similitude entre Personnage/Entité -> Refactoriser avec héritage
     class Entite {
-
         protected $_id;
         protected $_nom;
         protected $_vie;
@@ -13,22 +10,54 @@
         protected $_lvl;
         private $sacEquipements=array();
         private $sacEquipe=array();
-
         protected $_type; //1 = hero 2= mob
-
         protected $map;
-
         protected $_bdd;
         //dans le cas d'un perso
         protected $_idTypePersonnage;
         protected $typePersonnage;
 
-        //private $sacItems=array();
-
         public function __construct($bdd){
             $this->_bdd = $bdd;
         }
 
+        /** Return Nom */
+        public function getNom(){
+            return $this->_nom;
+        }
+
+        /** Return VieMax */
+        public function getVieMax(){
+            return $this->_vieMax ;
+        }
+
+        /** Return l'ID de l'entitée */
+        public function getId(){
+            return $this->_id;
+        }
+
+        /** Return l'ID de sa position Map */
+        public function getMap(){
+            return $this->map;
+        }
+
+        /** Return Lvl */
+        public function getLvl(){
+            return $this->_lvl;
+        }
+
+        /** Return Vie */
+        public function getVie(){
+            //on enpeche les boost de perdurer
+            if($this->_vie>$this->_vieMax){
+                $this->_vie =$this->_vieMax;
+                $req  = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `id` = '".$this->_id ."'";
+                $Result = $this->_bdd->query($req);
+            }
+            return $this->_vie;
+        }
+
+        /** Remove Équipement by ID */
         public function removeEquipementByID($EquipementID){
             $idindex = array_search($EquipementID, $this->sacEquipements);
             if($idindex  >= 0){
@@ -57,7 +86,8 @@
                 }
                 array_push($this->sacEquipements,$newEquipement->getId());
                 return $TabIDRemoved;
-            }else{
+            }
+            else{
                 $req="INSERT INTO `EntiteEquipement`(`idEntite`, `idEquipement`) VALUES ('".$this->getId()."','".$newEquipement->getId()."')";
                 $this->_bdd->query($req);
                 array_push($this->sacEquipements,$newEquipement->getId());
@@ -66,8 +96,7 @@
             }
         }
 
-        /* Début Cauet */
-
+        /** Affichage de la Barre de Vie */
         public function getBardeVie(){
             $pourcentage = round(100*$this->_vie/$this->_vieMax);
             ?>
@@ -75,29 +104,11 @@
                     <div class="attaque" id="attaqueEntiteValeur<?= $this->_id ;?>"> <?= $this->_degat ;?>  </div> 
                     <div class="barreDeVie" id="vieEntite<?= $this->_id ;?>">
                         <div class="vie" id="vieEntiteValeur<?= $this->_id ;?>" style="width:<?= $pourcentage?>%;">
-                            ♥️<?= $this->_vie ;?>
+                            ♥️<?= $this->_vie ?>
                         </div>
                     </div>
                 </div>
             <?php
-        }
-
-        public function getVieMax(){
-            return $this->_vieMax ;
-        }
-
-        public function getVie(){
-            //on enpeche les boost de perdurer
-            if($this->_vie>$this->_vieMax){
-                $this->_vie =$this->_vieMax;
-                $req  = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `id` = '".$this->_id ."'";
-                $Result = $this->_bdd->query($req);
-            }
-            return $this->_vie;
-        }
-
-        public function getLvl(){
-            return $this->_lvl;
         }
 
         //Equipe l'item au personnage
@@ -117,7 +128,7 @@
             }
         }
 
-        //retourne uniquement les equipiments non porte
+        /** Return les équipements non portés */
         public function getEquipementNonPorte(){
             //compare les 2tableau et retourne ce qui est pas commun
             $tab1 = $this->sacEquipements;
@@ -134,6 +145,7 @@
             return $lists;
         }
 
+        /** Return les équipements */
         public function getEquipements(){
             $lists=array();
             foreach($this->sacEquipements as $EquipementId){
@@ -207,7 +219,7 @@
             }
         }
 
-        //Fonction pour déséquiper une arme
+        /** Déséquipe Arme */
         public function desequipeArme(){
             $arme = $this->getArme();
             if(!is_null($arme)){
@@ -215,7 +227,7 @@
             }
         }
 
-        //Fonction pour déséquiper une armure
+        /** Déséquipe Armure */
         public function desequipeArmure(){
             $armure = $this->getArmure();
             if(!is_null($armure)){
@@ -223,7 +235,7 @@
             }
         }
 
-        //Fonction pour déséquiper un pourvoir
+        /** Déséquipe Pouvoir */
         public function desequipePouvoir(){
             $pouvoir = $this->getPouvoir();
             if(!is_null($pouvoir)){
@@ -231,7 +243,7 @@
             }
         }
 
-        //Fonction pour déséquiper un bouclier
+        /** Déséquipe Bouclier */
         public function desequipeBouclier(){
             $bouclier = $this->getBouclier();
             if(!is_null($bouclier)){
@@ -239,14 +251,12 @@
             }
         }
 
-        //Fonction Attaque utilise une Arme
+        /** Fonction d'attaque */
         public function getAttaque(){
 
             //si L'attaquant à une arme cas 1 
             //si il a de la magie cas 2
             //si il a rien cas 3
-
-
 
             //ici on affiche les dégats Maximun du joueur avec Arme
             $arme = $this->getArme();
@@ -254,44 +264,40 @@
             $coef = 1;
             $lvl = 1;
             $forceArme = 0;
-            if(!is_null($arme)){
+            if(!is_null($arme)){// Si utilise une arme
                 $coef = $arme->getEfficacite();
                 $forceArme = $arme->getForce();
                 $lvl = $arme->getLvl();
             }
-            if(!is_null($pouvoir)){
+            if(!is_null($pouvoir)){// Si utilise la magie
                 $coef = $pouvoir->getEfficacite();
                 $forcePourvoir = $pouvoir->getForce();
                 $lvl = $pouvoir->getLvl();
             }
             //application des coef si il y a nu type de personnage
             //1 c'est des perso , 2 c'est des mob
-            if ($this->_type == 1){
-               $type = $this->getTyePersonnage();
-               if(!is_null($arme)){
-                $coef = $coef*$type->getCoefAttaque();
-               }
-               if(!is_null($pouvoir)){
-                $coef = $coef*$type->getCoefPouvoir();
+            if($this->_type == 1){// Si n'utilise rien
+                $type = $this->getTyePersonnage();
+                if(!is_null($arme)){
+                    $coef = $coef*$type->getCoefAttaque();
                 }
-               
             }
-
-        
             $val = round(($this->_degat+$forceArme)*$coef);
             return $val;
         }
 
+        /** Aucune idée de ce que c'est */
         public function getCoolDownAttaque(){
-
             $arme = $this->getArme();
             $pouvoir = $this->getPouvoir();
             $cooldown = -1;
             if(!is_null($arme)){
                 $cooldown =$arme->getCoolDown();
-            }else if(!is_null($pouvoir)){
+            }
+            else if(!is_null($pouvoir)){
                 $cooldown = $pouvoir->getCoolDown();
-            }else{
+            }
+            else{
                 $cooldown = 500;
             }
             return $cooldown;
@@ -330,7 +336,7 @@
                 $forceBouclier = $bouclier->getForce();
             }
             //alors Todo Je sais pas ... evaluer la valeur d'une armure
-            if ($this->_type == 1){
+            if($this->_type == 1){
                 $type = $this->getTyePersonnage();
                 if(!is_null($armure)){
                  $coef = $coef*$type->getCoefDefense();
@@ -423,7 +429,8 @@
                 $tabAttaque = $tab;
                 $tabAttaque['DegatsDonnes']+=$MobDegatAttaqueEnvoyer;
                 $tabAttaque['nbCoup']++;
-            }else{
+            }
+            else{
                 //insertion d'une nouvelle attaque
                 $req="INSERT INTO `AttaqueEntiteMob`(`idMob`, `idEntite`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`) 
                 VALUES (
@@ -455,7 +462,8 @@
             
             if(!is_null($arme)){
                 $cooldown =$arme->resetCoolDown();
-            }else if(!is_null($pouvoir)){
+            }
+            else if(!is_null($pouvoir)){
                 $cooldown = $pouvoir->resetCoolDown();
             }
             
@@ -482,30 +490,22 @@
             }
         }
 
-        //retour le type de personnage 
-        //retour null si pas de type
+        /** Return Type Personnage */
         public function getTyePersonnage(){
-            
             if(!is_null($this->_idTypePersonnage) ){
                 if(is_null($this->typePersonnage)){
                     $TypePersonnage = new TypePersonnage($this->_bdd);
                     $TypePersonnage->setTypePersonnageByIdPerso($this->_id);
                     $this->typePersonnage = $TypePersonnage;
-                
                 }
                 return $this->typePersonnage;
-            }else{
-                //ne devrait jamais etre le cas
-                return null;
             }
-            
+            else{
+                return null; // Ne devrait pas avoir lieu
+            }
         }
 
-        public function getNom(){
-            return $this->_nom;
-        }
-
-        //met a jour la vie de depart et replace le joueur
+        /** Fonction de Rennaisance : Réinitialisation Vie */
         public function resurection(){
             $vieMax = intdiv ($this->_vieMax,2);
             $attaque = intdiv ($this->_vieMax,2);
@@ -530,7 +530,7 @@
             return $valeur;
         }
 
-        //retourne toute la mécanique d'affichage d'un Entite
+        /** Affiche le rendu HTML de l'entité */
         public function renderHTML(){
             if($this->_vieMax<0 || $this->_vieMax=="0"){
                 $this->_vieMax=10;
@@ -538,10 +538,9 @@
             $pourcentage = round(100*$this->_vie/$this->_vieMax);
             $arme = $this->getArme();
             $pouvoir = $this->getPouvoir();
-            if ($this->_type == 1){
+            if($this->_type == 1){
                 $type = $this->getTyePersonnage();
             }
-
             ?>
                 <div class="EntiteInfo">
                     <div class="EntiteName">
@@ -554,72 +553,68 @@
                 <div>
                     <img class="Entite" src="<?= $this->_imageLien;?>">
                 </div>
-                
             <?php 
-            
             if(!is_null($arme)){
                 ?>
-                <div class="attaque standard" id="attaqueEntiteValeur<?= $this->_id ;?>"> <?= $this->getAttaque()?>
-                    <div class="coef">(*<?php 
-                        if(!is_null($type)){
-                            echo $type->getCoefAttaque();
-                        }else{
-                            echo "1";
-                        }
-                    ?>)</div>
-                </div>
-                <div id="Arme<?= $arme->getId() ?>" class="Arme standard" onclick="CallApiRemoveEquipementEntite(<?= $arme->getId() ?>)"><?= $arme->getNom() ?> lvl <?= $arme->getLvl() ?></div>
-                <?php
-            }else if(!is_null($pouvoir)){
-                ?>
-                <div class="attaque magic" id="attaqueEntiteValeur<?= $this->_id ;?>"> <?= $this->getAttaque()?>
-                    <div class="coef">(*<?php 
-                        if(!is_null($type)){
-                            echo $type->getCoefPouvoir();
-                        }else{
-                            echo "1";
-                        }
-                    ?>)</div>
-                </div>
-                <div id="Arme<?= $pouvoir->getId() ?>" class="Arme magic" onclick="CallApiRemoveEquipementEntite(<?= $pouvoir->getId() ?>)"><?= $pouvoir->getNom() ?> lvl <?= $pouvoir->getLvl() ?></div>
+                    <div class="attaque standard" id="attaqueEntiteValeur<?= $this->_id ;?>"> <?= $this->getAttaque()?>
+                        <div class="coef">
+                            (*<?php 
+                                if(!is_null($type)){
+                                    echo $type->getCoefAttaque();
+                                }
+                                else{
+                                    echo "1";
+                                }
+                            ?>)
+                        </div>
+                    </div>
+                    <div id="Arme<?= $arme->getId() ?>" class="Arme standard" onclick="CallApiRemoveEquipementEntite(<?= $arme->getId() ?>)"><?= $arme->getNom() ?> lvl <?= $arme->getLvl() ?></div>
                 <?php
             }
             else{
                 ?>
-                <div class="attaque" id="attaqueEntiteValeur<?= $this->_id ;?>"> <?= $this->getAttaque()?>
+                    <div class="attaque" id="attaqueEntiteValeur<?= $this->_id ;?>">
+                        <?= $this->getAttaque()?>
                     </div>
-                
-                <div id="ArmePerso<?= $this->_id ?>" class="Arme"></div>
+                    <div id="ArmePerso<?= $this->_id ?>" class="Arme">
+                    </div>
                 <?php
             }
             $armure = $this->getArmure();
             $bouclier = $this->getBouclier();
             if(!is_null($armure)){
                 ?>
-                <div id ="Armure<?= $armure->getId() ?>" class="ArmureNom standard" onclick="CallApiRemoveEquipementEntite(<?= $armure->getId() ?>)"><?= $armure->getNom() ?> lvl <?= $armure->getLvl() ?>
-                    <div class="coef">(*<?php 
-                        if(!is_null($type)){
-                            echo $type->getCoefDefense();
-                        }else{
-                            echo "1";
-                        }
-                    ?>)
+                    <div id ="Armure<?= $armure->getId() ?>" class="ArmureNom standard" onclick="CallApiRemoveEquipementEntite(<?= $armure->getId() ?>)"><?= $armure->getNom() ?> lvl <?= $armure->getLvl() ?>
+                        <div class="coef">
+                            (*<?php 
+                                if(!is_null($type)){
+                                    echo $type->getCoefDefense();
+                                }
+                                else{
+                                    echo "1";
+                                }
+                            ?>)
+                        </div>
                     </div>
-                </div>
                 <?php
-            }else if(!is_null($bouclier)){
+            }
+            else if(!is_null($bouclier)){
                 ?>
                 <div id ="Armure<?= $bouclier->getId() ?>" class="ArmureNom magic" onclick="CallApiRemoveEquipementEntite(<?= $bouclier->getId() ?>)"><?= $bouclier->getNom() ?> lvl <?= $bouclier->getLvl() ?>
-                    <div class="coef">(*<?php 
-                        if(!is_null($type)){
-                            echo $type->getCoefBouclier();
-                        }else{
-                            echo "1";
-                        }
-                    ?>)</div>
+                    <div class="coef">
+                        (*<?php 
+                            if(!is_null($type)){
+                                echo $type->getCoefBouclier();
+                            }
+                            else{
+                                echo "1";
+                            }
+                        ?>
+                    )</div>
                 </div>
                 <?php
-            }else{
+            }
+            else{
                 ?>
                     <div id ="ArmurePerso<?= $this->_id ?>" class="ArmureNom"></div>
                 <?php
@@ -635,7 +630,8 @@
                                     ?>
                                         style="width:<?= $this->getDefense() ?>%;"><?= $this->getDefense() ?>
                                     <?php
-                                }else{
+                                }
+                                else{
                                     ?>
                                         >
                                     <?php
@@ -644,21 +640,15 @@
                         </div>
                     </div>
                 </div>
-                <div><?php 
-                if ($this->_type == 1){
-                    $type = $this->getTyePersonnage();
-                    echo $type->getNom();
-                }
-                ?></div>
+                <div>
+                    <?php 
+                        if($this->_type == 1){
+                            $type = $this->getTyePersonnage();
+                            echo $type->getNom();
+                        }
+                    ?>
+                </div>
             <?php
-        }
-
-        public function getId(){
-            return $this->_id;
-        }
-
-        public function getMap(){
-            return $this->map;
         }
 
         public function lvlupAttaque($attaque){
@@ -677,7 +667,7 @@
             $this->_bdd->query($sql);
         }
 
-        //permet de changer la position du joueur sur la carte
+        /** Déplacement de l'entitée sur la Map : Appliqué aux joueux */
         public function changeMap($NewMap){
             $this->map = $NewMap;
             //on mémorise çà en base
@@ -685,6 +675,7 @@
             $this->_bdd->query($sql);
         }
 
+        /** Récupère l'entitée par ID */
         public function setEntiteById($id){
             $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `id`='".$id."'");
             if($tab = $Result->fetch()){
@@ -693,14 +684,12 @@
                 $map = new map($this->_bdd);
                 $map->setMapByID($tab["idMap"]);
                 $this->map = $map;
-
                 //select les equipements déjà présent
                 $req = "SELECT idEquipement FROM `EntiteEquipement` WHERE idEntite='".$id."'";
                 $Result = $this->_bdd->query($req);
                 while($tab=$Result->fetch()){
                     array_push($this->sacEquipements,$tab[0]);
                 }
-
                 //select les Equipement déjà présent
                 $req = "SELECT idEquipement,equipe FROM `EntiteEquipement` WHERE idEntite='".$id."' AND equipe='1'";
                 $Result = $this->_bdd->query($req);
@@ -736,7 +725,8 @@
                 $newperso->setEntiteById($this->_id);
                 $this->_bdd->commit();
                 return $newperso;
-            }else{
+            }
+            else{
                 $this->_bdd->rollback();
                 return null;
             }

@@ -1,13 +1,9 @@
 ﻿<?php
-    //cette classe est développé par : ???
-
-class Competence  {
-
-    private  $id_;
-    private $nom_;
-    private $idCategorie_;
-    private $Information_;	
-    private $idTyp_;
-    
-}
+    class Competence  {
+        private $_id;
+        private $_nom;
+        private $_idCategorie;
+        private $_information;	
+        private $_idTyp;
+    }
 ?>

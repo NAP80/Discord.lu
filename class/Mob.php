@@ -1,28 +1,33 @@
 <?php
-    //TODO MOB ET PERSONNAGE ON TROP DE SIMILITUDE
-    //IL FAUT REFACTORISER AVEC DE LhERITAGE
+    // Beaucoup de Similitude entre Personnage/Entité -> Refactoriser avec héritage
     class Mob extends Entite{
-        //valeur
         private $_coefXP;
         private $_typeMob;
-        //fonction
+
         public function __construct($bdd){
             Parent::__construct($bdd);
         }
+
+        /** Return CoefXp */
         public function getCoefXp(){
             return $this->_coefXP;
         }
+
+        /** Return Type Mob */
         public function getTypeMob(){
             return $this->_typeMob;
         }
+
         public function setMobById($id){
             Parent::setEntiteByIdWithoutMap($id);
             $this->initInfo($id);
         }
+
         public function setMobByIdWithMap($id){
             Parent::setEntiteById($id);
             $this->initInfo($id);
         }
+
         private function initInfo($id){
             //select les info personnage
             $req  = "SELECT * FROM `Mob` WHERE id='".$id."'";
@@ -30,15 +35,16 @@
             if($tab=$Result->fetch()){
                 $this->_typeMob  = $tab['type'];
                 $this->_coefXP  = $tab['coefXp'];
-            }else{
+            }
+            else{
                 $req  = "INSERT  INTO `Mob` (id,type,coefXp) VALUE ('".$id."','0','1')";
                 $Result = $this->_bdd->query($req);
             }
         }
+
         //methode appelé quand un personnage attaque un mob
         //le perso est passé en param return 0 si pas possible d'attaquer
-        public function SubitDegat($Entite)
-        {
+        public function SubitDegat($Entite){
             $Attaque = $Entite->getAttaque();
             $CoolDown = $Entite->getCoolDownAttaque();
             $CoupCritique='coolDown';
@@ -52,11 +58,10 @@
                     $degat = $Attaque * 1.5;
                     $degat = round($degat);
                     $this->_vie = $this->_vie - $degat;
-                    if($degat > 1)
-                    {
+                    if($degat > 1){
                         $CoupCritique = "Coup Critique ! Vous avez infligé ".$degat." points de dégâts.";
-                    } else
-                    {
+                    }
+                    else{
                         $CoupCritique = "Coup Critique ! Vous avez infligé ".$degat." point de dégât.";
                     }
                 }
@@ -64,11 +69,10 @@
                     $degat = $Attaque;
                     $degat = round($degat);
                     $this->_vie = $this->_vie - $degat;
-                    if($degat > 1)
-                    {
+                    if($degat > 1){
                         $CoupCritique = "Vous avez infligé ".$degat." points de dégâts.";
-                    } else
-                    {
+                    }
+                    else{
                         $CoupCritique = "Vous avez infligé ".$degat." point de dégât.";
                     }
                 }
@@ -114,14 +118,17 @@
             }
             return array ($this->_vie, $CoupCritique);
         }
+
+        /** Return Historique d'ataque */
         public function getHistoriqueAttaque(){
             $req  = "SELECT * FROM `AttaquePersoMob` where idMob = '".$this->_id."'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
-                array_push($this->HostoriqueAttaque,$tab);
+                array_push($this->HistoriqueAttaque,$tab);
             }
-            return $this->HostoriqueAttaque;
+            return $this->HistoriqueAttaque;
         }
+
         //retourne toute la mécanique d'affichage d'un mob
         public function renderHTML(){
             ?>
@@ -135,6 +142,8 @@
                 </div>
             <?php
         }
+
+        /** Création d'un Mobs Aléatoire */
         public function CreateMobAleatoire($map){
                 $newMob = new Mob($this->_bdd);
                 $type = $this->getTypeAleatoire();
@@ -170,7 +179,8 @@
                     $map->addItem($itemEnplus->createItemAleatoire());
                 }
         }
-        //retour un tableau vace le nom du type et id dy type
+
+        //retour un tableau avec le nom du type et id dy type
         //$tab[0]=$newTypeNom;
         //$tab[1]=$newType;
         //$tab[2]=$coef;
@@ -199,6 +209,8 @@
             $tab[3]=$image;
             return $tab;
         }
+
+        /** Génére et Return un Nom en fonction du Type */
         public function GenerateName($type){
             $nom = $type;
             $Adjectif = "";
@@ -876,6 +888,8 @@
             }
             return $nom." ".$Adjectif." ".$Nom;
         }
+
+        /** Génére et Return un lien d'image en fonction du Type */
         public function generateImageMob($topic){
             //echo '<img src="'.$partialString3.'" widht="200px">';
             if(empty($topic)){
@@ -884,24 +898,22 @@
             $ofs=mt_rand(0, 100);
             $geturl='https://www.bing.com/images/search?q='.$topic.'&first='.$ofs.'&tsc=ImageHoverTitle';
             $data=file_get_contents($geturl);
-            //echo $data;
             //partialString1 is bigger link.. in it will be a scr for the beginning of the url
             $f1='<div class="img_cont hoff">';
             $pos1=strpos($data, $f1)+strlen($f1);
             $partialString1 = substr($data, $pos1);
-
             $f1bis='src="';
             $pos1=strpos($partialString1, $f1bis)+strlen($f1bis);
             $partialString1 = substr($partialString1, $pos1);
-
             //PartialString3 ends the url when it sees the "&amp;"
             $f3='"';
             $urlLength=strpos($partialString1, $f3);
             $partialString3 = substr($partialString1, 0, $urlLength);
             return $partialString3;
         }
-        public function healmobspawn($id)//prend en paramettre l'id du mob qui faut heal
-        {
+
+        /** Reset Vie de Mob by ID */
+        public function healmobspawn($id){
             $this->_bdd->query("UPDATE `Entite` SET `vie` = '".$this->vieMax."' WHERE `id` = $id");
         }
     }
