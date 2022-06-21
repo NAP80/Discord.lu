@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 06 juin 2022 à 00:23
+-- Généré le : mar. 21 juin 2022 à 23:04
 -- Version du serveur :  8.0.21
 -- Version de PHP : 7.3.21
 
@@ -67,22 +67,6 @@ INSERT INTO `categorie` (`id`, `Attaque`, `Defense`, `Magie`, `nom`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `competence`
---
-
-DROP TABLE IF EXISTS `competence`;
-CREATE TABLE IF NOT EXISTS `competence` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nom` varchar(100) NOT NULL,
-  `idCategorie` int NOT NULL,
-  `Information` text NOT NULL,
-  `idType` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `efficacite`
 --
 
@@ -142,21 +126,6 @@ CREATE TABLE IF NOT EXISTS `entite` (
   KEY `idUser` (`idUser`),
   KEY `type` (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=COMPACT;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `entitecompetence`
---
-
-DROP TABLE IF EXISTS `entitecompetence`;
-CREATE TABLE IF NOT EXISTS `entitecompetence` (
-  `idEntite` int NOT NULL,
-  `idCompetence` int NOT NULL,
-  `equipe` tinyint NOT NULL,
-  KEY `idCompetence` (`idCompetence`),
-  KEY `idEntite` (`idEntite`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -537,7 +506,6 @@ CREATE TABLE IF NOT EXISTS `typepersonnage` (
   `nom` varchar(50) NOT NULL DEFAULT 'humain',
   `coefAttaque` float NOT NULL DEFAULT '1',
   `coefDefense` float NOT NULL DEFAULT '1',
-  `coefPouvoir` float NOT NULL DEFAULT '1',
   `coefBouclier` float NOT NULL DEFAULT '1',
   `coefCoolDown` int NOT NULL DEFAULT '1',
   `distance` tinyint NOT NULL DEFAULT '0',
@@ -550,26 +518,26 @@ CREATE TABLE IF NOT EXISTS `typepersonnage` (
 -- Déchargement des données de la table `typepersonnage`
 --
 
-INSERT INTO `typepersonnage` (`id`, `nom`, `coefAttaque`, `coefDefense`, `coefPouvoir`, `coefBouclier`, `coefCoolDown`, `distance`, `lienImage`, `idFaction`) VALUES
-(1, 'Humain - 3', 1, 1, 0.8, 1, 1, 0, 'https://media.sciencephoto.com/c0/39/51/80/c0395180-800px-wm.jpg', 3),
-(2, 'Naruto Humain', 1, 1, 0.8, 1, 1, 0, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcomkY3FAt3ObQPsLCKb828ltFy1BNS-rtFQ&usqp=CAU', 1),
-(3, 'Humain - 2', 1, 1, 0.8, 1, 1, 0, 'https://static.wikia.nocookie.net/batman/images/e/e5/Martha_Wayne.jpg/revision/latest/top-crop/width/360/height/450?cb=20100425181617', 2),
-(4, 'Humain - 4', 1, 1, 0.8, 1, 1, 0, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEi9QxhJpudHqzdfOQH-OpDH0o5L-B6uAcjg&usqp=CAU', 4),
-(5, 'Dbz - Sayen', 1.5, 1, 1, 0.7, 1, 0, '', 1),
-(6, 'Dbz - Humain', 1, 1, 1, 0.7, 1, 0, '', 1),
-(7, 'DbZ - Sorcier', 1, 1, 1, 0.7, 1, 0, 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoGCBMTERcTExMXGBcZFxoaGhoXGhoYGxwZGhcfGhobGhkaHysjHB8oHxodJTYlKCwuMjMyGSE3PDcxOysxMi4BCwsLDw4PHRERHTEoISg7MTExMTMuMS4xMTMxMTEzOTQxMTExMTExOTMxM', 1),
-(8, 'Batman - Humain', 1, 1, 1, 1, 1, 0, '', 2),
-(9, 'Batman - Magicien', 0.8, 1, 1.2, 1, 1, 0, '', 2),
-(10, 'Flash - Magicien', 0.8, 1, 1.2, 1, 1, 0, '', 2),
-(11, 'Hulk - Magicen', 1, 0.8, 1.2, 1, 1, 0, '', 2),
-(12, 'Alien - Alien', 1, 1, 1, 1, 1, 0, '', 3),
-(13, 'Alien - Marines', 1, 1, 1, 1, 1, 0, '', 3),
-(14, 'Alien - Humain', 1, 1, 1, 1, 1, 0, '', 3),
-(15, 'Starwars - jedi', 1, 1, 1, 1, 1, 0, '', 3),
-(16, 'Starwars - sith', 1, 1, 1, 1, 1, 0, '', 3),
-(17, 'League Of Legend - Assassin', 1, 1, 1, 1, 1, 0, '', 4),
-(18, 'League Of Legend - Tank', 1, 1, 1, 1, 1, 0, '', 4),
-(19, 'Humain - π', 10, 10, 10, 10, 1, 10, 'https://i.pinimg.com/originals/d3/b0/6b/d3b06b0479de8fd88e5b1bd8df1068cd.jpg', 5);
+INSERT INTO `typepersonnage` (`id`, `nom`, `coefAttaque`, `coefDefense`, `coefBouclier`, `coefCoolDown`, `distance`, `lienImage`, `idFaction`) VALUES
+(1, 'Humain - 3', 1, 1, 1, 1, 0, 'https://media.sciencephoto.com/c0/39/51/80/c0395180-800px-wm.jpg', 3),
+(2, 'Naruto Humain', 1, 1, 1, 1, 0, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcomkY3FAt3ObQPsLCKb828ltFy1BNS-rtFQ&usqp=CAU', 1),
+(3, 'Humain - 2', 1, 1, 1, 1, 0, 'https://static.wikia.nocookie.net/batman/images/e/e5/Martha_Wayne.jpg/revision/latest/top-crop/width/360/height/450?cb=20100425181617', 2),
+(4, 'Humain - 4', 1, 1, 1, 1, 0, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEi9QxhJpudHqzdfOQH-OpDH0o5L-B6uAcjg&usqp=CAU', 4),
+(5, 'Dbz - Sayen', 1.5, 1, 0.7, 1, 0, '', 1),
+(6, 'Dbz - Humain', 1, 1, 0.7, 1, 0, '', 1),
+(7, 'DbZ - Sorcier', 1, 1, 0.7, 1, 0, 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoGCBMTERcTExMXGBcZFxoaGhoXGhoYGxwZGhcfGhobGhkaHysjHB8oHxodJTYlKCwuMjMyGSE3PDcxOysxMi4BCwsLDw4PHRERHTEoISg7MTExMTMuMS4xMTMxMTEzOTQxMTExMTExOTMxM', 1),
+(8, 'Batman - Humain', 1, 1, 1, 1, 0, '', 2),
+(9, 'Batman - Magicien', 0.8, 1, 1, 1, 0, '', 2),
+(10, 'Flash - Magicien', 0.8, 1, 1, 1, 0, '', 2),
+(11, 'Hulk - Magicen', 1, 0.8, 1, 1, 0, '', 2),
+(12, 'Alien - Alien', 1, 1, 1, 1, 0, '', 3),
+(13, 'Alien - Marines', 1, 1, 1, 1, 0, '', 3),
+(14, 'Alien - Humain', 1, 1, 1, 1, 0, '', 3),
+(15, 'Starwars - jedi', 1, 1, 1, 1, 0, '', 3),
+(16, 'Starwars - sith', 1, 1, 1, 1, 0, '', 3),
+(17, 'League Of Legend - Assassin', 1, 1, 1, 1, 0, '', 4),
+(18, 'League Of Legend - Tank', 1, 1, 1, 1, 0, '', 4),
+(19, 'Humain - π', 10, 10, 10, 1, 10, 'https://i.pinimg.com/originals/d3/b0/6b/d3b06b0479de8fd88e5b1bd8df1068cd.jpg', 5);
 
 -- --------------------------------------------------------
 
@@ -584,6 +552,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `name` varchar(50) NOT NULL,
   `mdp` varchar(200) NOT NULL,
   `idPersonnage` int NOT NULL,
+  `idFaction` int DEFAULT NULL,
   `admin` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `login` (`login`),
