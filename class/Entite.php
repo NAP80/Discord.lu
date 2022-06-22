@@ -516,7 +516,9 @@
             $this->_vieMax=$vieMax;
             $this->_degat=$attaque;
             $maporigine = new Map($this->_bdd);
-            $maporigine->setMapByID(0);
+            // TODO : Récupérer point de Spawn du personnage pour pouvoir le changer à chaque ville.
+            $Personnage_Spawn = 1;
+            $maporigine->setMapByID($Personnage_Spawn);
             $this->changeMap($maporigine);
         }
 

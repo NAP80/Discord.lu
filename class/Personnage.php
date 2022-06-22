@@ -282,7 +282,7 @@
             <?php
             if(isset($_POST["createPerso"]) && !is_null($factionDuJoueur)){
                 $newperso = new Personnage($this->_bdd);
-                $newperso = $newperso->CreateEntite($_POST['NomPersonnage'], 100, 10, 0,100,$_POST['image'],$idUser,1,1);
+                $newperso = $newperso->CreateEntite($_POST['NomPersonnage'], 100, 10, 1,100,$_POST['image'],$idUser,1,1);
                 $idTypePersonnage = $_POST['idTypePerso'];
                 if($newperso->getId()){
                     $req="INSERT INTO `Personnage`(`id`,`xp`,`idTypePersonnage`) VALUES ('".$newperso->getId()."','1','".$idTypePersonnage."')";
