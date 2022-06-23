@@ -5,6 +5,7 @@
         private $_mdp;
         private $_name;
         private $_faction;
+        private $_dateUser;
         private $_admin;
         private $_bdd;
 
@@ -44,6 +45,11 @@
             return $this->_faction;
         }
 
+        /** Return Faction */
+        public function getDateUser(){
+            return $this->_dateUser;
+        }
+
         /** Return Nom du personnage en cours de 'lUser */
         public function getNomPersonnage(){
             return $this->_MonPersonnage->getNom();
@@ -56,7 +62,7 @@
 
         /** Set User By ID */
         public function setUserById($id){
-            $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `id`='".$id."' ");
+            $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `id`='".$id."'");
             if($tab = $Result->fetch()){ 
                 $this->setUser($tab["id"],$tab["login"],$tab["mdp"],$tab["idFaction"],$tab["name"],$tab["admin"]);
                 //chercher son personnage
