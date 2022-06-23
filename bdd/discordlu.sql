@@ -3,13 +3,14 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mar. 21 juin 2022 à 23:04
+-- Généré le : jeu. 23 juin 2022 à 06:00
 -- Version du serveur :  8.0.21
 -- Version de PHP : 7.3.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -542,6 +543,37 @@ INSERT INTO `typepersonnage` (`id`, `nom`, `coefAttaque`, `coefDefense`, `coefBo
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `typeuser`
+--
+
+DROP TABLE IF EXISTS `typeuser`;
+CREATE TABLE IF NOT EXISTS `typeuser` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
+  `admin` tinyint NOT NULL,
+  `Staff` tinyint NOT NULL,
+  `bypass` tinyint NOT NULL,
+  `visibility` tinyint NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `typeuser`
+--
+
+INSERT INTO `typeuser` (`id`, `name`, `admin`, `Staff`, `bypass`, `visibility`) VALUES
+(12, 'Administrateur', 1, 1, 1, 0),
+(11, 'Opérateur', 1, 1, 1, 0),
+(10, 'Modérateur', 0, 1, 1, 0),
+(3, 'Joueur Expérimenté', 0, 0, 0, 1),
+(2, 'Joueur Vérifié', 0, 0, 0, 1),
+(1, 'Joueur', 0, 0, 0, 1),
+(0, 'Ban', 0, 0, 0, 0),
+(-1, 'Testeur', 0, 0, 1, 0);
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `user`
 --
 
@@ -550,13 +582,15 @@ CREATE TABLE IF NOT EXISTS `user` (
   `id` int NOT NULL AUTO_INCREMENT,
   `login` varchar(50) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `mdp` varchar(200) NOT NULL,
+  `mdp` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `idPersonnage` int NOT NULL,
   `idFaction` int DEFAULT NULL,
+  `dateUser` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `admin` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `login` (`login`),
-  KEY `idPersonnage` (`idPersonnage`)
+  KEY `idPersonnage` (`idPersonnage`),
+  KEY `idFaction` (`idFaction`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
