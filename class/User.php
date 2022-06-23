@@ -91,7 +91,8 @@
             if(isset($_POST["sub"])){
                 if($_POST['MDP'] == $_POST['password']){
                     if(!empty($_POST['name'])){
-                        $req ="INSERT INTO `User`( `login`, `name`, `mdp`) VALUES ('".$_POST['login']."','".$_POST['name']."','".$_POST['password']."')";
+                        $PasswordHash = password_hash($_POST['password'], PASSWORD_BCRYPT);
+                        $req ="INSERT INTO `User`( `login`, `name`, `mdp`) VALUES ('".$_POST['login']."','".$_POST['name']."','".$PasswordHash."')";
                         $Result = $this->_bdd->query($req);
                     }
                     else{
@@ -101,16 +102,17 @@
                 else{
                     echo "Les mots de passes ne corespondent pas.";
                 }
-                
             }
             //traitement du formulaire
             $access = false;
             if(isset($_POST["login"]) && isset($_POST["password"])){
                 //verif mdp en BDD
-                $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `login`='".$_POST['login']."' AND `mdp` = '".$_POST['password']."'");
-                if($tab = $Result->fetch()){
+                $Password = $_POST["password"];
+                $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `login`='".$_POST['login']."'");
+                $tab = $Result->fetch();
+                $PasswordHash = $tab['mdp'];
+                if(password_verify($Password, $PasswordHash)){
                     $this->setUserById($tab["id"]);
-                    //si mdp = ok
                     $access = true;
                     $_SESSION["idUser"]= $tab["id"];
                     $_SESSION["Connected"]=true;
@@ -120,7 +122,7 @@
                 }
                 else{
                     if($errorMessage==""){
-                        $errorMessage = "Le mots de passe ne correspond pas.";
+                        $errorMessage = "Le pseudo ou le mots de passe ne correspondent pas.";
                     }
                     $afficheForm = true;
                 }
