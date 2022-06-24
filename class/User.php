@@ -4,7 +4,7 @@
         private $_login;
         private $_mdp;
         private $_name;
-        private $_faction;
+        private $_idFaction;
         private $_dateUser;
         private $_admin;
         private $_bdd;
@@ -16,11 +16,11 @@
         }
 
         /** Récupère User */
-        public function setUser($id,$login,$mdp,$faction,$name,$admin){
+        public function setUser($id,$login,$mdp,$idFaction,$name,$admin){
             $this->_id = $id;
             $this->_login = $login;
             $this->_mdp = $mdp;
-            $this->_faction = $faction;
+            $this->_idFaction = $idFaction;
             $this->_name = $name;
             $this->_admin = $admin;
         }
@@ -41,8 +41,8 @@
         }
 
         /** Return Faction */
-        public function getFaction(){
-            return $this->_faction;
+        public function getIdFaction(){
+            return $this->_idFaction;
         }
 
         /** Return Faction */
@@ -429,7 +429,7 @@
                 $Faction = new Faction($this->_bdd);
                 $Faction->setFactionById($_SESSION['Faction']);
                 $FactionUser = $Faction;
-                $RepMSG = "Vous êtes maintenant dans la faction ".$FactionUser->getNom()." .";
+                $RepMSG = "Vous êtes maintenant dans la faction ".$FactionUser->getNameFaction()." .";
                 echo $RepMSG;
             }
             else{
