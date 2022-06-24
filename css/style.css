@@ -221,6 +221,22 @@ input[value='Deco!']{
     background-color: grey;
 }
 
+/* Faction */
+.formfaction{
+    border: solid;
+}
+.faction_1{
+    border-color: rgba(23,24,181,0.84);
+}
+.faction_2{
+    border-color: rgba(160,74,36,0.89);
+}
+.faction_3{
+    border-color: rgba(159,159,199,0.4);
+}
+.faction_4{
+    border-color: rgba(222,80,80,0.95);
+}
 
 /*les liens*/
 
