@@ -240,26 +240,28 @@
                             $factionDuJoueur = $faction;
                         }
                         if(!is_null($factionDuJoueur)){
-                            $TypePersos=  $factionDuJoueur->getAllTypePersonnage();
+                            print_r($_SESSION['Faction']);
+                            $TypePersos = $factionDuJoueur->getAllTypePersonnage();
                             $TypePerso = $TypePersos[rand(0,count($TypePersos)-1)];
-                            $imageUrl = $this->generateImage( $factionDuJoueur->getNom().'+'.$TypePerso->getNom());
+                            $imageUrl = $this->generateImage($factionDuJoueur->getNameFaction().'+'.$TypePerso->getNom());
                             ?>
                                 <form action="" method="post" onclick="this.submit()">
                                     <img class="creationImage" src="<?php echo $imageUrl;?>" width="200px">
                                 </form>
-                                <p>Vous êtes dans la faction : <?=$factionDuJoueur->getNom()?></p>
+                                <p>Vous êtes dans la faction : <?=$factionDuJoueur->getNameFaction()?></p>
                                 <form action="" method="post" class="formCreationPersonnage">
                                     <div>Créez un personnage ou choisissez-en un :</div>
                                     <input type="text" name="NomPersonnage" required>
                                     <?php
                                         //affichage des type de personnage selon la faction
                                         if(!is_null($factionDuJoueur)){
+                                            // En fait là on récupère les type de personnages en fonction de son ID de Faction
                                             $TypePersos= $factionDuJoueur->getAllTypePersonnage();
                                             ?>
                                                 <select name="idTypePerso" id="idTypePerso">
                                                     <?php
                                                         foreach ($TypePersos as $TypePerso) {
-                                                            echo '<option value="'.$TypePerso->getID().'" '.$selected.'> '.$TypePerso->getNom().'</option>';
+                                                            echo '<option value="'.$TypePerso->getID().'" '.$selected.'> '.$TypePerso->getNameFaction().'</option>';
                                                         }
                                                     ?>
                                                 </select>

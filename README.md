@@ -3,7 +3,7 @@ Refonte du projet scolaire https://github.com/EnseignantLapro/Covid.
 
 # Avancement :
 - Début Uniformisation Code + Commentaires
-
+- Refonte Form Choix Faction.
 
 ## Todo List :
 - Refonte Inscription/Connexion FRONT.
