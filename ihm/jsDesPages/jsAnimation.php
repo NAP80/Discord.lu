@@ -3,38 +3,38 @@
     function hitAnimation(event){
         const weaponType = document.querySelector(".Arme").innerText
             , eventFrame = document.querySelector(".effect")
-            , soundPath  = "Assets/Sounds";
+            , soundPath  = "assets/sounds";
         const rand = (x) => ~~(Math.random() * x) + 1;
         const {clientX, clientY} = event;
         if(["Glaive", "Épée"].some(w => weaponType.includes(w))){
             eventFrame.style.top  = `${clientY + window.scrollY}px`;
             eventFrame.style.left = `${clientX}px`;
             eventFrame.classList.add("sword-slash");
-            new Audio(`${soundPath}/Sword/swordSound${rand(3)}.mp3`).play();
+            new Audio(`${soundPath}/sword/swordSound${rand(3)}.mp3`).play();
         }
         if(["Fouet"].some(w => weaponType.includes(w))){
             eventFrame.style.top  = `${clientY + window.scrollY}px`;
             eventFrame.style.left = `${clientX}px`;
             eventFrame.classList.add("sword-slash");
-            new Audio(`${soundPath}/Fouet/SoundFouet.mp3`).play();
+            new Audio(`${soundPath}/fouet/soundfouet.mp3`).play();
         }
         if(["Pistolet"].some(w => weaponType.includes(w))){
             eventFrame.style.top  = `${clientY + window.scrollY}px`;
             eventFrame.style.left = `${clientX}px`;
             eventFrame.classList.add("sword-slash");
-            new Audio(`${soundPath}/Pistolet/SoundPistol${rand(4)}.mp3`).play();
+            new Audio(`${soundPath}/pistolet/soundpistol${rand(4)}.mp3`).play();
         }
         if(["L'amour"].some(w => weaponType.includes(w))){
             eventFrame.style.top  = `${clientY + window.scrollY}px`;
             eventFrame.style.left = `${clientX}px`;
             eventFrame.classList.add("sword-slash");
-            new Audio(`${soundPath}/Amour/oni-chan.mp3`).play();
+            new Audio(`${soundPath}/amour/oni-chan.mp3`).play();
         }
         if(["Sabre Laser"].some(w => weaponType.includes(w))){
             eventFrame.style.top  = `${clientY + window.scrollY}px`;
             eventFrame.style.left = `${clientX}px`;
             eventFrame.classList.add("sword-slash");
-            const sound = new Audio(`${soundPath}/Sabre_Laser/Enuma_Elish.mp3`);
+            const sound = new Audio(`${soundPath}/sabre_Laser/enuma_Elish.mp3`);
             sound.volume = 0.1;
             sound.play();
         }
@@ -42,13 +42,13 @@
             eventFrame.style.top  = `${clientY + window.scrollY}px`;
             eventFrame.style.left = `${clientX}px`;
             eventFrame.classList.add("sword-slash");
-            new Audio(`${soundPath}/Parapluie/Parapluie.mp3`).play();
+            new Audio(`${soundPath}/parapluie/parapluie.mp3`).play();
         }
         if(["Baton"].some(w => weaponType.includes(w))){
             eventFrame.style.top  = `${clientY + window.scrollY}px`;
             eventFrame.style.left = `${clientX}px`;
             eventFrame.classList.add("sword-slash");
-            new Audio(`${soundPath}/Baton/coup_baton${rand(2)}.mp3`).play();
+            new Audio(`${soundPath}/baton/coup_baton${rand(2)}.mp3`).play();
         }
         eventFrame.classList.add("play");
         eventFrame.onanimationend = () => eventFrame.classList.remove("play");

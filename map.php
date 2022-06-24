@@ -79,7 +79,7 @@
                                 <div class="divInformationMap">
                                     <div class="divMap">
                                         <?= $BousoleDeplacement['nord'] ?>
-                                        <img src="Assets/Image/Fleche-225px.png" class="NESO">
+                                        <img src="assets/image/Fleche-225px.png" class="NESO">
                                         <div class="divMapOuest">
                                             <?= $BousoleDeplacement['ouest'] ?>
                                             <div class="divMapEst">
@@ -166,5 +166,5 @@
         include "ihm/jsDesPages/jsMap.php";
         include "ihm/jsDesPages/jsAnimation.php";
     ?>
-    <script src="Javascript/map.js"></script>
+    <script src="javascript/map.js"></script>
 </html>

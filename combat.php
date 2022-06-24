@@ -96,8 +96,8 @@
                 echo $errorMessage;
             }
             include "ihm/fonction-web/footer.php";
-            include "ihm/jsDesPages/jsMap.php";
-            include "ihm/jsDesPages/jsAnimation.php";
+            include "ihm/jsdespages/jsMap.php";
+            include "ihm/jsdespages/jsAnimation.php";
         ?>
     </body>
 </html>
