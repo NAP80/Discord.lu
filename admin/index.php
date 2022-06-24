@@ -11,7 +11,6 @@
         <!-- Style CSS / Script -->
             <link rel="stylesheet" href="../css/admin.css">
             <link rel="stylesheet" href="../css/style.css">
-            <script src="main.js"></script>
         <!-- Informations Générales -->
             <title>Projet Full Stack - Panel Admins</title>
             <meta name='description' content='Projet Full Stack - Panel Admin'>

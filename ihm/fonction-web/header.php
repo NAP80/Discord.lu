@@ -21,7 +21,5 @@
         <meta name='twitter:title' content='<?= $NameWebsite ?> - <?= $NameLocal ?>'>
         <meta name='twitter:description' content='<?= $NameWebsite ?> - <?= $NameLocal ?>'>
         <meta name='twitter:image' content='<?= $NameIcon ?>'>
-    <!-- Style Script -->
-        <script src="main.js"></script>
     <!-- Style CSS Style Base -->
         <link rel="stylesheet" href="css/style.css">
