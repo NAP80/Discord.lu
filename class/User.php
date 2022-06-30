@@ -5,6 +5,7 @@
         private $_mdp;
         private $_name;
         private $_idFaction;
+        private $_idPersonnage;
         private $_dateUser;
         private $_admin;
         private $_bdd;
@@ -16,12 +17,14 @@
         }
 
         /** Récupère User */
-        public function setUser($id,$login,$mdp,$idFaction,$name,$admin){
+        public function setUser($id,$login,$mdp,$name,$idFaction,$idPersonnage,$dateUser,$admin){
             $this->_id = $id;
             $this->_login = $login;
             $this->_mdp = $mdp;
-            $this->_idFaction = $idFaction;
             $this->_name = $name;
+            $this->_idFaction = $idFaction;
+            $this->_idPersonnage = $idPersonnage;
+            $this->_dateUser = $dateUser;
             $this->_admin = $admin;
         }
 
@@ -50,12 +53,17 @@
             return $this->_dateUser;
         }
 
-        /** Return Nom du personnage en cours de 'lUser */
+        /** Return Id du personnage en cours de l'User */
+        public function getIdPersonnage(){
+            return $this->_idPersonnage;
+        }
+
+        /** Return Nom du personnage en cours de l'User : À dégager */
         public function getNomPersonnage(){
             return $this->_MonPersonnage->getNom();
         }
 
-        /** Return Object Personnage en Court */
+        /** Return Object Personnage */
         public function getPersonnage(){
             return $this->_MonPersonnage;
         }
@@ -64,7 +72,7 @@
         public function setUserById($id){
             $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `id`='".$id."'");
             if($tab = $Result->fetch()){ 
-                $this->setUser($tab["id"],$tab["login"],$tab["mdp"],$tab["idFaction"],$tab["name"],$tab["admin"]);
+                $this->setUser($tab["id"],$tab["login"],$tab["mdp"],$tab["name"],$tab["idFaction"],$tab["idPersonnage"],$tab["dateUser"],$tab["admin"]);
                 //chercher son personnage
                 $personnage = new Personnage($this->_bdd);
                 $personnage->setPersonnageById($tab["idPersonnage"]);
@@ -72,10 +80,9 @@
             }
         }
 
-        /** Set Personnage */
+        /** Set Object Personnage */
         public function setPersonnage($Perso){
             $this->_MonPersonnage = $Perso;
-            //je mémorise en base l'association du personnage dans user
             $req ="UPDATE `User` SET `idPersonnage`='".$Perso->getID()."' WHERE `id` = '".$this->_id."'";
             $Result = $this->_bdd->query($req);
         }
