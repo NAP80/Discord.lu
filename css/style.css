@@ -19,7 +19,6 @@ html,body{
 }
 
 body{
-    margin-top:100px;
     width:100%;
     background-image:url('https://www.wallpaperuse.com/wallp/48-481854_m.jpg');
     background-size:cover;
@@ -38,6 +37,7 @@ body{
 
 .divReglement{
     margin:auto;
+    margin-top: 100px;
     padding: 40px;
     text-align: center;
     width:800px;

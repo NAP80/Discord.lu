@@ -203,7 +203,7 @@
                         $User = new User($this->_bdd);
                         $User->setUserById($idUser);
                         $idFactionUser = $User->getIdFaction();
-                        $TypePersos = $User->getAllTypePersonnage();
+                        $TypePersos = $User->getAllTypePersonnage($idFactionUser);
                         $TypePerso = $TypePersos[rand(0,count($TypePersos)-1)];
                         $imageUrl = $this->generateImage($TypePerso->getNom());
                         ?>
@@ -217,18 +217,17 @@
                                     //affichage des type de personnage selon la faction
                                     if(!is_null($idFactionUser)){
                                         // En fait là on récupère les type de personnages en fonction de son ID de Faction
-                                        $TypePersos = $User->getAllTypePersonnage();
+                                        $TypePersos = $User->getAllTypePersonnage($idFactionUser);
                                         ?>
                                             <select name="idTypePerso" id="idTypePerso">
                                                 <?php
                                                     foreach ($TypePersos as $TypePerso) {
-                                                        echo '<option value="'.$TypePerso->getID().'" '.$selected.'> '.$TypePerso->getNameFaction().'</option>';
+                                                        echo '<option value="'.$TypePerso->getID().'" '.$selected.'> '.$TypePerso->getNom().'</option>';
                                                     }
                                                 ?>
                                             </select>
                                             <input type="submit" value="Creer" name="createPerso">
-                                            <input type="hidden" name="image" value="<?php echo $imageUrl;?>">
-                                            <input type="hidden" name="idFaction" value="<?php echo $idFactionUser->getId();?>">
+                                            <input type="hidden" name="image" value="<?= $imageUrl ?>">
                                         <?php
                                     }
                                     else{

@@ -93,8 +93,6 @@
                                     <p><?= $tabFaction['nameFaction'] ?></p>
                                     <p><?= $tabFaction['descFaction'] ?></p>
                                     <img src="./assets/image/<?= $tabFaction['logoFaction'] ?>">
-                                    <?= $tabFaction['idFaction'] ?>
-                                    <?= $tabFaction['nameFaction'] ?>
                                     <a id="confirmFaction" class="ui-button ui-widget ui-corner-all" onclick="idFaction='<?= $tabFaction['idFaction'] ?>', nameFaction='<?= $tabFaction['nameFaction'] ?>', confirmFaction(nameFaction)">
                                         Rejoindre !
                                     </a>
@@ -150,9 +148,9 @@
         }
 
         /** Return un tableau des type de personnages en fonction de l'ID Faction */
-        public function getAllTypePersonnage(){
+        public function getAllTypePersonnage($idFactionUser){
             $TypePersos = array();
-            $Result = $this->_bdd->query("SELECT * FROM `TypePersonnage` WHERE idFaction = '".$this->_idFaction."'");
+            $Result = $this->_bdd->query("SELECT * FROM `TypePersonnage` WHERE idFaction = '".$idFactionUser."'");
             while($tab=$Result->fetch()){
                 $TypePerso = new TypePersonnage($this->_bdd);
                 $TypePerso->setTypePersonnageById($tab['id']);

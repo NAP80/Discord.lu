@@ -2,11 +2,14 @@
 Refonte du projet scolaire https://github.com/EnseignantLapro/Covid.
 
 # Avancement :
+
+## En cours :
 - Début Uniformisation Code + Commentaires
 
 ## Todo List :
 - Refonte Inscription/Connexion FRONT.
 - Refonte Inscription/Connexion BACK.
+- Refonte Form Création Personnage.
 - Ajouter Boite de Dialog pour RepMSG
 - Intégration envoie de mail et confirmation inscription.
 - Sécurisation MDP Session.
@@ -30,6 +33,8 @@ Refonte du projet scolaire https://github.com/EnseignantLapro/Covid.
 - Intégration Hiearchi Utilisateur.
 - Sécurisation Injection SQL.
 - Mise à jours Boolen Admin -> Rôle.
+- Patch CSS Décalage Dialog.
+- Refaire l'intégralité du CSS.
 
 ## Fait :
 - Récupération du projet.
