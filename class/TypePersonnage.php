@@ -88,7 +88,7 @@
         }
 
         /** Return idFaction */
-        public function getFaction(){
+        public function getIdFaction(){
             $faction = new Faction($this->_bdd);
             $faction->setFactionById($this->_idFaction);
             return $faction;

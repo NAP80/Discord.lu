@@ -182,7 +182,7 @@
         }
 
         /** Retourne les information Faction propre au Type Personnage : À dégager */
-        public function getFaction(){
+        public function getIdFaction(){
             $req = "SELECT * FROM `TypePersonnage` WHERE id = '".$this->_idTypePersonnage."'";
             $Result = $this->_bdd->query($req);
             if($tab = $Result->fetch()){
@@ -200,89 +200,49 @@
             ?>
                 <div class = "formCreatio">
                     <?php 
-                        //traitement du changement de faction
-                        if(isset($_POST["idFaction"])){
-                            $this->ChangeFactionById($_POST["idFaction"]);
-                            //on mémorise la faction en sessions pour le moment
-                            $_SESSION['Faction']=$_POST["idFaction"];
-                        }
                         $User = new User($this->_bdd);
                         $User->setUserById($idUser);
-                        $factionDuJoueur = $User->getFaction();
-                        //on va vérifier la faction du joueur
-                        //car un joueur ne peut être que dans une faction.
-                        if(is_null($factionDuJoueur)){
-                            ?>
-                                <p>Choisisez une faction :</p>
-                            <?php
-                            $Result = $this->_bdd->query("SELECT * FROM `Faction`");
-                            ?>
-                                <form action="" method="post" onchange="this.submit()">
-                                    <select name="idFaction" id="idFaction">
-                                        <option value="1">Choisisez une faction</option>
-                                        <?php
-                                            while($tab=$Result->fetch()){
-                                                $idFaction = 0;
-                                                if(isset($_SESSION['Faction'])){
-                                                    $idFaction = $_SESSION['Faction'];
-                                                }
-                                                ($tab['id']==$idFaction)?$selected='selected':$selected='';
-                                                echo '<option value="'.$tab["id"].'" '.$selected.'> '.$tab["nom"].'</option>';
-                                            }
+                        $idFactionUser = $User->getIdFaction();
+                        $TypePersos = $User->getAllTypePersonnage();
+                        $TypePerso = $TypePersos[rand(0,count($TypePersos)-1)];
+                        $imageUrl = $this->generateImage($TypePerso->getNom());
+                        ?>
+                            <form action="" method="post" onclick="this.submit()">
+                                <img class="creationImage" src="<?php echo $imageUrl;?>" width="200px">
+                            </form>
+                            <form action="" method="post" class="formCreationPersonnage">
+                                <div>Créez un personnage ou choisissez-en un :</div>
+                                <input type="text" name="NomPersonnage" required>
+                                <?php
+                                    //affichage des type de personnage selon la faction
+                                    if(!is_null($idFactionUser)){
+                                        // En fait là on récupère les type de personnages en fonction de son ID de Faction
+                                        $TypePersos = $User->getAllTypePersonnage();
                                         ?>
-                                    </select>
-                                </form>
-                            <?php
-                        }
-                        if(isset($_SESSION['Faction'])){
-                            $faction = new Faction($this->_bdd);
-                            $faction->setFactionById($_SESSION['Faction']);
-                            $factionDuJoueur = $faction;
-                        }
-                        if(!is_null($factionDuJoueur)){
-                            print_r($_SESSION['Faction']);
-                            $TypePersos = $factionDuJoueur->getAllTypePersonnage();
-                            $TypePerso = $TypePersos[rand(0,count($TypePersos)-1)];
-                            $imageUrl = $this->generateImage($factionDuJoueur->getNameFaction().'+'.$TypePerso->getNom());
-                            ?>
-                                <form action="" method="post" onclick="this.submit()">
-                                    <img class="creationImage" src="<?php echo $imageUrl;?>" width="200px">
-                                </form>
-                                <p>Vous êtes dans la faction : <?=$factionDuJoueur->getNameFaction()?></p>
-                                <form action="" method="post" class="formCreationPersonnage">
-                                    <div>Créez un personnage ou choisissez-en un :</div>
-                                    <input type="text" name="NomPersonnage" required>
-                                    <?php
-                                        //affichage des type de personnage selon la faction
-                                        if(!is_null($factionDuJoueur)){
-                                            // En fait là on récupère les type de personnages en fonction de son ID de Faction
-                                            $TypePersos= $factionDuJoueur->getAllTypePersonnage();
-                                            ?>
-                                                <select name="idTypePerso" id="idTypePerso">
-                                                    <?php
-                                                        foreach ($TypePersos as $TypePerso) {
-                                                            echo '<option value="'.$TypePerso->getID().'" '.$selected.'> '.$TypePerso->getNameFaction().'</option>';
-                                                        }
-                                                    ?>
-                                                </select>
-                                                <input type="submit" value="Creer" name="createPerso">
-                                                <input type="hidden" name="image" value="<?php echo $imageUrl;?>">
-                                                <input type="hidden" name="idFaction" value="<?php echo $factionDuJoueur->getId();?>">
-                                            <?php
-                                        }
-                                        else{
-                                            ?>
-                                                <div class="ChoixTypePerso">Choisissez une Faction si vous souhaitez créer un personage.</div>
-                                            <?php
-                                        }
-                                    ?>
-                                </form>
-                            <?php
-                        }
+                                            <select name="idTypePerso" id="idTypePerso">
+                                                <?php
+                                                    foreach ($TypePersos as $TypePerso) {
+                                                        echo '<option value="'.$TypePerso->getID().'" '.$selected.'> '.$TypePerso->getNameFaction().'</option>';
+                                                    }
+                                                ?>
+                                            </select>
+                                            <input type="submit" value="Creer" name="createPerso">
+                                            <input type="hidden" name="image" value="<?php echo $imageUrl;?>">
+                                            <input type="hidden" name="idFaction" value="<?php echo $idFactionUser->getId();?>">
+                                        <?php
+                                    }
+                                    else{
+                                        ?>
+                                            <div class="ChoixTypePerso">Choisissez une Faction si vous souhaitez créer un personage.</div>
+                                        <?php
+                                    }
+                                ?>
+                            </form>
+                        <?php
                     ?>
                 </div>
             <?php
-            if(isset($_POST["createPerso"]) && !is_null($factionDuJoueur)){
+            if(isset($_POST["createPerso"]) && !is_null($idFactionUser)){
                 $newperso = new Personnage($this->_bdd);
                 $newperso = $newperso->CreateEntite($_POST['NomPersonnage'], 100, 10, 1,100,$_POST['image'],$idUser,1,1);
                 $idTypePersonnage = $_POST['idTypePerso'];

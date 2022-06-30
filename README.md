@@ -3,11 +3,11 @@ Refonte du projet scolaire https://github.com/EnseignantLapro/Covid.
 
 # Avancement :
 - Début Uniformisation Code + Commentaires
-- Refonte Form Choix Faction.
 
 ## Todo List :
 - Refonte Inscription/Connexion FRONT.
 - Refonte Inscription/Connexion BACK.
+- Ajouter Boite de Dialog pour RepMSG
 - Intégration envoie de mail et confirmation inscription.
 - Sécurisation MDP Session.
 - Refonte des déplacements MAP (Retrait du délire de TP, système de direction pour les déplacements).
@@ -29,9 +29,10 @@ Refonte du projet scolaire https://github.com/EnseignantLapro/Covid.
 - Intégration Système de Ban.
 - Intégration Hiearchi Utilisateur.
 - Sécurisation Injection SQL.
-- Mise à jours Admin -> Rôle.
+- Mise à jours Boolen Admin -> Rôle.
 
 ## Fait :
 - Récupération du projet.
 - Mise à jours des crédits.
 - Hash des MDP en BDD.
+- Refonte Form Choix Faction.

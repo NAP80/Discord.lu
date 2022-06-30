@@ -35,10 +35,13 @@
                             ?>
                         </div>
                         <?php
+                            // Si Envoie de request Faction-Id
+                            if(isset($_POST['faction-id'])){
+                                $Joueur1->setFaction($_POST['faction-id']);
+                            }
                             // Si Faction est Null
-                            if($Joueur1->getIdFaction() == NULL){
-                                $Faction = new Faction($mabase);
-                                $Faction->getFormFaction();
+                            if(($Joueur1->getIdFaction() == NULL) && (!isset($_POST['faction-id']))){
+                                $Joueur1->getFormFaction();
                             }
                             // Si Faction Non Null
                             if($Joueur1->getIdFaction() != NULL){
