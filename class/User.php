@@ -183,12 +183,18 @@
             if(isset($_POST["sub"])){
                 if($_POST['MDP'] == $_POST['password']){
                     if(!empty($_POST['name'])){
-                        $PasswordHash = password_hash($_POST['password'], PASSWORD_BCRYPT);
-                        $req ="INSERT INTO `User`( `login`, `name`, `mdp`) VALUES ('".$_POST['login']."','".$_POST['name']."','".$PasswordHash."')";
-                        $Result = $this->_bdd->query($req);
+                        $Check = preg_replace('#[^A-Za-z0-9]#','',$_POST['name']);
+                        if($_POST['name'] == $Check){
+                            $PasswordHash = password_hash($_POST['password'], PASSWORD_BCRYPT);
+                            $req ="INSERT INTO `User`( `login`, `name`, `mdp`) VALUES ('".$_POST['login']."','".$_POST['name']."','".$PasswordHash."')";
+                            $Result = $this->_bdd->query($req);
+                        }
+                        else{
+                            $errorMessage = "Le pseudo ne doit pas contenir de caractères spéciaux.";
+                        }
                     }
                     else{
-                        $errorMessage = "Il faut écrire un name à l'inscription.";
+                        $errorMessage = "Il faut écrire un pseudo lors de l'inscription.";
                     }
                 }
                 else{
