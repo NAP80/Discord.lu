@@ -8,22 +8,22 @@
         public function nbequipement(){
             $Result = $this->_bdd->query("SELECT COUNT(*) FROM `equipement`WHERE efficacite=".$value."");
             $nbequipement = $Result->fetch();
-            echo $nbequipement;
+            echo $nbequipement['COUNT(*)'];
         }
 
         /** Return le nombre d'équipement par Type : À vérifier */
         public function nbitemtype(){
             $Result = $this->_bdd->query("SELECT COUNT(*) FROM `equipement` WHERE type=".$value."");
             $nbitemtype = $Result->fetch();
-            echo $nbitemtype;
+            echo $nbitemtype['COUNT(*)'];
         }
 
         /** Return le nombre d'équipement totaux : À vérifier */
         public function getNombreEquipement($bdd){
-            $req = 'SELECT COUNT(*) as "NB" FROM equipement';
+            $req = 'SELECT COUNT(*) FROM equipement';
             $excuteReq = $this->_bdd->query($req);
             $data = $excuteReq->fetch();
-            return $data['NB'];
+            return $data['COUNT(*)'];
         }
 
         /** Return le nombre d'items par Type : À vérifier */
@@ -36,23 +36,23 @@
         /** Return le nombre d'items par Éfficacité : À vérifier */
         public function nbefficatite(){
             $Result = $this->_bdd->query("SELECT COUNT(*) FROM `item` WHERE efficacite=".$value."");
-            $nbefficatite= $Result->fetch();
+            $nbefficatite = $Result->fetch();
             echo $nbefficatite;
         }
 
         /** Return le nombre d'items par Lvl : À vérifier */
         public function nblvl(){
             $Result = $this->_bdd->query("SELECT COUNT(*) FROM `item` WHERE lvl=".$value."");
-            $nblvl= $Result->fetch();
+            $nblvl = $Result->fetch();
             echo $nblvl;
         }
 
         /** Return le nombre d'items totaux : À vérifier */
         public function getNombreItem(){
-            $req = 'SELECT COUNT(*) as "NB" FROM item';
+            $req = 'SELECT COUNT(*) FROM item';
             $excuteReq = $this->_bdd->query($req);
             $data = $excuteReq->fetch();
-            return $data['NB'];
+            return $data['COUNT(*)'];
         }
 
         /** Return Nombre de Map ayant au moins un Mob */
@@ -88,21 +88,21 @@
         public function nbpersonnage(){
             $Result = $this->_bdd->query("SELECT COUNT(*) FROM `Entite` WHERE type=`1`");
             $nbperso = $Result->fetch();
-            echo $nbperso;
+            echo $nbperso['COUNT(*)'];
         }
 
         /** Retur Nombre User */
         public function nbUser(){
-            $user = $this->_bdd->query("SELECT COUNT(*) name FROM User");
+            $user = $this->_bdd->query("SELECT COUNT(*) FROM User");
             $nbuser = $user->fetch();
-            echo $nbuser['name'];
+            echo $nbuser['COUNT(*)'];
         }
 
         /** Retur Nombre User by idFaction */
         public function nbUserFaction(){
             $userfaction = $this->_bdd->query("SELECT COUNT(*) FROM faction, typepersonnage WHERE faction.id = typepersonnage.idFaction");
             $nbuserfaction = $user->fetch();
-            echo $nbuserfaction[''];
+            echo $nbuserfaction['COUNT(*)'];
         }
     }
 ?>
