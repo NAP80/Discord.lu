@@ -24,7 +24,6 @@
             $user = "root";
             $pass = "root";
             $mabase = new PDO('mysql:host=127.0.0.1;dbname=discordlu', $user);
-            //$mabase = new PDO('mysql:host=127.0.0.1;dbname=lapro_virus', $user, $pass);
         }catch(Exception $e){
             $errorMessage .= $e->getMessage();
         }

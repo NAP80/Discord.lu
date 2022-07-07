@@ -628,7 +628,7 @@
         /** Return Texte InforMap */
         public function getInfoMap(){
             ?>
-                <b><?= $this->getNom() ?></b>, <?= $this->getCoordonne() ?>, lvl <?= $this->getlvl() ?>, découvert par <?= $this->getPersonnageDecouvreur()->getName() ?> et ses Heros.
+                <b><?= $this->getNom() ?></b>, <?= $this->getCoordonne() ?>, lvl <?= $this->getlvl() ?>, découvert par <?= $this->getPersonnageDecouvreur()->getPseudo() ?> et ses Heros.
             <?php
         }
 

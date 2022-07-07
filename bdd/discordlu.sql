@@ -580,15 +580,15 @@ INSERT INTO `typeuser` (`id`, `name`, `admin`, `Staff`, `bypass`, `visibility`) 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `login` varchar(50) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `mdp` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `pseudo` varchar(50) NOT NULL,
+  `password_hash` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `idPersonnage` int NOT NULL,
   `idFaction` int DEFAULT NULL,
   `dateUser` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `admin` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `login` (`login`),
+  UNIQUE KEY `email` (`email`),
   KEY `idPersonnage` (`idPersonnage`),
   KEY `idFaction` (`idFaction`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

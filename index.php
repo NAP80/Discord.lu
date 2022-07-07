@@ -23,13 +23,13 @@
                             <?php
                                 if($Joueur1->isAdmin() === true){
                                     ?>
-                                        <p>Bienvenue Administrateur <?= $Joueur1->getName() ?>.</p>
+                                        <p>Bienvenue Administrateur <?= $Joueur1->getPseudo() ?>.</p>
                                         <p><a href='admin/'>Accéder au Panel Administrateur.</a></p>
                                     <?php
                                 }
                                 else{
                                     ?>
-                                        <p>Bienvenue Joueur <?= $Joueur1->getName() ?>.</p>
+                                        <p>Bienvenue Joueur <?= $Joueur1->getPseudo() ?>.</p>
                                     <?php
                                 }
                             ?>

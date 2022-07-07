@@ -45,7 +45,7 @@
                                 $tabDirection = $map->getMapAdjacenteLienHTML('nord',$Joueur1); 
                                 ?>
                                     <?= $tabDirection['nord'] ?>
-                                    <p class="pWelcome">Bienvenue <?= $Joueur1->getName() ?></p>
+                                    <p class="pWelcome">Bienvenue <?= $Joueur1->getPseudo() ?></p>
                                     <p class="pChoixCombattant">Tu as décidé de combattre avec <?= $Joueur1->getNomPersonnage() ?>, il a une fortune de <?= $personnage->getValeur() ?> (NFT)</p>
                                     <!-- AFFICHAGE EN-TÊTE PERSONNAGE ET SAC -->
                                     <div class="divEntete">
