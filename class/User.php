@@ -1,9 +1,9 @@
 <?php
     class User{
         private $_id;
-        private $_login;
-        private $_mdp;
-        private $_name;
+        private $_email;
+        private $_password_hash;
+        private $_pseudo;
         private $_idFaction;
         private $_idPersonnage;
         private $_dateUser;
@@ -17,25 +17,15 @@
         }
 
         /** Récupère User */
-        public function setUser($id,$login,$mdp,$name,$idFaction,$idPersonnage,$dateUser,$admin){
+        public function setUser($id,$email,$password_hash,$pseudo,$idFaction,$idPersonnage,$dateUser,$admin){
             $this->_id = $id;
-            $this->_login = $login;
-            $this->_mdp = $mdp;
-            $this->_name = $name;
+            $this->_email = $email;
+            $this->_password_hash = $password_hash;
+            $this->_pseudo = $pseudo;
             $this->_idFaction = $idFaction;
             $this->_idPersonnage = $idPersonnage;
             $this->_dateUser = $dateUser;
             $this->_admin = $admin;
-        }
-
-        /** Return True si Admin : À dégager */
-        public function isAdmin(){
-            return $this->_admin;
-        }
-
-        /** Return Name */
-        public function getName(){
-            return $this->_name;
         }
 
         /** Return ID */
@@ -43,19 +33,39 @@
             return $this->_id;
         }
 
+        /** Return Email */
+        public function getEmail(){
+            return $this->_email;
+        }
+
+        /** Return Password_hash */
+        public function getPassword_hash(){
+            return $this->_password_hash;
+        }
+
+        /** Return Pseudo */
+        public function getPseudo(){
+            return $this->_pseudo;
+        }
+
         /** Return Faction */
         public function getIdFaction(){
             return $this->_idFaction;
         }
 
-        /** Return Faction */
+        /** Return Id du personnage en cours de l'User */
+        public function getIdPersonnage(){
+            return $this->_idPersonnage;
+        }
+
+        /** Return DateUser */
         public function getDateUser(){
             return $this->_dateUser;
         }
 
-        /** Return Id du personnage en cours de l'User */
-        public function getIdPersonnage(){
-            return $this->_idPersonnage;
+        /** Return True si Admin : À dégager */
+        public function isAdmin(){
+            return $this->_admin;
         }
 
         /** Return Nom du personnage en cours de l'User : À dégager */
@@ -72,7 +82,7 @@
         public function setUserById($id){
             $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `id`='".$id."'");
             if($tab = $Result->fetch()){ 
-                $this->setUser($tab["id"],$tab["login"],$tab["mdp"],$tab["name"],$tab["idFaction"],$tab["idPersonnage"],$tab["dateUser"],$tab["admin"]);
+                $this->setUser($tab["id"],$tab["email"],$tab["password_hash"],$tab["pseudo"],$tab["idFaction"],$tab["idPersonnage"],$tab["dateUser"],$tab["admin"]);
                 //chercher son personnage
                 $personnage = new Personnage($this->_bdd);
                 $personnage->setPersonnageById($tab["idPersonnage"]);
@@ -125,7 +135,7 @@
                                             '       <input type="hidden" name="faction-id" value="' + idFaction + '" class="text ui-widget-content ui-corner-all">'+
                                             '   </form>'+
                                             '</div>';
-                        form.setAttribute('id','dialog-confirm', 'title', 'Rejoindre');
+                        form.setAttribute('id','dialog-confirm');
                         form.setAttribute('title', 'Rejoindre ' + nameFaction);
                         document.body.appendChild(form);
                         $("#dialog-confirm").dialog({
@@ -178,99 +188,187 @@
         }
 
         public function ConnectToi(){
-            $errorMessage="";
-            //si c'est une inscription on valide l'inscription et on le connect
-            if(isset($_POST["sub"])){
-                if($_POST['MDP'] == $_POST['password']){
-                    if(!empty($_POST['name'])){
-                        $Check = preg_replace('#[^A-Za-z0-9]#','',$_POST['name']);
-                        if($_POST['name'] == $Check){
-                            $PasswordHash = password_hash($_POST['password'], PASSWORD_BCRYPT);
-                            $req ="INSERT INTO `User`( `login`, `name`, `mdp`) VALUES ('".$_POST['login']."','".$_POST['name']."','".$PasswordHash."')";
-                            $Result = $this->_bdd->query($req);
+            // PHP Inscription
+            if((isset($_POST["pseudo"])) && (isset($_POST["email"])) && (isset($_POST["password"])) && (isset($_POST["password_confirmation"])) && (isset($_POST["cgu"]))){
+                if($_POST["cgu"]){
+                    if(($_POST['password'] == $_POST['password_confirmation']) && (!empty($_POST['password']))){
+                        if((!empty($_POST['pseudo'])) && (!empty($_POST['email']))){
+                            $CheckPseudo = preg_replace('#[^A-Za-z0-9]#','',$_POST['pseudo']);
+                            if($_POST['pseudo'] == $CheckPseudo){
+                                $CheckMail = preg_replace('#[^A-Za-z0-9.@]#','',$_POST['email']);
+                                if($_POST['email'] == $CheckMail){
+                                    $Count = $this->_bdd->query("SELECT COUNT(*) FROM `User` WHERE `email`='".$_POST['email']."' OR `pseudo`='".$_POST['pseudo']."'");
+                                    $CountNb = $Count->fetch();
+                                    if($CountNb['COUNT(*)'] == 0){
+                                        $PasswordHash = password_hash($_POST['password'], PASSWORD_BCRYPT);
+                                        $req = "INSERT INTO `User`( `email`, `pseudo`, `password_hash`) VALUES ('".$_POST['email']."','".$_POST['pseudo']."','".$PasswordHash."')";
+                                        $Result = $this->_bdd->query($req);
+                                        $RepMsgRegister = "Compte crée!";
+                                    }
+                                    else{
+                                        $RepMsgRegister = "L'email ou le pseudo sont déjà utilisés.";
+                                    }
+                                }
+                                else{
+                                    $RepMsgRegister = "L'email n'est pas conforme.";
+                                }
+                            }
+                            else{
+                                $RepMsgRegister = "Le pseudo ne doit pas contenir de caractères spéciaux.";
+                            }
                         }
                         else{
-                            $errorMessage = "Le pseudo ne doit pas contenir de caractères spéciaux.";
+                            $RepMsgRegister = "Le pseudo et l'email sont nécessaire.";
                         }
                     }
                     else{
-                        $errorMessage = "Il faut écrire un pseudo lors de l'inscription.";
+                        $RepMsgRegister = "Les mots de passes ne corespondent pas.";
                     }
                 }
                 else{
-                    echo "Les mots de passes ne corespondent pas.";
+                    $RepMsgRegister = "Les CGU doivent être acceptés.";
                 }
             }
-            //traitement du formulaire
+            // PHP Connexion
             $access = false;
-            if(isset($_POST["login"]) && isset($_POST["password"])){
-                //verif mdp en BDD
-                $Password = $_POST["password"];
-                $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `login`='".$_POST['login']."'");
-                $tab = $Result->fetch();
-                $PasswordHash = $tab['mdp'];
-                if(password_verify($Password, $PasswordHash)){
-                    $this->setUserById($tab["id"]);
-                    $access = true;
-                    $_SESSION["idUser"]= $tab["id"];
-                    $_SESSION["Connected"]=true;
-                    $afficheForm = false;
-                    //si on est co on affiche le formulaire de deco
-                    $this->DeconnectToi();
+            if((isset($_POST["login"])) && (isset($_POST["password"]))){
+                if((!empty($_POST["login"])) && (!empty($_POST["password"]))){
+                    $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `email`='".$_POST['login']."' OR `pseudo`='".$_POST['login']."'");
+                    $tab = $Result->fetch();
+                    if((password_verify($_POST["password"], $tab['password_hash'])) && ($tab['password_hash'] != NULL)){
+                        // Partie à Revoir : Trop bordelique et pas sécu
+                        $this->setUserById($tab["id"]);
+                        $_SESSION["idUser"]= $tab["id"];
+                        $_SESSION["Connected"]=true;
+                        $afficheForm = false;
+                        $access = true;
+                        $this->DeconnectToi();
+                    }
+                    else{
+                        $RepMsgLogin = "Login ou mots de passe incorrect.";
+                        $afficheForm = true;
+                    }
                 }
                 else{
-                    if($errorMessage==""){
-                        $errorMessage = "Le pseudo ou le mots de passe ne correspondent pas.";
-                    }
+                    $RepMsgLogin = "Des éléments sont manquants.";
                     $afficheForm = true;
                 }
             }
             else{
                 $afficheForm = true;
             }
+            if(isset($RepMsgRegister)){
+                echo $RepMsgRegister;
+            }
+            if(isset($RepMsgLogin)){
+                echo $RepMsgLogin;
+            }
             if($afficheForm){
                 ?>
                     <div class="formlogin">
-                        <?php
-                            if($errorMessage!=""){
-                                echo '<div class="Red">'.$errorMessage.'</div>';
-                            }
-                        ?>
-                        <form action="" method="POST">
-                            <div>
-                                <label for="login">Mail :</label>
-                                <input type="email" name="login" id="login" required>
-                            </div>
-                            <div>
-                                <label for="password">Password :</label>
-                                <input type="password" name="password" id="password" required>
-                                <label class="inscriptionHide logSub" for="MDP">Réécrivez votre Password :</label>
-                                <input class="inscriptionHide logSub" type="password" name="MDP" id="MDP">
-                            </div>
-                            <div>
-                                <label class="inscriptionHide logSub" for="name">Pseudo :</label>
-                                <input class="inscriptionHide logSub" type="text" name="name" id="name">
-                            </div>
-                            <div>
-                                <input type="submit" value="GO !" name="log" id="logSubsubmit">
-                                <a class="inscriptionShow logSub" id="subCreatclick" onclick="inscription()">Cliquez pour vous inscrire.</a>
-                            </div>
-                        </form>
+                        <a id="Connect" class="ui-button ui-widget ui-corner-all" onclick="dialogRegister()">
+                            S'inscrire !
+                        </a>
+                        <a id="Register" class="ui-button ui-widget ui-corner-all" onclick="dialogLogin()">
+                            Se connecter !
+                        </a>
                     </div>
-                    <script>
-                        function inscription(){
-                            var TabElements = document.getElementsByClassName("logSub");
-                            for(var e of TabElements){
-                                e.classList.add('inscriptionShow');
-                                e.classList.remove('inscriptionHide');
-                            }
-                            document.getElementById("logSubsubmit").setAttribute("name", "sub");
-                            var e = document.getElementById("subCreatclick");
-                            e.className = 'inscriptionHide';
-                        }
-                    </script>
                 <?php
             }
+            // Script
+            ?>
+                <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+                <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+                <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+                <script>
+                    function dialogRegister(){
+                        var dialogRegister = document.createElement('div');
+                        dialogRegister.innerHTML =
+                                    '<form method="POST" action="" id="form-register">'+
+                                    '   <div>'+
+                                    '       <label for="pseudo">Pseudo :</label>'+
+                                    '       <input type="text" name="pseudo" id="pseudo" class="text ui-widget-content ui-corner-all" required>'+
+                                    '   </div>'+
+                                    '   <div>'+
+                                    '       <label for="email">E-mail :</label>'+
+                                    '       <input type="text" name="email" id="email" class="text ui-widget-content ui-corner-all" required>'+
+                                    '   </div>'+
+                                    '   <div>'+
+                                    '       <label for="password">Mot de passe :</label>'+
+                                    '       <input type="password" name="password" id="password" class="text ui-widget-content ui-corner-all" required>'+
+                                    '       <label for="password_confirmation">Confirmation :</label>'+
+                                    '       <input type="password" name="password_confirmation" id="password_confirmation" class="text ui-widget-content ui-corner-all" required>'+
+                                    '   </div>'+
+                                    '   <div>'+
+                                    '       <input type="checkbox" id="cgu" name="cgu" required>'+
+                                    '       <label for="cgu">J\'accepte les termes des CGU et de la politique de confidentialité.</label>'+
+                                    '   </div>'+
+                                    '   <input type="submit" id="submitRegister" tabindex="-1" style="display:none">'+
+                                    '</form>';
+                        dialogRegister.setAttribute('id','dialog-register');
+                        dialogRegister.setAttribute('title', 'Inscription');
+                        document.body.appendChild(dialogRegister);
+                        $("#dialog-register").dialog({
+                            resizable:false,
+                            height:"auto",
+                            width:400,
+                            modal:true,
+                            buttons:{
+                                "S'inscrire":function(){
+                                    document.getElementById('submitRegister').click();
+                                },
+                                "Annuler":function(){
+                                    $(this).dialog("close");
+                                    $('div').remove('#dialog-register');
+                                    $('div').remove('.ui-dialog .ui-corner-all .ui-widget .ui-widget-content .ui-front .ui-dialog-buttons .ui-draggable');
+                                }
+                            },
+                            close:function(){
+                                $('div').remove('#dialog-register');
+                                $('div').remove('.ui-dialog .ui-corner-all .ui-widget .ui-widget-content .ui-front .ui-dialog-buttons .ui-draggable');
+                            }
+                        }); 
+                    };
+                    function dialogLogin(){
+                        var dialogLogin = document.createElement('div');
+                        dialogLogin.innerHTML =
+                                    '<form method="POST" action="" id="form-login">'+
+                                    '   <div>'+
+                                    '       <label for="login">Pseudo ou E-mail :</label>'+
+                                    '       <input type="text" name="login" id="login" class="text ui-widget-content ui-corner-all" required>'+
+                                    '   </div>'+
+                                    '   <div>'+
+                                    '       <label for="password">Mot de passe :</label>'+
+                                    '       <input type="password" name="password" id="password" class="text ui-widget-content ui-corner-all" required>'+
+                                    '   </div>'+
+                                    '   <input type="submit" id="submitLogin" tabindex="-1" style="display:none">'+
+                                    '</form>';
+                        dialogLogin.setAttribute('id','dialog-login');
+                        dialogLogin.setAttribute('title', 'Connexion');
+                        document.body.appendChild(dialogLogin);
+                        $("#dialog-login").dialog({
+                            resizable:false,
+                            height:"auto",
+                            width:400,
+                            modal:true,
+                            buttons:{
+                                "Se connecter":function(){
+                                    document.getElementById('submitLogin').click();
+                                },
+                                "Annuler":function(){
+                                    $(this).dialog("close");
+                                    $('div').remove('#dialog-login');
+                                    $('div').remove('.ui-dialog .ui-corner-all .ui-widget .ui-widget-content .ui-front .ui-dialog-buttons .ui-draggable');
+                                }
+                            },
+                            close:function(){
+                                $('div').remove('#dialog-login');
+                                $('div').remove('.ui-dialog .ui-corner-all .ui-widget .ui-widget-content .ui-front .ui-dialog-buttons .ui-draggable');
+                            }
+                        });
+                    };
+                </script>
+            <?php
             return $access;
         }
 
@@ -389,7 +487,7 @@
                                                 if(array_key_exists($x,$allMap)){
                                                     // Si Y/X existe dans la BDD.
                                                     if(array_key_exists($y,$allMap[$x])){
-                                                        // Si déja visité par User.
+                                                        // Si déjà visité par User.
                                                         if(!is_null($allMap[$x][$y])){
                                                             //map found check it bro
                                                             $MapScan->setMapByID($allMap[$x][$y]);
@@ -450,9 +548,9 @@
             return $ReturnAllUser;
         }
 
-        /** Set Name : À modifier */
+        /** Set Pseudo : À modifier */
         public function updateuser(){
-            $Up = $this->_bdd->query("UPDATE `User` SET `name`='".$POST['newname']."' WHERE id=".$this->_id." ");
+            $Up = $this->_bdd->query("UPDATE `User` SET `pseudo`='".$POST['newpseudo']."' WHERE id=".$this->_id." ");
             if($Up){
                 ?>
                     <p>Le pseudo a bien été changé.</p>
@@ -465,13 +563,13 @@
             }
         }
 
-        /** Set Mdp : À modifier */
+        /** Set Password : À modifier */
         public function updatepassword(){
-            if(isset($_POST["updatemdp"])){
+            if(isset($_POST["update_password_hash"])){
                 //comparaison du mot de passe avec l'ancien
-                if($_POST['NEWMDP'] == $_POST['password']){
+                if($_POST['New_password_hash'] == $_POST['password']){
                     //mise a jour dans la base du nouveau mot de passe
-                    $rep = $this->_bdd->query("UPDATE `User` SET `mdp`='".$_POST['NEWMDP']."' WHERE id=".$this->_id." ");
+                    $rep = $this->_bdd->query("UPDATE `User` SET `password_hash`='".$_POST['New_password_hash']."' WHERE id=".$this->_id." ");
                     if($rep){
                         ?>
                             <p>Mot de passe changé.</p>
