@@ -7,11 +7,11 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 # Avancement :
 
 ## En cours :
-- Début Uniformisation Code + Commentaires.
+- Début Uniformisation Code + Commentaires,
 
 ## Todo List :
-- Refonte Inscription/Connexion FRONT,
-- Refonte Inscription/Connexion BACK,
+- Vérification JS Inscription FRONT,
+- Page de présentation du site (Inscription),
 - Refonte Form Création Personnage,
 - Ajouter Boite de Dialog pour RepMSG,
 - Intégration envoie de mail et confirmation inscription,
@@ -33,14 +33,18 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Intégration Forge,
 - Intégration Marché,
 - Intégration Système de Ban,
-- Intégration Hiearchi Utilisateur,
+- Intégration Hiérarchie Utilisateur,
 - Sécurisation Injection SQL,
 - Mise à jours Boolen Admin -> Rôle,
 - Patch CSS Décalage Dialog,
+- Mettre des CGU ou un truc légal,
+- Le putain de footer,
 - Refaire l'intégralité du CSS.
 
 ## Fait :
 - Récupération du projet,
 - Mise à jours des crédits,
 - Hash des MDP en BDD,
-- Refonte Form Choix Faction.
+- Refonte Form Choix Faction,
+- Refonte Inscription/Connexion FRONT,
+- Refonte Inscription/Connexion BACK.
