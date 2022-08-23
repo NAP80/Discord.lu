@@ -29,7 +29,7 @@
                 $Personnage = $Joueur1->getPersonnage();
                 if(is_null($Personnage->getId())){
                     ?>
-                        <div class="divMapPage">
+                        <div class="divMainPage">
                             <p>Il faut créer un personnage d'abord.</p>
                             <p><a href="index.php">Retour à l'origine du tout</a></p>
                         </div>

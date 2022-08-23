@@ -549,7 +549,7 @@
                         <?= $this->getNom() ?>
                     </div>
                     <div class="EntiteValeur">
-                        (<?= $this->getValeur() ?> NFT) LV <?= $this->_lvl ?>
+                        (<?= $this->getValeur() ?> $) LV <?= $this->_lvl ?>
                     </div>
                 </div>
                 <div>

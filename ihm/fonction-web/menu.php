@@ -1,17 +1,17 @@
 <nav class="navMenu">
     <ul class="ulMenu">                
         <li><a href="index.php">Accueil</a></li>
-        <li><a href="reglement.php">Règlement</a></li>
+        <!--<li><a href="reglement.php">Règlement</a></li>-->
         <li><a href="combat.php">Combat</a></li>
         <li><a href="map.php">Map</a></li>
-        <li><a href="faq.php">FAQ</a></li>
-        <li><a href="#">Guides</a>
+        <!--<li><a href="faq.php">FAQ</a></li>-->
+        <!--<li><a href="#">Guides</a>
             <ul class="ulSousMenu">
                 <li><a href="guide_jeux.php">Guide Général</a></li>
                 <li><a href="guide_equipements.php">Guide Équipements</a></li>
                 <li><a href="guide_items.php">Guide Items</a></li>
             </ul>
-        </li>
+        </li>-->
         <li><a href="classement.php">Classement</a></li>
         <?php
             if($Joueur1->isAdmin() == true){

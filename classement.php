@@ -23,13 +23,13 @@
             if($access === true){
                 include "ihm/fonction-web/menu.php";
                 ?>
-                    <div class="divClassement">
+                    <div class="divMainPage">
                         <h1>Classement</h1>
                         <table>
                             <tr>
                                 <th>Pseudo<th>
                                 <th>Monstre capturé</th>
-                                <th>NFT</th>
+                                <th>Argent</th>
                                 <th>LV</th>
                                 <th>XP</th>
                                 <th>Dégats</th>

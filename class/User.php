@@ -100,7 +100,8 @@
         /** Formulaire choix de Faction */
         public function getFormFaction(){
             ?>
-                <p>Choisisez une faction :</p>
+                <h2>Choisisez une faction :</h2>
+                <p>La Faction définira votre groupe de joueur et votre "camps".</p>
                 <div>
                     <?php
                         $Result = $this->_bdd->query("SELECT * FROM `Faction`");

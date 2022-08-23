@@ -40,6 +40,8 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Mettre des CGU ou un truc légal,
 - Le putain de footer,
 - Refaire l'intégralité du CSS.
+- Refaire le Menu.
+- Ajouter Sécurité sur l'idPersonnage User.
 
 ## Fait :
 - Récupération du projet,

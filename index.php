@@ -18,7 +18,7 @@
             if($access === true){
                 include "ihm/fonction-web/menu.php";
                 ?>
-                    <div class="divReglement">
+                    <div class="divMainPage">
                         <div class="divWelcome">
                             <?php
                                 if($Joueur1->isAdmin() === true){
@@ -39,13 +39,12 @@
                             if(isset($_POST['faction-id'])){
                                 $Joueur1->setFaction($_POST['faction-id']);
                             }
-                            // Si Faction est Null
-                            if(($Joueur1->getIdFaction() == NULL) && (!isset($_POST['faction-id']))){
+                            // Si Faction est Null ou supérieur à 4
+                            if((($Joueur1->getIdFaction() == NULL) || ($Joueur1->getIdFaction() >= 5)) && (!isset($_POST['faction-id']))){
                                 $Joueur1->getFormFaction();
                             }
-                            // Si Faction Non Null
-                            if($Joueur1->getIdFaction() != NULL){
-                                $PersoChoisie = new Personnage($mabase);
+                            // Si Faction Non Null et inférieur ou égale à 4
+                            else if($Joueur1->getIdFaction() != NULL){
                                 $PersoChoisie = $Joueur1->getPersonnage();
                                 if(!is_null($PersoChoisie)){
                                     $PersoChoisie->getChoixPersonnage($Joueur1);

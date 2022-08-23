@@ -30,7 +30,7 @@
                 $personnage = $Joueur1->getPersonnage();
                 if(is_null($personnage->getId())){
                     ?>
-                        <div class="divReglement">
+                        <div class="divMainPage">
                             <p>Il faut créer un personnage d'abord.</p>
                             <p><a href="index.php">Retour à l'origine du tout.</a></p>
                         </div>
@@ -38,7 +38,7 @@
                 }
                 else{
                     ?>
-                        <div class="divReglement">
+                        <div class="divMainPage">
                             <?php
                                 $personnage->getChoixPersonnage($Joueur1);
                                 $map = $personnage->getMap();
@@ -46,7 +46,7 @@
                                 ?>
                                     <?= $tabDirection['nord'] ?>
                                     <p class="pWelcome">Bienvenue <?= $Joueur1->getPseudo() ?></p>
-                                    <p class="pChoixCombattant">Tu as décidé de combattre avec <?= $Joueur1->getNomPersonnage() ?>, il a une fortune de <?= $personnage->getValeur() ?> (NFT)</p>
+                                    <p class="pChoixCombattant">Tu as décidé de combattre avec <?= $Joueur1->getNomPersonnage() ?>, il a une fortune de <?= $personnage->getValeur() ?>§</p>
                                     <!-- AFFICHAGE EN-TÊTE PERSONNAGE ET SAC -->
                                     <div class="divEntete">
                                         <div class="divAvatar">
