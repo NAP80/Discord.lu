@@ -10,7 +10,7 @@
         private $_admin;
         private $_bdd;
 
-        private $_MonPersonnage;
+        private $_infoPerso; // Information du personnage en cours
 
         public function __construct($bdd){
             $this->_bdd = $bdd;
@@ -70,12 +70,12 @@
 
         /** Return Nom du personnage en cours de l'User : À dégager */
         public function getNomPersonnage(){
-            return $this->_MonPersonnage->getNom();
+            return $this->_infoPerso->getNom();
         }
 
         /** Return Object Personnage */
         public function getPersonnage(){
-            return $this->_MonPersonnage;
+            return $this->_infoPerso;
         }
 
         /** Set User By ID */
@@ -86,13 +86,13 @@
                 //chercher son personnage
                 $personnage = new Personnage($this->_bdd);
                 $personnage->setPersonnageById($tab["idPersonnage"]);
-                $this->_MonPersonnage = $personnage;
+                $this->_infoPerso = $personnage;
             }
         }
 
         /** Set Object Personnage */
         public function setPersonnage($Perso){
-            $this->_MonPersonnage = $Perso;
+            $this->_infoPerso = $Perso;
             $req ="UPDATE `User` SET `idPersonnage`='".$Perso->getID()."' WHERE `id` = '".$this->_id."'";
             $Result = $this->_bdd->query($req);
         }
