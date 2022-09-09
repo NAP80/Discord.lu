@@ -40,7 +40,7 @@
                     ?>
                         <div class="divMainPage">
                             <?php
-                                $personnage->getChoixPersonnage($Joueur1);
+                                $personnage->getListPersonnage($Joueur1);
                                 $map = $personnage->getMap();
                                 $tabDirection = $map->getMapAdjacenteLienHTML('nord',$Joueur1); 
                                 ?>

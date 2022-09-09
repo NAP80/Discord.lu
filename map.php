@@ -50,7 +50,7 @@
                                             </div>
                                             <div class="divAppelPersonnage">
                                                 <?php
-                                                    $Personnage->getChoixPersonnage($Joueur1);
+                                                    $Personnage->getListPersonnage($Joueur1);
                                                     $Joueur1->setPersonnage($Personnage);
                                                 ?>
                                             </div>

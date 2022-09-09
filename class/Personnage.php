@@ -244,12 +244,12 @@
             $this->_bdd->query($req);
         }
 
-        /** Return List HTML des Personnage d'un User et permet d'atribuer un perso à un User */
-        public function getChoixPersonnage($User){
+        /** Return List HTML des Personnages d'un User et permet d'atribuer un perso à un User */
+        public function getListPersonnage($User){
             if(isset($_POST["idPersonnage"])){
                 $this->setPersonnageById($_POST["idPersonnage"]);
                 $User->setPersonnage($this);
-                if($this->_vie==0){
+                if($this->_vie <= 0 ){
                     $this->resurection();
                 }
             }
@@ -267,7 +267,6 @@
                     </select>
                 </form>
             <?php
-            return $this;
         }
     }
 ?>

@@ -220,7 +220,7 @@
             <?php
         }
 
-        /** Return un tableau des type de personnages en fonction de l'ID Faction */
+        /** Return un tableau des type de personnages en fonction de l'ID Faction */ // À Migrer sur une autre page, n'a rien à faire en User
         public function getAllTypePersonnage($idFactionUser){
             $TypePersos = array();
             $Result = $this->_bdd->query("SELECT * FROM `TypePersonnage` WHERE idFaction = '".$idFactionUser."'");
@@ -456,7 +456,7 @@
             return $access;
         }
 
-        /** Affiche la Map HTML */
+        /** Affiche la Map HTML */ // À Migrer sur la page Map
         public function getVisitesHTML($taille){
             $Map = $this->getPersonnage()->getMap();
             $maxX=$Map->getX()+$taille;
@@ -683,6 +683,37 @@
                 $RepMSG = "La faction n'existe pas.";
                 echo $RepMSG;
             }
+        }
+
+        /** Return HTML des Personnages d'un User et permet d'atribuer un perso à un User */
+        public function getChoixPersonnage(){
+            if((isset($_POST["AssignePerso"])) && (isset($_POST["IdPerso"]))){// À faire check si idUser est bon ou si Admin
+                $Personnage = New Personnage($this->_bdd);
+                $Personnage->setPersonnageById($_POST["IdPerso"]);
+                if(($Personnage->getidUser() == $this->getId()) || $this->isAdmin()){
+                    $this->setPersonnage($Personnage); // Assignation du Personnage à l'User
+                    if($Personnage->_vie <= 0 ){
+                        $Personnage->resurection();
+                    }
+                }
+            }
+            $Result = $this->_bdd->query("SELECT * FROM `Entite` where idUser='".$this->getId()."' AND type=1");
+            ?>
+                <p>Choisir un personnage :</p>
+                <form action="" method="post" class="formChangePerso">
+                    <?php
+                        while($Personnage = $Result->fetch()){
+                            ?>
+                                <div class="listTypePerso">
+                                    <input type="radio" name="IdPerso" id="Perso<?= $Personnage['id'] ?>" value="<?= $Personnage['id'] ?>">
+                                    <label for="Perso<?= $Personnage['id'] ?>"><?= $Personnage['nom'] ?></label>
+                                </div>
+                            <?php
+                        }
+                    ?>
+                    <input type="submit" value="Prendre ce personnage" name="AssignePerso">
+                </form>
+            <?php
         }
     }
 ?>

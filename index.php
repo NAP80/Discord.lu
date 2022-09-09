@@ -49,7 +49,7 @@
                                 if($Joueur1->getIdPersonnage() !== NULL){
                                     // Récupération Objet Personnage
                                     $ObjectPersonnage = $Joueur1->getPersonnage();
-                                    $ObjectPersonnage->getChoixPersonnage($Joueur1); // Fonction de selection du personnage
+                                    $Joueur1->getChoixPersonnage(); // Fonction de selection du personnage
                                     // Formulaire création Personnage
                                     $Joueur1->CreatNewPersonnage();
                                     ?>
