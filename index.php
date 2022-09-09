@@ -47,11 +47,17 @@
                             else{
                                 // Si un Personnage est assigné
                                 if($Joueur1->getIdPersonnage() !== NULL){
+                                    $NbPersonnage = $Joueur1->getNbPersonnages();
+                                    ?>
+                                        <p class="NbPersonnage">Vous avez <?= $NbPersonnage ?> personnages sur 10.</p>
+                                    <?php
                                     // Récupération Objet Personnage
                                     $ObjectPersonnage = $Joueur1->getPersonnage();
                                     $Joueur1->getChoixPersonnage(); // Fonction de selection du personnage
-                                    // Formulaire création Personnage
-                                    $Joueur1->CreatNewPersonnage();
+                                    if($NbPersonnage < 10){
+                                        // Formulaire création Personnage
+                                        $Joueur1->CreatNewPersonnage();
+                                    }
                                     ?>
                                         <div class="divAction">
                                             <p><a href="combat.php">Viens combattre avec <?= $ObjectPersonnage->getNom() ?></a></p>

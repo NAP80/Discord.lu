@@ -97,6 +97,14 @@
             $Result = $this->_bdd->query($req);
         }
 
+        /** Get Nombres de Personnages */
+        public function getNbPersonnages(){
+            $req ="SELECT COUNT(*) FROM `entite` WHERE `type`=1 AND `idUser` = '".$this->_id."'";
+            $Result = $this->_bdd->query($req);
+            $Count = $Result->fetch();
+            return $Count['COUNT(*)'];
+        }
+
         /** Affiche Formulaire Création Personnage */
         public function CreatNewPersonnage(){
             ?>

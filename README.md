@@ -8,7 +8,6 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 
 ## En cours :
 - Début Uniformisation Code + Commentaires,
-- Refonte Form Création Personnage.
 
 ## Todo List :
 - Vérification JS Inscription FRONT,
@@ -50,3 +49,5 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Refonte Form Choix Faction,
 - Refonte Inscription/Connexion FRONT,
 - Refonte Inscription/Connexion BACK.
+- Refonte Form Création Personnage. [À Terminer CSS]
+- Refonte Form Choix Personnage. [À Terminer CSS]
