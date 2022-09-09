@@ -81,9 +81,9 @@
         /** Set User By ID */
         public function setUserById($id){
             $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `id`='".$id."'");
-            if($tab = $Result->fetch()){ 
+            if($tab = $Result->fetch()){
                 $this->setUser($tab["id"],$tab["email"],$tab["password_hash"],$tab["pseudo"],$tab["idFaction"],$tab["idPersonnage"],$tab["dateUser"],$tab["admin"]);
-                //chercher son personnage
+                // Set son Personnage
                 $personnage = new Personnage($this->_bdd);
                 $personnage->setPersonnageById($tab["idPersonnage"]);
                 $this->_infoPerso = $personnage;
@@ -95,6 +95,61 @@
             $this->_infoPerso = $Perso;
             $req ="UPDATE `User` SET `idPersonnage`='".$Perso->getID()."' WHERE `id` = '".$this->_id."'";
             $Result = $this->_bdd->query($req);
+        }
+
+        /** Affiche Formulaire Création Personnage */
+        public function CreatNewPersonnage(){
+            ?>
+                <div class="divCreatPerso">
+                    <?php 
+                        $idFactionUser = $this->getIdFaction();
+                        $TypePersos = $this->getAllTypePersonnage($idFactionUser);
+                        $TypePerso = $TypePersos[rand(0,count($TypePersos)-1)];
+                        $personnage = new Personnage($this->_bdd);
+                        $imageUrl = $personnage->generateImage($TypePerso->getNom());
+                        ?>
+                            <form action="" method="post" class="formCreatPerso">
+                                <p>Créez un personnage :</p>
+                                <input type="text" name="Name" required>
+                                <?php
+                                    // En fait là on récupère les type de personnages en fonction de son ID de Faction
+                                    $TypePersos = $this->getAllTypePersonnage($idFactionUser);
+                                    ?>
+                                        <div class="listTypePerso">
+                                            <?php
+                                                foreach($TypePersos as $TypePerso){
+                                                    ?>
+                                                        <div class="listTypePerso">
+                                                            <input type="radio" name="TypePerso" id="Type<?= $TypePerso->getID() ?>" value="<?= $TypePerso->getID() ?>">
+                                                            <label for="Type<?= $TypePerso->getID() ?>"><?= $TypePerso->getNom() ?></label>
+                                                            <input type="hidden" name="image" value="<?= $imageUrl ?>">
+                                                        </div>
+                                                    <?php
+                                                }
+                                            ?>
+                                        </div>
+                                        <input type="submit" value="Creer" name="createPerso">
+                                    <?php
+                                ?>
+                            </form>
+                        <?php
+                    ?>
+                </div>
+            <?php
+            if(isset($_POST["createPerso"]) && !is_null($idFactionUser)){
+                $newperso = new Personnage($this->_bdd);
+                $newperso = $newperso->CreateEntite($_POST['Name'], 100, 10, 1,100,$_POST['image'],$this->getId(),1,1);
+                $idTypePersonnage = $_POST['TypePerso'];
+                $req="INSERT INTO `Personnage`(`id`,`xp`,`idTypePersonnage`) VALUES ('".$newperso->getId()."','1','".$idTypePersonnage."')";
+                $Result = $this->_bdd->query($req);
+                $newperso->setEntiteById($newperso->getId());
+                // Assignation du Personnage à l'User
+                $this->setPersonnage($newperso);
+                // Redirection - À patch le fait qu'il faut actuliser la page pour avoir son perso... Truc Temporaire
+                ?>
+                    <script>window.location.replace("./combat.php");</script>
+                <?php
+            }
         }
 
         /** Formulaire choix de Faction */

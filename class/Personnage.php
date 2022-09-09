@@ -195,70 +195,6 @@
             }
         }
 
-        /** Affiche Formulaire Création Personnage */
-        public function CreatNewPersonnage($idUser){
-            ?>
-                <div class = "formCreatio">
-                    <?php 
-                        $User = new User($this->_bdd);
-                        $User->setUserById($idUser);
-                        $idFactionUser = $User->getIdFaction();
-                        $TypePersos = $User->getAllTypePersonnage($idFactionUser);
-                        $TypePerso = $TypePersos[rand(0,count($TypePersos)-1)];
-                        $imageUrl = $this->generateImage($TypePerso->getNom());
-                        ?>
-                            <form action="" method="post" onclick="this.submit()">
-                                <img class="creationImage" src="<?php echo $imageUrl;?>" width="200px">
-                            </form>
-                            <form action="" method="post" class="formCreationPersonnage">
-                                <div>Créez un personnage ou choisissez-en un :</div>
-                                <input type="text" name="NomPersonnage" required>
-                                <?php
-                                    //affichage des type de personnage selon la faction
-                                    if(!is_null($idFactionUser)){
-                                        // En fait là on récupère les type de personnages en fonction de son ID de Faction
-                                        $TypePersos = $User->getAllTypePersonnage($idFactionUser);
-                                        ?>
-                                            <select name="idTypePerso" id="idTypePerso">
-                                                <?php
-                                                    foreach ($TypePersos as $TypePerso) {
-                                                        echo '<option value="'.$TypePerso->getID().'" '.$selected.'> '.$TypePerso->getNom().'</option>';
-                                                    }
-                                                ?>
-                                            </select>
-                                            <input type="submit" value="Creer" name="createPerso">
-                                            <input type="hidden" name="image" value="<?= $imageUrl ?>">
-                                        <?php
-                                    }
-                                    else{
-                                        ?>
-                                            <div class="ChoixTypePerso">Choisissez une Faction si vous souhaitez créer un personage.</div>
-                                        <?php
-                                    }
-                                ?>
-                            </form>
-                        <?php
-                    ?>
-                </div>
-            <?php
-            if(isset($_POST["createPerso"]) && !is_null($idFactionUser)){
-                $newperso = new Personnage($this->_bdd);
-                $newperso = $newperso->CreateEntite($_POST['NomPersonnage'], 100, 10, 1,100,$_POST['image'],$idUser,1,1);
-                $idTypePersonnage = $_POST['idTypePerso'];
-                if($newperso->getId()){
-                    $req="INSERT INTO `Personnage`(`id`,`xp`,`idTypePersonnage`) VALUES ('".$newperso->getId()."','1','".$idTypePersonnage."')";
-                    $Result = $this->_bdd->query($req);
-                    $newperso->setEntiteById($newperso->getId());
-                    return $newperso;
-                }
-                else{
-                    $this->_bdd->rollback();
-                    return null;
-                }
-            }
-            return null;
-        }
-
         public function setPersonnageByIdWithoutMap($id){
             Parent::setEntiteByIdWithoutMap($id);
             $req  = "SELECT * FROM `Personnage` WHERE id='".$id."'";
@@ -322,10 +258,11 @@
                 <form action="" method="post" onchange="this.submit()">
                     <select name="idPersonnage" id="idPersonnage">
                     <option value="">Choisir un personnage</option>
-                        <?php while($tab=$Result->fetch()){
-                            ($tab['id']==$this->_id)?$selected='selected':$selected='';
-                            echo '<option value="'.$tab["id"].'" '.$selected.'> '.$tab["nom"].'</option>';
-                        }
+                        <?php
+                            while($tab=$Result->fetch()){
+                                ($tab['id']==$this->_id)?$selected='selected':$selected='';
+                                echo '<option value="'.$tab["id"].'" '.$selected.'> '.$tab["nom"].'</option>';
+                            }
                         ?>
                     </select>
                 </form>

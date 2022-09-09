@@ -43,35 +43,25 @@
                             if((($Joueur1->getIdFaction() == NULL) || ($Joueur1->getIdFaction() >= 5)) && (!isset($_POST['faction-id']))){
                                 $Joueur1->getFormFaction();
                             }
-                            // Si Faction Non Null et inférieur ou égale à 4
-                            else if($Joueur1->getIdFaction() != NULL){
-                                $PersoChoisie = $Joueur1->getPersonnage();
-                                if(!is_null($PersoChoisie)){
-                                    $PersoChoisie->getChoixPersonnage($Joueur1);
-                                }
-                                $PersoCree = new Personnage($mabase);
-                                $PersoCree = $PersoCree->CreatNewPersonnage($Joueur1->getId());
-                                if(!is_null($PersoCree)){
-                                    $PersoChoisie = $PersoCree;
-                                }
-                                if(!is_null($PersoChoisie)){
-                                    $Joueur1->setPersonnage($PersoChoisie);
+                            // Si Faction Non Null et inférieur ou égale à 4 (Donc qu'on a une faction valide)
+                            else{
+                                // Si un Personnage est assigné
+                                if($Joueur1->getIdPersonnage() !== NULL){
+                                    // Récupération Objet Personnage
+                                    $ObjectPersonnage = $Joueur1->getPersonnage();
+                                    $ObjectPersonnage->getChoixPersonnage($Joueur1); // Fonction de selection du personnage
+                                    // Formulaire création Personnage
+                                    $Joueur1->CreatNewPersonnage();
                                     ?>
                                         <div class="divAction">
-                                            <?php
-                                                if(!empty($PersoChoisie->getNom())){
-                                                    ?>
-                                                        <p><a href="combat.php">Viens combattre avec <?= $PersoChoisie->getNom() ?></a></p>
-                                                    <?php
-                                                }
-                                                else{
-                                                    ?>
-                                                        <p><a href="combat.php">Viens combattre avec <?= $Joueur1->getNomPersonnage() ?></a></p>
-                                                    <?php
-                                                }
-                                            ?>
+                                            <p><a href="combat.php">Viens combattre avec <?= $ObjectPersonnage->getNom() ?></a></p>
                                         </div>
                                     <?php
+                                }
+                                // Si aucun Personnage choisis.
+                                else{
+                                    // Formulaire création Personnage
+                                    $Joueur1->CreatNewPersonnage();
                                 }
                             }
                         ?>

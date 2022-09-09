@@ -8,11 +8,11 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 
 ## En cours :
 - Début Uniformisation Code + Commentaires,
+- Refonte Form Création Personnage.
 
 ## Todo List :
 - Vérification JS Inscription FRONT,
 - Page de présentation du site (Inscription),
-- Refonte Form Création Personnage,
 - Ajouter Boite de Dialog pour RepMSG,
 - Intégration envoie de mail et confirmation inscription,
 - Sécurisation MDP Session,
