@@ -1,21 +1,22 @@
 <?php
     // Beaucoup de Similitude entre Personnage/Entité -> Refactoriser avec héritage
-    class Entite {
-        protected $_id;
-        protected $_nom;
-        protected $_vie;
-        protected $_vieMax;
-        protected $_degat;
-        protected $_imageLien;
-        protected $_lvl;
-        private $sacEquipements=array();
-        private $sacEquipe=array();
-        protected $_type; //1 = hero 2= mob
-        protected $map;
-        protected $_bdd;
+    class Entite{
+        public $_id;
+        public $_nom;
+        public $_vie;
+        public $_vieMax;
+        public $_degat;
+        public $_imageLien;
+        public $_lvl;
+        public $_iddUser;
+        public $sacEquipements=array();
+        public $sacEquipe=array();
+        public $_type; //1 = hero 2= mob
+        public $map;
+        public $_bdd;
         //dans le cas d'un perso
-        protected $_idTypePersonnage;
-        protected $typePersonnage;
+        public $_idTypePersonnage;
+        public $typePersonnage;
 
         public function __construct($bdd){
             $this->_bdd = $bdd;
@@ -44,6 +45,11 @@
         /** Return Lvl */
         public function getLvl(){
             return $this->_lvl;
+        }
+
+        /** Return idUser */
+        public function getidUser(){
+            return $this->_idUser;
         }
 
         /** Return Vie */
@@ -375,6 +381,7 @@
             //doit retourner des degat que l'entite donne a l'instant t
             return $this->_degat;
         }
+        
         //il n'est possible de booster la vie au dela de vie max
         public function SoinPourcentage($pourcentage){
             $valeur = round(($this->_vieMax*$pourcentage)/100);
@@ -469,7 +476,7 @@
             
         }
 
-        public function setEntite($id,$nom,$vie,$degat,$vieMax,$image,$type,$lvl){
+        public function setEntite($id,$nom,$vie,$degat,$vieMax,$image,$type,$lvl,$idUser){
             $this->_id = $id;
             $this->_nom = $nom;
             $this->_vie = $vie;
@@ -478,6 +485,7 @@
             $this->_imageLien = $image;
             $this->_type = $type;
             $this->_lvl = $lvl;
+            $this->_idUser = $idUser;
 
             if($this->_type == 1){
                 if(is_null($this->typePersonnage)){
@@ -681,7 +689,7 @@
         public function setEntiteById($id){
             $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `id`='".$id."'");
             if($tab = $Result->fetch()){
-                $this->setEntite($tab["id"],$tab["nom"],$tab["vie"],$tab["degat"],$tab["vieMax"],$tab["lienImage"],$tab["type"],$tab["lvl"]);
+                $this->setEntite($tab["id"],$tab["nom"],$tab["vie"],$tab["degat"],$tab["vieMax"],$tab["lienImage"],$tab["type"],$tab["lvl"],$tab["idUser"]);
                 //recherche de sa position
                 $map = new map($this->_bdd);
                 $map->setMapByID($tab["idMap"]);
@@ -706,7 +714,7 @@
         public function setEntiteByIdWithoutMap($id){
             $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `id`='".$id."'");
             if($tab = $Result->fetch()){
-                $this->setEntite($tab["id"],$tab["nom"],$tab["vie"],$tab["degat"],$tab["vieMax"],$tab["lienImage"],$tab["type"],$tab["lvl"]);
+                $this->setEntite($tab["id"],$tab["nom"],$tab["vie"],$tab["degat"],$tab["vieMax"],$tab["lienImage"],$tab["type"],$tab["lvl"],$tab["idUser"]);
             }
         }
 
