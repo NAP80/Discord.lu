@@ -39,8 +39,8 @@
                             if(isset($_POST['faction-id'])){
                                 $Joueur1->setFaction($_POST['faction-id']);
                             }
-                            // Si Faction est Null ou supérieur à 4
-                            if((($Joueur1->getIdFaction() == NULL) || ($Joueur1->getIdFaction() >= 5)) && (!isset($_POST['faction-id']))){
+                            // Si Faction est Null ou inférieur à 1 ou supérieur à 4
+                            if((($Joueur1->getIdFaction() == NULL) || ($Joueur1->getIdFaction() <= 0) || ($Joueur1->getIdFaction() >= 5))){
                                 $Joueur1->getFormFaction();
                             }
                             // Si Faction Non Null et inférieur ou égale à 4 (Donc qu'on a une faction valide)
