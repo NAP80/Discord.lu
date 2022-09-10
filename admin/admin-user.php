@@ -35,7 +35,7 @@
             // Vérifie qu'il ne s'est pas déconnecté.
             if($access === true){
                 include "admin-menu.php";
-                if($Joueur1->isAdmin() == true){
+                if($Joueur1->getPermAdmin()){
                     ?>
                         <div class='Div1 BG_Blanc'>
                             <h1 class='TITRE'>Panel Administrateur</h2>
@@ -63,7 +63,7 @@
                                             <td class="TC"><?= 'MDP' ?></td>
                                             <td class="TC">
                                                 <?php
-                                                    if($Joueur1->isAdmin() == true){
+                                                    if($Joueur1->getPermAdmin()){
                                                         echo 'Admin';
                                                     }
                                                     else{

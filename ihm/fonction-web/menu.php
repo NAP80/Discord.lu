@@ -14,7 +14,7 @@
         </li>-->
         <li><a href="classement.php">Classement</a></li>
         <?php
-            if($Joueur1->isAdmin() == true){
+            if($Joueur1->getPermAdmin()){
                 ?>
                     <li><a href="admin/statistique.php">Statistique</a></li>
                     <li><a href="admin/index.php">Administration</a>

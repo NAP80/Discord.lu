@@ -735,7 +735,7 @@
             if((isset($_POST["AssignePerso"])) && (isset($_POST["IdPerso"]))){// À faire check si idUser est bon ou si Admin
                 $Personnage = New Personnage($this->_bdd);
                 $Personnage->setPersonnageById($_POST["IdPerso"]);
-                if(($Personnage->getidUser() == $this->getId()) /*|| $Joueur1->isAdmin() === true*/){
+                if(($Personnage->getidUser() == $this->getId()) || $this->getPermAdmin()){
                     $this->setPersonnage($Personnage); // Assignation du Personnage à l'User
                     if($Personnage->_vie <= 0 ){
                         $Personnage->resurection();

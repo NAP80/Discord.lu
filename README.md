@@ -26,20 +26,17 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Refonte des équipements,
 - Refonte des combats,
 - Refonte de la Map,
-- Refonte de Session.php,
 - Intégration Panel Admin,
 - Intégration Forge,
 - Intégration Marché,
 - Intégration Système de Ban,
 - Intégration Hiérarchie Utilisateur,
 - Sécurisation Injection SQL,
-- Mise à jours Boolen Admin -> Rôle,
 - Patch CSS Décalage Dialog,
 - Mettre des CGU ou un truc légal,
 - Le putain de footer,
 - Refaire l'intégralité du CSS,
-- Refaire le Menu,
-- Ajouter Sécurité sur l'idPersonnage User.
+- Refaire le Menu.
 
 ## Fait :
 - Récupération du projet,
@@ -50,4 +47,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Refonte Inscription/Connexion BACK,
 - Refonte Form Création Personnage, [À Terminer CSS]
 - Refonte Form Choix Personnage, [À Terminer CSS]
-- Sécurisation MDP Session.
+- Sécurisation MDP Session,
+- Refonte de Session.php,
+- Ajouter Sécurité sur l'idPersonnage User,
+- Mise à jours Boolen User Admin -> TypeUser.

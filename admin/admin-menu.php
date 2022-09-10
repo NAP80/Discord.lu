@@ -8,7 +8,7 @@
         <li><a href="../classement.php">Classement</a></li>
         <li><a href="../credit.php">Crédit</a></li>
         <?php
-            if($Joueur1->isAdmin() == true){
+            if($Joueur1->getPermAdmin()){
                 ?>
                     <li><a href="statistique.php">Statistique</a></li>
                     <li><a href="index.php">Administration</a>

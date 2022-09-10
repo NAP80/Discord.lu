@@ -20,16 +20,16 @@
                 ?>
                     <div class="divMainPage">
                         <div class="divWelcome">
+                            <p>Bienvenue <?= $Joueur1->getNameTypeUser() ?> <?= $Joueur1->getPseudo() ?>.</p>
                             <?php
-                                if($Joueur1->isAdmin() === true){
+                                if($Joueur1->getPermAdmin()){
                                     ?>
-                                        <p>Bienvenue Administrateur <?= $Joueur1->getPseudo() ?>.</p>
                                         <p><a href='admin/'>Accéder au Panel Administrateur.</a></p>
                                     <?php
                                 }
-                                else{
+                                if($Joueur1->getPermStaff()){
                                     ?>
-                                        <p>Bienvenue Joueur <?= $Joueur1->getPseudo() ?>.</p>
+                                        <p><a href='staff/'>Accéder au Panel Staff.</a></p>
                                     <?php
                                 }
                             ?>

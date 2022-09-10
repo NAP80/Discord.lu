@@ -40,7 +40,7 @@
             // Vérifie qu'il ne s'est pas déconnecté.
             if($access === true){
                 include "admin-menu.php";
-                if($Joueur1->isAdmin() == true){
+                if($Joueur1->getPermAdmin()){
                     ?>
                         <div class='Div1 BG_Blanc'>
                             <h1 class='TITRE'>Statistique du Jeu</h2>
