@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : jeu. 23 juin 2022 à 06:00
+-- Généré le : sam. 10 sep. 2022 à 07:00
 -- Version du serveur :  8.0.21
 -- Version de PHP : 7.3.21
 
@@ -171,21 +171,22 @@ CREATE TABLE IF NOT EXISTS `equipement` (
 
 DROP TABLE IF EXISTS `faction`;
 CREATE TABLE IF NOT EXISTS `faction` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nom` varchar(50) NOT NULL,
-  `couleur` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
+  `idFaction` int NOT NULL AUTO_INCREMENT,
+  `nameFaction` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `descFaction` varchar(100) NOT NULL,
+  `logoFaction` varchar(100) NOT NULL,
+  PRIMARY KEY (`idFaction`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `faction`
 --
 
-INSERT INTO `faction` (`id`, `nom`, `couleur`) VALUES
-(1, 'Manga', 'rgba(34,159,190,0.555)'),
-(2, 'Comics', 'rgba(128,159,23,0.555)'),
-(3, 'Science Fiction', 'rgba(134,159,22,0.555)'),
-(4, 'Gaming', 'rgba(177,255,0,0.53)');
+INSERT INTO `faction` (`idFaction`, `nameFaction`, `descFaction`, `logoFaction`) VALUES
+(1, 'Albion', 'La faction Albion.', '1_faction'),
+(2, 'Alterna', 'La faction Alterna.', '2_faction'),
+(3, 'Menos', 'La faction Menos.', '3_faction'),
+(4, 'Initir', 'La faction Initir.', '4_faction');
 
 -- --------------------------------------------------------
 
@@ -580,15 +581,16 @@ INSERT INTO `typeuser` (`id`, `name`, `admin`, `Staff`, `bypass`, `visibility`) 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `email` varchar(50) NOT NULL,
-  `pseudo` varchar(50) NOT NULL,
+  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `pseudo` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `password_hash` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `idPersonnage` int NOT NULL,
+  `token` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `idPersonnage` int DEFAULT NULL,
   `idFaction` int DEFAULT NULL,
   `dateUser` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `admin` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `login` (`email`),
   KEY `idPersonnage` (`idPersonnage`),
   KEY `idFaction` (`idFaction`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
