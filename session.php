@@ -1,6 +1,7 @@
 <?php
     //  INCLUDES
         include "class/Entite.php";
+        include "class/TypeUser.php";
         include "class/User.php";
         include "class/Faction.php";
         include "class/TypePersonnage.php";

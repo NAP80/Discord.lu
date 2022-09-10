@@ -1,5 +1,5 @@
 <?php
-    class User{
+    class User extends TypeUser{
         private $_bdd;
 
         private $_id;
@@ -10,16 +10,17 @@
         private $_idPersonnage;
         private $_idFaction;
         private $_dateUser;
-        private $_admin;
+        private $_typeUser;
 
         private $_infoPerso; // Information du personnage en cours
 
         public function __construct($bdd){
+            Parent::__construct($bdd);
             $this->_bdd = $bdd;
         }
 
         /** Récupère User */
-        public function setUser($id,$email,$pseudo,$password_hash,$token,$idPersonnage,$idFaction,$dateUser,$admin){
+        public function setUser($id,$email,$pseudo,$password_hash,$token,$idPersonnage,$idFaction,$dateUser,$typeUser){
             $this->_id = $id;
             $this->_email = $email;
             $this->_pseudo = $pseudo;
@@ -28,7 +29,8 @@
             $this->_idPersonnage = $idPersonnage;
             $this->_idFaction = $idFaction;
             $this->_dateUser = $dateUser;
-            $this->_admin = $admin;
+            $this->_typeUser = $typeUser;
+            $this->setTypeUserById($typeUser);
         }
 
         /** Return ID */
@@ -71,9 +73,9 @@
             return $this->_dateUser;
         }
 
-        /** Return True si Admin : À dégager */
-        public function isAdmin(){
-            return $this->_admin;
+        /** Return TypeUser User */
+        public function getTypeUser(){
+            return $this->_typeUser;
         }
 
         /** Return Nom du personnage en cours de l'User : À dégager */
@@ -94,10 +96,10 @@
 
         /** Set User By Token */
         public function setUserByToken($token){
-            $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `token`='".$token."'");
+            $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `token`='".$token."'"); // Optimisable en récupérant aussi le TypeUser
             // Authentification si Correct et à jours.
             if($tab = $Result->fetch()){
-                $this->setUser($tab["id"],$tab["email"],$tab["pseudo"],$tab["password_hash"],$tab["token"],$tab["idPersonnage"],$tab["idFaction"],$tab["dateUser"],$tab["admin"]);
+                $this->setUser($tab["id"],$tab["email"],$tab["pseudo"],$tab["password_hash"],$tab["token"],$tab["idPersonnage"],$tab["idFaction"],$tab["dateUser"],$tab["typeUser"]);
                 // Set son Personnage
                 $personnage = new Personnage($this->_bdd);
                 $personnage->setPersonnageById($tab["idPersonnage"]);
@@ -117,7 +119,7 @@
         public function setUserById($id){
             $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `id`='".$id."'");
             if($tab = $Result->fetch()){
-                $this->setUser($tab["id"],$tab["email"],$tab["pseudo"],$tab["password_hash"],$tab["token"],$tab["idPersonnage"],$tab["idFaction"],$tab["dateUser"],$tab["admin"]);
+                $this->setUser($tab["id"],$tab["email"],$tab["pseudo"],$tab["password_hash"],$tab["token"],$tab["idPersonnage"],$tab["idFaction"],$tab["dateUser"],$tab["typeUser"]);
                 // Set son Personnage
                 $personnage = new Personnage($this->_bdd);
                 $personnage->setPersonnageById($tab["idPersonnage"]);
@@ -733,7 +735,7 @@
             if((isset($_POST["AssignePerso"])) && (isset($_POST["IdPerso"]))){// À faire check si idUser est bon ou si Admin
                 $Personnage = New Personnage($this->_bdd);
                 $Personnage->setPersonnageById($_POST["IdPerso"]);
-                if(($Personnage->getidUser() == $this->getId()) || $this->isAdmin()){
+                if(($Personnage->getidUser() == $this->getId()) /*|| $Joueur1->isAdmin() === true*/){
                     $this->setPersonnage($Personnage); // Assignation du Personnage à l'User
                     if($Personnage->_vie <= 0 ){
                         $Personnage->resurection();
