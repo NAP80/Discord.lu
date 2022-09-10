@@ -31,13 +31,11 @@
 
     //  GESTION DES SESSIONS
         if(!is_null($mabase)){
-            if(isset($_SESSION["Connected"]) && $_SESSION["Connected"]===true){
+            if(isset($_SESSION["Connected"]) && $_SESSION["Connected"] === true && isset($_SESSION["token"])){
                 $access = true;
-                if(isset($_SESSION["token"])){
-                    $Joueur1->setUserByToken($_SESSION["token"]);
-                }
+                $access = $Joueur1->setUserByToken($_SESSION["token"]);
             }
-            else{
+            if($access !== true){
                 $access = false;
                 // Affichage de formulaire si pas deconnexion
                 $access = $Joueur1->ConnectToi();

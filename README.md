@@ -14,7 +14,6 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Page de présentation du site (Inscription),
 - Ajouter Boite de Dialog pour RepMSG,
 - Intégration envoie de mail et confirmation inscription,
-- Sécurisation MDP Session,
 - Refonte des déplacements MAP (Retrait du délire de TP, système de direction pour les déplacements),
 - Système d'amis,
 - Refonte des Monstres,
@@ -38,8 +37,8 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Patch CSS Décalage Dialog,
 - Mettre des CGU ou un truc légal,
 - Le putain de footer,
-- Refaire l'intégralité du CSS.
-- Refaire le Menu.
+- Refaire l'intégralité du CSS,
+- Refaire le Menu,
 - Ajouter Sécurité sur l'idPersonnage User.
 
 ## Fait :
@@ -48,6 +47,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Hash des MDP en BDD,
 - Refonte Form Choix Faction,
 - Refonte Inscription/Connexion FRONT,
-- Refonte Inscription/Connexion BACK.
-- Refonte Form Création Personnage. [À Terminer CSS]
-- Refonte Form Choix Personnage. [À Terminer CSS]
+- Refonte Inscription/Connexion BACK,
+- Refonte Form Création Personnage, [À Terminer CSS]
+- Refonte Form Choix Personnage, [À Terminer CSS]
+- Sécurisation MDP Session.

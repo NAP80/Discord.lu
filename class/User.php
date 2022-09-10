@@ -95,12 +95,21 @@
         /** Set User By Token */
         public function setUserByToken($token){
             $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `token`='".$token."'");
+            // Authentification si Correct et à jours.
             if($tab = $Result->fetch()){
                 $this->setUser($tab["id"],$tab["email"],$tab["pseudo"],$tab["password_hash"],$tab["token"],$tab["idPersonnage"],$tab["idFaction"],$tab["dateUser"],$tab["admin"]);
                 // Set son Personnage
                 $personnage = new Personnage($this->_bdd);
                 $personnage->setPersonnageById($tab["idPersonnage"]);
                 $this->_infoPerso = $personnage;
+            }
+            // Déconnection si non à jours.
+            else{
+                $_SESSION["Connected"] = false;
+                session_unset();
+                session_destroy();
+                $access = false;
+                return $access;
             }
         }
 
@@ -470,16 +479,12 @@
             $afficheForm = true;
             $access = true;
             if(isset($_POST["logout"])){
-                //si on se deco on raffiche le formulaire de co
-                $_SESSION["Connected"]=false;
+                $_SESSION["Connected"] = false;
                 session_unset();
                 session_destroy();
                 $this->ConnectToi();
                 $afficheForm = false;
                 $access = false;
-            }
-            else{
-                $afficheForm = true;
             }
             if($afficheForm){
                 ?>
