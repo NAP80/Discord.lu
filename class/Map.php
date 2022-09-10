@@ -271,9 +271,9 @@
 
         /** Return Nom du Découvreur de Map */
         public function getPersonnageDecouvreur(){
-            $perso = new User($this->_bdd);
-            $perso->setUserById($this->idUserDecouverte);
-            return $perso;
+            $User = new User($this->_bdd);
+            $User->setUserById($this->idUserDecouverte);
+            return $User;
         }
 
         /** Set Coord ID Map Nord */
