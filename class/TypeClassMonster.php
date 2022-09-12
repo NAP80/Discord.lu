@@ -12,6 +12,7 @@
         private $_spawnTypeMob;
 
         public function __construct($bdd){
+            Parent::__construct($bdd);
             $this->_bdd = $bdd;
         }
 

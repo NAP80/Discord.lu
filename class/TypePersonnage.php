@@ -2,7 +2,7 @@
     class TypePersonnage{
         private $_bdd;
 
-        private $_idTypePerso ;
+        private $_idTypePerso;
         private $_nameTypePerso;
         private $_statsAttaque;
         private $_statsDefense;
