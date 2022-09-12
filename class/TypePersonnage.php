@@ -1,97 +1,95 @@
-
 <?php
     class TypePersonnage{
-        private $_id;
-        private $_coefAttaque;
-        private $_coefBouclier;
-        private $_coefDefense;
-        private $_distance;
-        private $_idFaction;
-        private $_lienImage;
-        private $_nom;
         private $_bdd;
+
+        private $_idTypePerso ;
+        private $_nameTypePerso;
+        private $_statsAttaque;
+        private $_statsDefense;
+        private $_statsMagique;
+        private $_statsRessMagique;
+        private $_imgTypePerso;
+        private $_idFaction;
 
         public function __construct($bdd){
             $this->_bdd = $bdd;
         }
 
-        //on fourni l'id du personnage on récupére un type de perso
-        public function setTypePersonnageByIdPerso($id){
-            $req  = "SELECT *
+        // Return TypePersonnage by Id Perso
+        public function setTypePersonnageByIdPerso($idPersonnage){
+            $req = "SELECT *
             FROM `TypePersonnage`,`Personnage`
-            WHERE `Personnage`.idTypePersonnage=  `TypePersonnage`.id
-            AND `Personnage`.id='".$id."'";
+            WHERE `Personnage`.idTypePersonnage = `TypePersonnage`.idTypePerso
+            AND `Personnage`.id='".$idPersonnage."'";
             $Result = $this->_bdd->query($req);
             if($tab=$Result->fetch()){
-                $this->_id = $tab['id'];
-                $this->_coefAttaque= $tab['coefAttaque'];
-                $this->_coefBouclier= $tab['coefBouclier'];
-                $this->_coefDefense= $tab['coefDefense'];
-                $this->_distance= $tab['distance'];
-                $this->_idFaction= $tab['idFaction'];
-                $this->_lienImage= $tab['lienImage'];
-                $this->_nom= $tab['nom'];
+                $this->_idTypePerso = $tab['idTypePerso'];
+                $this->_nameTypePerso = $tab['nameTypePerso'];
+                $this->_statsAttaque = $tab['statsAttaque'];
+                $this->_statsDefense = $tab['statsDefense'];
+                $this->_statsMagique = $tab['statsMagique'];
+                $this->_statsRessMagique = $tab['statsRessMagique'];
+                $this->_imgTypePerso = $tab['imgTypePerso'];
+                $this->_idFaction = $tab['idFaction'];
             }
         }
         
-        //on fourni l'id du personnage on récupér un type de perso
+        // Return TypePersonnage by Id
         public function setTypePersonnageById($id){
             //select les info personnage
-            $req  = "SELECT * FROM `TypePersonnage`
-            WHERE id='".$id."'";
+            $req = "SELECT * FROM `TypePersonnage`
+            WHERE idTypePerso='".$id."'";
             $Result = $this->_bdd->query($req);
             if($tab=$Result->fetch()){
-                $this->_id = $tab['id'];
-                $this->_coefAttaque=$tab['coefAttaque'];
-                $this->_coefBouclier=$tab['coefBouclier'];
-                $this->_coefDefense=$tab['coefDefense'];
-                $this->_distance=$tab['distance'];
-                $this->_idFaction=$tab['idFaction'];
-                $this->_lienImage=$tab['lienImage'];
-                $this->_nom=$tab['nom'];
+                $this->_idTypePerso = $tab['idTypePerso'];
+                $this->_nameTypePerso = $tab['nameTypePerso'];
+                $this->_statsAttaque = $tab['statsAttaque'];
+                $this->_statsDefense = $tab['statsDefense'];
+                $this->_statsMagique = $tab['statsMagique'];
+                $this->_statsRessMagique = $tab['statsRessMagique'];
+                $this->_imgTypePerso = $tab['imgTypePerso'];
+                $this->_idFaction = $tab['idFaction'];
             }
         }
 
-        /** Return Id */
-        public function getId(){
-            return $this->_id;
+        /** Return IdTypePerso */
+        public function getIdTypePerso(){
+            return $this->_idTypePerso;
         }
 
-        /** Return Nom */
-        public function getNom(){
-            return $this->_nom;
+        /** Return NameTypePerso */
+        public function getNameTypePerso(){
+            return $this->_nameTypePerso;
         }
 
-        /** Return CoefBouclier */
-        public function getCoefBouclier(){
-            return $this->_coefBouclier;
+        /** Return StatsAttaque */
+        public function getStatsAttaque(){
+            return $this->_statsAttaque;
         }
 
-        /** Return CoefDefense */
-        public function getCoefDefense(){
-            return $this->_coefDefense;
+        /** Return StatsDefense */
+        public function getStatsDefense(){
+            return $this->_statsDefense;
         }
 
-        /** Return CoefAttaque */
-        public function getCoefAttaque(){
-            return $this->_coefAttaque;
+        /** Return StatsMagique */
+        public function getStatsMagique(){
+            return $this->_statsMagique;
         }
 
-        /** Return Distance */
-        public function getDistance(){
-            return $this->_distance;
+        /** Return StatsRessMagique */
+        public function getStatsRessMagique(){
+            return $this->_statsRessMagique;
         }
 
-        /** Return LienImage */
-        public function getLienImage(){
-            return $this->_lienImage;
+        /** Return ImgTypePerso */
+        public function getImgTypePerso(){
+            return $this->_imgTypePerso;
         }
 
-        /** Return idFaction */
+        /** Return IdFaction */
         public function getIdFaction(){
-            $faction = new Faction($this->_bdd);
-            $faction->setFactionById($this->_idFaction);
-            return $faction;
+            return $this->_idFaction;
         }
     }
 ?>

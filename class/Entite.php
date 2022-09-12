@@ -153,7 +153,7 @@
 
         /** Return les équipements */
         public function getEquipements(){
-            $lists=array();
+            $lists = array();
             foreach($this->sacEquipements as $EquipementId){
                 $newEquipement = new Equipement($this->_bdd);
                 $newEquipement->setEquipementByID($EquipementId);
@@ -283,9 +283,9 @@
             //application des coef si il y a nu type de personnage
             //1 c'est des perso , 2 c'est des mob
             if($this->_type == 1){// Si n'utilise rien
-                $type = $this->getTyePersonnage();
+                $type = $this->getTypePersonnage();
                 if(!is_null($arme)){
-                    $coef = $coef*$type->getCoefAttaque();
+                    $coef = $coef*$type->getStatsAttaque();
                 }
             }
             $val = round(($this->_degat+$forceArme)*$coef);
@@ -343,12 +343,12 @@
             }
             //alors Todo Je sais pas ... evaluer la valeur d'une armure
             if($this->_type == 1){
-                $type = $this->getTyePersonnage();
+                $type = $this->getTypePersonnage();
                 if(!is_null($armure)){
-                 $coef = $coef*$type->getCoefDefense();
+                 $coef = $coef*$type->getStatsDefense();
                 }
                 if(!is_null($bouclier)){
-                 $coef = $coef*$type->getCoefBouclier();
+                 $coef = $coef*$type->getStatsRessMagique();
                 }
                 
             }
@@ -492,14 +492,14 @@
                     $TypePersonnage = new TypePersonnage($this->_bdd);
                     $TypePersonnage->setTypePersonnageByIdPerso($this->_id);
                     $this->typePersonnage = $TypePersonnage;
-                    $this->_idTypePersonnage = $TypePersonnage->getId();
+                    $this->_idTypePersonnage = $TypePersonnage->getIdTypePerso();
                 
                 }
             }
         }
 
         /** Return Type Personnage */
-        public function getTyePersonnage(){
+        public function getTypePersonnage(){
             if(!is_null($this->_idTypePersonnage) ){
                 if(is_null($this->typePersonnage)){
                     $TypePersonnage = new TypePersonnage($this->_bdd);
@@ -549,7 +549,7 @@
             $arme = $this->getArme();
             $pouvoir = $this->getPouvoir();
             if($this->_type == 1){
-                $type = $this->getTyePersonnage();
+                $type = $this->getTypePersonnage();
             }
             ?>
                 <div class="EntiteInfo">
@@ -570,7 +570,7 @@
                         <div class="coef">
                             (*<?php 
                                 if(!is_null($type)){
-                                    echo $type->getCoefAttaque();
+                                    echo $type->getStatsAttaque();
                                 }
                                 else{
                                     echo "1";
@@ -598,7 +598,7 @@
                         <div class="coef">
                             (*<?php 
                                 if(!is_null($type)){
-                                    echo $type->getCoefDefense();
+                                    echo $type->getStatsDefense();
                                 }
                                 else{
                                     echo "1";
@@ -614,7 +614,7 @@
                     <div class="coef">
                         (*<?php 
                             if(!is_null($type)){
-                                echo $type->getCoefBouclier();
+                                echo $type->getStatsRessMagique();
                             }
                             else{
                                 echo "1";
@@ -653,8 +653,8 @@
                 <div>
                     <?php 
                         if($this->_type == 1){
-                            $type = $this->getTyePersonnage();
-                            echo $type->getNom();
+                            $type = $this->getTypePersonnage();
+                            echo $type->getNameTypePerso();
                         }
                     ?>
                 </div>

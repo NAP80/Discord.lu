@@ -151,7 +151,7 @@
                         $TypePersos = $this->getAllTypePersonnage($idFactionUser);
                         $TypePerso = $TypePersos[rand(0,count($TypePersos)-1)];
                         $personnage = new Personnage($this->_bdd);
-                        $imageUrl = $personnage->generateImage($TypePerso->getNom());
+                        $imageUrl = $personnage->generateImage($TypePerso->getNameTypePerso());
                         ?>
                             <form action="" method="post" class="formCreatPerso">
                                 <p>Créez un personnage :</p>
@@ -165,8 +165,8 @@
                                                 foreach($TypePersos as $TypePerso){
                                                     ?>
                                                         <div class="listTypePerso">
-                                                            <input type="radio" name="TypePerso" id="Type<?= $TypePerso->getID() ?>" value="<?= $TypePerso->getID() ?>">
-                                                            <label for="Type<?= $TypePerso->getID() ?>"><?= $TypePerso->getNom() ?></label>
+                                                            <input type="radio" name="TypePerso" id="Type<?= $TypePerso->getIdTypePerso() ?>" value="<?= $TypePerso->getIdTypePerso() ?>">
+                                                            <label for="Type<?= $TypePerso->getIdTypePerso() ?>"><?= $TypePerso->getNameTypePerso() ?></label>
                                                             <input type="hidden" name="image" value="<?= $imageUrl ?>">
                                                         </div>
                                                     <?php
@@ -267,14 +267,14 @@
 
         /** Return un tableau des type de personnages en fonction de l'ID Faction */ // À Migrer sur une autre page, n'a rien à faire en User
         public function getAllTypePersonnage($idFactionUser){
-            $TypePersos = array();
+            $ListPerso = array();
             $Result = $this->_bdd->query("SELECT * FROM `TypePersonnage` WHERE idFaction = '".$idFactionUser."'");
             while($tab=$Result->fetch()){
                 $TypePerso = new TypePersonnage($this->_bdd);
-                $TypePerso->setTypePersonnageById($tab['id']);
-                array_push($TypePersos,$TypePerso);
+                $TypePerso->setTypePersonnageById($tab['idTypePerso']);
+                array_push($ListPerso,$TypePerso);
             }
-            return $TypePersos;
+            return $ListPerso;
         }
 
         /** Return List de tout Mob Capturé par ID User */
