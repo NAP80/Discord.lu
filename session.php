@@ -8,6 +8,8 @@
         include "class/Personnage.php";
         include "class/Map.php";
         include "class/Forge.php";
+        include "class/TypeClassMonster.php";
+        include "class/TypeMonster.php";
         include "class/Mob.php";
         include "class/Tooltip.php";
         include "class/Objet.php";

@@ -20,8 +20,8 @@
         public function setTypeClassMonsterByIdPerso($idMonster){
             $req = "SELECT *
             FROM `TypeClassMob`,`Entite`
-            WHERE `Entite`.idTypePersonnage = `TypeClassMob`._idClassTypeMob
-            AND `Personnage`.id='".$idMonster."'";
+            WHERE `TypeClassMob`.idTypeClassMob = `Entite`.idTypeClassMob
+            AND `Entite`.idEntite='".$idMonster."'";
             $Result = $this->_bdd->query($req);
             if($tab = $Result->fetch()){
                 $this->_idTypeClassMob = $tab['idTypeClassMob'];

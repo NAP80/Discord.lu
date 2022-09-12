@@ -1,6 +1,6 @@
 <?php
     // Beaucoup de Similitude entre Personnage/Entité -> Refactoriser avec héritage
-    class Mob extends Entite{
+    class Mob extends TypeMonster{
         private $_coefXP;
         private $_typeMob;
 

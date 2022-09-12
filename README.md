@@ -8,6 +8,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 
 ## En cours :
 - Début Uniformisation Code + Commentaires,
+- Refonte des Monstres.
 
 ## Todo List :
 - Vérification JS Inscription FRONT,
@@ -15,8 +16,10 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Ajouter Boite de Dialog pour RepMSG,
 - Intégration envoie de mail et confirmation inscription,
 - Refonte des déplacements MAP (Retrait du délire de TP, système de direction pour les déplacements),
+- Mécanique de Gains d'Argent lors d'une capture de monstre.
+- Mécanique de monstre Innofensif pour X heure une fois capturé.
+- Ajouts de Logs persistant sur les maps.
 - Système d'amis,
-- Refonte des Monstres,
 - Système de ville,
 - Réalisation du système de Faction,
 - Réalisation du système de Classe,
@@ -50,4 +53,6 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Sécurisation MDP Session,
 - Refonte de Session.php,
 - Ajouter Sécurité sur l'idPersonnage User,
-- Mise à jours Boolen User Admin -> TypeUser.
+- Mise à jours Boolen User Admin -> TypeUser,
+- Mise à jours TypePersonnage,
+- Mise à jours TypeMobs.
