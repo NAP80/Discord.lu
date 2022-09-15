@@ -51,7 +51,7 @@
     display: flex;
     flex-direction: column;
 }
-.divAllMobs{
+.divAllMonsters{
     display: flex;
     flex-direction: column;
 }
@@ -70,7 +70,7 @@
     flex-direction: row;
     justify-content: center;
 }
-.divInfoMobs{
+.divInfoMonsters{
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -104,7 +104,7 @@
     margin: 5px;
     padding: 0px;
 }
-.ulMob{
+.ulMonster{
     
     flex-wrap: wrap;
     justify-content: center;
@@ -224,7 +224,7 @@
     height: 20px;
     background-color:rgba(4,155,12,0.685);
 }
-.mapMob{
+.mapMonster{
     float:left;
     width: 20px;
     height: 20px;
@@ -354,7 +354,7 @@
 .OtherPerso{
     float:left;
 }
-.AllMobs{
+.AllMonsters{
     float:left;
 }
 

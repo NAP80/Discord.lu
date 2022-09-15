@@ -9,7 +9,7 @@
     box-shadow:2px 2px 2px rgb(0, 0, 0);
     -webkit-box-shadow:2px 2px 2px rgb(0, 0, 0);
 }
-.ulMob li{
+.ulMonster li{
     padding:5px;
     margin:10px;
 }
@@ -85,7 +85,7 @@ li.liAdverse{
     margin-left:30px;
 }
 
-.ulMob li{
+.ulMonster li{
     background-color:rgba(201,58,58,0.705);
     border-radius:10px;
     border:1px solid gray;
@@ -94,7 +94,7 @@ li.liAdverse{
     width:170px;
 }
 
-.ulMob .liAdverse:hover{
+.ulMonster .liAdverse:hover{
     cursor:url('epee.cur'),pointer;
     background-color:rgb(187,37,37);
 }
@@ -126,6 +126,6 @@ img .Personnage{
     float:left;
 }
 
-.mobCoef{
+.MonsterCoef{
     float:left;
 }

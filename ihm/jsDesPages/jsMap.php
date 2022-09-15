@@ -236,7 +236,7 @@
         }
     }
 
-    //le type est 0 = person 1 = mob
+    //le type est 0 = person 1 = Monster
     function attaquer(idPerso,type){
         hitAnimation(event);
         //supprimer temporairement l'attaque pour le cooldown
@@ -245,8 +245,8 @@
             var a = document.getElementById("aPerso"+idPerso);
         }
         else{
-            var li = document.getElementById("Mob"+idPerso);
-            var a = document.getElementById("aMob"+idPerso);
+            var li = document.getElementById("Monster"+idPerso);
+            var a = document.getElementById("aMonster"+idPerso);
         }
         li.classList.add("busy");
         let theclick =a.onclick;
@@ -261,7 +261,7 @@
                 UpdateVie("vieEntiteValeur"+data[0],data[1],data[2],data[3],data[4],"vieEntiteValeur"+data[5],data[6]);
                 //data[7]c'est xp
                 if(data[1] <= 0){
-                    //si mob mort on doit recharger le server
+                    //si Monster mort on doit recharger le server
                     //Todo toruver une alternative à un refrech de page
                     location.reload();
                 }
@@ -338,10 +338,10 @@
                 const clearID = id.match(/(\d+)/);
                 if(!clearID)
                     return;
-                var mob = document.getElementById(`Mob${clearID[0]}`);
-                mob.classList.add("Captured")
-                mob.classList.remove("adverse")
-                mob.querySelector('a').setAttribute("onclick", `SoinMob(${clearID[0]}, 1)`);
+                var Monster = document.getElementById(`Monster${clearID[0]}`);
+                Monster.classList.add("Captured")
+                Monster.classList.remove("adverse")
+                Monster.querySelector('a').setAttribute("onclick", `SoinMonster(${clearID[0]}, 1)`);
             }
         }
     }

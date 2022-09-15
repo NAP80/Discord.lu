@@ -52,24 +52,24 @@
                     $message .= " Ce personnage est déjà mort.";
                 }
             }
-            //attaque sur mob
+            //attaque sur Monster
             if($_GET["type"]==1){
-                $DeffensseurMob = new Mob($mabase);
-                $DeffensseurMob->setMobByIdWithMap($_GET["id"]);
-                $vieMax=$DeffensseurMob->getVieMax();
-                $vie=$DeffensseurMob->getVie();
-                if($DeffensseurMob->getVie()>0){
+                $DeffensseurMonster = new Monster($mabase);
+                $DeffensseurMonster->setMonsterByIdWithMap($_GET["id"]);
+                $vieMax=$DeffensseurMonster->getVieMax();
+                $vie=$DeffensseurMonster->getVie();
+                if($DeffensseurMonster->getVie()>0){
                     if($vieAttaquant!=0){
-                        //Utilisation méthode pour attaquer le mob
-                        $SubitDegat = $DeffensseurMob->SubitDegat($Attaquant);
-                        //Vie du mob renvoyer après avoir subit l attaque du joueur
+                        //Utilisation méthode pour attaquer le Monster
+                        $SubitDegat = $DeffensseurMonster->SubitDegat($Attaquant);
+                        //Vie du Monster renvoyer après avoir subit l attaque du joueur
                         $vie = $SubitDegat[0];
-                        $vieMax = $DeffensseurMob->getVieMax();
-                        //Si le mob as de la vie, il attaque. Sinon, rien ne se passe
+                        $vieMax = $DeffensseurMonster->getVieMax();
+                        //Si le Monster as de la vie, il attaque. Sinon, rien ne se passe
                         if($vie>0 && $SubitDegat[1]!='coolDown'){
                             $vieAvant = $Attaquant->getVie();
                             //Sinon : retour de bâton le deffenseur aussi attaque
-                            $vieAttaquant=$Attaquant->SubitDegatByMob($DeffensseurMob);
+                            $vieAttaquant=$Attaquant->SubitDegatByMonster($DeffensseurMonster);
                             $perte = $vieAvant-$vieAttaquant;
                             $message .= "vous avez subit ".$perte." pts de degat ";
                         }
@@ -79,10 +79,10 @@
                         if($vieAttaquant==0){
                             $message .= "Ton personnage est mort.";
                         }
-                        //si le perso tu le mob il faut envoyer un message
+                        //si le perso tu le Monster il faut envoyer un message
                         if($vie<=0){
-                            $lvl = $DeffensseurMob->getLvl();
-                            $Attaquant->addXP($lvl*rand(8,10)*$DeffensseurMob->getCoefXp());
+                            $lvl = $DeffensseurMonster->getLvl();
+                            $Attaquant->addXP($lvl*rand(8,10)*$DeffensseurMonster->getCoefXp());
                             $message .= "Tu as participé à la capture de ce monstre.";
                         }
                     }

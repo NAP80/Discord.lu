@@ -112,17 +112,17 @@
                                 </div>
                                 <div class="divEntity">
                                     <?php
-                                        $ZoneMobEmpty = 0;
+                                        $ZoneMonsterEmpty = 0;
                                         // AFFICHAGE AUTRES JOUEURS PRESENTS
                                             include "ihm/map/affichageAutrePersos.php";
                                         // AFFICHAGE DES MONSTRES
-                                            include "ihm/map/affichageTousLesMobs.php";
+                                            include "ihm/map/displayAllMonsters.php";
                                         // SI JOUEUR OU MONSTRE
-                                        if($ZoneMobEmpty == 2){
+                                        if($ZoneMonsterEmpty == 2){
                                             ?>
                                                 <p><i>Personne à l'horizon, peu rassurant...</i></p>
                                             <?php
-                                            $MobEmpty = 1 ;
+                                            $MonsterEmpty = 1 ;
                                         }
                                     ?>
                                 </div>
@@ -135,7 +135,7 @@
                                             include "ihm/map/affichageEquipementsMap.php";
                                         // SI AUCUN ITEM ET EQUIPEMENT
                                         if($ZoneObjectEmpty == 2){
-                                            if(isset($MobEmpty)){
+                                            if(isset($MonsterEmpty)){
                                                 ?>
                                                     <p><i>Et l'absence d'objets ne me réconforte pas dans cette solitude...</i></p>
                                                 <?php

@@ -11,7 +11,7 @@
         public $_iddUser;
         public $sacEquipements=array();
         public $sacEquipe=array();
-        public $_type; //1 = hero 2= mob
+        public $_type; //1 = hero 2= Monster
         public $map;
         public $_bdd;
         //dans le cas d'un perso
@@ -281,7 +281,7 @@
                 $lvl = $pouvoir->getLvl();
             }
             //application des coef si il y a nu type de personnage
-            //1 c'est des perso , 2 c'est des mob
+            //1 c'est des perso , 2 c'est des Monster
             if($this->_type == 1){// Si n'utilise rien
                 $type = $this->getTypePersonnage();
                 if(!is_null($arme)){
@@ -397,11 +397,11 @@
         public function SubitDegatByEntite($Entite){
             //nouveauté 2022 JLA on va gerer les dégat selon le type d'équipement
             //get Attaque sera modifier
-            $MobDegatAttaqueEnvoyer=$Entite->getAttaque();
+            $MonsterDegatAttaqueEnvoyer=$Entite->getAttaque();
             //Mise en place de la defence.
-            $MobDegatAttaqueEnvoyer -= round(($MobDegatAttaqueEnvoyer * $this->getDefense())/100,1);
+            $MonsterDegatAttaqueEnvoyer -= round(($MonsterDegatAttaqueEnvoyer * $this->getDefense())/100,1);
     
-            $this->_vie = $this->_vie - $MobDegatAttaqueEnvoyer;
+            $this->_vie = $this->_vie - $MonsterDegatAttaqueEnvoyer;
             if($this->_vie<0){
                 $this->_vie =0;
                 //retour en zone 0,0
@@ -411,42 +411,42 @@
             return $this->_vie;
         }
 
-        public function getAllMyMobIdByMap($map){
-            $listMob=array();
+        public function getAllMyMonsterIdByMap($map){
+            $listMonster=array();
             $req="SELECT `id` FROM `Entite` WHERE `idUser` = '".$this->_id."' AND `idMap` = '".$map->getId()."')";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
-                array_push($listMob,$tab);
+                array_push($listMonster,$tab);
             }
-            return $listMob;
+            return $listMonster;
         }
 
-        public function SubitDegatByMob($Mob){
-            $MobDegatAttaqueEnvoyer=$Mob->getAttaque();
+        public function SubitDegatByMonster($Monster){
+            $MonsterDegatAttaqueEnvoyer=$Monster->getAttaque();
             //Mise en place de la defence.
-            $MobDegatAttaqueEnvoyer -= round(($MobDegatAttaqueEnvoyer * $this->getDefense())/100,1);
+            $MonsterDegatAttaqueEnvoyer -= round(($MonsterDegatAttaqueEnvoyer * $this->getDefense())/100,1);
 
             $vieAvantAttaque = $this->_vie;
             //on va rechercher l'historique
-            $req = "SELECT * FROM `AttaqueEntiteMob` where idMob = '".$Mob->getId()."' and idEntite = '".$this->_id."'";
+            $req = "SELECT * FROM `AttaqueEntiteMonster` where idMonster = '".$Monster->getId()."' and idEntite = '".$this->_id."'";
             $Result = $this->_bdd->query($req);
             $tabAttaque['nbCoup']=0;
-            $tabAttaque['DegatsDonnes']=$MobDegatAttaqueEnvoyer;
+            $tabAttaque['DegatsDonnes']=$MonsterDegatAttaqueEnvoyer;
             if($tab=$Result->fetch()){
                 $tabAttaque = $tab;
-                $tabAttaque['DegatsDonnes']+=$MobDegatAttaqueEnvoyer;
+                $tabAttaque['DegatsDonnes']+=$MonsterDegatAttaqueEnvoyer;
                 $tabAttaque['nbCoup']++;
             }
             else{
                 //insertion d'une nouvelle attaque
-                $req="INSERT INTO `AttaqueEntiteMob`(`idMob`, `idEntite`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`) 
+                $req="INSERT INTO `AttaqueEntiteMonster`(`idMonster`, `idEntite`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`) 
                 VALUES (
-                    '".$Mob->getId()."','".$this->_id."',0,0,".$tabAttaque['DegatsReçus'].",0
+                    '".$Monster->getId()."','".$this->_id."',0,0,".$tabAttaque['DegatsReçus'].",0
                 )";
                 $Result = $this->_bdd->query($req);
             }
 
-            $this->_vie = $this->_vie - $MobDegatAttaqueEnvoyer;
+            $this->_vie = $this->_vie - $MonsterDegatAttaqueEnvoyer;
             if($this->_vie<0){
                 $this->_vie=0;
                 //on ne peut pas donner plus de degat que la vie d'un perso
@@ -455,10 +455,10 @@
             }
             $req = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `id` = '".$this->_id."'";
             $Result = $this->_bdd->query($req);
-            //update AttaqueEntiteMob pour mettre a jour combien le perso a pris de degat 
-            $req="UPDATE `AttaqueEntiteMob` SET 
+            //update AttaqueEntiteMonster pour mettre a jour combien le perso a pris de degat 
+            $req="UPDATE `AttaqueEntiteMonster` SET 
             `DegatsDonnes`=".$tabAttaque['DegatsDonnes']." 
-            WHERE idMob = '".$Mob->getId()."' AND idEntite ='".$this->_id."'";
+            WHERE idMonster = '".$Monster->getId()."' AND idEntite ='".$this->_id."'";
             $Result = $this->_bdd->query($req);
             return $this->_vie;
         }

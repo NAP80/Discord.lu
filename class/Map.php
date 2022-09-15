@@ -12,7 +12,7 @@
         Private $listItems=array();
         Private $listEquipements=array();
         Private $listPersonnages=array();
-        Private $listMobs=array();
+        Private $listMonsters=array();
         private $mapNord=null;
         private $mapSud=null;
         private $mapEst=null;
@@ -155,12 +155,12 @@
             while($tab=$Result->fetch()){
                 array_push($this->listPersonnages,$tab[0]);
             }
-            //select les Mob déjà présent
-            $this->listMobs = array();
+            //select les Monster déjà présent
+            $this->listMonsters = array();
             $req = "SELECT id FROM `Entite` WHERE idMap='".$id."' AND type='2'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
-                array_push($this->listMobs,$tab[0]);
+                array_push($this->listMonsters,$tab[0]);
             }
         }
 
@@ -243,28 +243,28 @@
         }
 
         /** Return Liste des Personnages présent Map */
-        public function getAllMobs(){
+        public function getAllMonsters(){
             $lists=array();
-            foreach($this->listMobs as $MobID){
-                $mob = new Mob($this->_bdd);
-                $mob->setMobByIdWithMap($MobID);
-                array_push($lists,$mob);
+            foreach($this->listMonsters as $MonsterID){
+                $Monster = new Monster($this->_bdd);
+                $Monster->setMonsterByIdWithMap($MonsterID);
+                array_push($lists,$Monster);
             }
             return $lists;
         }
 
-        /** Return Liste des Mobs Énnemies présent Map */
-        public function getAllMobContre($User){
-            $tab1 = $User->getAllMyMobIds();
-            $tab2 = $this->listMobs;
+        /** Return Liste des Monsters Énnemies présent Map */
+        public function getAllMonsterContre($User){
+            $tab1 = $User->getAllMyMonsterIds();
+            $tab2 = $this->listMonsters;
             $tab3 = array_diff($tab2,$tab1);
             return $tab3;
         }
 
-        /** Return Liste des Mobs Capturés présent Map */
-        public function getAllMobCapture($User){
-            $tab1 = $User->getAllMyMobIds();
-            $tab2 = $this->listMobs;
+        /** Return Liste des Monsters Capturés présent Map */
+        public function getAllMonsterCapture($User){
+            $tab1 = $User->getAllMyMonsterIds();
+            $tab2 = $this->listMonsters;
             $tab3 = array_intersect($tab1,$tab2);
             return $tab3;
         }
@@ -462,16 +462,16 @@
                         $newmap->addEquipement($equipement1->createEquipementAleatoire());
                     }
                 }
-                //chargement d'un Mob aléatoire à la création
+                //chargement d'un Monster aléatoire à la création
                 if(rand(0,3)>1){
                     
-                    $nbMob = rand(0,rand(2,4));
-                    for($i=0;$i<$nbMob;$i++){
-                        //il faut passer la map($this) au créateur de mob
-                        $Mob1 = new Mob($this->_bdd);
-                        $Mob1 = $Mob1->CreateMobAleatoire($newmap);
-                        if(!is_null($Mob1)){
-                            array_push($newmap->listMobs,$Mob1->getId());
+                    $nbMonster = rand(0,rand(2,4));
+                    for($i=0;$i<$nbMonster;$i++){
+                        //il faut passer la map($this) au créateur de Monster
+                        $Monster1 = new Monster($this->_bdd);
+                        $Monster1 = $Monster1->CreateMonsterAleatoire($newmap);
+                        if(!is_null($Monster1)){
+                            array_push($newmap->listMonsters,$Monster1->getId());
                             //chargement d'un Item aléatoire par monstre present
                             if(rand(0,4)>1){
                                 $item1 = new Item($this->_bdd);
@@ -508,9 +508,9 @@
                     //la cardinalité permet de lui dire d'ou on vient
                     //on va
                     $map= $Joueur1->getPersonnage()->getMap();
-                    //on vérifie si un mob est présent la ou on est car on est bloqué normalement
-                    $listMob = $map->getAllMobContre($Joueur1);
-                    if(is_null($listMob) || count($listMob) == 0){
+                    //on vérifie si un Monster est présent la ou on est car on est bloqué normalement
+                    $listMonster = $map->getAllMonsterContre($Joueur1);
+                    if(is_null($listMonster) || count($listMonster) == 0){
                         $map = $map->Create($map,$_GET["cardinalite"],$Joueur1->getId());
                     }
                     $lvlMap = $map->getlvl();
@@ -680,7 +680,7 @@
             $affichSud = false;
             $affichEst= false;
             $affichOuest = false;
-            //si jamais il y a un mob on va quand meme passer à true la ou l'on vient
+            //si jamais il y a un Monster on va quand meme passer à true la ou l'on vient
             switch($cardinalite){
                 case 'nord':
                     $affichNord = true;
@@ -695,7 +695,7 @@
                     $affichEst= true;
                     break;
             }
-            if(count($this->getAllMobContre($User))==0){
+            if(count($this->getAllMonsterContre($User))==0){
                 $affichNord = true;
                 $affichSud = true;
                 $affichEst= true;
@@ -711,7 +711,7 @@
                 }
                 $tab['sud'] .=  '</div>';
             } 
-            //si il y a un mob la region est bloqué
+            //si il y a un Monster la region est bloqué
             if($affichNord){
                 $tab['nord'] .= '<div class="nord">';
                 if(!is_null($Mnord)){

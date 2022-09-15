@@ -70,13 +70,13 @@
                                     <div class="divAllMonsterCaptured">
                                         <p class="pTitleMonsterCaptured">Voici tes monstres capturés :</p>
                                         <?php
-                                            $MysMob = new Mob($mabase);
-                                            foreach($Joueur1->getAllMyMobIds() as $mob){
+                                            $MysMonster = new Monster($mabase);
+                                            foreach($Joueur1->getAllMyMonsterIds() as $Monster){
                                                 ?>
                                                     <div class="divMonsterCaptured">
                                                         <?php
-                                                            $MysMob->setMobById($mob);
-                                                            $MysMob->renderHTML();
+                                                            $MysMonster->setMonsterById($Monster);
+                                                            $MysMonster->renderHTML();
                                                         ?>
                                                     </div>
                                                 <?php

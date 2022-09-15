@@ -2,72 +2,72 @@
     class TypeClassMonster extends Entite{
         public $_bdd;
 
-        private $_idTypeClassMob;
-        private $_nameTypeClassMob;
-        private $_posTypeMob;
+        private $_idTypeClassMonster;
+        private $_nameTypeClassMonster;
+        private $_posTypeMonster;
         private $_percentAttaque;
         private $_percentDefense;
         private $_percentMagique;
         private $_percentRessMagique;
-        private $_spawnTypeMob;
+        private $_spawnTypeMonster;
 
         public function __construct($bdd){
             Parent::__construct($bdd);
             $this->_bdd = $bdd;
         }
 
-        // Return TypeClassMonster by Id Mobs
+        // Return TypeClassMonster by Id Monsters
         public function setTypeClassMonsterByIdPerso($idMonster){
             $req = "SELECT *
-            FROM `TypeClassMob`,`Entite`
-            WHERE `TypeClassMob`.idTypeClassMob = `Entite`.idTypeClassMob
+            FROM `TypeClassMonster`,`Entite`
+            WHERE `TypeClassMonster`.idTypeClassMonster = `Entite`.idTypeClassMonster
             AND `Entite`.idEntite='".$idMonster."'";
             $Result = $this->_bdd->query($req);
             if($tab = $Result->fetch()){
-                $this->_idTypeClassMob = $tab['idTypeClassMob'];
-                $this->_nameTypeClassMob = $tab['nameTypeClassMob'];
-                $this->_posTypeMob = $tab['posTypeMob'];
+                $this->_idTypeClassMonster = $tab['idTypeClassMonster'];
+                $this->_nameTypeClassMonster = $tab['nameTypeClassMonster'];
+                $this->_posTypeMonster = $tab['posTypeMonster'];
                 $this->_percentAttaque = $tab['percentAttaque'];
                 $this->_percentDefense = $tab['percentDefense'];
                 $this->_percentMagique = $tab['percentMagique'];
                 $this->_percentRessMagique = $tab['percentRessMagique'];
-                $this->_spawnTypeMob = $tab['spawnTypeMob'];
+                $this->_spawnTypeMonster = $tab['spawnTypeMonster'];
             }
         }
         
         // Return TypeClassMonster by Id TypeClassMonster
         public function setTypePersonnageById($idTypeClassMonster){
-            $req = "SELECT * FROM `TypeClassMob`
-            WHERE idTypeClassMob='".$idTypeClassMonster."'";
+            $req = "SELECT * FROM `TypeClassMonster`
+            WHERE idTypeClassMonster='".$idTypeClassMonster."'";
             $Result = $this->_bdd->query($req);
             if($tab = $Result->fetch()){
-                $this->_idTypeClassMob = $tab['idTypeClassMob'];
-                $this->_nameTypeClassMob = $tab['nameTypeClassMob'];
-                $this->_posTypeMob = $tab['posTypeMob'];
+                $this->_idTypeClassMonster = $tab['idTypeClassMonster'];
+                $this->_nameTypeClassMonster = $tab['nameTypeClassMonster'];
+                $this->_posTypeMonster = $tab['posTypeMonster'];
                 $this->_percentAttaque = $tab['percentAttaque'];
                 $this->_percentDefense = $tab['percentDefense'];
                 $this->_percentMagique = $tab['percentMagique'];
                 $this->_percentRessMagique = $tab['percentRessMagique'];
-                $this->_spawnTypeMob = $tab['spawnTypeMob'];
+                $this->_spawnTypeMonster = $tab['spawnTypeMonster'];
             }
         }
 
-        /** Return IdTypeClassMob */
-        public function getIdTypeClassMob(){
-            return $this->_idTypeClassMob;
+        /** Return IdTypeClassMonster */
+        public function getIdTypeClassMonster(){
+            return $this->_idTypeClassMonster;
         }
 
-        /** Return NameTypeClassMob */
-        public function getNameTypeClassMob(){
-            return $this->_nameTypeClassMob;
+        /** Return NameTypeClassMonster */
+        public function getNameTypeClassMonster(){
+            return $this->_nameTypeClassMonster;
         }
 
-        /** Return Position du NameTypeClassMob :
+        /** Return Position du NameTypeClassMonster :
          *  0 = Début,
          *  1 = Fin
          */
-        public function getPosTypeMob(){
-            return $this->_posTypeMob;
+        public function getPosTypeMonster(){
+            return $this->_posTypeMonster;
         }
 
         /** Return PercentAttaque */
@@ -90,9 +90,9 @@
             return $this->_percentRessMagique;
         }
 
-        /** Return SpawnTypeMob */
-        public function getSpawnTypeMob(){
-            return $this->_spawnTypeMob;
+        /** Return SpawnTypeMonster */
+        public function getSpawnTypeMonster(){
+            return $this->_spawnTypeMonster;
         }
     }
 ?>

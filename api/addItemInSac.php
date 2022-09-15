@@ -19,11 +19,11 @@
             $map=$Perso->getMap();
             //une fois que j'ai mes objet je vérifie que le perso est bien sur la map
             $idmap = $map->getId();
-            //que l'item est bien dans la map si ya un mob on peut pas le prendre
+            //que l'item est bien dans la map si ya un Monster on peut pas le prendre
             foreach($map->getItems() as $item){
                 if($_GET["idItem"]==$item->getId()){
-                    //vérifier si ya des mob
-                    if(count($map->getAllMobContre($Joueur1))==0){
+                    //vérifier si ya des Monster
+                    if(count($map->getAllMonsterContre($Joueur1))==0){
                         //on retire l'item de la map et on la rajoute dans le sac
                         $map->removeItemById($_GET["idItem"]);
                         $item = new Item($mabase);

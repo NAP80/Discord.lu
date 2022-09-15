@@ -1,5 +1,5 @@
 <script>
-    /** Animation Click Attaque Mob */
+    /** Animation Click Attaque Monster */
     function hitAnimation(event){
         const weaponType = document.querySelector(".Arme").innerText
             , eventFrame = document.querySelector(".effect")

@@ -14,7 +14,7 @@
                     <li><a href="index.php">Administration</a>
                         <ul class="ulSousMenu">
                             <li><a href="admin-map.php">Gestion Map</a></li>
-                            <li><a href="admin-mobs.php">Gestion Monstre</a></li>
+                            <li><a href="admin-Monsters.php">Gestion Monstre</a></li>
                             <li><a href="admin-objet.php">Gestion Objet</a></li>
                             <li><a href="admin-perso.php">Gestion Personnage</a></li>
                             <li><a href="admin-user.php">Gestion Utilisateur</a></li>

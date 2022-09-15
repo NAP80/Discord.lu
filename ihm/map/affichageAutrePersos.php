@@ -25,7 +25,7 @@
             <?php
         }
         else{
-            $ZoneMobEmpty++;
+            $ZoneMonsterEmpty++;
         }
     ?>
 </div>

@@ -1,8 +1,8 @@
 <?php
     // Beaucoup de Similitude entre Personnage/Entité -> Refactoriser avec héritage
-    class Mob extends TypeMonster{
+    class Monster extends TypeMonster{
         private $_coefXP;
-        private $_typeMob;
+        private $_typeMonster;
 
         public function __construct($bdd){
             Parent::__construct($bdd);
@@ -13,36 +13,36 @@
             return $this->_coefXP;
         }
 
-        /** Return Type Mob */
-        public function getTypeMob(){
-            return $this->_typeMob;
+        /** Return Type Monster */
+        public function getTypeMonster(){
+            return $this->_typeMonster;
         }
 
-        public function setMobById($id){
+        public function setMonsterById($id){
             Parent::setEntiteByIdWithoutMap($id);
             $this->initInfo($id);
         }
 
-        public function setMobByIdWithMap($id){
+        public function setMonsterByIdWithMap($id){
             Parent::setEntiteById($id);
             $this->initInfo($id);
         }
 
         private function initInfo($id){
             //select les info personnage
-            $req  = "SELECT * FROM `Mob` WHERE id='".$id."'";
+            $req  = "SELECT * FROM `Monster` WHERE id='".$id."'";
             $Result = $this->_bdd->query($req);
             if($tab=$Result->fetch()){
-                $this->_typeMob  = $tab['type'];
+                $this->_typeMonster  = $tab['type'];
                 $this->_coefXP  = $tab['coefXp'];
             }
             else{
-                $req  = "INSERT  INTO `Mob` (id,type,coefXp) VALUE ('".$id."','0','1')";
+                $req  = "INSERT  INTO `Monster` (id,type,coefXp) VALUE ('".$id."','0','1')";
                 $Result = $this->_bdd->query($req);
             }
         }
 
-        //methode appelé quand un personnage attaque un mob
+        //methode appelé quand un personnage attaque un Monster
         //le perso est passé en param return 0 si pas possible d'attaquer
         public function SubitDegat($Entite){
             $Attaque = $Entite->getAttaque();
@@ -80,7 +80,7 @@
                 if($this->_vie<=0){
                     $this->_vie=0;
                     $coupFatal=1;
-                    //on va attribuer le mob au perssonage sa vie revient a fond pour le propriétaire
+                    //on va attribuer le monstre au personnage, sa vie revient a fond pour le propriétaire
                     $req  = "UPDATE `Entite` SET `vie`='".$this->_vieMax."',`idUser`='".$Entite->getId()."' WHERE `id` = '".$this->_id."'";
                     $Result = $this->_bdd->query($req);
                 }
@@ -89,7 +89,7 @@
                     $Result = $this->_bdd->query($req);
                 }
                 //on va rechercher l'historique
-                $req  = "SELECT * FROM `AttaquePersoMob` where idMob = '".$this->_id."' and idPersonnage = '".$Entite->getId()."'";
+                $req  = "SELECT * FROM `AttaquePersoMonster` where idMonster = '".$this->_id."' and idPersonnage = '".$Entite->getId()."'";
                 $Result = $this->_bdd->query($req);
                 $tabAttaque['nbCoup']=0;
                 $tabAttaque['DegatsDonnes']=0;
@@ -101,18 +101,18 @@
                 }
                 else{
                     //insertion d'une nouvelle attaque
-                    $req="INSERT INTO `AttaquePersoMob`(`idMob`, `idPersonnage`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`)
+                    $req="INSERT INTO `AttaquePersoMonster`(`idMonster`, `idPersonnage`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`)
                     VALUES (
                         '".$this->_id."','".$Entite->getId()."',1,0,0,".$tabAttaque['DegatsReçus']."
                     )";
                     $Result = $this->_bdd->query($req);
                 }
-                //update AttaquePersoMob
-                $req="UPDATE `AttaquePersoMob` SET
+                //update AttaquePersoMonster
+                $req="UPDATE `AttaquePersoMonster` SET
                 `nbCoup`=".$tabAttaque['nbCoup'].",
                 `coupFatal`=".$coupFatal.",
                 `DegatsReçus`=".$tabAttaque['DegatsReçus']."
-                WHERE idMob = '".$this->getId()."' AND idPersonnage ='".$Entite->getId()."' ";
+                WHERE idMonster = '".$this->getId()."' AND idPersonnage ='".$Entite->getId()."' ";
                     $Result = $this->_bdd->query($req);
                 usleep($CoolDown*1000);//microSeconde
             }
@@ -121,7 +121,7 @@
 
         /** Return Historique d'ataque */
         public function getHistoriqueAttaque(){
-            $req  = "SELECT * FROM `AttaquePersoMob` where idMob = '".$this->_id."'";
+            $req  = "SELECT * FROM `AttaquePersoMonster` where idMonster = '".$this->_id."'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($this->HistoriqueAttaque,$tab);
@@ -129,11 +129,11 @@
             return $this->HistoriqueAttaque;
         }
 
-        //retourne toute la mécanique d'affichage d'un mob
+        //retourne toute la mécanique d'affichage d'un Monster
         public function renderHTML(){
             ?>
-                <div class="mob">
-                    <div class="mobCoef">
+                <div class="Monster">
+                    <div class="MonsterCoef">
                         Coef <?php echo $this->_coefXP ?>
                     </div>
                     <?php
@@ -143,9 +143,9 @@
             <?php
         }
 
-        /** Création d'un Mobs Aléatoire */
-        public function CreateMobAleatoire($map){
-                $newMob = new Mob($this->_bdd);
+        /** Création d'un Monsters Aléatoire */
+        public function CreateMonsterAleatoire($map){
+                $newMonster = new Monster($this->_bdd);
                 $type = $this->getTypeAleatoire();
                 $lvl = $map->getlvl();
                 $coefAbuseVie = rand(20,50);
@@ -157,14 +157,14 @@
                     $vie = $coefAbuseVie*20*$lvl*$lvl;
                     $degat = 1*$lvl*$lvl;
                 }
-                $newMob = $newMob->CreateEntite($this->generateName($type[0]), $vie, $degat, $map->getId(),$vie,$type[3],null,2,$lvl);
-                if(!is_null($newMob)){
-                    $req="INSERT INTO `Mob`(`coefXp`, `id` ,`type` )
-                    VALUES ('".$type[2]."','".$newMob->getId()."','".$type[1]."')";
+                $newMonster = $newMonster->CreateEntite($this->generateName($type[0]), $vie, $degat, $map->getId(),$vie,$type[3],null,2,$lvl);
+                if(!is_null($newMonster)){
+                    $req="INSERT INTO `Monster`(`coefXp`, `id` ,`type` )
+                    VALUES ('".$type[2]."','".$newMonster->getId()."','".$type[1]."')";
                     $Result = $this->_bdd->query($req);
-                    if($newMob->getId()){
-                        $newMob->setEntiteById( $newMob->getId());
-                        return $newMob;
+                    if($newMonster->getId()){
+                        $newMonster->setEntiteById( $newMonster->getId());
+                        return $newMonster;
                     }
                     else{
                         return null;
@@ -186,23 +186,23 @@
         //$tab[2]=$coef;
         //$tab[3]=image
         private function getTypeAleatoire(){
-            $req="SELECT * FROM TypeMob ORDER BY rarete ASC";
+            $req="SELECT * FROM TypeMonster ORDER BY spawnTypeMonster ASC";
             $Result = $this->_bdd->query($req);
             $i = $Result->rowCount();
             $coef = 1;
-            $imax=$i*3;
-            $newType=0;// Menhir par default
-            $rarete=1;
+            $imax = $i*3;
+            $newType = 0;// Menhir par default
+            $spawnTypeMonster = 1;
             $newTypeNom='Menhir';
             while($tab=$Result->fetch()){
-                if(rand(0,$tab['chance'])==1){
-                    $newType = $tab['id'];
-                    $newTypeNom = $tab['nom'];
-                    $coef=$tab['rarete'];
+                if(rand(0,$tab['spawnTypeMonster'])==1){
+                    $newType = $tab['idTypeMonster'];
+                    $newTypeNom = $tab['nameTypeMonster'];
+                    $coef=$tab['spawnTypeMonster'];
                     break;
                 }
             }
-            $image = $this->generateImageMob($newTypeNom);
+            $image = $this->generateImageMonster($newTypeNom);
             $tab[0]=$newTypeNom;
             $tab[1]=$newType;
             $tab[2]=$coef;
@@ -890,7 +890,7 @@
         }
 
         /** Génére et Return un lien d'image en fonction du Type */
-        public function generateImageMob($topic){
+        public function generateImageMonster($topic){
             //echo '<img src="'.$partialString3.'" widht="200px">';
             if(empty($topic)){
                 $topic='creature';
@@ -912,8 +912,8 @@
             return $partialString3;
         }
 
-        /** Reset Vie de Mob by ID */
-        public function healmobspawn($id){
+        /** Reset Vie de Monster by ID */
+        public function healMonsterspawn($id){
             $this->_bdd->query("UPDATE `Entite` SET `vie` = '".$this->vieMax."' WHERE `id` = $id");
         }
     }

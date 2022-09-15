@@ -2,70 +2,70 @@
     class TypeMonster extends TypeClassMonster{
         public $_bdd;
 
-        private $_idTypeMob;
-        private $_nameTypeMob;
+        private $_idTypeMonster;
+        private $_nameTypeMonster;
         private $_baseAttaque;
         private $_baseDefense;
         private $_baseMagique;
         private $_baseRessMagique;
         private $_baseGainMoney;
         private $_baseGainExp;
-        private $_factionTypeMob;
-        private $_spawnTypeMob;
+        private $_factionTypeMonster;
+        private $_spawnTypeMonster;
 
         public function __construct($bdd){
             Parent::__construct($bdd);
             $this->_bdd = $bdd;
         }
 
-        // Return TypeMonstre by Id Mobs
+        // Return TypeMonstre by Id Monsters
         public function setTypePersonnageByIdPerso($idMonster){
             $req = "SELECT *
-            FROM `Typemob`,`Entite`
-            WHERE `Typemob`.idTypeMob = `Entite`.idTypeMob
+            FROM `TypeMonster`,`Entite`
+            WHERE `TypeMonster`.idTypeMonster = `Entite`.idTypeMonster
             AND `Entite`.idEntite='".$idMonster."'";
             $Result = $this->_bdd->query($req);
             if($tab=$Result->fetch()){
-                $this->_idTypeMob = $tab['idTypeMob'];
-                $this->_nameTypeMob = $tab['nameTypeMob'];
+                $this->_idTypeMonster = $tab['idTypeMonster'];
+                $this->_nameTypeMonster = $tab['nameTypeMonster'];
                 $this->_baseAttaque = $tab['baseAttaque'];
                 $this->_baseDefense = $tab['baseDefense'];
                 $this->_baseMagique = $tab['baseMagique'];
                 $this->_baseRessMagique = $tab['baseRessMagique'];
                 $this->_baseGainMoney = $tab['baseGainMoney'];
                 $this->_baseGainExp = $tab['baseGainExp'];
-                $this->_factionTypeMob = $tab['factionTypeMob'];
-                $this->_spawnTypeMob = $tab['spawnTypeMob'];
+                $this->_factionTypeMonster = $tab['factionTypeMonster'];
+                $this->_spawnTypeMonster = $tab['spawnTypeMonster'];
             }
         }
         
-        // Return TypeMonstre by idTypeMob
-        public function setTypePersonnageById($idTypeMob){
-            $req = "SELECT * FROM `Typemob`
-            WHERE idTypeMob='".$idTypeMob."'";
+        // Return TypeMonstre by idTypeMonster
+        public function setTypePersonnageById($idTypeMonster){
+            $req = "SELECT * FROM `TypeMonster`
+            WHERE idTypeMonster='".$idTypeMonster."'";
             $Result = $this->_bdd->query($req);
             if($tab=$Result->fetch()){
-                $this->_idTypeMob = $tab['idTypeMob'];
-                $this->_nameTypeMob = $tab['nameTypeMob'];
+                $this->_idTypeMonster = $tab['idTypeMonster'];
+                $this->_nameTypeMonster = $tab['nameTypeMonster'];
                 $this->_baseAttaque = $tab['baseAttaque'];
                 $this->_baseDefense = $tab['baseDefense'];
                 $this->_baseMagique = $tab['baseMagique'];
                 $this->_baseRessMagique = $tab['baseRessMagique'];
                 $this->_baseGainMoney = $tab['baseGainMoney'];
                 $this->_baseGainExp = $tab['baseGainExp'];
-                $this->_factionTypeMob = $tab['factionTypeMob'];
-                $this->_spawnTypeMob = $tab['spawnTypeMob'];
+                $this->_factionTypeMonster = $tab['factionTypeMonster'];
+                $this->_spawnTypeMonster = $tab['spawnTypeMonster'];
             }
         }
 
-        /** Return IdTypeMob */
-        public function getIdTypeMob(){
-            return $this->_idTypeMob;
+        /** Return IdTypeMonster */
+        public function getIdTypeMonster(){
+            return $this->_idTypeMonster;
         }
 
-        /** Return NameTypeMob */
-        public function getNameTypeMob(){
-            return $this->_nameTypeMob;
+        /** Return NameTypeMonster */
+        public function getNameTypeMonster(){
+            return $this->_nameTypeMonster;
         }
 
         /** Return BaseAttaque */
@@ -98,14 +98,14 @@
             return $this->_baseGainExp;
         }
 
-        /** Return FactionTypeMob */
-        public function getFactionTypeMob(){
-            return $this->_factionTypeMob;
+        /** Return FactionTypeMonster */
+        public function getFactionTypeMonster(){
+            return $this->_factionTypeMonster;
         }
 
-        /** Return SpawnTypeMob */
-        public function getSpawnTypeMob(){
-            return $this->_spawnTypeMob;
+        /** Return SpawnTypeMonster */
+        public function getSpawnTypeMonster(){
+            return $this->_spawnTypeMonster;
         }
     }
 ?>

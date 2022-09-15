@@ -8,7 +8,9 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 
 ## En cours :
 - Début Uniformisation Code + Commentaires,
-- Refonte des Monstres.
+- Refonte des Monstres,
+- Bug déplacement Map : Non affichage de l'origine de déplacement quand refresh,
+- Bug JS ? : Non refresh si mort après une attaque.
 
 ## Todo List :
 - Vérification JS Inscription FRONT,
@@ -39,7 +41,9 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Mettre des CGU ou un truc légal,
 - Le putain de footer,
 - Refaire l'intégralité du CSS,
-- Refaire le Menu.
+- Refaire le Menu,
+- Intégrer les différent display/affichage.php dans l'objet PHP Map,
+- Ajouter une "fouille" avant de faire apparaitre des items.
 
 ## Fait :
 - Récupération du projet,
@@ -55,4 +59,4 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Ajouter Sécurité sur l'idPersonnage User,
 - Mise à jours Boolen User Admin -> TypeUser,
 - Mise à jours TypePersonnage,
-- Mise à jours TypeMobs.
+- Mise à jours TypeMonsters.

@@ -277,15 +277,15 @@
             return $ListPerso;
         }
 
-        /** Return List de tout Mob Capturé par ID User */
-        public function getAllMyMobIds(){
-            $listMob=array();
+        /** Return List de tout Monster Capturé par ID User */
+        public function getAllMyMonsterIds(){
+            $listMonster=array();
             $req="SELECT `id` FROM `Entite` WHERE `idUser` in (SELECT `id` FROM `Entite` WHERE `idUser` = '".$this->_id."') AND Type=2";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
-                array_push($listMob,$tab[0]);
+                array_push($listMonster,$tab[0]);
             }
-            return $listMob;
+            return $listMonster;
         }
 
         public function ConnectToi(){
@@ -592,13 +592,13 @@
                                                             //map found check it bro
                                                             $MapScan->setMapByID($allMap[$x][$y]);
                                                             // Si coordonné ayant un ou des Monstres Non capturés.
-                                                            if(count($MapScan->getAllMobContre($this))){
+                                                            if(count($MapScan->getAllMonsterContre($this))){
                                                                 ?>
-                                                                    <div class="mapMob" <?= $styleCellule ?>></div>
+                                                                    <div class="mapMonster" <?= $styleCellule ?>></div>
                                                                 <?php
                                                             // Si coordonné ayant un ou des Monstres capturés.
                                                             }
-                                                            else if(count($MapScan->getAllMobCapture($this))){
+                                                            else if(count($MapScan->getAllMonsterCapture($this))){
                                                                 ?>
                                                                     <div class="mapClear" <?= $styleCellule ?>></div>
                                                                 <?php

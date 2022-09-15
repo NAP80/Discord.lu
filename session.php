@@ -10,7 +10,7 @@
         include "class/Forge.php";
         include "class/TypeClassMonster.php";
         include "class/TypeMonster.php";
-        include "class/Mob.php";
+        include "class/Monster.php";
         include "class/Tooltip.php";
         include "class/Objet.php";
         include "class/Item.php";
