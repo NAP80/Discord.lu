@@ -8,7 +8,7 @@
         public $_degat;
         public $_imageLien;
         public $_lvl;
-        public $_iddUser;
+        public $_idUser;
         public $sacEquipements=array();
         public $sacEquipe=array();
         public $_type; //1 = hero 2= Monster
@@ -681,13 +681,13 @@
         public function changeMap($NewMap){
             $this->map = $NewMap;
             //on mémorise çà en base
-            $sql = "UPDATE `Entite` SET `idMap`='".$NewMap->getId()."' WHERE `idEntite`='".$this->_idEntite."'";
+            $sql = "UPDATE `Entite` SET `idMap`='".$NewMap->getIdMap()."' WHERE `idEntite`='".$this->_idEntite."'";
             $this->_bdd->query($sql);
         }
 
         /** Récupère l'entitée par ID */
-        public function setEntiteById($id){
-            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `idEntite`='".$id."'");
+        public function setEntiteById($idEntite){
+            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `idEntite`='".$idEntite."'");
             if($tab = $Result->fetch()){
                 $this->setEntite($tab["idEntite"],$tab["nom"],$tab["vie"],$tab["degat"],$tab["vieMax"],$tab["lienImage"],$tab["type"],$tab["lvl"],$tab["idUser"]);
                 //recherche de sa position
@@ -695,13 +695,13 @@
                 $map->setMapByID($tab["idMap"]);
                 $this->map = $map;
                 //select les equipements déjà présent
-                $req = "SELECT idEquipement FROM `EntiteEquipement` WHERE idEntite='".$id."'";
+                $req = "SELECT idEquipement FROM `EntiteEquipement` WHERE idEntite='".$idEntite."'";
                 $Result = $this->_bdd->query($req);
                 while($tab=$Result->fetch()){
                     array_push($this->sacEquipements,$tab[0]);
                 }
                 //select les Equipement déjà présent
-                $req = "SELECT idEquipement,equipe FROM `EntiteEquipement` WHERE idEntite='".$id."' AND equipe='1'";
+                $req = "SELECT idEquipement,equipe FROM `EntiteEquipement` WHERE idEntite='".$idEntite."' AND equipe='1'";
                 $Result = $this->_bdd->query($req);
                 while($tab=$Result->fetch()){
                     if($tab['equipe']==1){

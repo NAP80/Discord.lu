@@ -1,8 +1,9 @@
 <?php
     class map{
         Private $_bdd;
-        private $_id;
-        private $_nom;
+
+        private $_idMap;
+        private $_nomMap;
         private $_imageLien;
         private $_x;
         private $_y;
@@ -25,13 +26,13 @@
         }
 
         /** Récupère Map by ID */
-        public function setMapByID($id){
-            $req = "SELECT * FROM map WHERE id='".$id."'";
+        public function setMapByID($idMap){
+            $req = "SELECT * FROM Map WHERE idMap='".$idMap."'";
             $Result = $this->_bdd->query($req);
             if($tab = $Result->fetch()){
                 $this->setMap(
-                    $tab["id"],
-                    $tab["nom"],
+                    $tab["idMap"],
+                    $tab["nameMap"],
                     $tab["position"],
                     $tab["mapNord"],
                     $tab["mapSud"],
@@ -46,14 +47,14 @@
             }
         }
 
-        /** Return ID */
-        public function getId(){
-            return $this->_id;
+        /** Return Id Map */
+        public function getIdMap(){
+            return $this->_idMap;
         }
 
-        /** Return Nom */
-        public function getNom(){
-            return $this->_nom;
+        /** Return Name Map */
+        public function getNameMap(){
+            return $this->_nameMap;
         }
 
         /** Return Coord X */
@@ -121,9 +122,10 @@
             <?php
         }
 
-        public function setMap($id,$nom,$position,$mapNord,$mapSud,$mapEst,$mapOuest,$x,$y,$idUserDecouverte,$image,$type){
-            $this->_id = $id;
-            $this->_nom = $nom;
+        // Optimiser et refaire
+        public function setMap($idMap,$nameMap,$position,$mapNord,$mapSud,$mapEst,$mapOuest,$x,$y,$idUserDecouverte,$image,$type){
+            $this->_idMap = $idMap;
+            $this->_nameMap = $nameMap;
             $this->_position = $position;
             $this->_x = $x;
             $this->_y = $y;
@@ -136,28 +138,28 @@
             (is_null($mapOuest))?$this->mapOuest = null:$this->mapOuest = $mapOuest;
             //select les items déjà présent
             $this->listItems = array();
-            $req = "SELECT idItem FROM `MapItems` WHERE idMap='".$id."'";
+            $req = "SELECT idItem FROM `MapItems` WHERE idMap='".$idMap."'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($this->listItems,$tab[0]);
             }
             //select les Equipements déjà présent
             $this->listEquipements = array();
-            $req = "SELECT idEquipement FROM `MapEquipements` WHERE idMap='".$id."'";
+            $req = "SELECT idEquipement FROM `MapEquipements` WHERE idMap='".$idMap."'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($this->listEquipements,$tab[0]);
             }
             //select les Personnages déjà présent en vie
             $this->listPersonnages = array();
-            $req = "SELECT idEntite FROM `Entite` WHERE idMap='".$id."' and vie > 0 AND type='1'";
+            $req = "SELECT idEntite FROM `Entite` WHERE idMap='".$idMap."' and vie > 0 AND type='1'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($this->listPersonnages,$tab[0]);
             }
             //select les Monsters déjà présent
             $this->listMonsters = array();
-            $req = "SELECT idEntite FROM `Entite` WHERE idMap='".$id."' AND type='2'";
+            $req = "SELECT idEntite FROM `Entite` WHERE idMap='".$idMap."' AND type='2'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($this->listMonsters,$tab[0]);
@@ -279,56 +281,56 @@
         /** Set Coord ID Map Nord */
         public function setMapNord($NewMap){
             $this->mapNord = $NewMap->getId();
-            $req = "UPDATE `map` SET `mapNord`='".$NewMap->getId()."' WHERE `id` = '$this->_id'";
+            $req = "UPDATE `map` SET `mapNord`='".$NewMap->getId()."' WHERE `idMap` = '$this->_idMap'";
             $Result = $this->_bdd->query($req);
         }
 
         /** Set Coord ID Map Sud */
         public function setMapSud($NewMap){
             $this->mapSud = $NewMap->getId();
-            $req = "UPDATE `map` SET `mapSud`='".$NewMap->getId()."' WHERE `id` = '$this->_id'";
+            $req = "UPDATE `map` SET `mapSud`='".$NewMap->getId()."' WHERE `idMap` = '$this->_idMap'";
             $Result = $this->_bdd->query($req);
         }
 
         /** Set Coord ID Map Est */
         public function setMapEst($NewMap){
             $this->mapEst = $NewMap->getId();
-            $req = "UPDATE `map` SET `mapEst`='".$NewMap->getId()."' WHERE `id` = '$this->_id'";
+            $req = "UPDATE `map` SET `mapEst`='".$NewMap->getId()."' WHERE `idMap` = '$this->_idMap'";
             $Result = $this->_bdd->query($req);
         }
 
         /** Set Coord ID Map Ouest */
         public function setMapOuest($NewMap){
             $this->mapOuest = $NewMap->getId();
-            $req = "UPDATE `map` SET `mapOuest`='".$NewMap->getId()."' WHERE `id` = '$this->_id'";
+            $req = "UPDATE `map` SET `mapOuest`='".$NewMap->getId()."' WHERE `idMap` = '$this->_idMap'";
             $Result = $this->_bdd->query($req);
         }
 
         /** Add un lien entre Item et Map */
         public function addItem($newItem){
             array_push($this->listItems,$newItem->getId());
-            $req = "INSERT INTO `MapItems`(`idMap`, `idItem`) VALUES ('".$this->getId()."','".$newItem->getId()."')";
+            $req = "INSERT INTO `MapItems`(`idMap`, `idItem`) VALUES ('".$this->getIdMap()."','".$newItem->getId()."')";
             $this->_bdd->query($req);
         }
 
         /** Add un lien entre Équipements et Map */
         public function addEquipement($newEquipement){
             array_push($this->listEquipements,$newEquipement->getId());
-            $req = "INSERT INTO `MapEquipements`(`idMap`, `idEquipement`) VALUES ('".$this->getId()."','".$newEquipement->getId()."')";
+            $req = "INSERT INTO `MapEquipements`(`idMap`, `idEquipement`) VALUES ('".$this->getIdMap()."','".$newEquipement->getId()."')";
             $this->_bdd->query($req);
         }
 
         /** Retire lien entre Équipements et Map */
-        public function removeEquipementByID($id){
-            unset($this->listEquipements[array_search($id, $this->listEquipements)]);
-            $req = "DELETE FROM `MapEquipements` WHERE idMap='".$this->getId()."' AND idEquipement='".$id."'";
+        public function removeEquipementByID($idEquipement){
+            unset($this->listEquipements[array_search($idEquipement, $this->listEquipements)]);
+            $req = "DELETE FROM `MapEquipements` WHERE idMap='".$this->getIdMap()."' AND idEquipement='".$idEquipement."'";
             $this->_bdd->query($req);
         }
 
         /** Retire lien entre Items et Map en BDD */
-        public function removeItemByID($id){
-            unset($this->listItems[array_search($id, $this->listItems)]);
-            $req = "DELETE FROM `MapItems` WHERE idMap='".$this->getId()."' AND idItem='".$id."'";
+        public function removeItemByID($idItem){
+            unset($this->listItems[array_search($idItem, $this->listItems)]);
+            $req = "DELETE FROM `MapItems` WHERE idMap='".$this->getIdMap()."' AND idItem='".$idItem."'";
             $this->_bdd->query($req);
         }
 
@@ -387,27 +389,27 @@
             if(is_object($mapExistante)){
                 switch($cardinalite){
                     case "nord":
-                        $req = "UPDATE `map` SET `mapSud`='".$mapExistante->getId()."' WHERE `id` = '".$map->getId()."'";
+                        $req = "UPDATE `map` SET `mapSud`='".$mapExistante->getId()."' WHERE `idMap` = '".$map->getId()."'";
                         $map->setMapSud($mapExistante);
-                        $req = "UPDATE `map` SET `mapNord`='".$map->getId()."' WHERE `id` = '".$mapExistante->getId()."'";
+                        $req = "UPDATE `map` SET `mapNord`='".$map->getId()."' WHERE `idMap` = '".$mapExistante->getId()."'";
                         $mapExistante->setMapNord($map);
                         break;
                     case "sud":
-                        $req = "UPDATE `map` SET `mapNord`='".$mapExistante->getId()."' WHERE `id` = '".$map->getId()."'";
+                        $req = "UPDATE `map` SET `mapNord`='".$mapExistante->getId()."' WHERE `idMap` = '".$map->getId()."'";
                         $map->setMapNord($mapExistante);
-                        $req = "UPDATE `map` SET `mapSud`='".$map->getId()."' WHERE `id` = '".$mapExistante->getId()."'";
+                        $req = "UPDATE `map` SET `mapSud`='".$map->getId()."' WHERE `idMap` = '".$mapExistante->getId()."'";
                         $mapExistante->setMapSud($map);
                         break;
                     case "est":
-                        $req = "UPDATE `map` SET `mapOuest`='".$mapExistante->getId()."' WHERE `id` = '".$map->getId()."'";
+                        $req = "UPDATE `map` SET `mapOuest`='".$mapExistante->getId()."' WHERE `idMap` = '".$map->getId()."'";
                         $map->setMapOuest($mapExistante);
-                        $req = "UPDATE `map` SET `mapEst`='".$map->getId()."' WHERE `id` = '".$mapExistante->getId()."'";
+                        $req = "UPDATE `map` SET `mapEst`='".$map->getId()."' WHERE `idMap` = '".$mapExistante->getId()."'";
                         $mapExistante->setMapEst($map);
                         break;
                     case "ouest":
-                        $req = "UPDATE `map` SET `mapEst`='".$mapExistante->getId()."' WHERE `id` = '".$map->getId()."'";
+                        $req = "UPDATE `map` SET `mapEst`='".$mapExistante->getId()."' WHERE `idMap` = '".$map->getId()."'";
                         $map->setMapEst($mapExistante);
-                        $req = "UPDATE `map` SET `mapOuest`='".$map->getId()."' WHERE `id` = '".$mapExistante->getId()."'";
+                        $req = "UPDATE `map` SET `mapOuest`='".$map->getId()."' WHERE `idMap` = '".$mapExistante->getId()."'";
                         $mapExistante->setMapOuest($map);
                         break;
                 }
@@ -416,21 +418,21 @@
             }
             $position = $this->generatePosition();
             $Generate = $this->generateCarte();
-            $nom = $Generate[2];
+            $nameMap = $Generate[2];
             $typeId=$Generate[0];
             $type=$Generate[1];
             //insertion en base
             //la position doit etre unique
             $imgLink = $this->getAleatoireImage($type);
-            $req = "INSERT INTO `map`( `nom`, `position`, `mapNord`, `mapSud`, `mapEst`, `mapOuest`, `x`, `y`,`idUserDecouverte`,`lienImage`) 
+            $req = "INSERT INTO `map`( `nameMap`, `position`, `mapNord`, `mapSud`, `mapEst`, `mapOuest`, `x`, `y`,`idUserDecouverte`,`lienImage`) 
                     VALUES 
-                ('".$nom."','".$position."',".$mapNord.",".$mapSud.",".$mapEst.",".$mapOuest.",".$newx.",".$newy.",".$idUserDecouverte.",'".$imgLink."')";
+                ('".$nameMap."','".$position."',".$mapNord.",".$mapSud.",".$mapEst.",".$mapOuest.",".$newx.",".$newy.",".$idUserDecouverte.",'".$imgLink."')";
             $Result = $this->_bdd->query($req);
-            $req = "select id from map where position='".$position."'";
+            $req = "SELECT idMap FROM map WHERE position='".$position."'";
             $Result = $this->_bdd->query($req);
             if($tab = $Result->fetch()){
                 $newmap = new map($this->_bdd);
-                $newmap->setMapByID($tab["id"]);
+                $newmap->setMapByID($tab["idMap"]);
                 //on met à jour l'ancienne map avec les coordonnée de la nouvelle
                 switch($cardinalite){
                     case "sud":
@@ -491,7 +493,7 @@
                     }
                 }
                 ?>
-                    <p>Tu viens de découvrir une nouvelle position : <?= $newmap->getNom() ?> <?= $newmap->getCoordonne()?>.</p>
+                    <p>Tu viens de découvrir une nouvelle position : <?= $newmap->getNameMap() ?> <?= $newmap->getCoordonne()?>.</p>
                 <?php
                 return $newmap;
             }
@@ -545,7 +547,7 @@
                         $this->setMapByPosition($position);
                     }
                     //chargement des Items en plus
-                    $req = "SELECT `laDate` from `Visites` WHERE `idMap` = '".$this->getId()."' ORDER BY `laDate` DESC";
+                    $req = "SELECT `laDate` from `Visites` WHERE `idMap` = '".$this->getIdMap()."' ORDER BY `laDate` DESC";
                     $Result = $this->_bdd->query($req);
                     if($tab = $Result->fetch()){
                         $DatePresent = time();//"Y-m-d H:i:s"
@@ -628,7 +630,7 @@
         /** Return Texte InforMap */
         public function getInfoMap(){
             ?>
-                <b><?= $this->getNom() ?></b>, <?= $this->getCoordonne() ?>, lvl <?= $this->getlvl() ?>, découvert par <?= $this->getPersonnageDecouvreur()->getPseudo() ?> et ses Heros.
+                <b><?= $this->getNameMap() ?></b>, <?= $this->getCoordonne() ?>, lvl <?= $this->getlvl() ?>, découvert par <?= $this->getPersonnageDecouvreur()->getPseudo() ?> et ses Heros.
             <?php
         }
 
@@ -636,18 +638,18 @@
         public function LogVisiteMap($Perso){
             $req = "SELECT `laDate` from `Visites` 
                 WHERE `idPersonnage` = '".$Perso->getId()."'
-                AND idmap = '".$this->_id."' 
+                AND idMap = '".$this->_idMap."' 
                 ORDER BY `laDate` DESC";
             $Result = $this->_bdd->query($req);
             if($tab = $Result->fetch()){
                 $req = "UPDATE  `Visites` SET `laDate` =  '".date("Y-m-d H:i:s")."'
                 WHERE   `idPersonnage` = '".$Perso->getId()."' 
-                AND idmap = '".$this->_id."' ;";
+                AND idMap = '".$this->_idMap."' ;";
                 $Result = $this->_bdd->query($req);
             }
             else{
                 $req = "INSERT INTO `Visites` (`idPersonnage`, `idMap`, `laDate`) 
-                VALUES ('".$Perso->getId()."', '".$this->_id."', '".date("Y-m-d H:i:s")."')";
+                VALUES ('".$Perso->getId()."', '".$this->_idMap."', '".date("Y-m-d H:i:s")."')";
                 $Result = $this->_bdd->query($req);
             }
             return true;
@@ -655,14 +657,14 @@
 
         /** Return un Hash de Position */
         public function generatePosition(){
-            return hash('ripemd160', $this->_nom.rand(0,100000000).rand(0,100000000));
+            return hash('ripemd160', $this->_nameMap.rand(0,100000000).rand(0,100000000));
         }
 
         /** Set Map ID by Position Hash */
         public function setMapByPosition($position){
-            $Result = $this->_bdd->query("SELECT id FROM `map` WHERE `position`='".$position."' ");
+            $Result = $this->_bdd->query("SELECT idMap FROM `Map` WHERE `position`='".$position."' ");
             if($tab = $Result->fetch()){ 
-                $this->setMapByID($tab["id"]);
+                $this->setMapByID($tab['idMap']);
             }
         }
 
@@ -704,7 +706,7 @@
             if($affichSud){
                 $tab['sud'] .= '<div class="sud">';
                 if(!is_null($Msud)){
-                    $tab['sud'] .= '<a href="map.php?position='.$Msud->getPosition().'&cardinalite=nord">'.$Msud->getNom().'</a>';
+                    $tab['sud'] .= '<a href="map.php?position='.$Msud->getPosition().'&cardinalite=nord">'.$Msud->getNameMap().'</a>';
                 }
                 else{
                     $tab['sud'] .= '<a href="map.php?position=Generate&cardinalite=nord">Découvre cette région inconnue</a>';
@@ -715,7 +717,7 @@
             if($affichNord){
                 $tab['nord'] .= '<div class="nord">';
                 if(!is_null($Mnord)){
-                    $tab['nord'] .= '<a href="map.php?position='.$Mnord->getPosition().'&cardinalite=sud">'.$Mnord->getNom().'</a>';
+                    $tab['nord'] .= '<a href="map.php?position='.$Mnord->getPosition().'&cardinalite=sud">'.$Mnord->getNameMap().'</a>';
                 }
                 else{
                     $tab['nord'] .= '<a href="map.php?position=Generate&cardinalite=sud">Découvre cette région inconnue</a>';
@@ -725,7 +727,7 @@
             if($affichEst){
                 $tab['est'] .= '<div class="est">';
                 if(!is_null($Mest)){
-                    $tab['est'] .= '<a class="VerticalText" href="map.php?position='.$Mest->getPosition().'&cardinalite=ouest">'.$Mest->getNom().'</a>';
+                    $tab['est'] .= '<a class="VerticalText" href="map.php?position='.$Mest->getPosition().'&cardinalite=ouest">'.$Mest->getNameMap().'</a>';
                 }
                 else{
                     $tab['est'] .= '<a class="VerticalText" href="map.php?position=Generate&cardinalite=ouest">Découvre cette région inconnue</a>';
@@ -735,7 +737,7 @@
             if($affichOuest){
                 $tab['ouest'] .= '<div class="ouest">';
                 if(!is_null($Mouest)){
-                    $tab['ouest'] .= '<a class="VerticalText" href="map.php?position='.$Mouest->getPosition().'&cardinalite=est">'.$Mouest->getNom().'</a>';
+                    $tab['ouest'] .= '<a class="VerticalText" href="map.php?position='.$Mouest->getPosition().'&cardinalite=est">'.$Mouest->getNameMap().'</a>';
                 }
                 else{
                     $tab['ouest'] .= '<a class="VerticalText" href="map.php?position=Generate&cardinalite=est">Découvre cette région inconnue</a>';
@@ -756,7 +758,7 @@
         
         /** Génére un Nom de Map */
         public function generateCarte(){
-            $nom = "";
+            $nameMap = "";
             $req = "Select * from TypeMap";
             $Result = $this->_bdd->query($req);
             $typemap=array();
@@ -765,7 +767,7 @@
             }
             $choixAleatoire= array_rand($typemap, 1);
             $type =  $typemap[$choixAleatoire];
-            $nom = $type['nomFr'];
+            $nameMap = $type['nomFr'];
             $Adjectif = "";
             switch(rand(0,20)){
                 case 0:
@@ -1165,11 +1167,11 @@
                     $x++;
                     break;
             }
-            $req = "select id from map where x='".$x."' AND y='".$y."'";
+            $req = "SELECT idMap FROM Map WHERE x='".$x."' AND y='".$y."'";
             $Result = $this->_bdd->query($req);
             if($tab = $Result->fetch()){
                 $newmap = new Map($this->_bdd);
-                $newmap->setMapByID($tab['id']);
+                $newmap->setMapByID($tab['idMap']);
                 return $newmap;
             }
             return null;

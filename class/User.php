@@ -508,23 +508,23 @@
             $maxY=$Map->getY()+$taille;
             $minY=$Map->getY()-$taille;
             if($taille>0){
-                $req="SELECT `map`.`id`,`map`.`x`,`map`.`y` 
-                FROM `Visites`,`map` , `Entite`
-                WHERE map.id = Visites.idMap 
-                AND Visites.idPersonnage = Entite.idEntite 
-                AND `Entite`.`idUser`='".$this->_idUser."' 
-                AND map.x >= '".$minX."' 
-                AND map.x <= '".$maxX."' 
-                AND map.y >= '".$minY."' 
-                AND map.y <= '".$maxY."' 
+                $req="SELECT `Map`.`idMap`,`Map`.`x`,`Map`.`y`
+                FROM `Visites`,`Map`,`Entite`
+                WHERE Map.idMap = Visites.idMap 
+                AND `Visites`.`idPersonnage` = `Entite`.`idEntite`
+                AND `Entite`.`idUser`='".$this->_idUser."'
+                AND `Map`.`x` >= '".$minX."'
+                AND `Map`.`x` <= '".$maxX."'
+                AND `Map`.`y` >= '".$minY."'
+                AND `Map`.`y` <= '".$maxY."'
                 group by `Visites`.`idMap`";
             }
             else{
-                $req="SELECT `map`.`id`,`map`.`x`,`map`.`y` 
-                FROM `Visites`,`Entite`,`map` 
-                WHERE map.id = Visites.idMap 
-                AND Visites.idPersonnage = Entite.idEntite 
-                AND `Entite`.`idUser`='".$this->_idUser."' 
+                $req="SELECT `Map`.`idMap`,`Map`.`x`,`Map`.`y`
+                FROM `Visites`,`Entite`,`Map`
+                WHERE `Map`.`idMap` = `Visites`.`idMap`
+                AND `Visites`.idPersonnage` = `Entite.idEntite`
+                AND `Entite`.`idUser`='".$this->_idUser."'
                 group by `Visites`.`idMap`";
             }
             $Result = $this->_bdd->query($req);
@@ -543,7 +543,7 @@
                 if($visite['y'] < $minY){
                     $minY = $visite['y'];
                 }
-                $allMap[$visite['x']][$visite['y']]=$visite['id'];
+                $allMap[$visite['x']][$visite['y']]=$visite['idMap'];
             }
             $LargeurX = $maxX - $minX ;
             $HauteurY = $maxY - $minY ;
