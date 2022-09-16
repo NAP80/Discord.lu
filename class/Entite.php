@@ -22,6 +22,28 @@
             $this->_bdd = $bdd;
         }
 
+        public function setEntite($id,$nom,$vie,$degat,$vieMax,$image,$type,$lvl,$idUser){
+            $this->_id = $id;
+            $this->_nom = $nom;
+            $this->_vie = $vie;
+            $this->_vieMax = $vieMax;
+            $this->_degat = $degat;
+            $this->_imageLien = $image;
+            $this->_type = $type;
+            $this->_lvl = $lvl;
+            $this->_idUser = $idUser;
+
+            if($this->_type == 1){
+                if(is_null($this->typePersonnage)){
+                    $TypePersonnage = new TypePersonnage($this->_bdd);
+                    $TypePersonnage->setTypePersonnageByIdPerso($this->_id);
+                    $this->typePersonnage = $TypePersonnage;
+                    $this->_idTypePersonnage = $TypePersonnage->getIdTypePerso();
+                
+                }
+            }
+        }
+
         /** Return Nom */
         public function getNom(){
             return $this->_nom;
@@ -474,28 +496,6 @@
                 $cooldown = $pouvoir->resetCoolDown();
             }
             
-        }
-
-        public function setEntite($id,$nom,$vie,$degat,$vieMax,$image,$type,$lvl,$idUser){
-            $this->_id = $id;
-            $this->_nom = $nom;
-            $this->_vie = $vie;
-            $this->_vieMax = $vieMax;
-            $this->_degat = $degat;
-            $this->_imageLien = $image;
-            $this->_type = $type;
-            $this->_lvl = $lvl;
-            $this->_idUser = $idUser;
-
-            if($this->_type == 1){
-                if(is_null($this->typePersonnage)){
-                    $TypePersonnage = new TypePersonnage($this->_bdd);
-                    $TypePersonnage->setTypePersonnageByIdPerso($this->_id);
-                    $this->typePersonnage = $TypePersonnage;
-                    $this->_idTypePersonnage = $TypePersonnage->getIdTypePerso();
-                
-                }
-            }
         }
 
         /** Return Type Personnage */

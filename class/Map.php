@@ -24,6 +24,28 @@
             $this->_bdd = $bdd;
         }
 
+        /** Récupère Map by ID */
+        public function setMapByID($id){
+            $req = "SELECT * FROM map WHERE id='".$id."'";
+            $Result = $this->_bdd->query($req);
+            if($tab = $Result->fetch()){
+                $this->setMap(
+                    $tab["id"],
+                    $tab["nom"],
+                    $tab["position"],
+                    $tab["mapNord"],
+                    $tab["mapSud"],
+                    $tab["mapEst"],
+                    $tab["mapOuest"],
+                    $tab["x"],
+                    $tab["y"],
+                    $tab["idUserDecouverte"],
+                    $tab["lienImage"],
+                    $tab["type"]
+                );
+            }
+        }
+
         /** Return ID */
         public function getId(){
             return $this->_id;
@@ -57,28 +79,6 @@
         /** Return si Marché */
         public function isMarche(){
             return $this->_isMarche;
-        }
-
-        /** Récupère Map by ID */
-        public function setMapByID($id){
-            $req = "SELECT * FROM map WHERE id='".$id."'";
-            $Result = $this->_bdd->query($req);
-            if($tab = $Result->fetch()){
-                $this->setMap(
-                    $tab["id"],
-                    $tab["nom"],
-                    $tab["position"],
-                    $tab["mapNord"],
-                    $tab["mapSud"],
-                    $tab["mapEst"],
-                    $tab["mapOuest"],
-                    $tab["x"],
-                    $tab["y"],
-                    $tab["idUserDecouverte"],
-                    $tab["lienImage"],
-                    $tab["type"]
-                );
-            }
         }
 
         /** Calcule de Distance du point 0 : Détermine le Niveau */

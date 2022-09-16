@@ -8,16 +8,6 @@
             Parent::__construct($bdd);
         }
 
-        /** Return CoefXp */
-        public function getCoefXp(){
-            return $this->_coefXP;
-        }
-
-        /** Return Type Monster */
-        public function getTypeMonster(){
-            return $this->_typeMonster;
-        }
-
         public function setMonsterById($id){
             Parent::setEntiteByIdWithoutMap($id);
             $this->initInfo($id);
@@ -26,6 +16,16 @@
         public function setMonsterByIdWithMap($id){
             Parent::setEntiteById($id);
             $this->initInfo($id);
+        }
+
+        /** Return CoefXp */
+        public function getCoefXp(){
+            return $this->_coefXP;
+        }
+
+        /** Return Type Monster */
+        public function getTypeMonster(){
+            return $this->_typeMonster;
         }
 
         private function initInfo($id){
