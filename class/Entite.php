@@ -1,7 +1,7 @@
 <?php
     // Beaucoup de Similitude entre Personnage/Entité -> Refactoriser avec héritage
     class Entite{
-        public $_id;
+        public $_idEntite;
         public $_nom;
         public $_vie;
         public $_vieMax;
@@ -22,8 +22,8 @@
             $this->_bdd = $bdd;
         }
 
-        public function setEntite($id,$nom,$vie,$degat,$vieMax,$image,$type,$lvl,$idUser){
-            $this->_id = $id;
+        public function setEntite($idEntite,$nom,$vie,$degat,$vieMax,$image,$type,$lvl,$idUser){
+            $this->_idEntite = $idEntite;
             $this->_nom = $nom;
             $this->_vie = $vie;
             $this->_vieMax = $vieMax;
@@ -36,7 +36,7 @@
             if($this->_type == 1){
                 if(is_null($this->typePersonnage)){
                     $TypePersonnage = new TypePersonnage($this->_bdd);
-                    $TypePersonnage->setTypePersonnageByIdPerso($this->_id);
+                    $TypePersonnage->setTypePersonnageByIdPerso($this->_idEntite);
                     $this->typePersonnage = $TypePersonnage;
                     $this->_idTypePersonnage = $TypePersonnage->getIdTypePerso();
                 
@@ -56,7 +56,7 @@
 
         /** Return l'ID de l'entitée */
         public function getId(){
-            return $this->_id;
+            return $this->_idEntite;
         }
 
         /** Return l'ID de sa position Map */
@@ -79,7 +79,7 @@
             //on enpeche les boost de perdurer
             if($this->_vie>$this->_vieMax){
                 $this->_vie =$this->_vieMax;
-                $req  = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `id` = '".$this->_id ."'";
+                $req  = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `idEntite` = '".$this->_idEntite ."'";
                 $Result = $this->_bdd->query($req);
             }
             return $this->_vie;
@@ -129,9 +129,9 @@
             $pourcentage = round(100*$this->_vie/$this->_vieMax);
             ?>
                 <div class="EntitePrincipalBarreVie">
-                    <div class="attaque" id="attaqueEntiteValeur<?= $this->_id ;?>"> <?= $this->_degat ;?>  </div> 
-                    <div class="barreDeVie" id="vieEntite<?= $this->_id ;?>">
-                        <div class="vie" id="vieEntiteValeur<?= $this->_id ;?>" style="width:<?= $pourcentage?>%;">
+                    <div class="attaque" id="attaqueEntiteValeur<?= $this->_idEntite ;?>"> <?= $this->_degat ;?>  </div> 
+                    <div class="barreDeVie" id="vieEntite<?= $this->_idEntite ;?>">
+                        <div class="vie" id="vieEntiteValeur<?= $this->_idEntite ;?>" style="width:<?= $pourcentage?>%;">
                             ♥️<?= $this->_vie ?>
                         </div>
                     </div>
@@ -411,7 +411,7 @@
             if($this->_vie>$this->_vieMax){
                 $this->_vie = $this->_vieMax;
             }
-            $req = "UPDATE `Entite` SET `vie`='".$this->_vie."' WHERE `id` = '".$this->_id."'";
+            $req = "UPDATE `Entite` SET `vie`='".$this->_vie."' WHERE `idEntite` = '".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
             return $valeur;
         }
@@ -428,14 +428,14 @@
                 $this->_vie =0;
                 //retour en zone 0,0
             }
-            $req = "UPDATE `Entite` SET `vie`='".$this->_vie."' WHERE `id` = '".$this->_id."'";
+            $req = "UPDATE `Entite` SET `vie`='".$this->_vie."' WHERE `idEntite` = '".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
             return $this->_vie;
         }
 
         public function getAllMyMonsterIdByMap($map){
             $listMonster=array();
-            $req="SELECT `id` FROM `Entite` WHERE `idUser` = '".$this->_id."' AND `idMap` = '".$map->getId()."')";
+            $req="SELECT `idEntite` FROM `Entite` WHERE `idUser` = '".$this->_idEntite."' AND `idMap` = '".$map->getId()."')";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($listMonster,$tab);
@@ -450,7 +450,7 @@
 
             $vieAvantAttaque = $this->_vie;
             //on va rechercher l'historique
-            $req = "SELECT * FROM `AttaqueEntiteMonster` where idMonster = '".$Monster->getId()."' and idEntite = '".$this->_id."'";
+            $req = "SELECT * FROM `AttaqueEntiteMonster` where idMonster = '".$Monster->getId()."' and idEntite = '".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
             $tabAttaque['nbCoup']=0;
             $tabAttaque['DegatsDonnes']=$MonsterDegatAttaqueEnvoyer;
@@ -463,7 +463,7 @@
                 //insertion d'une nouvelle attaque
                 $req="INSERT INTO `AttaqueEntiteMonster`(`idMonster`, `idEntite`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`) 
                 VALUES (
-                    '".$Monster->getId()."','".$this->_id."',0,0,".$tabAttaque['DegatsReçus'].",0
+                    '".$Monster->getId()."','".$this->_idEntite."',0,0,".$tabAttaque['DegatsReçus'].",0
                 )";
                 $Result = $this->_bdd->query($req);
             }
@@ -475,12 +475,12 @@
                 $tabAttaque['DegatsDonnes'] = $vieAvantAttaque;
                 //retour en zone 0,0
             }
-            $req = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `id` = '".$this->_id."'";
+            $req = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `idEntite` = '".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
             //update AttaqueEntiteMonster pour mettre a jour combien le perso a pris de degat 
             $req="UPDATE `AttaqueEntiteMonster` SET 
             `DegatsDonnes`=".$tabAttaque['DegatsDonnes']." 
-            WHERE idMonster = '".$Monster->getId()."' AND idEntite ='".$this->_id."'";
+            WHERE idMonster = '".$Monster->getId()."' AND idEntite ='".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
             return $this->_vie;
         }
@@ -503,7 +503,7 @@
             if(!is_null($this->_idTypePersonnage) ){
                 if(is_null($this->typePersonnage)){
                     $TypePersonnage = new TypePersonnage($this->_bdd);
-                    $TypePersonnage->setTypePersonnageByIdPerso($this->_id);
+                    $TypePersonnage->setTypePersonnageByIdPerso($this->_idEntite);
                     $this->typePersonnage = $TypePersonnage;
                 }
                 return $this->typePersonnage;
@@ -518,7 +518,7 @@
             $vieMax = intdiv ($this->_vieMax,2);
             $attaque = intdiv ($this->_vieMax,2);
             if($vieMax<10){$vieMax=10;}
-            $req = "UPDATE `Entite` SET `degat`='".$attaque."',`vieMax`='".$vieMax."',`vie`='".$vieMax."' WHERE `id` = '".$this->_id."'";
+            $req = "UPDATE `Entite` SET `degat`='".$attaque."',`vieMax`='".$vieMax."',`vie`='".$vieMax."' WHERE `idEntite` = '".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
             $this->_vie=$vieMax;
             $this->_vieMax=$vieMax;
@@ -566,7 +566,7 @@
             <?php 
             if(!is_null($arme)){
                 ?>
-                    <div class="attaque standard" id="attaqueEntiteValeur<?= $this->_id ;?>"> <?= $this->getAttaque()?>
+                    <div class="attaque standard" id="attaqueEntiteValeur<?= $this->_idEntite ;?>"> <?= $this->getAttaque()?>
                         <div class="coef">
                             (*<?php 
                                 if(!is_null($type)){
@@ -583,10 +583,10 @@
             }
             else{
                 ?>
-                    <div class="attaque" id="attaqueEntiteValeur<?= $this->_id ;?>">
+                    <div class="attaque" id="attaqueEntiteValeur<?= $this->_idEntite ;?>">
                         <?= $this->getAttaque()?>
                     </div>
-                    <div id="ArmePerso<?= $this->_id ?>" class="Arme">
+                    <div id="ArmePerso<?= $this->_idEntite ?>" class="Arme">
                     </div>
                 <?php
             }
@@ -626,15 +626,15 @@
             }
             else{
                 ?>
-                    <div id ="ArmurePerso<?= $this->_id ?>" class="ArmureNom"></div>
+                    <div id ="ArmurePerso<?= $this->_idEntite ?>" class="ArmureNom"></div>
                 <?php
             }
             ?>
-                <div class="barreDeVie" id="vieEntite<?= $this->_id ?>">
-                    <div class="vie" id="vieEntiteValeur<?= $this->_id ?>" style="width:<?= $pourcentage ?>%;">♥️<?= $this->_vie ?>
+                <div class="barreDeVie" id="vieEntite<?= $this->_idEntite ?>">
+                    <div class="vie" id="vieEntiteValeur<?= $this->_idEntite ?>" style="width:<?= $pourcentage ?>%;">♥️<?= $this->_vie ?>
                     </div>
                     <div class="armureAll">
-                        <div class="armure" id="defenseEntiteValeur<?= $this->_id ?>"
+                        <div class="armure" id="defenseEntiteValeur<?= $this->_idEntite ?>"
                             <?php
                                 if(!is_null($armure)){
                                     ?>
@@ -663,17 +663,17 @@
 
         public function lvlupAttaque($attaque){
             $this->_degat += $attaque;
-            $sql = "UPDATE `Entite` SET `degat`='".$this->_degat."' WHERE `id`='".$this->_id."'";
+            $sql = "UPDATE `Entite` SET `degat`='".$this->_degat."' WHERE `idEntite`='".$this->_idEntite."'";
             $this->_bdd->query($sql);
         }
         public function lvlupVie($viemore){
             $this->_vie += $viemore;
-            $sql = "UPDATE `Entite` SET `vie`='".$this->_vie."' WHERE `id`='".$this->_id."'";
+            $sql = "UPDATE `Entite` SET `vie`='".$this->_vie."' WHERE `idEntite`='".$this->_idEntite."'";
             $this->_bdd->query($sql);
         }
         public function lvlupVieMax($viemore){
             $this->_vieMax += $viemore;
-            $sql = "UPDATE `Entite` SET `vieMax`='".$this->_vieMax."' WHERE `id`='".$this->_id."'";
+            $sql = "UPDATE `Entite` SET `vieMax`='".$this->_vieMax."' WHERE `idEntite`='".$this->_idEntite."'";
             $this->_bdd->query($sql);
         }
 
@@ -681,15 +681,15 @@
         public function changeMap($NewMap){
             $this->map = $NewMap;
             //on mémorise çà en base
-            $sql = "UPDATE `Entite` SET `idMap`='".$NewMap->getId()."' WHERE `id`='".$this->_id."'";
+            $sql = "UPDATE `Entite` SET `idMap`='".$NewMap->getId()."' WHERE `idEntite`='".$this->_idEntite."'";
             $this->_bdd->query($sql);
         }
 
         /** Récupère l'entitée par ID */
         public function setEntiteById($id){
-            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `id`='".$id."'");
+            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `idEntite`='".$id."'");
             if($tab = $Result->fetch()){
-                $this->setEntite($tab["id"],$tab["nom"],$tab["vie"],$tab["degat"],$tab["vieMax"],$tab["lienImage"],$tab["type"],$tab["lvl"],$tab["idUser"]);
+                $this->setEntite($tab["idEntite"],$tab["nom"],$tab["vie"],$tab["degat"],$tab["vieMax"],$tab["lienImage"],$tab["type"],$tab["lvl"],$tab["idUser"]);
                 //recherche de sa position
                 $map = new map($this->_bdd);
                 $map->setMapByID($tab["idMap"]);
@@ -712,9 +712,9 @@
         }
 
         public function setEntiteByIdWithoutMap($id){
-            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `id`='".$id."'");
+            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `idEntite`='".$id."'");
             if($tab = $Result->fetch()){
-                $this->setEntite($tab["id"],$tab["nom"],$tab["vie"],$tab["degat"],$tab["vieMax"],$tab["lienImage"],$tab["type"],$tab["lvl"],$tab["idUser"]);
+                $this->setEntite($tab["idEntite"],$tab["nom"],$tab["vie"],$tab["degat"],$tab["vieMax"],$tab["lienImage"],$tab["type"],$tab["lvl"],$tab["idUser"]);
             }
         }
 
@@ -730,9 +730,9 @@
             VALUES ('".$this->_nom."','.$vie.','.$degat.','.$idMap.','.$vieMax.','".$this->_imageLien."','".$idUser."','.$type.','.$lvl.')";
             $this->_bdd->beginTransaction();
             $Result = $this->_bdd->query($req);
-            $this->_id = $this->_bdd->lastInsertId();
-            if($this->_id){
-                $newperso->setEntiteById($this->_id);
+            $this->_idEntite = $this->_bdd->lastInsertId();
+            if($this->_idEntite){
+                $newperso->setEntiteById($this->_idEntite);
                 $this->_bdd->commit();
                 return $newperso;
             }
@@ -761,9 +761,9 @@
                         <option value="">Choisir un entite</option>
                         <?php
                             while($tab=$Result->fetch()){
-                                ($tab['id']==$this->_id)?$selected='selected':$selected='';
+                                ($tab['idEntite']==$this->_idEntite)?$selected='selected':$selected='';
                                 ?>
-                                    <option value="<?= $tab["id"] ?>" <?= $selected ?>>
+                                    <option value="<?= $tab["idEntite"] ?>" <?= $selected ?>>
                                         <?= $tab["nom"] ?>
                                     </option>
                                 <?php

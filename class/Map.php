@@ -150,14 +150,14 @@
             }
             //select les Personnages déjà présent en vie
             $this->listPersonnages = array();
-            $req = "SELECT id FROM `Entite` WHERE idMap='".$id."' and vie > 0 AND type='1'";
+            $req = "SELECT idEntite FROM `Entite` WHERE idMap='".$id."' and vie > 0 AND type='1'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($this->listPersonnages,$tab[0]);
             }
-            //select les Monster déjà présent
+            //select les Monsters déjà présent
             $this->listMonsters = array();
-            $req = "SELECT id FROM `Entite` WHERE idMap='".$id."' AND type='2'";
+            $req = "SELECT idEntite FROM `Entite` WHERE idMap='".$id."' AND type='2'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($this->listMonsters,$tab[0]);

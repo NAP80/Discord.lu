@@ -83,35 +83,35 @@
         /** Set Level Personnage */
         public function setLevelpersonnage($levelPersonage){
             $req = $this->_bdd->prepare("UPDATE Personnage SET levelPersonnage = ? WHERE idPersonnage = ?");
-            $req->execute(array($levelPersonage, $this->_id));
+            $req->execute(array($levelPersonage, $this->_idEntite));
             return $req;
         }
 
         /** Set Experience Personnage */
         public function setExpPersonnage($expPersonnage){
             $req = $this->_bdd->prepare("UPDATE Personnage SET expPersonnage = ? WHERE idPersonnage = ?");
-            $req->execute(array($expPersonnage, $this->_id));
+            $req->execute(array($expPersonnage, $this->_idEntite));
             return $req;
         }
 
         /** Set Money Personnage */
         public function setMoneyPersonage($moneyPersonnage){
             $req = $this->_bdd->prepare("UPDATE Personnage SET moneyPersonnage = ? WHERE idPersonnage = ?");
-            $req->execute(array($moneyPersonnage, $this->_id));
+            $req->execute(array($moneyPersonnage, $this->_idEntite));
             return $req;
         }
 
         /** Set Effect Personnage */
         public function setEffectPersonnage($effectPersonnage){
             $req = $this->_bdd->prepare("UPDATE Personnage SET effectPersonnage = ? WHERE idPersonnage = ?");
-            $req->execute(array($effectPersonnage, $this->_id));
+            $req->execute(array($effectPersonnage, $this->_idEntite));
             return $req;
         }
 
         /** Set Id Map Spawn Personnage */
         public function setIdMapSpawnPersonnage($idMapSpawnPersonnage){
             $req = $this->_bdd->prepare("UPDATE Personnage SET effectPersonnage = ? WHERE idPersonnage = ?");
-            $req->execute(array($idMapSpawnPersonnage, $this->_id));
+            $req->execute(array($idMapSpawnPersonnage, $this->_idEntite));
             return $req;
         }
 
@@ -126,7 +126,7 @@
             if($this->_vie < 1){
                 $this->_vie = 1;
             }
-            $req  = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `id` = '".$this->_id ."'";
+            $req  = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `idEntite` = '".$this->_idEntite ."'";
             $Result = $this->_bdd->query($req);
             return $this->_vie;
         }
@@ -147,7 +147,7 @@
                 }
                 $vieAvantAttaque = $this->_vie;
                 //on va rechercher l'historique
-                $req  = "SELECT * FROM `AttaquePersoMonster` where idMonster = '".$Monster->getId()."' and idPersonnage = '".$this->_id."'";
+                $req  = "SELECT * FROM `AttaquePersoMonster` where idMonster = '".$Monster->getId()."' and idPersonnage = '".$this->_idEntite."'";
                 $Result = $this->_bdd->query($req);
                 $tabAttaque['nbCoup']=0;
                 $tabAttaque['DegatsDonnes']=$MonsterDegatAttaqueEnvoyer;
@@ -160,7 +160,7 @@
                     //insertion d'une nouvelle attaque
                     $req="INSERT INTO `AttaquePersoMonster`(`idMonster`, `idPersonnage`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`) 
                     VALUES (
-                        '".$Monster->getId()."','".$this->_id."',0,0,".$tabAttaque['DegatsReçus'].",0
+                        '".$Monster->getId()."','".$this->_idEntite."',0,0,".$tabAttaque['DegatsReçus'].",0
                     )";
                     $Result = $this->_bdd->query($req);
                 }
@@ -171,12 +171,12 @@
                     $tabAttaque['DegatsDonnes'] = $vieAvantAttaque;
                     //retour en zone 0,0
                 }
-                $req  = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `id` = '".$this->_id ."'";
+                $req  = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `idEntite` = '".$this->_idEntite ."'";
                 $Result = $this->_bdd->query($req);
                 //update AttaquePersoMonster pour mettre a jour combien le perso a pris de degat 
                 $req="UPDATE `AttaquePersoMonster` SET 
                 `DegatsDonnes`=".$tabAttaque['DegatsDonnes']."
-                WHERE idMonster = '".$Monster->getId()."' AND idPersonnage ='".$this->_id."' ";
+                WHERE idMonster = '".$Monster->getId()."' AND idPersonnage ='".$this->_idEntite."' ";
                 $Result = $this->_bdd->query($req);
             }
             return $this->_vie;
@@ -185,14 +185,14 @@
         /** Add de l'Experience Personnage */ // À refaire
         public function addXP($value){
             $this->_expPersonnage += $value ;
-            $req  = "UPDATE `Personnage` SET `expPersonnage`='".$this->_experience ."' WHERE `idPersonnage` = '".$this->_id ."'";
+            $req  = "UPDATE `Personnage` SET `expPersonnage`='".$this->_experience ."' WHERE `idPersonnage` = '".$this->_idEntite ."'";
             $Result = $this->_bdd->query($req);
             //passage des Lvl suis une loi de racine carre
             /* le double etole ** c'est elevé à la puissance */
             $lvl = ceil(($this->_expPersonnage/2000)**(0.7));
             if($lvl >$this->_lvl){
                 $this->_lvl = $lvl;
-                $req  = "UPDATE `Entite` SET `lvl`='".$this->_lvl."' WHERE `id` = '".$this->_id ."'";
+                $req  = "UPDATE `Entite` SET `lvl`='".$this->_lvl."' WHERE `idEntite` = '".$this->_idEntite ."'";
                 $Result = $this->_bdd->query($req);
             }
             return $this->_expPersonnage;
@@ -203,7 +203,7 @@
             $vieMax = round($this->_vieMax - (($this->_vieMax*10)/100));
             $attaque = round($this->_degat - (($this->_degat*15)/100));
             if($vieMax<100){$vieMax=100;}
-            $req = "UPDATE `Entite` SET `degat`='".$attaque."',`vieMax`='".$vieMax."',`vie`='".$vieMax."' WHERE `id` = '".$this->_id ."'";
+            $req = "UPDATE `Entite` SET `degat`='".$attaque."',`vieMax`='".$vieMax."',`vie`='".$vieMax."' WHERE `idEntite` = '".$this->_idEntite ."'";
             $Result = $this->_bdd->query($req);
             $this->_vie=$vieMax;
             $this->_vieMax=$vieMax;
@@ -228,7 +228,7 @@
         /** Affiche le rendu HTML du personnage */ // À Refaire
         public function renderHTML(){
         ?>
-            <div class="perso" id="PersoEnCours<?= $this->_id ?>">
+            <div class="perso" id="PersoEnCours<?= $this->_idEntite ?>">
                 <div class="persoXP">
                     <?= $this->_expPersonnage?> (Exp)
                 </div>
@@ -282,7 +282,7 @@
                     <option value="">Choisir un personnage</option>
                         <?php
                             while($tab=$Result->fetch()){
-                                ($tab['id']==$this->_id)?$selected='selected':$selected='';
+                                ($tab['id']==$this->_idEntite)?$selected='selected':$selected='';
                                 echo '<option value="'.$tab["id"].'" '.$selected.'> '.$tab["nom"].'</option>';
                             }
                         ?>

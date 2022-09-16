@@ -81,15 +81,15 @@
                     $this->_vie=0;
                     $coupFatal=1;
                     //on va attribuer le monstre au personnage, sa vie revient a fond pour le propriétaire
-                    $req  = "UPDATE `Entite` SET `vie`='".$this->_vieMax."',`idUser`='".$Entite->getId()."' WHERE `id` = '".$this->_id."'";
+                    $req  = "UPDATE `Entite` SET `vie`='".$this->_vieMax."',`idUser`='".$Entite->getId()."' WHERE `idEntite` = '".$this->_idEntite."'";
                     $Result = $this->_bdd->query($req);
                 }
                 else{
-                    $req  = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `id` = '".$this->_id ."'";
+                    $req  = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `idEntite` = '".$this->_idEntite ."'";
                     $Result = $this->_bdd->query($req);
                 }
                 //on va rechercher l'historique
-                $req  = "SELECT * FROM `AttaquePersoMonster` where idMonster = '".$this->_id."' and idPersonnage = '".$Entite->getId()."'";
+                $req  = "SELECT * FROM `AttaquePersoMonster` where idMonster = '".$this->_idEntite."' and idPersonnage = '".$Entite->getId()."'";
                 $Result = $this->_bdd->query($req);
                 $tabAttaque['nbCoup']=0;
                 $tabAttaque['DegatsDonnes']=0;
@@ -103,7 +103,7 @@
                     //insertion d'une nouvelle attaque
                     $req="INSERT INTO `AttaquePersoMonster`(`idMonster`, `idPersonnage`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`)
                     VALUES (
-                        '".$this->_id."','".$Entite->getId()."',1,0,0,".$tabAttaque['DegatsReçus']."
+                        '".$this->_idEntite."','".$Entite->getId()."',1,0,0,".$tabAttaque['DegatsReçus']."
                     )";
                     $Result = $this->_bdd->query($req);
                 }
@@ -121,7 +121,7 @@
 
         /** Return Historique d'ataque */
         public function getHistoriqueAttaque(){
-            $req  = "SELECT * FROM `AttaquePersoMonster` where idMonster = '".$this->_id."'";
+            $req  = "SELECT * FROM `AttaquePersoMonster` where idMonster = '".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($this->HistoriqueAttaque,$tab);
@@ -914,7 +914,7 @@
 
         /** Reset Vie de Monster by ID */
         public function healMonsterspawn($id){
-            $this->_bdd->query("UPDATE `Entite` SET `vie` = '".$this->vieMax."' WHERE `id` = $id");
+            $this->_bdd->query("UPDATE `Entite` SET `vie` = '".$this->vieMax."' WHERE `idEntite` = $id");
         }
     }
 ?>

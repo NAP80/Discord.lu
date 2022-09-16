@@ -2,7 +2,7 @@
     class User extends TypeUser{
         private $_bdd;
 
-        private $_id;
+        private $_idUser;
         private $_email;
         private $_pseudo;
         private $_password_hash;
@@ -20,8 +20,8 @@
         }
 
         /** Récupère User */
-        public function setUser($id,$email,$pseudo,$password_hash,$token,$idPersonnage,$idFaction,$dateUser,$typeUser){
-            $this->_id = $id;
+        public function setUser($idUser,$email,$pseudo,$password_hash,$token,$idPersonnage,$idFaction,$dateUser,$typeUser){
+            $this->_idUser = $idUser;
             $this->_email = $email;
             $this->_pseudo = $pseudo;
             $this->_password_hash = $password_hash;
@@ -35,7 +35,7 @@
 
         /** Return ID */
         public function getId(){
-            return $this->_id;
+            return $this->_idUser;
         }
 
         /** Return Email */
@@ -99,7 +99,7 @@
             $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `token`='".$token."'"); // Optimisable en récupérant aussi le TypeUser
             // Authentification si Correct et à jours.
             if($tab = $Result->fetch()){
-                $this->setUser($tab["id"],$tab["email"],$tab["pseudo"],$tab["password_hash"],$tab["token"],$tab["idPersonnage"],$tab["idFaction"],$tab["dateUser"],$tab["typeUser"]);
+                $this->setUser($tab["idUser"],$tab["email"],$tab["pseudo"],$tab["password_hash"],$tab["token"],$tab["idPersonnage"],$tab["idFaction"],$tab["dateUser"],$tab["typeUser"]);
                 // Set son Personnage
                 $personnage = new Personnage($this->_bdd);
                 $personnage->setPersonnageById($tab["idPersonnage"]);
@@ -116,10 +116,10 @@
         }
 
         /** Set User By ID */
-        public function setUserById($id){
-            $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `id`='".$id."'");
+        public function setUserById($idUser){
+            $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `idUser`='".$idUser."'");
             if($tab = $Result->fetch()){
-                $this->setUser($tab["id"],$tab["email"],$tab["pseudo"],$tab["password_hash"],$tab["token"],$tab["idPersonnage"],$tab["idFaction"],$tab["dateUser"],$tab["typeUser"]);
+                $this->setUser($tab["idUser"],$tab["email"],$tab["pseudo"],$tab["password_hash"],$tab["token"],$tab["idPersonnage"],$tab["idFaction"],$tab["dateUser"],$tab["typeUser"]);
                 // Set son Personnage
                 $personnage = new Personnage($this->_bdd);
                 $personnage->setPersonnageById($tab["idPersonnage"]);
@@ -130,13 +130,13 @@
         /** Set Object Personnage */
         public function setPersonnage($Perso){
             $this->_infoPerso = $Perso;
-            $req ="UPDATE `User` SET `idPersonnage`='".$Perso->getID()."' WHERE `id` = '".$this->_id."'";
+            $req ="UPDATE `User` SET `idPersonnage`='".$Perso->getID()."' WHERE `idUser` = '".$this->_idUser."'";
             $Result = $this->_bdd->query($req);
         }
 
         /** Get Nombres de Personnages */
         public function getNbPersonnages(){
-            $req ="SELECT COUNT(*) FROM `entite` WHERE `type`=1 AND `idUser` = '".$this->_id."'";
+            $req ="SELECT COUNT(*) FROM `entite` WHERE `type`=1 AND `idUser` = '".$this->_idUser."'";
             $Result = $this->_bdd->query($req);
             $Count = $Result->fetch();
             return $Count['COUNT(*)'];
@@ -185,7 +185,7 @@
                 $newperso = new Personnage($this->_bdd);
                 $newperso = $newperso->CreateEntite($_POST['Name'], 100, 10, 1,100,$_POST['image'],$this->getId(),1,1);
                 $idTypePersonnage = $_POST['TypePerso'];
-                $req="INSERT INTO `Personnage`(`id`,`xp`,`idTypePersonnage`) VALUES ('".$newperso->getId()."','1','".$idTypePersonnage."')";
+                $req="INSERT INTO `Personnage`(`idPersonnage`,`xp`,`idTypePersonnage`) VALUES ('".$newperso->getId()."','1','".$idTypePersonnage."')";
                 $Result = $this->_bdd->query($req);
                 $newperso->setEntiteById($newperso->getId());
                 // Assignation du Personnage à l'User
@@ -280,7 +280,7 @@
         /** Return List de tout Monster Capturé par ID User */
         public function getAllMyMonsterIds(){
             $listMonster=array();
-            $req="SELECT `id` FROM `Entite` WHERE `idUser` in (SELECT `id` FROM `Entite` WHERE `idUser` = '".$this->_id."') AND Type=2";
+            $req="SELECT `idEntite` FROM `Entite` WHERE `idUser` in (SELECT `idEntite` FROM `Entite` WHERE `idUser` = '".$this->_idUser."') AND Type=2";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($listMonster,$tab[0]);
@@ -511,8 +511,8 @@
                 $req="SELECT `map`.`id`,`map`.`x`,`map`.`y` 
                 FROM `Visites`,`map` , `Entite`
                 WHERE map.id = Visites.idMap 
-                AND Visites.idPersonnage = Entite.id 
-                AND `Entite`.`idUser`='".$this->_id."' 
+                AND Visites.idPersonnage = Entite.idEntite 
+                AND `Entite`.`idUser`='".$this->_idUser."' 
                 AND map.x >= '".$minX."' 
                 AND map.x <= '".$maxX."' 
                 AND map.y >= '".$minY."' 
@@ -523,8 +523,8 @@
                 $req="SELECT `map`.`id`,`map`.`x`,`map`.`y` 
                 FROM `Visites`,`Entite`,`map` 
                 WHERE map.id = Visites.idMap 
-                AND Visites.idPersonnage = Entite.id 
-                AND `Entite`.`idUser`='".$this->_id."' 
+                AND Visites.idPersonnage = Entite.idEntite 
+                AND `Entite`.`idUser`='".$this->_idUser."' 
                 group by `Visites`.`idMap`";
             }
             $Result = $this->_bdd->query($req);
@@ -650,7 +650,7 @@
 
         /** Set Pseudo : À modifier */
         public function updateuser(){
-            $Up = $this->_bdd->query("UPDATE `User` SET `pseudo`='".$POST['newpseudo']."' WHERE id=".$this->_id." ");
+            $Up = $this->_bdd->query("UPDATE `User` SET `pseudo`='".$POST['newpseudo']."' WHERE idUser=".$this->_idUser." ");
             if($Up){
                 ?>
                     <p>Le pseudo a bien été changé.</p>
@@ -669,7 +669,7 @@
                 //comparaison du mot de passe avec l'ancien
                 if($_POST['New_password_hash'] == $_POST['password']){
                     //mise a jour dans la base du nouveau mot de passe
-                    $rep = $this->_bdd->query("UPDATE `User` SET `password_hash`='".$_POST['New_password_hash']."' WHERE id=".$this->_id." ");
+                    $rep = $this->_bdd->query("UPDATE `User` SET `password_hash`='".$_POST['New_password_hash']."' WHERE idUser=".$this->_idUser." ");
                     if($rep){
                         ?>
                             <p>Mot de passe changé.</p>
@@ -689,32 +689,15 @@
             }
         }
 
-        /** Set User : À modifier / Supprimer */
-        public function GiveAdmin($id){
-            $req = 'SELECT `admin` FROM `user` WHERE id = '.$id.'';
-            $excuteReq = $this->_bdd->query($req);
-            $dataAdmin = $excuteReq->fetch();
-            $dataAdmin['admin'];
-            if($dataAdmin['admin'] == 0){
-                $req = 'UPDATE `user` SET `admin`= "1" WHERE id ='.$id.'';
-                $excuteReq = $this->_bdd->query($req);
-            }
-            else if($dataAdmin['admin'] == 1){
-                $req = 'UPDATE `user` SET `admin`= "0" WHERE id ='.$id.'';
-                $excuteReq = $this->_bdd->query($req);
-            }
-        }
-
         /** Assigne une Faction à l'User */
         public function setFaction($idFaction){
-            $IdUser = $this->_id;
             /* Check isset IdFaction in BDD */
             $req = "SELECT COUNT(*) FROM `faction` WHERE `idFaction` = '".$idFaction."'";
             $Result = $this->_bdd->query($req);
             $ResultTab=$Result->fetch();
             if($ResultTab['COUNT(*)'] != 0){
                 // Si existe en BDD
-                $req = "UPDATE `user` SET `idFaction` = '".$idFaction."' WHERE `id` = '".$IdUser."'";
+                $req = "UPDATE `user` SET `idFaction` = '".$idFaction."' WHERE `idUser` = '".$this->_idUser."'";
                 $Result = $this->_bdd->query($req);
                 $Result = $Result->fetch();
                 $this->_idFaction = $idFaction;
@@ -750,8 +733,8 @@
                         while($Personnage = $Result->fetch()){
                             ?>
                                 <div class="listTypePerso">
-                                    <input type="radio" name="IdPerso" id="Perso<?= $Personnage['id'] ?>" value="<?= $Personnage['id'] ?>">
-                                    <label for="Perso<?= $Personnage['id'] ?>"><?= $Personnage['nom'] ?></label>
+                                    <input type="radio" name="IdPerso" id="Perso<?= $Personnage['idEntite'] ?>" value="<?= $Personnage['idEntite'] ?>">
+                                    <label for="Perso<?= $Personnage['idEntite'] ?>"><?= $Personnage['nom'] ?></label>
                                 </div>
                             <?php
                         }

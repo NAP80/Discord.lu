@@ -98,7 +98,7 @@ input[value='Deco!']{
     margin: 20px 0px 5px 0px;
 }
 
-.formlogin label[for=pseudo]{
+.formlogin label[for=pseudoUser]{
     text-align: center;
     font-weight: bold;
     margin: 20px 0px 5px 0px;
