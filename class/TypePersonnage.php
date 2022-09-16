@@ -20,7 +20,7 @@
             $req = "SELECT *
             FROM `TypePersonnage`,`Personnage`
             WHERE `Personnage`.idTypePersonnage = `TypePersonnage`.idTypePerso
-            AND `Personnage`.id='".$idPersonnage."'";
+            AND `Personnage`.idPersonnage = '".$idPersonnage."'";
             $Result = $this->_bdd->query($req);
             if($tab=$Result->fetch()){
                 $this->_idTypePerso = $tab['idTypePerso'];
@@ -38,7 +38,7 @@
         public function setTypePersonnageById($id){
             //select les info personnage
             $req = "SELECT * FROM `TypePersonnage`
-            WHERE idTypePerso='".$id."'";
+            WHERE idTypePerso = '".$id."'";
             $Result = $this->_bdd->query($req);
             if($tab=$Result->fetch()){
                 $this->_idTypePerso = $tab['idTypePerso'];

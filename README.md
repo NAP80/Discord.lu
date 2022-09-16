@@ -8,7 +8,9 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 
 ## En cours :
 - Début Uniformisation Code + Commentaires,
-- Refonte des Monstres,
+- Refonte Entitée,
+- Refonte Monster,
+- Refonte Personnage,
 - Bug déplacement Map : Non affichage de l'origine de déplacement quand refresh,
 - Bug JS ? : Non refresh si mort après une attaque.
 
@@ -43,7 +45,9 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Refaire l'intégralité du CSS,
 - Refaire le Menu,
 - Intégrer les différent display/affichage.php dans l'objet PHP Map,
-- Ajouter une "fouille" avant de faire apparaitre des items.
+- Ajouter une "fouille" avant de faire apparaitre des items,
+- Ajouter des effets Personnage,
+- Refaire RenderHTML.
 
 ## Fait :
 - Récupération du projet,

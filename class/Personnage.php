@@ -1,45 +1,130 @@
 <?php
     class Personnage extends Entite{
-        private $_xp;
-        private $sacItems=array();
+        public $_idTypePersonnage;
+        public $_levelPersonnage;
+        public $_expPersonnage;
+        public $_moneyPersonnage;
+        public $_idMapSpawnPersonnage;
+        public $_effectPersonnage; // Todo : Ajouter des effets - Paralysé, Poison, etc
+
+        public $sacItems=array();
 
         public function __construct($bdd){
             Parent::__construct($bdd);
         }
 
-        /** Set Xp Personnage */
-        public function setXp($valeurXp){
-            $req = $this->_bdd->prepare("UPDATE Personnage SET xp = ? WHERE id = ?");
-            $req->execute(array($valeurXp, $this->_id));
-            $this->_xp = $valeurXp;
-        }
-
-        /** Reinitialise Xp Personnage */
-        public function deleteXp(){
-            $req = $this->_bdd->prepare("UPDATE Personnage SET xp = 0 WHERE id = ?");
-            $req->execute(array($this->_id));
-        }
-
-        /** Return Xp Personnage */
-        public function getXp(){
-            $req = $this->_bdd->prepare("SELECT xp FROM Personnage WHERE id = ?");
-            $req->execute(array($this->_id));
-            $xp = $req->fetch();
-            return $xp;
-        }
-
-        public function SubitDegatByPersonnage($Personnage){
-            $degat = $Personnage->getAttaque();
-            //on réduit les déga avec armure si possible
-            $degat-=($degat*$this->getDefense())/100;
-            $degat = round($degat);
-            if($degat<0){
-                $degat = 0;
+        /** Set Personnage by Id Personnage */
+        public function setPersonnageById($idPersonnage){
+            Parent::setEntiteById($idPersonnage);
+            $req = "SELECT * FROM `Personnage` WHERE idPersonnage = '".$idPersonnage."'";
+            $Result = $this->_bdd->query($req);
+            if($tab=$Result->fetch()){
+                $this->_idTypePersonnage    = $tab['idTypePersonnage'];
+                $this->_levelPersonnage     = $tab['levelPersonnage'];
+                $this->_expPersonnage       = $tab['expPersonnage'];
+                $this->_moneyPersonnage     = $tab['moneyPersonnage'];
+                $this->_idMapSpawnPersonnage= $tab['idMapSpawnPersonnage'];
+                $this->_effectPersonnage    = $tab['effectPersonnage'];
             }
-            $this->_vie = $this->_vie - $degat;
-            if($this->_vie<0){
-                $this->_vie =0;
-                //retour en zone 0,0
+            //select les items déjà présent
+            $req = "SELECT idItem FROM `PersoSacItems` WHERE idPersonnage = '".$idPersonnage."'";
+            $Result = $this->_bdd->query($req);
+            while($tab=$Result->fetch()){
+                array_push($this->sacItems,$tab[0]);
+            }
+        }
+
+        /** Set Personnage by ID Personnage sur Map */
+        public function setPersonnageByIdWithoutMap($idPersonnage){
+            Parent::setEntiteByIdWithoutMap($idPersonnage);
+            $req = "SELECT * FROM `Personnage` WHERE idPersonnage='".$idPersonnage."'";
+            $Result = $this->_bdd->query($req);
+            if($tab=$Result->fetch()){
+                $this->_idTypePersonnage    = $tab['idTypePersonnage'];
+                $this->_levelPersonnage     = $tab['levelPersonnage'];
+                $this->_expPersonnage       = $tab['expPersonnage'];
+                $this->_moneyPersonnage     = $tab['moneyPersonnage'];
+                $this->_idMapSpawnPersonnage= $tab['idMapSpawnPersonnage'];
+                $this->_effectPersonnage    = $tab['effectPersonnage'];
+            }
+        }
+
+        /** Return id Type Personnage */
+        public function getIdTypePersonnage(){
+            return $this->_idTypePersonnage;
+        }
+
+        /** Return Level Personnage */
+        public function getLevelPersonnage(){
+            return $this->_levelPersonnage;
+        }
+
+        /** Return Experience Personnage */
+        public function getExpPersonnage(){
+            return $this->_expPersonnage;
+        }
+
+        /** Return Money Personnage */
+        public function getMoneyPersonnage(){
+            return $this->_moneyPersonnage;
+        }
+
+        /** Return Effects Personnage */
+        public function getEffectPersonnage(){
+            // Todo : Faire un traitement avant de renvoyer
+            return $this->_effectPersonnage;
+        }
+
+        /** Return Id Map Spawn Personnage */
+        public function getIdMapSpawnPersonnage(){
+            return $this->_idMapSpawnPersonnage;
+        }
+
+        /** Set Level Personnage */
+        public function setLevelpersonnage($levelPersonage){
+            $req = $this->_bdd->prepare("UPDATE Personnage SET levelPersonnage = ? WHERE idPersonnage = ?");
+            $req->execute(array($levelPersonage, $this->_id));
+            return $req;
+        }
+
+        /** Set Experience Personnage */
+        public function setExpPersonnage($expPersonnage){
+            $req = $this->_bdd->prepare("UPDATE Personnage SET expPersonnage = ? WHERE idPersonnage = ?");
+            $req->execute(array($expPersonnage, $this->_id));
+            return $req;
+        }
+
+        /** Set Money Personnage */
+        public function setMoneyPersonage($moneyPersonnage){
+            $req = $this->_bdd->prepare("UPDATE Personnage SET moneyPersonnage = ? WHERE idPersonnage = ?");
+            $req->execute(array($moneyPersonnage, $this->_id));
+            return $req;
+        }
+
+        /** Set Effect Personnage */
+        public function setEffectPersonnage($effectPersonnage){
+            $req = $this->_bdd->prepare("UPDATE Personnage SET effectPersonnage = ? WHERE idPersonnage = ?");
+            $req->execute(array($effectPersonnage, $this->_id));
+            return $req;
+        }
+
+        /** Set Id Map Spawn Personnage */
+        public function setIdMapSpawnPersonnage($idMapSpawnPersonnage){
+            $req = $this->_bdd->prepare("UPDATE Personnage SET effectPersonnage = ? WHERE idPersonnage = ?");
+            $req->execute(array($idMapSpawnPersonnage, $this->_id));
+            return $req;
+        }
+
+        /** Personnage Take dammage by Personnage*/
+        public function SubitDegatByPersonnage($dammage){
+            $dammage -=  ($dammage*$this->getDefense()) / 100;
+            $dammage = round($dammage);
+            if($dammage<0){
+                $dammage = 0;
+            }
+            $this->_vie = $this->_vie - $dammage;
+            if($this->_vie < 1){
+                $this->_vie = 1;
             }
             $req  = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `id` = '".$this->_id ."'";
             $Result = $this->_bdd->query($req);
@@ -47,6 +132,7 @@
         }
 
         //todo peut etre factoriser dans la class mère Entite
+        /** Personnage Take dammage by Personnage*/
         public function SubitDegatByMonster($Monster){
             //Attente de pull qui marche
             //Si le Monster attaquant a plus de O PV, il attaque
@@ -96,36 +182,34 @@
             return $this->_vie;
         }
 
-        /** Add de l'Xp Personnage */
+        /** Add de l'Experience Personnage */ // À refaire
         public function addXP($value){
-            $this->_xp += $value ;
-            $req  = "UPDATE `Personnage` SET `xp`='".$this->_xp ."' WHERE `id` = '".$this->_id ."'";
+            $this->_expPersonnage += $value ;
+            $req  = "UPDATE `Personnage` SET `expPersonnage`='".$this->_experience ."' WHERE `idPersonnage` = '".$this->_id ."'";
             $Result = $this->_bdd->query($req);
             //passage des Lvl suis une loi de racine carre
             /* le double etole ** c'est elevé à la puissance */
-            $lvl = ceil(($this->_xp/2000)**(0.7));
+            $lvl = ceil(($this->_expPersonnage/2000)**(0.7));
             if($lvl >$this->_lvl){
                 $this->_lvl = $lvl;
                 $req  = "UPDATE `Entite` SET `lvl`='".$this->_lvl."' WHERE `id` = '".$this->_id ."'";
                 $Result = $this->_bdd->query($req);
             }
-            return $this->_xp;
+            return $this->_expPersonnage;
         }
 
         /** Fonction de Rennaisance : Réinitialisation Vie + Déplacement Spawn */
         public function resurection(){
             $vieMax = round($this->_vieMax - (($this->_vieMax*10)/100));
             $attaque = round($this->_degat - (($this->_degat*15)/100));
-            if($vieMax<10){$vieMax=100;}
+            if($vieMax<100){$vieMax=100;}
             $req = "UPDATE `Entite` SET `degat`='".$attaque."',`vieMax`='".$vieMax."',`vie`='".$vieMax."' WHERE `id` = '".$this->_id ."'";
             $Result = $this->_bdd->query($req);
             $this->_vie=$vieMax;
             $this->_vieMax=$vieMax;
             $this->_degat=$attaque;
             $maporigine = new Map($this->_bdd);
-            // TODO : Récupérer point de Spawn du personnage pour pouvoir le changer à chaque ville.
-            $Personnage_Spawn = 1;
-            $maporigine->setMapByID($Personnage_Spawn);
+            $maporigine->setMapByID($this->_idMapSpawnPersonnage);
             $this->changeMap($maporigine);
         }
 
@@ -138,15 +222,15 @@
             foreach ($this->getEquipements() as $value){
                 $valeur+=$value->getValeur();
             }
-            return  $valeur;
+            return $valeur;
         }
 
-        /** Affiche le rendu HTML du personnage */
+        /** Affiche le rendu HTML du personnage */ // À Refaire
         public function renderHTML(){
         ?>
             <div class="perso" id="PersoEnCours<?= $this->_id ?>">
                 <div class="persoXP">
-                    <?= $this->_xp?> (xp)
+                    <?= $this->_expPersonnage?> (Exp)
                 </div>
                 <?php
                     Parent::renderHTML();
@@ -166,72 +250,10 @@
             return $lists;
         }
 
-        /** Attribue un idFaction Default à un personnage  : À dégager */
-        public function ChangeFactionById($id){
-            $Result = $this->_bdd->query("SELECT * FROM `TypePersonnage` WHERE idFaction = '".$id."'");
-            if($tab = $Result->fetch()){
-                $TypePersonnage = new TypePersonnage($this->_bdd);
-                $TypePersonnage->setTypePersonnageByIdPerso($tab['id']);
-                $this->ChangeTypePersonnage($TypePersonnage);
-            }
-        }
-
-        /** Change l'Id Type Personnage à l'objet en cours */
-        public function ChangeTypePersonnage($TypePersonnage){
-            $this->_idTypePersonnage = $TypePersonnage->getId();
-        }
-
-        /** Retourne les information Faction propre au Type Personnage : À dégager */
-        public function getIdFaction(){
-            $req = "SELECT * FROM `TypePersonnage` WHERE id = '".$this->_idTypePersonnage."'";
-            $Result = $this->_bdd->query($req);
-            if($tab = $Result->fetch()){
-                $req = "SELECT * FROM `Faction` WHERE id = '".$tab['idFaction']."'";
-                $Result2 = $this->_bdd->query($req);
-                if($tab2 = $Result2->fetch()){
-                    $faction = new Faction($this->_bdd);
-                    return $faction->setFactionById($tab2['id']);
-                }
-            }
-        }
-
-        public function setPersonnageByIdWithoutMap($id){
-            Parent::setEntiteByIdWithoutMap($id);
-            $req  = "SELECT * FROM `Personnage` WHERE id='".$id."'";
-            $Result = $this->_bdd->query($req);
-            if($tab=$Result->fetch()){
-                $this->_xp  = $tab['xp'];
-                $this->_idTypePersonnage  = $tab['idTypePersonnage'];
-            }
-            else{
-                return null;
-            }
-        }
-
-        public function setPersonnageById($id){
-            Parent::setEntiteById($id);
-            //select les info personnage
-            $req  = "SELECT * FROM `Personnage` WHERE id='".$id."'";
-            $Result = $this->_bdd->query($req);
-            if($tab=$Result->fetch()){
-                $this->_xp  = $tab['xp'];
-                $this->_idTypePersonnage  = $tab['idTypePersonnage'];
-            }
-            else{
-                return null;
-            }
-            //select les items déjà présent
-            $req  = "SELECT idItem FROM `PersoSacItems` WHERE idPersonnage='".$id."'";
-            $Result = $this->_bdd->query($req);
-            while($tab=$Result->fetch()){
-                array_push($this->sacItems,$tab[0]);
-            }
-        }
-
         /** Supprime Item du Sac Personnage et liste Items By ID */
         public function removeItemByID($id){
             unset($this->sacItems[array_search($id, $this->sacItems)]);
-            $req="DELETE FROM `PersoSacItems` WHERE idPersonnage='".$this->getId()."' AND idItem='".$id."'";
+            $req="DELETE FROM `PersoSacItems` WHERE idPersonnage = '".$this->getId()."' AND idItem='".$id."'";
             $this->_bdd->query($req);
             $req="DELETE FROM `Item` WHERE id='".$id."'";
             $this->_bdd->query($req);

@@ -540,7 +540,7 @@
             return $valeur;
         }
 
-        /** Affiche le rendu HTML de l'entité */
+        /** Affiche le rendu HTML de l'entité */ // À Dégager et faire une version pour Monstre et une pour Personnage
         public function renderHTML(){
             if($this->_vieMax<0 || $this->_vieMax=="0"){
                 $this->_vieMax=10;

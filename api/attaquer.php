@@ -26,13 +26,13 @@
                 //on verrifie que le perso n'est pas mort
                 if($Deffensseur->getVie()>0){
                     if($vieAttaquant!=0){
-                        $vie=$Deffensseur->SubitDegatByPersonnage($Attaquant);
+                        $vie = $Deffensseur->SubitDegatByPersonnage($Attaquant->getAttaque());
                         $vieMax = $Deffensseur->getVieMax();
                         $Deffensseur->addXP(1);
                         //on va retirer le coup d'attaque de base du deffensseur
                         //car une attaque n'est pas gratuite
                         $vieAvant = $Attaquant->getVie();
-                        $vieAttaquant=$Attaquant->SubitDegatByPersonnage($Deffensseur);
+                        $vieAttaquant=$Attaquant->SubitDegatByPersonnage($Deffensseur->getAttaque());
                         $perte = $vieAvant-$vieAttaquant;
                         $message .= "vous avez subit ".$perte." pts de degat ";
                         if($vieAttaquant==0){
@@ -101,7 +101,7 @@
             $reponse[4]=$vieMaxAttaquant;
             $reponse[5]=$Attaquant->getId();
             $reponse[6]=$message;
-            $reponse[7]=$Attaquant->getXp();
+            $reponse[7]=$Attaquant->getPersoExp();
             $reponse[8]=$Attaquant->getDefense();
         }
     }
