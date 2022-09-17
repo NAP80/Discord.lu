@@ -1,6 +1,6 @@
 <?php
     //cette api doit etre lancé pour attaquer un id
-    //cette API retourne un tableau avec idDuPersoattaque, sa vie restant et sa vie de base
+    //cette API retourne un tableau avec idDuPersoattaque, sa Health restant et sa Health de base
     // cette api retour un tableau avec 0 si elle n'a pas eccecuter le code attendu
     //une API ne dois sortir qu'un seul Echo celui de la reponse !!!!
     session_start();
@@ -13,35 +13,35 @@
             $Attaquant = $Joueur1->getPersonnage();
             $Attaquant->addXP(2);
             $message="";
-            $vieMax=0;
-            $vie=0;
-            $vieAttaquant=$Attaquant->getVie();
-            $vieMaxAttaquant=$Attaquant->getVieMax();
+            $healthMax=0;
+            $healthNow=0;
+            $healthAttaquant=$Attaquant->getHealthNow();
+            $healthMaxAttaquant=$Attaquant->getHealthMax();
             //attaque sur perso
             if($_GET["type"]==0 ){
                 $Deffensseur = new Personnage($mabase);
                 $Deffensseur->setPersonnageByIdWithoutMap($_GET["id"]);
-                $vieMax=$Deffensseur->getVieMax();
-                $vie=$Deffensseur->getVie();
+                $healthMax=$Deffensseur->getHealthMax();
+                $healthNow=$Deffensseur->getHealthNow();
                 //on verrifie que le perso n'est pas mort
-                if($Deffensseur->getVie()>0){
-                    if($vieAttaquant!=0){
-                        $vie = $Deffensseur->SubitDegatByPersonnage($Attaquant->getAttaque());
-                        $vieMax = $Deffensseur->getVieMax();
+                if($Deffensseur->getHealthNow()>0){
+                    if($healthAttaquant!=0){
+                        $healthNow = $Deffensseur->SubitDegatByPersonnage($Attaquant->getAttaque());
+                        $healthMax = $Deffensseur->getHealthMax();
                         $Deffensseur->addXP(1);
                         //on va retirer le coup d'attaque de base du deffensseur
                         //car une attaque n'est pas gratuite
-                        $vieAvant = $Attaquant->getVie();
-                        $vieAttaquant=$Attaquant->SubitDegatByPersonnage($Deffensseur->getAttaque());
-                        $perte = $vieAvant-$vieAttaquant;
+                        $healthAvant = $Attaquant->getHealthNow();
+                        $healthAttaquant=$Attaquant->SubitDegatByPersonnage($Deffensseur->getAttaque());
+                        $perte = $healthAvant-$healthAttaquant;
                         $message .= "vous avez subit ".$perte." pts de degat ";
-                        if($vieAttaquant==0){
+                        if($healthAttaquant==0){
                             $message .= " Ton personnage est mort.";
                         }
-                        if($vie==0){
+                        if($healthNow==0){
                             $lvl = $Deffensseur->getLvl();
                             $Attaquant->addXP($lvl*rand(8,10));
-                            $message .= " Tu as tué ".$Deffensseur->getNom();
+                            $message .= " Tu as tué ".$Deffensseur->getNameEntite();
                         }
                     }
                     else{
@@ -56,31 +56,31 @@
             if($_GET["type"]==1){
                 $DeffensseurMonster = new Monster($mabase);
                 $DeffensseurMonster->setMonsterByIdWithMap($_GET["id"]);
-                $vieMax=$DeffensseurMonster->getVieMax();
-                $vie=$DeffensseurMonster->getVie();
-                if($DeffensseurMonster->getVie()>0){
-                    if($vieAttaquant!=0){
+                $healthMax=$DeffensseurMonster->getHealthMax();
+                $healthNow=$DeffensseurMonster->getHealthNow();
+                if($DeffensseurMonster->getHealthNow()>0){
+                    if($healthAttaquant!=0){
                         //Utilisation méthode pour attaquer le Monster
                         $SubitDegat = $DeffensseurMonster->SubitDegat($Attaquant);
-                        //Vie du Monster renvoyer après avoir subit l attaque du joueur
-                        $vie = $SubitDegat[0];
-                        $vieMax = $DeffensseurMonster->getVieMax();
-                        //Si le Monster as de la vie, il attaque. Sinon, rien ne se passe
-                        if($vie>0 && $SubitDegat[1]!='coolDown'){
-                            $vieAvant = $Attaquant->getVie();
+                        //healthNow du Monster renvoyer après avoir subit l attaque du joueur
+                        $healthNow = $SubitDegat[0];
+                        $healthMax = $DeffensseurMonster->getHealthMax();
+                        //Si le Monster as de la healthNow, il attaque. Sinon, rien ne se passe
+                        if($healthNow>0 && $SubitDegat[1]!='coolDown'){
+                            $healthAvant = $Attaquant->getHealthNow();
                             //Sinon : retour de bâton le deffenseur aussi attaque
-                            $vieAttaquant=$Attaquant->SubitDegatByMonster($DeffensseurMonster);
-                            $perte = $vieAvant-$vieAttaquant;
+                            $healthAttaquant=$Attaquant->SubitDegatByMonster($DeffensseurMonster);
+                            $perte = $healthAvant-$healthAttaquant;
                             $message .= "vous avez subit ".$perte." pts de degat ";
                         }
                         //Affichage d'un message avec les dégats ingligé + info de si c'est un cout critique
                         //Si vous voulez retirer le popup, c'est ici; Gros Chien.
                         $message .= $SubitDegat[1];
-                        if($vieAttaquant==0){
+                        if($healthAttaquant==0){
                             $message .= "Ton personnage est mort.";
                         }
                         //si le perso tu le Monster il faut envoyer un message
-                        if($vie<=0){
+                        if($healthNow<=0){
                             $lvl = $DeffensseurMonster->getLvl();
                             $Attaquant->addXP($lvl*rand(8,10)*$DeffensseurMonster->getCoefXp());
                             $message .= "Tu as participé à la capture de ce monstre.";
@@ -95,13 +95,13 @@
                 }
             }
             $reponse[0]=$_GET["id"];
-            $reponse[1]=$vie;
-            $reponse[2]=$vieMax;
-            $reponse[3]=$vieAttaquant;
-            $reponse[4]=$vieMaxAttaquant;
-            $reponse[5]=$Attaquant->getId();
+            $reponse[1]=$healthNow;
+            $reponse[2]=$healthMax;
+            $reponse[3]=$healthAttaquant;
+            $reponse[4]=$healthMaxAttaquant;
+            $reponse[5]=$Attaquant->getIdEntite();
             $reponse[6]=$message;
-            $reponse[7]=$Attaquant->getPersoExp();
+            $reponse[7]=$Attaquant->getExpPersonnage();
             $reponse[8]=$Attaquant->getDefense();
         }
     }

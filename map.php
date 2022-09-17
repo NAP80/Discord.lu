@@ -27,7 +27,7 @@
                 include "ihm/fonction-web/menu.php";
                 //gestion accès map:
                 $Personnage = $Joueur1->getPersonnage();
-                if(is_null($Personnage->getId())){
+                if(is_null($Personnage->getIdEntite())){
                     ?>
                         <div class="divMainPage">
                             <p>Il faut créer un personnage d'abord.</p>

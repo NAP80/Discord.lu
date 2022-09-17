@@ -34,7 +34,7 @@
         }
 
         /** Return ID */
-        public function getId(){
+        public function getIdUser(){
             return $this->_idUser;
         }
 
@@ -80,7 +80,7 @@
 
         /** Return Nom du personnage en cours de l'User : À dégager */
         public function getNomPersonnage(){
-            return $this->_infoPerso->getNom();
+            return $this->_infoPerso->getNameEntite();
         }
 
         /** Return Object Personnage */
@@ -130,7 +130,7 @@
         /** Set Object Personnage */
         public function setPersonnage($Perso){
             $this->_infoPerso = $Perso;
-            $req ="UPDATE `User` SET `idPersonnage`='".$Perso->getID()."' WHERE `idUser` = '".$this->_idUser."'";
+            $req ="UPDATE `User` SET `idPersonnage`='".$Perso->getIdUser()."' WHERE `idUser` = '".$this->_idUser."'";
             $Result = $this->_bdd->query($req);
         }
 
@@ -181,13 +181,13 @@
                     ?>
                 </div>
             <?php
-            if(isset($_POST["createPerso"]) && isset($_POST["TypePerso"]) &&isset($_POST["Name"]) && isset($_POST["Name"]) && !is_null($idFactionUser)){
+            if(isset($_POST["createPerso"]) && isset($_POST["TypePerso"]) &&isset($_POST["Name"]) && isset($_POST["image"]) && !is_null($idFactionUser)){
                 $newperso = new Personnage($this->_bdd);
-                $newperso = $newperso->CreateEntite($_POST['Name'], 100, 10, 1,100,$_POST['image'],$this->getId(),1,1);
+                $newperso = $newperso->CreateEntite($_POST['Name'], 100, 10, 1,100,$_POST['image'],$this->getIdUser(),1,1);
                 $idTypePersonnage = $_POST['TypePerso'];
-                $req="INSERT INTO `Personnage`(`idPersonnage`,`xp`,`idTypePersonnage`) VALUES ('".$newperso->getId()."','1','".$idTypePersonnage."')";
+                $req="INSERT INTO `Personnage`(`idPersonnage`,`xp`,`idTypePersonnage`) VALUES ('".$newperso->getIdEntite()."','1','".$idTypePersonnage."')";
                 $Result = $this->_bdd->query($req);
-                $newperso->setEntiteById($newperso->getId());
+                $newperso->setEntiteById($newperso->getIdEntite());
                 // Assignation du Personnage à l'User
                 $this->setPersonnage($newperso);
                 // Redirection - À patch le fait qu'il faut actuliser la page pour avoir son perso... Truc Temporaire
@@ -649,8 +649,8 @@
         }
 
         /** Set Pseudo : À modifier */
-        public function updateuser(){
-            $Up = $this->_bdd->query("UPDATE `User` SET `pseudo`='".$POST['newpseudo']."' WHERE idUser=".$this->_idUser." ");
+        public function updateuser($newpseudo){
+            $Up = $this->_bdd->query("UPDATE `User` SET `pseudo`='".$newpseudo."' WHERE idUser=".$this->_idUser." ");
             if($Up){
                 ?>
                     <p>Le pseudo a bien été changé.</p>
@@ -718,14 +718,14 @@
             if((isset($_POST["AssignePerso"])) && (isset($_POST["IdPerso"]))){// À faire check si idUser est bon ou si Admin
                 $Personnage = New Personnage($this->_bdd);
                 $Personnage->setPersonnageById($_POST["IdPerso"]);
-                if(($Personnage->getidUser() == $this->getId()) || $this->getPermAdmin()){
+                if(($Personnage->getIdUser() == $this->getIdUser()) || $this->getPermAdmin()){
                     $this->setPersonnage($Personnage); // Assignation du Personnage à l'User
-                    if($Personnage->_vie <= 0 ){
+                    if($Personnage->_healthNow <= 0 ){
                         $Personnage->resurection();
                     }
                 }
             }
-            $Result = $this->_bdd->query("SELECT * FROM `Entite` where idUser='".$this->getId()."' AND type=1");
+            $Result = $this->_bdd->query("SELECT * FROM `Entite` where idUser='".$this->getIdUser()."' AND type=1");
             ?>
                 <p>Choisir un personnage :</p>
                 <form action="" method="post" class="formChangePerso">

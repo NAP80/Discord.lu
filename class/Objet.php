@@ -14,12 +14,12 @@
         }
 
         /** Return Name */
-        public function getNom(){
+        public function getNameObject(){
             return $this->_nom;
         }
 
         /** Return ID */
-        public function getId(){
+        public function getIdObject(){
             return $this->_id;
         }
 

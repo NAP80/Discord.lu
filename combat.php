@@ -28,7 +28,7 @@
                 include "ihm/fonction-web/menu.php";
 
                 $personnage = $Joueur1->getPersonnage();
-                if(is_null($personnage->getId())){
+                if(is_null($personnage->getIdEntite())){
                     ?>
                         <div class="divMainPage">
                             <p>Il faut créer un personnage d'abord.</p>
@@ -62,7 +62,7 @@
                                         </div>
                                     </div>
                                     <div class="divInfoCombat">
-                                        <p class="pPositionCombattant">Ton combattant est sur la position : <?= $map->getNom() ?> </p>
+                                        <p class="pPositionCombattant">Ton combattant est sur la position : <?= $map->getNameMap() ?> </p>
                                         <p>Tu peux maintenant ramasser des conneries par terre.</p>
                                         <p>Si tu en trouves qui sont parfaitement identiques, elles prennent de la valeur 😄 !</p>
                                         <p>But du jeu : Capture le "Super Jedi Légendaire".</p>

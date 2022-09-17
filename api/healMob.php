@@ -10,11 +10,11 @@
         $cible->setMonsterById($id);
         //Soigne le Monster
         $cible->healMonsterspawn($id);
-        //Recupère la vie et la vie max du monstre
-        $vieActuel = $cible->getVie();
-        $vieMax = $cible->getVieMax();
-        //Si la vie est égale à la vie max on return true sinon false
-        if($vieActuel == $vieMax){
+        //Recupère la healthNow et la healthMax du monstre
+        $healthNow = $cible->getHealthNow();
+        $healthMax = $cible->getHealthNow();
+        //Si la healthNow est égale à la healthMax max on return true sinon false
+        if($healthNow == $healthMax){
             $reponse = true;
         }
         else{

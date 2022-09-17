@@ -9,11 +9,11 @@
         //Retourne null(moi j'ai rien) dans le cas contraire.
         $Personnage = $Joueur1->getPersonnage();
         //Pour acceder au propriétés remettre les accesseurs après les getMap.
-        $reponse["this"] = $Personnage->getMap()->getId();
-        $reponse["Nord"] = $Personnage->getMap()->getMapNord()->getId();
-        $reponse["Sud"] = $Personnage->getMap()->getMapSud()->getId();
-        $reponse["Est"] = $Personnage->getMap()->getMapEst()->getId();
-        $reponse["Ouest"] = $Personnage->getMap()->getMapOuest()->getId();
+        $reponse["this"] = $Personnage->getMap()->getIdMap();
+        $reponse["Nord"] = $Personnage->getMap()->getMapNord()->getIdMap();
+        $reponse["Sud"] = $Personnage->getMap()->getMapSud()->getIdMap();
+        $reponse["Est"] = $Personnage->getMap()->getMapEst()->getIdMap();
+        $reponse["Ouest"] = $Personnage->getMap()->getMapOuest()->getIdMap();
         //renvoi l'ensemble de tableau dans un tableau.
         echo json_encode($reponse);
     }

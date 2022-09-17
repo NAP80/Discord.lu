@@ -88,7 +88,7 @@
                 divAtta.classList.remove("magic");
                 if(data[7]==1){ //cas de l'arme
                     var e3 = document.getElementById("Arme"+data[6]);
-                    e3.setAttribute('id',"ArmePerso"+<?php echo $Personnage->getId()?>);
+                    e3.setAttribute('id',"ArmePerso"+<?php echo $Personnage->getIdEntite()?>);
                     e3.innerHTML='';
                     //data 5 c'est l'ancien nom de equipement
                     setEquipementInSac(data[6],data[5]);
@@ -97,7 +97,7 @@
                 if(data[7]==2){
                     //cas de l'armure
                     var e3 = document.getElementById("Armure"+data[6]);
-                    e3.setAttribute('id',"ArmurePerso"+<?php echo $Personnage->getId()?>);
+                    e3.setAttribute('id',"ArmurePerso"+<?php echo $Personnage->getIdEntite()?>);
                     e3.innerHTML='';
                     //data 5 c'est l'ancien nom de equipement
                     setEquipementInSac(data[6],data[5]);
@@ -106,7 +106,7 @@
                 if(data[7]==4){
                     //cas de bouclier
                     var e3 = document.getElementById("Armure"+data[6]);
-                    e3.setAttribute('id',"ArmurePerso"+<?php echo $Personnage->getId()?>);
+                    e3.setAttribute('id',"ArmurePerso"+<?php echo $Personnage->getIdEntite()?>);
                     e3.innerHTML='';
                     //data 5 c'est l'ancien nom de equipement
                     setEquipementInSac(data[6],data[5]);
@@ -114,7 +114,7 @@
                 }
                 if(data[7]==3){ //cas de pouvoir
                     var e3 = document.getElementById("Arme"+data[6]);
-                    e3.setAttribute('id',"ArmePerso"+<?php echo $Personnage->getId()?>);
+                    e3.setAttribute('id',"ArmePerso"+<?php echo $Personnage->getIdEntite()?>);
                     e3.innerHTML='';
                     //data 5 c'est l'ancien nom de equipement
                     setEquipementInSac(data[6],data[5]);
@@ -132,7 +132,7 @@
     function UpdateArme(nomArme,idAncienneArme,idNouvelArme,Laclass){
         var e3 = document.getElementById("Arme"+idAncienneArme);
         if(e3 === null){
-            e3 = document.getElementById("ArmePerso"+<?php echo $Personnage->getId()?>);
+            e3 = document.getElementById("ArmePerso"+<?php echo $Personnage->getIdEntite()?>);
         }
         //on remet l'ancien equipement dans le sac
         setEquipementInSac(idAncienneArme,e3.innerHTML);
@@ -147,7 +147,7 @@
     function UpdateArmure(nomArmure,idAncienneArmure,idNouvelArmure,Laclass){
         var e3 = document.getElementById("Armure"+idAncienneArmure);
         if(e3 === null){
-            e3 = document.getElementById("ArmurePerso"+<?php echo $Personnage->getId()?>);
+            e3 = document.getElementById("ArmurePerso"+<?php echo $Personnage->getIdEntite()?>);
         }
         //on remet l'ancien equipement dans le sac
         setEquipementInSac(idAncienneArmure,e3.innerHTML);
@@ -258,7 +258,7 @@
         .then(function(data){
             // code for handling the data you get from the API
             console.log(data);
-                UpdateVie("vieEntiteValeur"+data[0],data[1],data[2],data[3],data[4],"vieEntiteValeur"+data[5],data[6]);
+                UpdateHealth("healthEntiteValeur"+data[0],data[1],data[2],data[3],data[4],"healthEntiteValeur"+data[5],data[6]);
                 //data[7]c'est xp
                 if(data[1] <= 0){
                     //si Monster mort on doit recharger le server
@@ -296,16 +296,16 @@
         });
     }
 
-    function lvlUp(id,attaque,vie,vieMax,Armure){
+    function lvlUp(id,attaque,healthNow,healthMax,Armure){
         if(id==0){
             log("La magie à fait chou blanc");
         }
         else{
-            var e1 = document.getElementById("vieEntiteValeur"+id);
+            var e1 = document.getElementById("healthEntiteValeur"+id);
             if(e1!="undefine"){
-                let pourcentage = vie/vieMax*100;
+                let pourcentage = healthNow/healthMax*100;
                 e1.style.width = pourcentage+"%";
-                e1.innerHTML = '♥️'+vie+'/'+vieMax;
+                e1.innerHTML = '♥️'+healthNow+'/'+healthMax;
             }
             var e2 = document.getElementById("attaqueEntiteValeur"+id);
             if(e2!="undefine"){
@@ -319,22 +319,22 @@
         }
     }
 
-    function UpdateVie(id,vie,vieMax,vieEntite2,viMaxEntite2,id2,message){
+    function UpdateHealth(id,healthNow,healthMax,healthEntite2,healthMaxEntite2,id2,message){
         var e1 = document.getElementById(id);
         if(e1!="undefine"){
-            let pourcentage = vie/vieMax*100;
+            let pourcentage = healthNow/healthMax*100;
             e1.style.width = pourcentage+"%";
-            e1.innerHTML = '♥️'+vie+'/'+vieMax;
+            e1.innerHTML = '♥️'+healthNow+'/'+healthMax;
         }
         var e2 = document.getElementById(id2);
         if(e2!="undefine"){
-            let pourcentage = vieEntite2/viMaxEntite2*100;
+            let pourcentage = healthEntite2/healthMaxEntite2*100;
             e2.style.width = pourcentage+"%";
-            e2.innerHTML = '♥️'+vieEntite2+'/'+viMaxEntite2;
+            e2.innerHTML = '♥️'+healthEntite2+'/'+healthMaxEntite2;
         }
-        if(vieEntite2 == 0 || message != ''){
+        if(healthEntite2 == 0 || message != ''){
             log(message);
-            if(vie <= 0){
+            if(healthNow <= 0){
                 const clearID = id.match(/(\d+)/);
                 if(!clearID)
                     return;

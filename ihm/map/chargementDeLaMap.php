@@ -7,11 +7,11 @@
         $cardinalite = $_GET["cardinalite"];
     }
     if($map->LogVisiteMap($Personnage) === true){
-        if(isset($_GET["position"]) && $Personnage->getVie() > 0){
+        if(isset($_GET["position"]) && $Personnage->getHealthNow() > 0){
             $map = $map->loadMap($_GET["position"],$cardinalite,$Joueur1);
         }
         else{
-            if($Personnage->getVie() == 0){
+            if($Personnage->getHealthNow() == 0){
                 $Personnage->resurection();
                 $map = $Personnage->getMap();
             }

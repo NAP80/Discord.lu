@@ -2,9 +2,9 @@
     // Beaucoup de Similitude entre Personnage/Entité -> Refactoriser avec héritage
     class Entite{
         public $_idEntite;
-        public $_nom;
-        public $_vie;
-        public $_vieMax;
+        public $_nameEntite;
+        public $_healthNow;
+        public $_healthMax;
         public $_degat;
         public $_imageLien;
         public $_lvl;
@@ -22,11 +22,11 @@
             $this->_bdd = $bdd;
         }
 
-        public function setEntite($idEntite,$nom,$vie,$degat,$vieMax,$image,$type,$lvl,$idUser){
+        public function setEntite($idEntite,$nameEntite,$healthNow,$degat,$healthMax,$image,$type,$lvl,$idUser){
             $this->_idEntite = $idEntite;
-            $this->_nom = $nom;
-            $this->_vie = $vie;
-            $this->_vieMax = $vieMax;
+            $this->_nameEntite = $nameEntite;
+            $this->_healthNow = $healthNow;
+            $this->_healthMax = $healthMax;
             $this->_degat = $degat;
             $this->_imageLien = $image;
             $this->_type = $type;
@@ -39,23 +39,27 @@
                     $TypePersonnage->setTypePersonnageByIdPerso($this->_idEntite);
                     $this->typePersonnage = $TypePersonnage;
                     $this->_idTypePersonnage = $TypePersonnage->getIdTypePerso();
-                
                 }
             }
         }
 
         /** Return Nom */
-        public function getNom(){
-            return $this->_nom;
+        public function getNameEntite(){
+            return $this->_nameEntite;
         }
 
-        /** Return VieMax */
-        public function getVieMax(){
-            return $this->_vieMax ;
+        /** Return HealthNow */
+        public function getHealthNow(){
+            return $this->_healthNow;
+        }
+
+        /** Return HealthMax */
+        public function getHealthMax(){
+            return $this->_healthMax;
         }
 
         /** Return l'ID de l'entitée */
-        public function getId(){
+        public function getIdEntite(){
             return $this->_idEntite;
         }
 
@@ -70,19 +74,8 @@
         }
 
         /** Return idUser */
-        public function getidUser(){
+        public function getIdUser(){
             return $this->_idUser;
-        }
-
-        /** Return Vie */
-        public function getVie(){
-            //on enpeche les boost de perdurer
-            if($this->_vie>$this->_vieMax){
-                $this->_vie =$this->_vieMax;
-                $req  = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `idEntite` = '".$this->_idEntite ."'";
-                $Result = $this->_bdd->query($req);
-            }
-            return $this->_vie;
         }
 
         /** Remove Équipement by ID */
@@ -90,7 +83,7 @@
             $idindex = array_search($EquipementID, $this->sacEquipements);
             if($idindex  >= 0){
                 unset($this->sacEquipements[ $idindex ]);
-                $req="DELETE FROM `EntiteEquipement` WHERE idEntite='".$this->getId()."' AND idEquipement='".$EquipementID."'";
+                $req="DELETE FROM `EntiteEquipement` WHERE idEntite='".$this->getIdEntite()."' AND idEquipement='".$EquipementID."'";
                 $this->_bdd->query($req);
 
                 //todo retirer un equipement ne doit pas etre une suppression
@@ -112,27 +105,27 @@
                 foreach ($TabIDRemoved as $idSup) {
                     $this->removeEquipementByID($idSup);
                 }
-                array_push($this->sacEquipements,$newEquipement->getId());
+                array_push($this->sacEquipements,$newEquipement->getIdObject());
                 return $TabIDRemoved;
             }
             else{
-                $req="INSERT INTO `EntiteEquipement`(`idEntite`, `idEquipement`) VALUES ('".$this->getId()."','".$newEquipement->getId()."')";
+                $req="INSERT INTO `EntiteEquipement`(`idEntite`, `idEquipement`) VALUES ('".$this->getIdEntite()."','".$newEquipement->getIdObject()."')";
                 $this->_bdd->query($req);
-                array_push($this->sacEquipements,$newEquipement->getId());
+                array_push($this->sacEquipements,$newEquipement->getIdObject());
                 //retourne 0 si ya pas eu de fusion d'équipement
                 return 0;
             }
         }
 
-        /** Affichage de la Barre de Vie */
-        public function getBardeVie(){
-            $pourcentage = round(100*$this->_vie/$this->_vieMax);
+        /** Affichage de HealthNow en Bar*/
+        public function getHealthBar(){
+            $pourcentage = round(100*$this->_healthNow/$this->_healthMax);
             ?>
-                <div class="EntitePrincipalBarreVie">
+                <div class="EntitePrincipalBarreHealth">
                     <div class="attaque" id="attaqueEntiteValeur<?= $this->_idEntite ;?>"> <?= $this->_degat ;?>  </div> 
-                    <div class="barreDeVie" id="vieEntite<?= $this->_idEntite ;?>">
-                        <div class="vie" id="vieEntiteValeur<?= $this->_idEntite ;?>" style="width:<?= $pourcentage?>%;">
-                            ♥️<?= $this->_vie ?>
+                    <div class="healthBar" id="healthEntite<?= $this->_idEntite ;?>">
+                        <div class="healthNow" id="healthEntiteValeur<?= $this->_idEntite ;?>" style="width:<?= $pourcentage?>%;">
+                            ♥️<?= $this->_healthNow ?>
                         </div>
                     </div>
                 </div>
@@ -193,7 +186,7 @@
                 //Le chiffre 1 et id de la categorie Armure à vérifier en base
                 if($EntiteEquipe->getCategorie()['id']==1){
                     $Arme = new Arme($this->_bdd);
-                    $Arme->setEquipementByID($EntiteEquipe->getId());
+                    $Arme->setEquipementByID($EntiteEquipe->getIdObject());
                     return $Arme;
                 }
             }
@@ -209,7 +202,7 @@
                 //Le chiffre 2 et id de la categorie Armure à vérifier en base
                 if($EntiteEquipe->getCategorie()['id']==2){
                     $Armure = new Armure($this->_bdd);
-                    $Armure->setEquipementByID($EntiteEquipe->getId());
+                    $Armure->setEquipementByID($EntiteEquipe->getIdObject());
                     return $Armure;
                 }
             }
@@ -225,7 +218,7 @@
                 //Le chiffre 1 et id de la categorie Pouvoir à vérifier en base
                 if($EntiteEquipe->getCategorie()['id']==3){
                     $Pouvoir = new Pouvoir($this->_bdd);
-                    $Pouvoir->setEquipementByID($EntiteEquipe->getId());
+                    $Pouvoir->setEquipementByID($EntiteEquipe->getIdObject());
                     return $Pouvoir;
                 }
             }
@@ -241,7 +234,7 @@
                 //Le chiffre 1 et id de la categorie Pouvoir à vérifier en base
                 if($EntiteEquipe->getCategorie()['id']==4){
                     $Bouclier = new Bouclier($this->_bdd);
-                    $Bouclier->setEquipementByID($EntiteEquipe->getId());
+                    $Bouclier->setEquipementByID($EntiteEquipe->getIdObject());
                     return $Bouclier;
                 }
             }
@@ -404,14 +397,14 @@
             return $this->_degat;
         }
         
-        //il n'est possible de booster la vie au dela de vie max
+        //il n'est possible de booster la HealthNow au dela de HealthMax
         public function SoinPourcentage($pourcentage){
-            $valeur = round(($this->_vieMax*$pourcentage)/100);
-            $this->_vie = $valeur+ $this->_vie;
-            if($this->_vie>$this->_vieMax){
-                $this->_vie = $this->_vieMax;
+            $valeur = round(($this->_healthMax*$pourcentage)/100);
+            $this->_healthNow = $valeur+ $this->_healthNow;
+            if($this->_healthNow>$this->_healthMax){
+                $this->_healthNow = $this->_healthMax;
             }
-            $req = "UPDATE `Entite` SET `vie`='".$this->_vie."' WHERE `idEntite` = '".$this->_idEntite."'";
+            $req = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow."' WHERE `idEntite` = '".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
             return $valeur;
         }
@@ -423,19 +416,19 @@
             //Mise en place de la defence.
             $MonsterDegatAttaqueEnvoyer -= round(($MonsterDegatAttaqueEnvoyer * $this->getDefense())/100,1);
     
-            $this->_vie = $this->_vie - $MonsterDegatAttaqueEnvoyer;
-            if($this->_vie<0){
-                $this->_vie =0;
+            $this->_healthNow = $this->_healthNow - $MonsterDegatAttaqueEnvoyer;
+            if($this->_healthNow<0){
+                $this->_healthNow =0;
                 //retour en zone 0,0
             }
-            $req = "UPDATE `Entite` SET `vie`='".$this->_vie."' WHERE `idEntite` = '".$this->_idEntite."'";
+            $req = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow."' WHERE `idEntite` = '".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
-            return $this->_vie;
+            return $this->_healthNow;
         }
 
         public function getAllMyMonsterIdByMap($map){
             $listMonster=array();
-            $req="SELECT `idEntite` FROM `Entite` WHERE `idUser` = '".$this->_idEntite."' AND `idMap` = '".$map->getId()."')";
+            $req="SELECT `idEntite` FROM `Entite` WHERE `idUser` = '".$this->_idEntite."' AND `idMap` = '".$map->getIdMap()."')";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($listMonster,$tab);
@@ -448,9 +441,9 @@
             //Mise en place de la defence.
             $MonsterDegatAttaqueEnvoyer -= round(($MonsterDegatAttaqueEnvoyer * $this->getDefense())/100,1);
 
-            $vieAvantAttaque = $this->_vie;
+            $healthAvantAttaque = $this->_healthNow;
             //on va rechercher l'historique
-            $req = "SELECT * FROM `AttaqueEntiteMonster` where idMonster = '".$Monster->getId()."' and idEntite = '".$this->_idEntite."'";
+            $req = "SELECT * FROM `AttaqueEntiteMonster` where idMonster = '".$Monster->getIdEntite()."' and idEntite = '".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
             $tabAttaque['nbCoup']=0;
             $tabAttaque['DegatsDonnes']=$MonsterDegatAttaqueEnvoyer;
@@ -463,26 +456,26 @@
                 //insertion d'une nouvelle attaque
                 $req="INSERT INTO `AttaqueEntiteMonster`(`idMonster`, `idEntite`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`) 
                 VALUES (
-                    '".$Monster->getId()."','".$this->_idEntite."',0,0,".$tabAttaque['DegatsReçus'].",0
+                    '".$Monster->getIdEntite()."','".$this->_idEntite."',0,0,".$tabAttaque['DegatsReçus'].",0
                 )";
                 $Result = $this->_bdd->query($req);
             }
 
-            $this->_vie = $this->_vie - $MonsterDegatAttaqueEnvoyer;
-            if($this->_vie<0){
-                $this->_vie=0;
-                //on ne peut pas donner plus de degat que la vie d'un perso
-                $tabAttaque['DegatsDonnes'] = $vieAvantAttaque;
+            $this->_healthNow = $this->_healthNow - $MonsterDegatAttaqueEnvoyer;
+            if($this->_healthNow<0){
+                $this->_healthNow=0;
+                //on ne peut pas donner plus de degat que la HealthNow d'un perso
+                $tabAttaque['DegatsDonnes'] = $healthAvantAttaque;
                 //retour en zone 0,0
             }
-            $req = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `idEntite` = '".$this->_idEntite."'";
+            $req = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow ."' WHERE `idEntite` = '".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
             //update AttaqueEntiteMonster pour mettre a jour combien le perso a pris de degat 
             $req="UPDATE `AttaqueEntiteMonster` SET 
             `DegatsDonnes`=".$tabAttaque['DegatsDonnes']." 
-            WHERE idMonster = '".$Monster->getId()."' AND idEntite ='".$this->_idEntite."'";
+            WHERE idMonster = '".$Monster->getIdEntite()."' AND idEntite ='".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
-            return $this->_vie;
+            return $this->_healthNow;
         }
 
         public function resetCoolDown(){
@@ -513,15 +506,15 @@
             }
         }
 
-        /** Fonction de Rennaisance : Réinitialisation Vie */
+        /** Fonction de Rennaisance : Réinitialisation HealthNow */
         public function resurection(){
-            $vieMax = intdiv ($this->_vieMax,2);
-            $attaque = intdiv ($this->_vieMax,2);
-            if($vieMax<10){$vieMax=10;}
-            $req = "UPDATE `Entite` SET `degat`='".$attaque."',`vieMax`='".$vieMax."',`vie`='".$vieMax."' WHERE `idEntite` = '".$this->_idEntite."'";
+            $healthMax = intdiv ($this->_healthMax,2);
+            $attaque = intdiv ($this->_healthMax,2);
+            if($healthMax<10){$healthMax=10;}
+            $req = "UPDATE `Entite` SET `degat`='".$attaque."',`healthMax`='".$healthMax."',`healthNow`='".$healthMax."' WHERE `idEntite` = '".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
-            $this->_vie=$vieMax;
-            $this->_vieMax=$vieMax;
+            $this->_healthNow=$healthMax;
+            $this->_healthMax=$healthMax;
             $this->_degat=$attaque;
             $maporigine = new Map($this->_bdd);
             // TODO : Récupérer point de Spawn du personnage pour pouvoir le changer à chaque ville.
@@ -542,10 +535,10 @@
 
         /** Affiche le rendu HTML de l'entité */ // À Dégager et faire une version pour Monstre et une pour Personnage
         public function renderHTML(){
-            if($this->_vieMax<0 || $this->_vieMax=="0"){
-                $this->_vieMax=10;
+            if($this->_healthMax<0 || $this->_healthMax=="0"){
+                $this->_healthMax=10;
             }
-            $pourcentage = round(100*$this->_vie/$this->_vieMax);
+            $pourcentage = round(100*$this->_healthNow/$this->_healthMax);
             $arme = $this->getArme();
             $pouvoir = $this->getPouvoir();
             if($this->_type == 1){
@@ -554,7 +547,7 @@
             ?>
                 <div class="EntiteInfo">
                     <div class="EntiteName">
-                        <?= $this->getNom() ?>
+                        <?= $this->getNameEntite() ?>
                     </div>
                     <div class="EntiteValeur">
                         (<?= $this->getValeur() ?> $) LV <?= $this->_lvl ?>
@@ -578,7 +571,7 @@
                             ?>)
                         </div>
                     </div>
-                    <div id="Arme<?= $arme->getId() ?>" class="Arme standard" onclick="CallApiRemoveEquipementEntite(<?= $arme->getId() ?>)"><?= $arme->getNom() ?> lvl <?= $arme->getLvl() ?></div>
+                    <div id="Arme<?= $arme->getIdObject() ?>" class="Arme standard" onclick="CallApiRemoveEquipementEntite(<?= $arme->getIdObject() ?>)"><?= $arme->getNameObject() ?> lvl <?= $arme->getLvl() ?></div>
                 <?php
             }
             else{
@@ -594,7 +587,7 @@
             $bouclier = $this->getBouclier();
             if(!is_null($armure)){
                 ?>
-                    <div id ="Armure<?= $armure->getId() ?>" class="ArmureNom standard" onclick="CallApiRemoveEquipementEntite(<?= $armure->getId() ?>)"><?= $armure->getNom() ?> lvl <?= $armure->getLvl() ?>
+                    <div id ="Armure<?= $armure->getIdObject() ?>" class="ArmureNom standard" onclick="CallApiRemoveEquipementEntite(<?= $armure->getIdObject() ?>)"><?= $armure->getNameObject() ?> lvl <?= $armure->getLvl() ?>
                         <div class="coef">
                             (*<?php 
                                 if(!is_null($type)){
@@ -610,7 +603,7 @@
             }
             else if(!is_null($bouclier)){
                 ?>
-                <div id ="Armure<?= $bouclier->getId() ?>" class="ArmureNom magic" onclick="CallApiRemoveEquipementEntite(<?= $bouclier->getId() ?>)"><?= $bouclier->getNom() ?> lvl <?= $bouclier->getLvl() ?>
+                <div id ="Armure<?= $bouclier->getIdObject() ?>" class="ArmureNom magic" onclick="CallApiRemoveEquipementEntite(<?= $bouclier->getIdObject() ?>)"><?= $bouclier->getNameObject() ?> lvl <?= $bouclier->getLvl() ?>
                     <div class="coef">
                         (*<?php 
                             if(!is_null($type)){
@@ -630,8 +623,8 @@
                 <?php
             }
             ?>
-                <div class="barreDeVie" id="vieEntite<?= $this->_idEntite ?>">
-                    <div class="vie" id="vieEntiteValeur<?= $this->_idEntite ?>" style="width:<?= $pourcentage ?>%;">♥️<?= $this->_vie ?>
+                <div class="healthBar" id="healthEntite<?= $this->_idEntite ?>">
+                    <div class="healthNow" id="healthEntiteValeur<?= $this->_idEntite ?>" style="width:<?= $pourcentage ?>%;">♥️<?= $this->_healthNow ?>
                     </div>
                     <div class="armureAll">
                         <div class="armure" id="defenseEntiteValeur<?= $this->_idEntite ?>"
@@ -666,14 +659,14 @@
             $sql = "UPDATE `Entite` SET `degat`='".$this->_degat."' WHERE `idEntite`='".$this->_idEntite."'";
             $this->_bdd->query($sql);
         }
-        public function lvlupVie($viemore){
-            $this->_vie += $viemore;
-            $sql = "UPDATE `Entite` SET `vie`='".$this->_vie."' WHERE `idEntite`='".$this->_idEntite."'";
+        public function lvlupHealthNow($healthmore){
+            $this->_healthNow += $healthmore;
+            $sql = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow."' WHERE `idEntite`='".$this->_idEntite."'";
             $this->_bdd->query($sql);
         }
-        public function lvlupVieMax($viemore){
-            $this->_vieMax += $viemore;
-            $sql = "UPDATE `Entite` SET `vieMax`='".$this->_vieMax."' WHERE `idEntite`='".$this->_idEntite."'";
+        public function lvlupHealthMax($healthmore){
+            $this->_healthMax += $healthmore;
+            $sql = "UPDATE `Entite` SET `healthMax`='".$this->_healthMax."' WHERE `idEntite`='".$this->_idEntite."'";
             $this->_bdd->query($sql);
         }
 
@@ -689,7 +682,7 @@
         public function setEntiteById($idEntite){
             $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `idEntite`='".$idEntite."'");
             if($tab = $Result->fetch()){
-                $this->setEntite($tab["idEntite"],$tab["nom"],$tab["vie"],$tab["degat"],$tab["vieMax"],$tab["lienImage"],$tab["type"],$tab["lvl"],$tab["idUser"]);
+                $this->setEntite($tab["idEntite"],$tab["nom"],$tab["healthNow"],$tab["degat"],$tab["healthMax"],$tab["imgEntite"],$tab["type"],$tab["lvl"],$tab["idUser"]);
                 //recherche de sa position
                 $map = new map($this->_bdd);
                 $map->setMapByID($tab["idMap"]);
@@ -714,20 +707,20 @@
         public function setEntiteByIdWithoutMap($id){
             $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `idEntite`='".$id."'");
             if($tab = $Result->fetch()){
-                $this->setEntite($tab["idEntite"],$tab["nom"],$tab["vie"],$tab["degat"],$tab["vieMax"],$tab["lienImage"],$tab["type"],$tab["lvl"],$tab["idUser"]);
+                $this->setEntite($tab["idEntite"],$tab["nom"],$tab["healthNow"],$tab["degat"],$tab["healthMax"],$tab["imgEntite"],$tab["type"],$tab["lvl"],$tab["idUser"]);
             }
         }
 
         //Retourne un formulaire HTML pourcreer un entite
         //et permet d'attribuer automatiquement à user
         // retour un objet entite
-        public function CreateEntite($nom, $vie, $degat, $idMap,$vieMax,$lienImage,$idUser,$type,$lvl){
+        public function CreateEntite($nom, $healthNow, $degat, $idMap,$healthMax,$imgEntite,$idUser,$type,$lvl){
             $newperso = new Entite($this->_bdd);
-            $this->_nom=htmlentities($nom, ENT_QUOTES);
+            $this->_nameEntite=htmlentities($nom, ENT_QUOTES);
             $this->_lvl = $lvl;
-            $this->_imageLien=$lienImage;
-            $req="INSERT INTO `Entite`(`nom`, `vie`, `degat`, `idMap`,`vieMax`,`lienImage`,`idUser`,`type`,`lvl`)
-            VALUES ('".$this->_nom."','.$vie.','.$degat.','.$idMap.','.$vieMax.','".$this->_imageLien."','".$idUser."','.$type.','.$lvl.')";
+            $this->_imageLien=$imgEntite;
+            $req="INSERT INTO `Entite`(`nom`, `healthNow`, `degat`, `idMap`,`healthMax`,`imgEntite`,`idUser`,`type`,`lvl`)
+            VALUES ('".$this->_nameEntite."','.$healthNow.','.$degat.','.$idMap.','.$healthMax.','".$this->_imageLien."','".$idUser."','.$type.','.$lvl.')";
             $this->_bdd->beginTransaction();
             $Result = $this->_bdd->query($req);
             $this->_idEntite = $this->_bdd->lastInsertId();
@@ -749,7 +742,7 @@
         public function getChoixEntite($idUser){
             if(isset($_POST["idEntite"])){
                 $this->setEntiteById($_POST["idEntite"]);
-                if($this->_vie==0){
+                if($this->_healthNow==0){
                     $this->resurection();
                 }
                 //si le entite est mort on le place ne origine 0,0

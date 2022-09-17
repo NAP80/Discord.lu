@@ -11,9 +11,9 @@
                     <?php
                         foreach($listEquipements as $Equipement){
                             ?>
-                                <li id="equipement<?= $Equipement->getId() ?>" style="<?= $Equipement->getClassRarete() ?>">
-                                    <a onclick="CallApiAddEquipementInSac(<?= $Equipement->getId() ?>)">
-                                        <?= $Equipement->getNom() ?>
+                                <li id="equipement<?= $Equipement->getIdObject() ?>" style="<?= $Equipement->getClassRarete() ?>">
+                                    <a onclick="CallApiAddEquipementInSac(<?= $Equipement->getIdObject() ?>)">
+                                        <?= $Equipement->getNameObject() ?>
                                     </a>
                                 </li>
                             <?php

@@ -19,8 +19,8 @@
                         foreach($MonsterContre as $MonsterID){
                             $Monster->setMonsterById($MonsterID);
                             ?>
-                                <li id="Monster<?= $Monster->getId() ?>" class="liAdverse" onmouseover="afficheDivPerso(event)" onmouseout="cacheDivPerso(event)">
-                                    <a id="aMonster<?= $Monster->getId() ?>" onclick="AttaquerPerso(<?= $Monster->getId() ?>,1, event)">
+                                <li id="Monster<?= $Monster->getIdEntite() ?>" class="liAdverse" onmouseover="afficheDivPerso(event)" onmouseout="cacheDivPerso(event)">
+                                    <a id="aMonster<?= $Monster->getIdEntite() ?>" onclick="AttaquerPerso(<?= $Monster->getIdEntite() ?>,1, event)">
                                         <?php
                                             $Monster->renderHTML();
                                         ?>
@@ -33,8 +33,8 @@
                         foreach( $tabMonster as $MonsterID){
                             $Monster->setMonsterById($MonsterID);
                             ?>
-                                <li id="Monster<?= $Monster->getId() ?>" class="liCaptured">
-                                    <a id="aMonster<?= $Monster->getId() ?>" onclick="SoinMonster(<?= $Monster->getId() ?>,1)">
+                                <li id="Monster<?= $Monster->getIdEntite() ?>" class="liCaptured">
+                                    <a id="aMonster<?= $Monster->getIdEntite() ?>" onclick="SoinMonster(<?= $Monster->getIdEntite() ?>,1)">
                                         <?php
                                             $Monster->renderHTML();
                                         ?>

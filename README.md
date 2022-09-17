@@ -7,7 +7,9 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 # Avancement :
 
 ## En cours :
-- Début Uniformisation Code + Commentaires,
+- Ajouts Commentaires,
+- Uniformisation Code,
+- Uniformisation Variable et BDD,
 - Refonte Entitée,
 - Refonte Monster,
 - Refonte Personnage,

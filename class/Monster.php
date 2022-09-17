@@ -57,7 +57,7 @@
                 if($CC >=1 && $CC <= 15){
                     $degat = $Attaque * 1.5;
                     $degat = round($degat);
-                    $this->_vie = $this->_vie - $degat;
+                    $this->_healthNow = $this->_healthNow - $degat;
                     if($degat > 1){
                         $CoupCritique = "Coup Critique ! Vous avez infligé ".$degat." points de dégâts.";
                     }
@@ -68,7 +68,7 @@
                 else{
                     $degat = $Attaque;
                     $degat = round($degat);
-                    $this->_vie = $this->_vie - $degat;
+                    $this->_healthNow = $this->_healthNow - $degat;
                     if($degat > 1){
                         $CoupCritique = "Vous avez infligé ".$degat." points de dégâts.";
                     }
@@ -77,19 +77,19 @@
                     }
                 }
                 $coupFatal = 0;
-                if($this->_vie<=0){
-                    $this->_vie=0;
+                if($this->_healthNow<=0){
+                    $this->_healthNow=0;
                     $coupFatal=1;
-                    //on va attribuer le monstre au personnage, sa vie revient a fond pour le propriétaire
-                    $req  = "UPDATE `Entite` SET `vie`='".$this->_vieMax."',`idUser`='".$Entite->getId()."' WHERE `idEntite` = '".$this->_idEntite."'";
+                    //on va attribuer le monstre au personnage, sa healthNow revient a fond pour le propriétaire
+                    $req  = "UPDATE `Entite` SET `healthNow`='".$this->_healthMax."',`idUser`='".$Entite->getIdEntite()."' WHERE `idEntite` = '".$this->_idEntite."'";
                     $Result = $this->_bdd->query($req);
                 }
                 else{
-                    $req  = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `idEntite` = '".$this->_idEntite ."'";
+                    $req  = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow ."' WHERE `idEntite` = '".$this->_idEntite ."'";
                     $Result = $this->_bdd->query($req);
                 }
                 //on va rechercher l'historique
-                $req  = "SELECT * FROM `AttaquePersoMonster` where idMonster = '".$this->_idEntite."' and idPersonnage = '".$Entite->getId()."'";
+                $req  = "SELECT * FROM `AttaquePersoMonster` where idMonster = '".$this->_idEntite."' and idPersonnage = '".$Entite->getIdEntite()."'";
                 $Result = $this->_bdd->query($req);
                 $tabAttaque['nbCoup']=0;
                 $tabAttaque['DegatsDonnes']=0;
@@ -103,7 +103,7 @@
                     //insertion d'une nouvelle attaque
                     $req="INSERT INTO `AttaquePersoMonster`(`idMonster`, `idPersonnage`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`)
                     VALUES (
-                        '".$this->_idEntite."','".$Entite->getId()."',1,0,0,".$tabAttaque['DegatsReçus']."
+                        '".$this->_idEntite."','".$Entite->getIdEntite()."',1,0,0,".$tabAttaque['DegatsReçus']."
                     )";
                     $Result = $this->_bdd->query($req);
                 }
@@ -112,11 +112,11 @@
                 `nbCoup`=".$tabAttaque['nbCoup'].",
                 `coupFatal`=".$coupFatal.",
                 `DegatsReçus`=".$tabAttaque['DegatsReçus']."
-                WHERE idMonster = '".$this->getId()."' AND idPersonnage ='".$Entite->getId()."' ";
+                WHERE idMonster = '".$this->getIdEntite()."' AND idPersonnage ='".$Entite->getIdEntite()."' ";
                     $Result = $this->_bdd->query($req);
                 usleep($CoolDown*1000);//microSeconde
             }
-            return array ($this->_vie, $CoupCritique);
+            return array ($this->_healthNow, $CoupCritique);
         }
 
         /** Return Historique d'ataque */
@@ -148,22 +148,22 @@
                 $newMonster = new Monster($this->_bdd);
                 $type = $this->getTypeAleatoire();
                 $lvl = $map->getlvl();
-                $coefAbuseVie = rand(20,50);
+                $coefAbuseHealth = rand(20,50);
                 $coefAbuseArme = rand(2,20);
-                $vie = $coefAbuseVie*$type[2]*$lvl*$lvl*$lvl;
+                $healthNow = $coefAbuseHealth*$type[2]*$lvl*$lvl*$lvl;
                 $degat = $coefAbuseArme*$type[2]*$lvl*$lvl;
                 // Menhir
                 if($type[1]==0){
-                    $vie = $coefAbuseVie*20*$lvl*$lvl;
+                    $healthNow = $coefAbuseHealth*20*$lvl*$lvl;
                     $degat = 1*$lvl*$lvl;
                 }
-                $newMonster = $newMonster->CreateEntite($this->generateName($type[0]), $vie, $degat, $map->getId(),$vie,$type[3],null,2,$lvl);
+                $newMonster = $newMonster->CreateEntite($this->generateName($type[0]), $healthNow, $degat, $map->getIdMap(),$healthNow,$type[3],null,2,$lvl);
                 if(!is_null($newMonster)){
                     $req="INSERT INTO `Monster`(`coefXp`, `id` ,`type` )
-                    VALUES ('".$type[2]."','".$newMonster->getId()."','".$type[1]."')";
+                    VALUES ('".$type[2]."','".$newMonster->getIdEntite()."','".$type[1]."')";
                     $Result = $this->_bdd->query($req);
-                    if($newMonster->getId()){
-                        $newMonster->setEntiteById( $newMonster->getId());
+                    if($newMonster->getIdEntite()){
+                        $newMonster->setEntiteById( $newMonster->getIdEntite());
                         return $newMonster;
                     }
                     else{
@@ -174,7 +174,7 @@
                     return null;
                 }
                 $itemEnplus = new Item($this->_bdd);
-                $nbItem = rand(2,$coefAbuseArme+round(($coefAbuseVie/10)));
+                $nbItem = rand(2,$coefAbuseArme+round(($coefAbuseHealth/10)));
                 for($i=0;$i<$nbItem;$i++){
                     $map->addItem($itemEnplus->createItemAleatoire());
                 }
@@ -912,9 +912,9 @@
             return $partialString3;
         }
 
-        /** Reset Vie de Monster by ID */
+        /** Reset HealthNow de Monster by ID */
         public function healMonsterspawn($id){
-            $this->_bdd->query("UPDATE `Entite` SET `vie` = '".$this->vieMax."' WHERE `idEntite` = $id");
+            $this->_bdd->query("UPDATE `Entite` SET `healthNow` = '".$this->healthMax."' WHERE `idEntite` = $id");
         }
     }
 ?>

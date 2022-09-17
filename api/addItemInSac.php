@@ -12,16 +12,16 @@
             $reponse[0]=0;
             $reponse[1]=0;
             $Perso = $Joueur1->getPersonnage();
-            if($Perso->getVie()==0){
+            if($Perso->getHealthNow()==0){
                 $Perso->resurection();
                 $reponse[1]="Ton personnage est mort.";
             }
             $map=$Perso->getMap();
             //une fois que j'ai mes objet je vérifie que le perso est bien sur la map
-            $idmap = $map->getId();
+            $idmap = $map->getIdMap();
             //que l'item est bien dans la map si ya un Monster on peut pas le prendre
             foreach($map->getItems() as $item){
-                if($_GET["idItem"]==$item->getId()){
+                if($_GET["idItem"]==$item->getIdObject()){
                     //vérifier si ya des Monster
                     if(count($map->getAllMonsterContre($Joueur1))==0){
                         //on retire l'item de la map et on la rajoute dans le sac

@@ -1,4 +1,4 @@
-.barreDeVie{
+.healthBar{
     width:170px;
     height:26px;
     display:block;
@@ -7,7 +7,7 @@
     text-align: left;
 }
 
-.vie{
+.healthNow{
     float:left;
     white-space:nowrap;
     background:rgb(34,190,34);
@@ -49,7 +49,7 @@ img.Entite{
     height:21px;
     text-align:right;
     background-color:rgba(177,255,0,0.53);
-    background-image:url(https://got-wic.ovh/wp-content/uploads/2019/09/game-of-thrones-winter-is-coming-arumure-champion.png);
+    /*background-image:url(https://got-wic.ovh/wp-content/uploads/2019/09/game-of-thrones-winter-is-coming-arumure-champion.png);*/
     background-size:20px;
     background-repeat:no-repeat;
     background-position:right;

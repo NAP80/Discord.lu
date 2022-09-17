@@ -10,10 +10,10 @@
                     <?php
                         $PersoJoueur = $Joueur1->getPersonnage();
                         foreach($listPersos as $Perso){
-                            if($Perso->getId()!=$PersoJoueur->getId()){
+                            if($Perso->getIdEntite()!=$PersoJoueur->getIdEntite()){
                                 ?>
                                     <li class="liAdverse" onmouseover="afficheDivPerso(event)" onmouseout="cacheDivPerso(event)">
-                                        <a id="aPerso<?= $Perso->getId() ?>" onclick="AttaquerPerso(<?= $Perso->getId() ?>,0, event)">
+                                        <a id="aPerso<?= $Perso->getIdEntite() ?>" onclick="AttaquerPerso(<?= $Perso->getIdEntite() ?>,0, event)">
                                             <?php $Perso->renderHTML() ?>
                                         </a>
                                     </li>

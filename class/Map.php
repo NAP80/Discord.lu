@@ -3,8 +3,8 @@
         Private $_bdd;
 
         private $_idMap;
-        private $_nomMap;
-        private $_imageLien;
+        private $_nameMap;
+        private $_imgMap;
         private $_x;
         private $_y;
         private $_type;
@@ -18,6 +18,9 @@
         private $mapSud=null;
         private $mapEst=null;
         private $mapOuest=null;
+
+        private $idTypeMap; // Id Type Map -> À faire en lien avec les Type de map (Plaine, Montagne).
+        private $idTypeBatiment; // Id Type de Batiment -> À faire pour les marché, forges, guildes, spawn, etc.
         protected $_isForge=false;
         protected $_isMarche=false;
 
@@ -41,7 +44,7 @@
                     $tab["x"],
                     $tab["y"],
                     $tab["idUserDecouverte"],
-                    $tab["lienImage"],
+                    $tab["imgMap"],
                     $tab["type"]
                 );
             }
@@ -70,6 +73,11 @@
         /** Return Type */
         public function getType(){
             return $this->_type;
+        }
+
+        /** Return ImgMap */
+        public function getImgMap(){
+            return $this->_imgMap;
         }
 
         /** Return si Forge */
@@ -115,7 +123,7 @@
                     body{
                         background-size: cover;
                         background-repeat: no-repeat;
-                        background-image: linear-gradient(rgba(255, 255, 255, 1), rgba(255,255,255, 0.01)), url(<?= $this->_imageLien?>);
+                        background-image: linear-gradient(rgba(255, 255, 255, 1), rgba(255,255,255, 0.01)), url(<?= $this->_imgMap?>);
                         background-attachment: fixed;
                     }
                 </style>
@@ -129,7 +137,7 @@
             $this->_position = $position;
             $this->_x = $x;
             $this->_y = $y;
-            $this->_imageLien = $image;
+            $this->_imgMap = $image;
             $this->idUserDecouverte = $idUserDecouverte;
             //je place les id pour ne pas que l'objet racupère en récurciv toute les maps inclu dans elle meme
             (is_null($mapNord))?$this->mapNord = null:$this->mapNord = $mapNord;
@@ -150,9 +158,9 @@
             while($tab=$Result->fetch()){
                 array_push($this->listEquipements,$tab[0]);
             }
-            //select les Personnages déjà présent en vie
+            //select les Personnages vivant
             $this->listPersonnages = array();
-            $req = "SELECT idEntite FROM `Entite` WHERE idMap='".$idMap."' and vie > 0 AND type='1'";
+            $req = "SELECT idEntite FROM `Entite` WHERE idMap='".$idMap."' AND healthNow > 0 AND type='1'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($this->listPersonnages,$tab[0]);
@@ -280,43 +288,43 @@
 
         /** Set Coord ID Map Nord */
         public function setMapNord($NewMap){
-            $this->mapNord = $NewMap->getId();
-            $req = "UPDATE `map` SET `mapNord`='".$NewMap->getId()."' WHERE `idMap` = '$this->_idMap'";
+            $this->mapNord = $NewMap->getIdMap();
+            $req = "UPDATE `map` SET `mapNord`='".$NewMap->getIdMap()."' WHERE `idMap` = '$this->_idMap'";
             $Result = $this->_bdd->query($req);
         }
 
         /** Set Coord ID Map Sud */
         public function setMapSud($NewMap){
-            $this->mapSud = $NewMap->getId();
-            $req = "UPDATE `map` SET `mapSud`='".$NewMap->getId()."' WHERE `idMap` = '$this->_idMap'";
+            $this->mapSud = $NewMap->getIdMap();
+            $req = "UPDATE `map` SET `mapSud`='".$NewMap->getIdMap()."' WHERE `idMap` = '$this->_idMap'";
             $Result = $this->_bdd->query($req);
         }
 
         /** Set Coord ID Map Est */
         public function setMapEst($NewMap){
-            $this->mapEst = $NewMap->getId();
-            $req = "UPDATE `map` SET `mapEst`='".$NewMap->getId()."' WHERE `idMap` = '$this->_idMap'";
+            $this->mapEst = $NewMap->getIdMap();
+            $req = "UPDATE `map` SET `mapEst`='".$NewMap->getIdMap()."' WHERE `idMap` = '$this->_idMap'";
             $Result = $this->_bdd->query($req);
         }
 
         /** Set Coord ID Map Ouest */
         public function setMapOuest($NewMap){
-            $this->mapOuest = $NewMap->getId();
-            $req = "UPDATE `map` SET `mapOuest`='".$NewMap->getId()."' WHERE `idMap` = '$this->_idMap'";
+            $this->mapOuest = $NewMap->getIdMap();
+            $req = "UPDATE `map` SET `mapOuest`='".$NewMap->getIdMap()."' WHERE `idMap` = '$this->_idMap'";
             $Result = $this->_bdd->query($req);
         }
 
         /** Add un lien entre Item et Map */
         public function addItem($newItem){
-            array_push($this->listItems,$newItem->getId());
-            $req = "INSERT INTO `MapItems`(`idMap`, `idItem`) VALUES ('".$this->getIdMap()."','".$newItem->getId()."')";
+            array_push($this->listItems,$newItem->getIdObject());
+            $req = "INSERT INTO `MapItems`(`idMap`, `idItem`) VALUES ('".$this->getIdMap()."','".$newItem->getIdObject()."')";
             $this->_bdd->query($req);
         }
 
         /** Add un lien entre Équipements et Map */
         public function addEquipement($newEquipement){
-            array_push($this->listEquipements,$newEquipement->getId());
-            $req = "INSERT INTO `MapEquipements`(`idMap`, `idEquipement`) VALUES ('".$this->getIdMap()."','".$newEquipement->getId()."')";
+            array_push($this->listEquipements,$newEquipement->getIdObject());
+            $req = "INSERT INTO `MapEquipements`(`idMap`, `idEquipement`) VALUES ('".$this->getIdMap()."','".$newEquipement->getIdObject()."')";
             $this->_bdd->query($req);
         }
 
@@ -338,8 +346,8 @@
         //String cardinalite: lui dire si elle est par rapport à elle au sud , nord , est ou ouest ($cardinalite)
         //int id du user qui as decouvert cette map en premier
         public function Create($map,$cardinalite,$idUserDecouverte){
-            if(intval($map->getId())>=0){
-                $map->setMapByID($map->getId());
+            if(intval($map->getIdMap())>=0){
+                $map->setMapByID($map->getIdMap());
             }
             else{
                 //la map n'existe pas
@@ -354,7 +362,7 @@
             $newy = $map->_y;
             switch($cardinalite){
                 case "sud":
-                    $mapSud = "'".$map->getId()."'";
+                    $mapSud = "'".$map->getIdMap()."'";
                     //on vérifie si la map n'existe pas déjà a cette cardinalité
                     if(!is_null($map->getMapNord())){
                         return $map->getMapNord();
@@ -362,21 +370,21 @@
                     $newy++;
                     break;
                 case "nord":
-                    $mapNord = "'".$map->getId()."'";
+                    $mapNord = "'".$map->getIdMap()."'";
                     if(!is_null($map->getMapSud())){
                         return $map->getMapSud();
                     }
                     $newy--;
                     break;
                 case "est":
-                    $mapEst = "'".$map->getId()."'";
+                    $mapEst = "'".$map->getIdMap()."'";
                     if(!is_null($map->getMapOuest())){
                         return $map->getMapOuest();
                     }
                     $newx--;
                     break;
                 case "ouest":
-                    $mapOuest = "'".$map->getId()."'";
+                    $mapOuest = "'".$map->getIdMap()."'";
                     if(!is_null($map->getMapEst())){
                         return $map->getMapEst();
                     }
@@ -389,27 +397,27 @@
             if(is_object($mapExistante)){
                 switch($cardinalite){
                     case "nord":
-                        $req = "UPDATE `map` SET `mapSud`='".$mapExistante->getId()."' WHERE `idMap` = '".$map->getId()."'";
+                        $req = "UPDATE `map` SET `mapSud`='".$mapExistante->getIdMap()."' WHERE `idMap` = '".$map->getIdMap()."'";
                         $map->setMapSud($mapExistante);
-                        $req = "UPDATE `map` SET `mapNord`='".$map->getId()."' WHERE `idMap` = '".$mapExistante->getId()."'";
+                        $req = "UPDATE `map` SET `mapNord`='".$map->getIdMap()."' WHERE `idMap` = '".$mapExistante->getIdMap()."'";
                         $mapExistante->setMapNord($map);
                         break;
                     case "sud":
-                        $req = "UPDATE `map` SET `mapNord`='".$mapExistante->getId()."' WHERE `idMap` = '".$map->getId()."'";
+                        $req = "UPDATE `map` SET `mapNord`='".$mapExistante->getIdMap()."' WHERE `idMap` = '".$map->getIdMap()."'";
                         $map->setMapNord($mapExistante);
-                        $req = "UPDATE `map` SET `mapSud`='".$map->getId()."' WHERE `idMap` = '".$mapExistante->getId()."'";
+                        $req = "UPDATE `map` SET `mapSud`='".$map->getIdMap()."' WHERE `idMap` = '".$mapExistante->getIdMap()."'";
                         $mapExistante->setMapSud($map);
                         break;
                     case "est":
-                        $req = "UPDATE `map` SET `mapOuest`='".$mapExistante->getId()."' WHERE `idMap` = '".$map->getId()."'";
+                        $req = "UPDATE `map` SET `mapOuest`='".$mapExistante->getIdMap()."' WHERE `idMap` = '".$map->getIdMap()."'";
                         $map->setMapOuest($mapExistante);
-                        $req = "UPDATE `map` SET `mapEst`='".$map->getId()."' WHERE `idMap` = '".$mapExistante->getId()."'";
+                        $req = "UPDATE `map` SET `mapEst`='".$map->getIdMap()."' WHERE `idMap` = '".$mapExistante->getIdMap()."'";
                         $mapExistante->setMapEst($map);
                         break;
                     case "ouest":
-                        $req = "UPDATE `map` SET `mapEst`='".$mapExistante->getId()."' WHERE `idMap` = '".$map->getId()."'";
+                        $req = "UPDATE `map` SET `mapEst`='".$mapExistante->getIdMap()."' WHERE `idMap` = '".$map->getIdMap()."'";
                         $map->setMapEst($mapExistante);
-                        $req = "UPDATE `map` SET `mapOuest`='".$map->getId()."' WHERE `idMap` = '".$mapExistante->getId()."'";
+                        $req = "UPDATE `map` SET `mapOuest`='".$map->getIdMap()."' WHERE `idMap` = '".$mapExistante->getIdMap()."'";
                         $mapExistante->setMapOuest($map);
                         break;
                 }
@@ -419,14 +427,14 @@
             $position = $this->generatePosition();
             $Generate = $this->generateCarte();
             $nameMap = $Generate[2];
-            $typeId=$Generate[0];
-            $type=$Generate[1];
+            $typeId = $Generate[0];
+            $type = $Generate[1];
             //insertion en base
             //la position doit etre unique
-            $imgLink = $this->getAleatoireImage($type);
-            $req = "INSERT INTO `map`( `nameMap`, `position`, `mapNord`, `mapSud`, `mapEst`, `mapOuest`, `x`, `y`,`idUserDecouverte`,`lienImage`) 
+            $imgMap = $this->getAleatoireImage($type);
+            $req = "INSERT INTO `map`( `nameMap`, `position`, `mapNord`, `mapSud`, `mapEst`, `mapOuest`, `x`, `y`,`idUserDecouverte`,`imgMap`) 
                     VALUES 
-                ('".$nameMap."','".$position."',".$mapNord.",".$mapSud.",".$mapEst.",".$mapOuest.",".$newx.",".$newy.",".$idUserDecouverte.",'".$imgLink."')";
+                ('".$nameMap."','".$position."',".$mapNord.",".$mapSud.",".$mapEst.",".$mapOuest.",".$newx.",".$newy.",".$idUserDecouverte.",'".$imgMap."')";
             $Result = $this->_bdd->query($req);
             $req = "SELECT idMap FROM map WHERE position='".$position."'";
             $Result = $this->_bdd->query($req);
@@ -473,7 +481,7 @@
                         $Monster1 = new Monster($this->_bdd);
                         $Monster1 = $Monster1->CreateMonsterAleatoire($newmap);
                         if(!is_null($Monster1)){
-                            array_push($newmap->listMonsters,$Monster1->getId());
+                            array_push($newmap->listMonsters,$Monster1->getIdEntite());
                             //chargement d'un Item aléatoire par monstre present
                             if(rand(0,4)>1){
                                 $item1 = new Item($this->_bdd);
@@ -504,16 +512,16 @@
         public function loadMap($position,$Cardinalite,$Joueur1){
             //on va vérifier qu'il n'est pas trop looin par rapport à son niveau
             $lvlPerso = $Joueur1->getPersonnage()->getLvl();
-            if(isset($position) && isset($Cardinalite) ){
+            if(isset($position) && isset($Cardinalite)){
                 //todo voir si le spam générate est controlé 
                 if($position === "Generate"){
                     //la cardinalité permet de lui dire d'ou on vient
                     //on va
-                    $map= $Joueur1->getPersonnage()->getMap();
+                    $map = $Joueur1->getPersonnage()->getMap();
                     //on vérifie si un Monster est présent la ou on est car on est bloqué normalement
                     $listMonster = $map->getAllMonsterContre($Joueur1);
                     if(is_null($listMonster) || count($listMonster) == 0){
-                        $map = $map->Create($map,$_GET["cardinalite"],$Joueur1->getId());
+                        $map = $map->Create($map,$_GET["cardinalite"],$Joueur1->getIdUser());
                     }
                     $lvlMap = $map->getlvl();
                     if($lvlPerso<$lvlMap){
@@ -637,19 +645,19 @@
         /** Enregistre une visite */
         public function LogVisiteMap($Perso){
             $req = "SELECT `laDate` from `Visites` 
-                WHERE `idPersonnage` = '".$Perso->getId()."'
+                WHERE `idPersonnage` = '".$Perso->getIdEntite()."'
                 AND idMap = '".$this->_idMap."' 
                 ORDER BY `laDate` DESC";
             $Result = $this->_bdd->query($req);
             if($tab = $Result->fetch()){
                 $req = "UPDATE  `Visites` SET `laDate` =  '".date("Y-m-d H:i:s")."'
-                WHERE   `idPersonnage` = '".$Perso->getId()."' 
+                WHERE   `idPersonnage` = '".$Perso->getIdEntite()."' 
                 AND idMap = '".$this->_idMap."' ;";
                 $Result = $this->_bdd->query($req);
             }
             else{
                 $req = "INSERT INTO `Visites` (`idPersonnage`, `idMap`, `laDate`) 
-                VALUES ('".$Perso->getId()."', '".$this->_idMap."', '".date("Y-m-d H:i:s")."')";
+                VALUES ('".$Perso->getIdEntite()."', '".$this->_idMap."', '".date("Y-m-d H:i:s")."')";
                 $Result = $this->_bdd->query($req);
             }
             return true;
@@ -1144,7 +1152,7 @@
             //la premiere case et le type en anglais pour une recherche d'image
             $tab[0]=$type['id'];
             $tab[1]=$type['nom'];
-            $tab[2]=$nom ." ". $Adjectif." ".$Nom;
+            $tab[2]=$Nom." ". $Adjectif." ".$Nom;
             return $tab;
         }
 
@@ -1153,7 +1161,7 @@
         public function trouveMapAdjacente($map,$cardinalite){
             $x=$map->getX();
             $y=$map->getY();
-            switch ($cardinalite){
+            switch($cardinalite){
                 case "nord":
                     $y--;
                     break;

@@ -60,7 +60,7 @@
                                     }
                                     ?>
                                         <div class="divAction">
-                                            <p><a href="combat.php">Viens combattre avec <?= $ObjectPersonnage->getNom() ?></a></p>
+                                            <p><a href="combat.php">Viens combattre avec <?= $ObjectPersonnage->getNameEntite() ?></a></p>
                                         </div>
                                     <?php
                                 }

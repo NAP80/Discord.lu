@@ -53,7 +53,7 @@
         }
 
         public function desequipeEntite($Entite){
-            $sql = "UPDATE `EntiteEquipement` SET `equipe`='0' WHERE `idEntite`='".$Entite->getId()."' AND `idEquipement`='".$this->_id."'";
+            $sql = "UPDATE `EntiteEquipement` SET `equipe`='0' WHERE `idEntite`='".$Entite->getIdEntite()."' AND `idEquipement`='".$this->_id."'";
             $this->_bdd->query($sql);
             $Entite->removeEquipeBydId($this->_id);
         }
@@ -67,7 +67,7 @@
             AND TypeEquipement.idCategorie = '".$this->_idCategorie."'";
             $this->_bdd->query($sql);
             $Entite->addEquipeById($this->_id);
-            $sql = "UPDATE `EntiteEquipement` SET `equipe`='1' WHERE `idEntite`='".$Entite->getId()."' AND `idEquipement`='".$this->_id."'";
+            $sql = "UPDATE `EntiteEquipement` SET `equipe`='1' WHERE `idEntite`='".$Entite->getIdEntite()."' AND `idEquipement`='".$this->_id."'";
             $this->_bdd->query($sql);
         }
 
@@ -87,7 +87,7 @@
             $req="DELETE FROM Equipement WHERE id='".$this->_id."' ";
             $Result = $this->_bdd->query($req);
         }
-        //retourn un tableau avec id information lienImage nom rarete
+        //retourn un tableau avec id information nom rarete
         public function getType(){
             $req="SELECT * FROM TypeEquipement WHERE id='".$this->_type."'";
             $Result = $this->_bdd->query($req);
@@ -100,10 +100,10 @@
         }
 
         /** Return le lien Image de l'équipement */
-        public function getLienImage(){
+        public function getImgEquipement(){
             $tab = $this->getType();
             if(!is_null($tab)){
-                return $tab['lienImage'];
+                return $tab['imgEquipement'];
             }
             else{
                 return "https://th.bing.com/th/id/OIP.I57H91s35hsrBcImYVt90AHaE8?w=247&h=180&c=7&r=0&o=5&pid=1.7";
@@ -211,21 +211,21 @@
         public function fusionEquipement($Entite,&$TabIDRemoved){
             $req="SELECT Equipement.id,Equipement.lvl FROM EntiteEquipement,Equipement
                 WHERE Equipement.id = EntiteEquipement.idEquipement
-                AND idEntite = '".$Entite->getId()."'
-                AND Equipement.nom = '".$this->getNom()."'
+                AND idEntite = '".$Entite->getIdEntite()."'
+                AND Equipement.nom = '".$this->getNameObject()."'
                 AND Equipement.lvl = '".$this->getlvl()."'
                 AND Equipement.type = '".$this->getType()['id']."'
-                AND Equipement.id <> '".$this->getId()."'
+                AND Equipement.id <> '".$this->getIdObject()."'
             ";
             $result = $this->_bdd->query($req);
             if($tab=$result->fetch()){
-                array_push($TabIDRemoved,$this->getId());
+                array_push($TabIDRemoved,$this->getIdObject());
                 //maj du lvl
                 $this->_lvl ++;
                 $req="UPDATE `Equipement` SET `lvl`='".$this->_lvl."' WHERE `id` = '".$tab['id']."'";
                 $this->_bdd->query($req);
                 //et suppresion de l'ancien item
-                $req="DELETE FROM `Equipement` WHERE `id` = '".$this->getId()."'";
+                $req="DELETE FROM `Equipement` WHERE `id` = '".$this->getIdObject()."'";
                 $this->_bdd->query($req);
                 //on met ajout son id fusionné
                 $this->_id = $tab['id'];

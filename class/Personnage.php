@@ -122,13 +122,13 @@
             if($dammage<0){
                 $dammage = 0;
             }
-            $this->_vie = $this->_vie - $dammage;
-            if($this->_vie < 1){
-                $this->_vie = 1;
+            $this->_healthNow = $this->_healthNow - $dammage;
+            if($this->_healthNow < 1){
+                $this->_healthNow = 1;
             }
-            $req  = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `idEntite` = '".$this->_idEntite ."'";
+            $req  = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow ."' WHERE `idEntite` = '".$this->_idEntite ."'";
             $Result = $this->_bdd->query($req);
-            return $this->_vie;
+            return $this->_healthNow;
         }
 
         //todo peut etre factoriser dans la class mère Entite
@@ -136,7 +136,7 @@
         public function SubitDegatByMonster($Monster){
             //Attente de pull qui marche
             //Si le Monster attaquant a plus de O PV, il attaque
-            if($Monster->getVie() > 0){
+            if($Monster->getHealthNow() > 0){
                 $MonsterDegatAttaqueEnvoyer=$Monster->getAttaque();
                 //on réduit les déga avec armure si possible
                 $enMoins = ($MonsterDegatAttaqueEnvoyer*$this->getDefense())/100;
@@ -145,9 +145,9 @@
                 if($MonsterDegatAttaqueEnvoyer<0){
                     $MonsterDegatAttaqueEnvoyer = 0;
                 }
-                $vieAvantAttaque = $this->_vie;
+                $healthAvantAttaque = $this->_healthNow;
                 //on va rechercher l'historique
-                $req  = "SELECT * FROM `AttaquePersoMonster` where idMonster = '".$Monster->getId()."' and idPersonnage = '".$this->_idEntite."'";
+                $req  = "SELECT * FROM `AttaquePersoMonster` where idMonster = '".$Monster->getIdEntite()."' and idPersonnage = '".$this->_idEntite."'";
                 $Result = $this->_bdd->query($req);
                 $tabAttaque['nbCoup']=0;
                 $tabAttaque['DegatsDonnes']=$MonsterDegatAttaqueEnvoyer;
@@ -160,32 +160,32 @@
                     //insertion d'une nouvelle attaque
                     $req="INSERT INTO `AttaquePersoMonster`(`idMonster`, `idPersonnage`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`) 
                     VALUES (
-                        '".$Monster->getId()."','".$this->_idEntite."',0,0,".$tabAttaque['DegatsReçus'].",0
+                        '".$Monster->getIdEntite()."','".$this->_idEntite."',0,0,".$tabAttaque['DegatsReçus'].",0
                     )";
                     $Result = $this->_bdd->query($req);
                 }
-                $this->_vie = $this->_vie - $MonsterDegatAttaqueEnvoyer;
-                if($this->_vie<0){
-                    $this->_vie =0;
-                    //on ne peut pas donner plus de degat que la vie d'un perso
-                    $tabAttaque['DegatsDonnes'] = $vieAvantAttaque;
+                $this->_healthNow = $this->_healthNow - $MonsterDegatAttaqueEnvoyer;
+                if($this->_healthNow<0){
+                    $this->_healthNow =0;
+                    //on ne peut pas donner plus de degat que la HealthNow d'un perso
+                    $tabAttaque['DegatsDonnes'] = $healthAvantAttaque;
                     //retour en zone 0,0
                 }
-                $req  = "UPDATE `Entite` SET `vie`='".$this->_vie ."' WHERE `idEntite` = '".$this->_idEntite ."'";
+                $req  = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow ."' WHERE `idEntite` = '".$this->_idEntite ."'";
                 $Result = $this->_bdd->query($req);
                 //update AttaquePersoMonster pour mettre a jour combien le perso a pris de degat 
                 $req="UPDATE `AttaquePersoMonster` SET 
                 `DegatsDonnes`=".$tabAttaque['DegatsDonnes']."
-                WHERE idMonster = '".$Monster->getId()."' AND idPersonnage ='".$this->_idEntite."' ";
+                WHERE idMonster = '".$Monster->getIdEntite()."' AND idPersonnage ='".$this->_idEntite."' ";
                 $Result = $this->_bdd->query($req);
             }
-            return $this->_vie;
+            return $this->_healthNow;
         }
 
         /** Add de l'Experience Personnage */ // À refaire
         public function addXP($value){
             $this->_expPersonnage += $value ;
-            $req  = "UPDATE `Personnage` SET `expPersonnage`='".$this->_experience ."' WHERE `idPersonnage` = '".$this->_idEntite ."'";
+            $req  = "UPDATE `Personnage` SET `expPersonnage`='".$this->_expPersonnage ."' WHERE `idPersonnage` = '".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
             //passage des Lvl suis une loi de racine carre
             /* le double etole ** c'est elevé à la puissance */
@@ -198,15 +198,15 @@
             return $this->_expPersonnage;
         }
 
-        /** Fonction de Rennaisance : Réinitialisation Vie + Déplacement Spawn */
+        /** Fonction de Rennaisance : Réinitialisation HealthNow + Déplacement Spawn */
         public function resurection(){
-            $vieMax = round($this->_vieMax - (($this->_vieMax*10)/100));
+            $healthMax = round($this->_healthMax - (($this->_healthMax*10)/100));
             $attaque = round($this->_degat - (($this->_degat*15)/100));
-            if($vieMax<100){$vieMax=100;}
-            $req = "UPDATE `Entite` SET `degat`='".$attaque."',`vieMax`='".$vieMax."',`vie`='".$vieMax."' WHERE `idEntite` = '".$this->_idEntite ."'";
+            if($healthMax<100){$healthMax=100;}
+            $req = "UPDATE `Entite` SET `degat`='".$attaque."',`healthMax`='".$healthMax."',`healthNow`='".$healthMax."' WHERE `idEntite` = '".$this->_idEntite ."'";
             $Result = $this->_bdd->query($req);
-            $this->_vie=$vieMax;
-            $this->_vieMax=$vieMax;
+            $this->_healthNow=$healthMax;
+            $this->_healthMax=$healthMax;
             $this->_degat=$attaque;
             $maporigine = new Map($this->_bdd);
             $maporigine->setMapByID($this->_idMapSpawnPersonnage);
@@ -253,7 +253,7 @@
         /** Supprime Item du Sac Personnage et liste Items By ID */
         public function removeItemByID($id){
             unset($this->sacItems[array_search($id, $this->sacItems)]);
-            $req="DELETE FROM `PersoSacItems` WHERE idPersonnage = '".$this->getId()."' AND idItem='".$id."'";
+            $req="DELETE FROM `PersoSacItems` WHERE idPersonnage = '".$this->getIdEntite()."' AND idItem='".$id."'";
             $this->_bdd->query($req);
             $req="DELETE FROM `Item` WHERE id='".$id."'";
             $this->_bdd->query($req);
@@ -261,8 +261,8 @@
 
         /** Crée Lien entre SacPersonnage et Items */
         public function addItem($newItem){
-            array_push($this->sacItems,$newItem->getId());
-            $req="INSERT INTO `PersoSacItems`(`idPersonnage`, `idItem`) VALUES ('".$this->getId()."','".$newItem->getId()."')";
+            array_push($this->sacItems,$newItem->getIdObject());
+            $req="INSERT INTO `PersoSacItems`(`idPersonnage`, `idItem`) VALUES ('".$this->getIdEntite()."','".$newItem->getIdObject()."')";
             $this->_bdd->query($req);
         }
 
@@ -271,11 +271,11 @@
             if(isset($_POST["idPersonnage"])){
                 $this->setPersonnageById($_POST["idPersonnage"]);
                 $User->setPersonnage($this);
-                if($this->_vie <= 0 ){
+                if($this->_healthNow <= 0 ){
                     $this->resurection();
                 }
             }
-            $Result = $this->_bdd->query("SELECT * FROM `Entite` where idUser='".$User->getId()."' AND type=1");
+            $Result = $this->_bdd->query("SELECT * FROM `Entite` where idUser='".$User->getIdUser()."' AND type=1");
             ?>
                 <form action="" method="post" onchange="this.submit()">
                     <select name="idPersonnage" id="idPersonnage">
