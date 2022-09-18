@@ -21,7 +21,7 @@
             $idmap = $map->getIdMap();
             //que l'item est bien dans la map si ya un Monster on peut pas le prendre
             foreach($map->getItems() as $item){
-                if($_GET["idItem"]==$item->getIdObject()){
+                if($_GET["idItem"]==$item->getIdItem()){
                     //vérifier si ya des Monster
                     if(count($map->getAllMonsterContre($Joueur1))==0){
                         //on retire l'item de la map et on la rajoute dans le sac

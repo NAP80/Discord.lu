@@ -147,7 +147,7 @@
                 }
                 $healthAvantAttaque = $this->_healthNow;
                 //on va rechercher l'historique
-                $req  = "SELECT * FROM `AttaquePersoMonster` where idMonster = '".$Monster->getIdEntite()."' and idPersonnage = '".$this->_idEntite."'";
+                $req = "SELECT * FROM `AttaquePersoMonster` WHERE idMonster = '".$Monster->getIdEntite()."' and idPersonnage = '".$this->_idEntite."'";
                 $Result = $this->_bdd->query($req);
                 $tabAttaque['nbCoup']=0;
                 $tabAttaque['DegatsDonnes']=$MonsterDegatAttaqueEnvoyer;
@@ -189,10 +189,10 @@
             $Result = $this->_bdd->query($req);
             //passage des Lvl suis une loi de racine carre
             /* le double etole ** c'est elevé à la puissance */
-            $lvl = ceil(($this->_expPersonnage/2000)**(0.7));
-            if($lvl >$this->_lvl){
-                $this->_lvl = $lvl;
-                $req  = "UPDATE `Entite` SET `lvl`='".$this->_lvl."' WHERE `idEntite` = '".$this->_idEntite ."'";
+            $lvlEntite = ceil(($this->_expPersonnage/2000)**(0.7));
+            if($lvlEntite >$this->_lvlEntite){
+                $this->_lvlEntite = $lvlEntite;
+                $req  = "UPDATE `Entite` SET `lvlEntite`='".$this->_lvlEntite."' WHERE `idEntite` = '".$this->_idEntite ."'";
                 $Result = $this->_bdd->query($req);
             }
             return $this->_expPersonnage;
@@ -242,7 +242,7 @@
         /** Return List Items */
         public function getItems(){
             $lists=array();
-            foreach ($this->sacItems as $ItemId){
+            foreach($this->sacItems as $ItemId){
                 $newItem = new Item($this->_bdd);
                 $newItem->setItemByID($ItemId);
                 array_push($lists,$newItem);
@@ -251,18 +251,18 @@
         }
 
         /** Supprime Item du Sac Personnage et liste Items By ID */
-        public function removeItemByID($id){
-            unset($this->sacItems[array_search($id, $this->sacItems)]);
-            $req="DELETE FROM `PersoSacItems` WHERE idPersonnage = '".$this->getIdEntite()."' AND idItem='".$id."'";
+        public function removeItemByID($idItem){
+            unset($this->sacItems[array_search($idItem, $this->sacItems)]);
+            $req="DELETE FROM `PersoSacItems` WHERE idPersonnage = '".$this->getIdEntite()."' AND idItem='".$idItem."'";
             $this->_bdd->query($req);
-            $req="DELETE FROM `Item` WHERE id='".$id."'";
+            $req="DELETE FROM `Item` WHERE idItem='".$idItem."'";
             $this->_bdd->query($req);
         }
 
         /** Crée Lien entre SacPersonnage et Items */
         public function addItem($newItem){
-            array_push($this->sacItems,$newItem->getIdObject());
-            $req="INSERT INTO `PersoSacItems`(`idPersonnage`, `idItem`) VALUES ('".$this->getIdEntite()."','".$newItem->getIdObject()."')";
+            array_push($this->sacItems,$newItem->getIdItem());
+            $req="INSERT INTO `PersoSacItems`(`idPersonnage`, `idItem`) VALUES ('".$this->getIdEntite()."','".$newItem->getIdItem()."')";
             $this->_bdd->query($req);
         }
 
@@ -275,15 +275,15 @@
                     $this->resurection();
                 }
             }
-            $Result = $this->_bdd->query("SELECT * FROM `Entite` where idUser='".$User->getIdUser()."' AND type=1");
+            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE idUser='".$User->getIdUser()."' AND idTypeEntite=1");
             ?>
                 <form action="" method="post" onchange="this.submit()">
                     <select name="idPersonnage" id="idPersonnage">
                     <option value="">Choisir un personnage</option>
                         <?php
                             while($tab=$Result->fetch()){
-                                ($tab['id']==$this->_idEntite)?$selected='selected':$selected='';
-                                echo '<option value="'.$tab["id"].'" '.$selected.'> '.$tab["nom"].'</option>';
+                                ($tab['idEntite']==$this->_idEntite)?$selected='selected':$selected='';
+                                echo '<option value="'.$tab["idEntite"].'" '.$selected.'> '.$tab["nameEntite"].'</option>';
                             }
                         ?>
                     </select>

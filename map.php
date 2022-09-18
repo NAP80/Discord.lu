@@ -126,7 +126,7 @@
                                         }
                                     ?>
                                 </div>
-                                <div class="divObjets">
+                                <div class="divObjects">
                                     <?php
                                         $ZoneObjectEmpty = 0;
                                         // AFFICHAGE DES ITEMS DE LA MAP

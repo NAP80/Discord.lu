@@ -11,8 +11,8 @@
 
             while($tab=$Result->fetch()){
                 if(rand(0,$tab['chance'])==1){
-                $newType = $tab['id'];
-                $newTypeNom = $tab['nom'];
+                $newType = $tab['idTypeEquipement'];
+                $newTypeNom = $tab['nameEquipement'];
                 $coef=$tab['rarete'];
                 break;
                 }
@@ -21,29 +21,28 @@
             $getEfficace = $this->getEfficaceAleatoire();
 
             $newNom = $newTypeNom." ".$getEfficace['adjectif'];
-            $efficacite = $getEfficace['id'];
+            $idEfficacite = $getEfficace['idEfficacite'];
 
             $newValeur = rand(5,10)*$rarete*$getEfficace['coef'];
 
             $this->_bdd->beginTransaction();
-            $req="INSERT INTO `Equipement`( `type`, `nom`, `valeur`, `efficacite`,`lvl`) VALUES ('".$newType."','".$newNom."','".$newValeur."','".$efficacite."',1)";
+            $req="INSERT INTO `Equipement`( `idTypeEquipement`, `nameEquipement`, `valeur`, `idEfficacite`,`lvlEquipement`) VALUES ('".$newType."','".$newNom."','".$newValeur."','".$idEfficacite."',1)";
             $Result = $this->_bdd->query($req);
             $lastID = $this->_bdd->lastInsertId();
-            if($lastID){ 
-                $this->setEquipement($lastID,$newType,$newNom,$newValeur,$efficacite,1);
-                $this->_bdd->commit();
+            if($lastID){
+                $this->setEquipementByID($lastID);
                 return $this;
             }
             else{
                 $this->_bdd->rollback();
-                echo "erreur anormal createEquipementAleatoire equipement.php ".$req;
+                echo "erreur anormal Arme createEquipementAleatoire equipement.php ".$req;
                 return null;
             }
         }
 
         /** Return la force d'une arme */
         public function getForce(){
-            return $val = $this->getLvl()*$this->getValeur();
+            return $val = $this->getLvlEquipement()*$this->getValeur();
         }
     }
 ?>

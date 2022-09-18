@@ -6,12 +6,12 @@
         public $_healthNow;
         public $_healthMax;
         public $_degat;
-        public $_imageLien;
-        public $_lvl;
+        public $_imgEntite;
+        public $_lvlEntite;
         public $_idUser;
         public $sacEquipements=array();
         public $sacEquipe=array();
-        public $_type; //1 = hero 2= Monster
+        public $_idTypeEntite; // 0 = Monster / 1 = Personnage
         public $map;
         public $_bdd;
         //dans le cas d'un perso
@@ -22,18 +22,18 @@
             $this->_bdd = $bdd;
         }
 
-        public function setEntite($idEntite,$nameEntite,$healthNow,$degat,$healthMax,$image,$type,$lvl,$idUser){
+        public function setEntite($idEntite,$nameEntite,$healthNow,$degat,$healthMax,$imgEntite,$idTypeEntite,$lvlEntite,$idUser){
             $this->_idEntite = $idEntite;
             $this->_nameEntite = $nameEntite;
             $this->_healthNow = $healthNow;
             $this->_healthMax = $healthMax;
             $this->_degat = $degat;
-            $this->_imageLien = $image;
-            $this->_type = $type;
-            $this->_lvl = $lvl;
+            $this->_imgEntite = $imgEntite;
+            $this->_idTypeEntite = $idTypeEntite;
+            $this->_lvlEntite = $lvlEntite;
             $this->_idUser = $idUser;
 
-            if($this->_type == 1){
+            if($this->_idTypeEntite == 1){
                 if(is_null($this->typePersonnage)){
                     $TypePersonnage = new TypePersonnage($this->_bdd);
                     $TypePersonnage->setTypePersonnageByIdPerso($this->_idEntite);
@@ -69,8 +69,13 @@
         }
 
         /** Return Lvl */
-        public function getLvl(){
-            return $this->_lvl;
+        public function getIdTypeEntite(){
+            return $this->_idTypeEntite;
+        }
+
+        /** Return Lvl */
+        public function getLvlEntite(){
+            return $this->_lvlEntite;
         }
 
         /** Return idUser */
@@ -88,7 +93,7 @@
 
                 //todo retirer un equipement ne doit pas etre une suppression
                 //todo la suppression peut etre déjà faite à la fusion
-                $req="DELETE FROM `Equipement` WHERE id='".$EquipementID."'";
+                $req="DELETE FROM `Equipement` WHERE idEquipement='".$EquipementID."'";
                 $this->_bdd->query($req);
             }
         }
@@ -105,13 +110,13 @@
                 foreach ($TabIDRemoved as $idSup) {
                     $this->removeEquipementByID($idSup);
                 }
-                array_push($this->sacEquipements,$newEquipement->getIdObject());
+                array_push($this->sacEquipements,$newEquipement->getIdEquipement());
                 return $TabIDRemoved;
             }
             else{
-                $req="INSERT INTO `EntiteEquipement`(`idEntite`, `idEquipement`) VALUES ('".$this->getIdEntite()."','".$newEquipement->getIdObject()."')";
+                $req="INSERT INTO `EntiteEquipement`(`idEntite`, `idEquipement`) VALUES ('".$this->getIdEntite()."','".$newEquipement->getIdEquipement()."')";
                 $this->_bdd->query($req);
-                array_push($this->sacEquipements,$newEquipement->getIdObject());
+                array_push($this->sacEquipements,$newEquipement->getIdEquipement());
                 //retourne 0 si ya pas eu de fusion d'équipement
                 return 0;
             }
@@ -141,11 +146,11 @@
 
         //Déséquipe l'item au personnage
         //cette methode doit etre appelé que par Equipemement
-        public function removeEquipeBydId($EquipementID){
+        public function removeEquipeBydId($idEquipement){
             //la mise a jout en base et fait dans l'equipement
-            $id = array_search($EquipementID, $this->sacEquipe);
-            if($id >= 0){
-                unset($this->sacEquipe[ $id ]);
+            $idEquipement = array_search($idEquipement, $this->sacEquipe);
+            if($idEquipement >= 0){
+                unset($this->sacEquipe[$idEquipement]);
             }
         }
 
@@ -184,9 +189,9 @@
                 $EntiteEquipe = new Equipement($this->_bdd);
                 $EntiteEquipe->setEquipementByID($EquipementId);
                 //Le chiffre 1 et id de la categorie Armure à vérifier en base
-                if($EntiteEquipe->getCategorie()['id']==1){
+                if($EntiteEquipe->getIdCategorie()==1){
                     $Arme = new Arme($this->_bdd);
-                    $Arme->setEquipementByID($EntiteEquipe->getIdObject());
+                    $Arme->setEquipementByID($EntiteEquipe->getIdEquipement());
                     return $Arme;
                 }
             }
@@ -200,9 +205,9 @@
                 $EntiteEquipe = new Equipement($this->_bdd);
                 $EntiteEquipe->setEquipementByID($EquipementId);
                 //Le chiffre 2 et id de la categorie Armure à vérifier en base
-                if($EntiteEquipe->getCategorie()['id']==2){
+                if($EntiteEquipe->getIdCategorie()==2){
                     $Armure = new Armure($this->_bdd);
-                    $Armure->setEquipementByID($EntiteEquipe->getIdObject());
+                    $Armure->setEquipementByID($EntiteEquipe->getIdEquipement());
                     return $Armure;
                 }
             }
@@ -216,9 +221,9 @@
                 $EntiteEquipe = new Equipement($this->_bdd);
                 $EntiteEquipe->setEquipementByID($EquipementId);
                 //Le chiffre 1 et id de la categorie Pouvoir à vérifier en base
-                if($EntiteEquipe->getCategorie()['id']==3){
+                if($EntiteEquipe->getIdCategorie()==3){
                     $Pouvoir = new Pouvoir($this->_bdd);
-                    $Pouvoir->setEquipementByID($EntiteEquipe->getIdObject());
+                    $Pouvoir->setEquipementByID($EntiteEquipe->getIdEquipement());
                     return $Pouvoir;
                 }
             }
@@ -232,9 +237,9 @@
                 $EntiteEquipe = new Equipement($this->_bdd);
                 $EntiteEquipe->setEquipementByID($EquipementId);
                 //Le chiffre 1 et id de la categorie Pouvoir à vérifier en base
-                if($EntiteEquipe->getCategorie()['id']==4){
+                if($EntiteEquipe->getIdCategorie()==4){
                     $Bouclier = new Bouclier($this->_bdd);
-                    $Bouclier->setEquipementByID($EntiteEquipe->getIdObject());
+                    $Bouclier->setEquipementByID($EntiteEquipe->getIdEquipement());
                     return $Bouclier;
                 }
             }
@@ -274,33 +279,26 @@
 
         /** Fonction d'attaque */
         public function getAttaque(){
-
-            //si L'attaquant à une arme cas 1 
-            //si il a de la magie cas 2
-            //si il a rien cas 3
-
-            //ici on affiche les dégats Maximun du joueur avec Arme
             $arme = $this->getArme();
             $pouvoir = $this->getPouvoir();
             $coef = 1;
-            $lvl = 1;
+            $lvlEquipement = 1;
             $forceArme = 0;
             if(!is_null($arme)){// Si utilise une arme
                 $coef = $arme->getEfficacite();
                 $forceArme = $arme->getForce();
-                $lvl = $arme->getLvl();
+                $lvlEquipement = $arme->getLvlEquipement();
             }
             if(!is_null($pouvoir)){// Si utilise la magie
                 $coef = $pouvoir->getEfficacite();
                 $forcePourvoir = $pouvoir->getForce();
-                $lvl = $pouvoir->getLvl();
+                $lvlEquipement = $pouvoir->getLvlEquipement();
             }
             //application des coef si il y a nu type de personnage
-            //1 c'est des perso , 2 c'est des Monster
-            if($this->_type == 1){// Si n'utilise rien
-                $type = $this->getTypePersonnage();
+            if($this->_idTypeEntite == 1){// Si n'utilise rien
+                $TypePersonnage = $this->getTypePersonnage();
                 if(!is_null($arme)){
-                    $coef = $coef*$type->getStatsAttaque();
+                    $coef = $coef*$TypePersonnage->getStatsAttaque();
                 }
             }
             $val = round(($this->_degat+$forceArme)*$coef);
@@ -329,12 +327,12 @@
             //ici on affiche les dégats Maximun du joueur avec Arme
             $pouvoir = $this->getPouvoir();
             $coef = 1;
-            $lvl = 1;
+            $lvlEquipement = 1;
             $forcePouvoir = 0;
             if(!is_null($pouvoir)){
                 $coef = $pouvoir->getEfficacite();
                 $forcePourvoir = $pouvoir->getForce();
-                $lvl = $pouvoir->getLvl();
+                $lvlEquipement = $pouvoir->getLvlEquipement();
             }
             $val = round(($this->_degat+$forcePouvoir)*$coef);
             return $val;
@@ -356,22 +354,16 @@
                 $coef = $bouclier->getEfficacite();
                 $forceBouclier = $bouclier->getForce();
             }
-            //alors Todo Je sais pas ... evaluer la valeur d'une armure
-            if($this->_type == 1){
-                $type = $this->getTypePersonnage();
+            if($this->_idTypeEntite == 1){
+                $TypePersonnage = $this->getTypePersonnage();
                 if(!is_null($armure)){
-                 $coef = $coef*$type->getStatsDefense();
+                 $coef = $coef*$TypePersonnage->getStatsDefense();
                 }
                 if(!is_null($bouclier)){
-                 $coef = $coef*$type->getStatsRessMagique();
+                 $coef = $coef*$TypePersonnage->getStatsRessMagique();
                 }
-                
             }
-            
             $val = $coef * $forceArmure ;
-
-                  
-
             return round($val,1);//arrondi à 1 chiffre aprés la virgul
         }
 
@@ -443,7 +435,7 @@
 
             $healthAvantAttaque = $this->_healthNow;
             //on va rechercher l'historique
-            $req = "SELECT * FROM `AttaqueEntiteMonster` where idMonster = '".$Monster->getIdEntite()."' and idEntite = '".$this->_idEntite."'";
+            $req = "SELECT * FROM `AttaqueEntiteMonster` WHERE idMonster = '".$Monster->getIdEntite()."' and idEntite = '".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
             $tabAttaque['nbCoup']=0;
             $tabAttaque['DegatsDonnes']=$MonsterDegatAttaqueEnvoyer;
@@ -493,7 +485,7 @@
 
         /** Return Type Personnage */
         public function getTypePersonnage(){
-            if(!is_null($this->_idTypePersonnage) ){
+            if(!is_null($this->_idTypePersonnage)){
                 if(is_null($this->typePersonnage)){
                     $TypePersonnage = new TypePersonnage($this->_bdd);
                     $TypePersonnage->setTypePersonnageByIdPerso($this->_idEntite);
@@ -541,8 +533,8 @@
             $pourcentage = round(100*$this->_healthNow/$this->_healthMax);
             $arme = $this->getArme();
             $pouvoir = $this->getPouvoir();
-            if($this->_type == 1){
-                $type = $this->getTypePersonnage();
+            if($this->_idTypeEntite == 1){
+                $TypePersonnage = $this->getTypePersonnage();
             }
             ?>
                 <div class="EntiteInfo">
@@ -550,11 +542,11 @@
                         <?= $this->getNameEntite() ?>
                     </div>
                     <div class="EntiteValeur">
-                        (<?= $this->getValeur() ?> $) LV <?= $this->_lvl ?>
+                        (<?= $this->getValeur() ?> $) LV <?= $this->_lvlEntite ?>
                     </div>
                 </div>
                 <div>
-                    <img class="Entite" src="<?= $this->_imageLien;?>">
+                    <img class="Entite" src="<?= $this->_imgEntite;?>">
                 </div>
             <?php 
             if(!is_null($arme)){
@@ -562,8 +554,8 @@
                     <div class="attaque standard" id="attaqueEntiteValeur<?= $this->_idEntite ;?>"> <?= $this->getAttaque()?>
                         <div class="coef">
                             (*<?php 
-                                if(!is_null($type)){
-                                    echo $type->getStatsAttaque();
+                                if(!is_null($TypePersonnage)){
+                                    echo $TypePersonnage->getStatsAttaque();
                                 }
                                 else{
                                     echo "1";
@@ -571,7 +563,7 @@
                             ?>)
                         </div>
                     </div>
-                    <div id="Arme<?= $arme->getIdObject() ?>" class="Arme standard" onclick="CallApiRemoveEquipementEntite(<?= $arme->getIdObject() ?>)"><?= $arme->getNameObject() ?> lvl <?= $arme->getLvl() ?></div>
+                    <div id="Arme<?= $arme->getIdEquipement() ?>" class="Arme standard" onclick="CallApiRemoveEquipementEntite(<?= $arme->getIdEquipement() ?>)"><?= $arme->getNameEquipement() ?> lvl <?= $arme->getLvlEquipement() ?></div>
                 <?php
             }
             else{
@@ -587,11 +579,11 @@
             $bouclier = $this->getBouclier();
             if(!is_null($armure)){
                 ?>
-                    <div id ="Armure<?= $armure->getIdObject() ?>" class="ArmureNom standard" onclick="CallApiRemoveEquipementEntite(<?= $armure->getIdObject() ?>)"><?= $armure->getNameObject() ?> lvl <?= $armure->getLvl() ?>
+                    <div id ="Armure<?= $armure->getIdEquipement() ?>" class="ArmureNom standard" onclick="CallApiRemoveEquipementEntite(<?= $armure->getIdEquipement() ?>)"><?= $armure->getNameEquipement() ?> lvl <?= $armure->getLvlEquipement() ?>
                         <div class="coef">
                             (*<?php 
-                                if(!is_null($type)){
-                                    echo $type->getStatsDefense();
+                                if(!is_null($TypePersonnage)){
+                                    echo $TypePersonnage->getStatsDefense();
                                 }
                                 else{
                                     echo "1";
@@ -603,11 +595,11 @@
             }
             else if(!is_null($bouclier)){
                 ?>
-                <div id ="Armure<?= $bouclier->getIdObject() ?>" class="ArmureNom magic" onclick="CallApiRemoveEquipementEntite(<?= $bouclier->getIdObject() ?>)"><?= $bouclier->getNameObject() ?> lvl <?= $bouclier->getLvl() ?>
+                <div id ="Armure<?= $bouclier->getIdEquipement() ?>" class="ArmureNom magic" onclick="CallApiRemoveEquipementEntite(<?= $bouclier->getIdEquipement() ?>)"><?= $bouclier->getNameEquipement() ?> lvl <?= $bouclier->getLvlEquipement() ?>
                     <div class="coef">
                         (*<?php 
-                            if(!is_null($type)){
-                                echo $type->getStatsRessMagique();
+                            if(!is_null($TypePersonnage)){
+                                echo $TypePersonnage->getStatsRessMagique();
                             }
                             else{
                                 echo "1";
@@ -645,9 +637,9 @@
                 </div>
                 <div>
                     <?php 
-                        if($this->_type == 1){
-                            $type = $this->getTypePersonnage();
-                            echo $type->getNameTypePerso();
+                        if($this->_idTypeEntite == 1){
+                            $TypePersonnage = $this->getTypePersonnage();
+                            echo $TypePersonnage->getNameTypePerso();
                         }
                     ?>
                 </div>
@@ -682,7 +674,7 @@
         public function setEntiteById($idEntite){
             $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `idEntite`='".$idEntite."'");
             if($tab = $Result->fetch()){
-                $this->setEntite($tab["idEntite"],$tab["nom"],$tab["healthNow"],$tab["degat"],$tab["healthMax"],$tab["imgEntite"],$tab["type"],$tab["lvl"],$tab["idUser"]);
+                $this->setEntite($tab["idEntite"],$tab["nameEntite"],$tab["healthNow"],$tab["degat"],$tab["healthMax"],$tab["imgEntite"],$tab["idTypeEntite"],$tab["lvlEntite"],$tab["idUser"]);
                 //recherche de sa position
                 $map = new map($this->_bdd);
                 $map->setMapByID($tab["idMap"]);
@@ -704,23 +696,23 @@
             }
         }
 
-        public function setEntiteByIdWithoutMap($id){
-            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `idEntite`='".$id."'");
+        public function setEntiteByIdWithoutMap($idEntite){
+            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `idEntite`='".$idEntite."'");
             if($tab = $Result->fetch()){
-                $this->setEntite($tab["idEntite"],$tab["nom"],$tab["healthNow"],$tab["degat"],$tab["healthMax"],$tab["imgEntite"],$tab["type"],$tab["lvl"],$tab["idUser"]);
+                $this->setEntite($tab["idEntite"],$tab["nameEntite"],$tab["healthNow"],$tab["degat"],$tab["healthMax"],$tab["imgEntite"],$tab["idTypeEntite"],$tab["lvlEntite"],$tab["idUser"]);
             }
         }
 
         //Retourne un formulaire HTML pourcreer un entite
         //et permet d'attribuer automatiquement à user
         // retour un objet entite
-        public function CreateEntite($nom, $healthNow, $degat, $idMap,$healthMax,$imgEntite,$idUser,$type,$lvl){
+        public function CreateEntite($nameEntite, $healthNow, $degat, $idMap,$healthMax,$imgEntite,$idUser,$idTypeEntite,$lvlEntite){
             $newperso = new Entite($this->_bdd);
-            $this->_nameEntite=htmlentities($nom, ENT_QUOTES);
-            $this->_lvl = $lvl;
-            $this->_imageLien=$imgEntite;
-            $req="INSERT INTO `Entite`(`nom`, `healthNow`, `degat`, `idMap`,`healthMax`,`imgEntite`,`idUser`,`type`,`lvl`)
-            VALUES ('".$this->_nameEntite."','.$healthNow.','.$degat.','.$idMap.','.$healthMax.','".$this->_imageLien."','".$idUser."','.$type.','.$lvl.')";
+            $this->_nameEntite=htmlentities($nameEntite, ENT_QUOTES);
+            $this->_lvlEntite = $lvlEntite;
+            $this->_imgEntite=$imgEntite;
+            $req="INSERT INTO `Entite`(`nameEntite`, `healthNow`, `degat`, `idMap`,`healthMax`,`imgEntite`,`idUser`,`idTypeEntite`,`lvlEntite`)
+            VALUES ('".$this->_nameEntite."','.$healthNow.','.$degat.','.$idMap.','.$healthMax.','".$this->_imgEntite."','".$idUser."','.$idTypeEntite.','.$lvlEntite.')";
             $this->_bdd->beginTransaction();
             $Result = $this->_bdd->query($req);
             $this->_idEntite = $this->_bdd->lastInsertId();
@@ -747,7 +739,7 @@
                 }
                 //si le entite est mort on le place ne origine 0,0
             }
-            $Result = $this->_bdd->query("SELECT * FROM `Entite` where idUser='".$idUser."'");
+            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE idUser='".$idUser."'");
             ?>
                 <form action="" method="post" onchange="this.submit()">
                     <select name="idEntite" id="idEntite">
@@ -757,7 +749,7 @@
                                 ($tab['idEntite']==$this->_idEntite)?$selected='selected':$selected='';
                                 ?>
                                     <option value="<?= $tab["idEntite"] ?>" <?= $selected ?>>
-                                        <?= $tab["nom"] ?>
+                                        <?= $tab["nameEntite"] ?>
                                     </option>
                                 <?php
                             }

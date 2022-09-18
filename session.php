@@ -12,7 +12,7 @@
         include "class/TypeMonster.php";
         include "class/Monster.php";
         include "class/Tooltip.php";
-        include "class/Objet.php";
+        include "class/Efficacite.php";
         include "class/Item.php";
         include "class/Equipement.php";
         include "class/Arme.php";

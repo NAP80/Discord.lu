@@ -1,45 +1,62 @@
 
 <?php
-    class Item extends Objet{
+    class Item extends Efficacite{
         public function __construct($bdd){
             $this->_bdd = $bdd;
+            Parent::__construct($bdd);
         }
 
         /** Récupère Item By ID */
-        public function setItemByID($id){
-            $req="SELECT * FROM Item WHERE id='".$id."'";
+        public function setItemByID($idItem){
+            $req = "SELECT * FROM Item WHERE idItem='".$idItem."'";
             $Result = $this->_bdd->query($req);
             if($tab = $Result->fetch()){
                 $this->setItem(
-                    $tab["id"],
-                    $tab["type"],
-                    $tab["nom"],
+                    $tab["idItem"],
+                    $tab["idTypeItem"],
+                    $tab["nameItem"],
                     $tab["valeur"],
-                    $tab["efficacite"],
-                    $tab["lvl"]
+                    $tab["idEfficacite"],
+                    $tab["lvlItem"]
                 );
             }
         }
 
+        /** Return Id Item */
+        public function getIdItem(){
+            return $this->_idItem;
+        }
+
+        /** Return Name Item */
+        public function getNameItem(){
+            return $this->_nameItem;
+        }
+
+        /** Return Name Item */
+        public function getLvlItem(){
+            return $this->_lvlItem;
+        }
+
         /** Set un Item */
-        public function setItem($id,$type,$nom,$valeur,$efficacite,$lvl){
-            $this->_id = $id;
-            $this->_type = $type;
-            $this->_nom = $nom;
+        public function setItem($idItem,$idTypeItem,$nameItem,$valeur,$idEfficacite,$lvlItem){
+            $this->_idItem = $idItem;
+            $this->_idTypeItem = $idTypeItem;
+            $this->_nameItem = $nameItem;
             $this->_valeur = $valeur;
-            $this->_efficacite = $efficacite;
-            $this->_lvl = $lvl;
+            $this->_idEfficacite = $idEfficacite;
+            $this->_lvlItem = $lvlItem;
+            Parent::setEfficaciteById($this->_idEfficacite);
         }
 
         /** Remove Item By ID : À vérifier si complet */
-        public function deleteItem($id){
-            $req="DELETE FROM Item WHERE id='".$id."'";
+        public function deleteItem($idItem){
+            $req="DELETE FROM Item WHERE idItem='".$idItem."'";
             $Result = $this->_bdd->query($req);
         }
 
         /** Return Tab[ID,Information,LienIMG,Nom,Rareté] */
-        public function getType(){
-            $req="SELECT * FROM TypeItem WHERE id='".$this->_type."'";
+        public function getTypeItem(){
+            $req="SELECT * FROM TypeItem WHERE idTypeItem='".$this->_idTypeItem."'";
             $Result = $this->_bdd->query($req);
             if($tab = $Result->fetch()){
                 return $tab;
@@ -51,7 +68,7 @@
 
         /** Return Couleur de Rareté d'un Item */
         public function getClassRarete(){
-            $req="SELECT rarete FROM TypeItem where id = '".$this->_type."'";
+            $req="SELECT rarete FROM TypeItem WHERE idTypeItem = '".$this->_idTypeItem."'";
             $Result = $this->_bdd->query($req);
             $colorRarete = "background-color:rgba(";
             if($tab = $Result->fetch()){
@@ -85,22 +102,22 @@
         /** Création d'un Item Soin Aléatoire */
         public function createItemSoinConsommable(){
             $newItem = new Item($this->_bdd);
-            $req="SELECT * FROM TypeItem where id = 2";
+            $req="SELECT * FROM TypeItem WHERE idTypeItem = 2";
             $Result = $this->_bdd->query($req);
             if($tab=$Result->fetch()){
-                $newType = $tab['id'];
-                $newTypeNom = $tab['nom'];
+                $newType = $tab['idTypeItem'];
+                $newTypeNom = $tab['nameTypeItem'];
                 $rarete=$tab['rarete'];
                 $getEfficace = $this->getEfficaceAleatoire();
                 $newNom = $newTypeNom." ".$getEfficace['adjectif'];
-                $efficacite = $getEfficace['id'];
+                $idEfficacite = $getEfficace['idEfficacite'];
                 $newValeur = rand(5,10)*$rarete*$getEfficace['coef'];
                 $this->_bdd->beginTransaction();
-                $req="INSERT INTO `Item`( `type`, `nom`, `valeur`, `efficacite`,`lvl`) VALUES ('".$newType."','".$newNom."','".$newValeur."','".$efficacite."',1)";
+                $req="INSERT INTO `Item`( `idTypeItem`, `nameItem`, `valeur`, `idEfficacite`,`lvlItem`) VALUES ('".$newType."','".$newNom."','".$newValeur."','".$idEfficacite."',1)";
                 $Result = $this->_bdd->query($req);
                 $lastID = $this->_bdd->lastInsertId();
                 if($lastID){
-                    $newItem->setItem($lastID,$newType,$newNom,$newValeur,$efficacite,1);
+                    $newItem->setItem($lastID,$newType,$newNom,$newValeur,$idEfficacite,1);
                     $this->_bdd->commit();
                     return $newItem;
                 }
@@ -126,22 +143,22 @@
             $newTypeNom='poussiere';
             while($tab=$Result->fetch()){
                 if(rand(0,$tab['chance'])==1){
-                    $newType = $tab['id'];
-                    $newTypeNom = $tab['nom'];
+                    $newType = $tab['idTypeItem'];
+                    $newTypeNom = $tab['nameTypeItem'];
                     $coef=$tab['rarete'];
                     break;
                 }
             }
             $getEfficace = $this->getEfficaceAleatoire();
             $newNom = $newTypeNom." ".$getEfficace['adjectif'];
-            $efficacite = $getEfficace['id'];
+            $idEfficacite = $getEfficace['idEfficacite'];
             $newValeur = rand(5,10)*$rarete*$getEfficace['coef'];
             $this->_bdd->beginTransaction();
-            $req="INSERT INTO `Item`( `type`, `nom`, `valeur`, `efficacite`,`lvl`) VALUES ('".$newType."','".$newNom."','".$newValeur."','".$efficacite."',1)";
+            $req="INSERT INTO `Item`( `idTypeItem`, `nameItem`, `valeur`, `idEfficacite`,`lvlItem`) VALUES ('".$newType."','".$newNom."','".$newValeur."','".$idEfficacite."',1)";
             $Result = $this->_bdd->query($req);
             $lastID = $this->_bdd->lastInsertId();
             if($lastID){ 
-                $newItem->setItem($lastID,$newType,$newNom,$newValeur,$efficacite,1);
+                $newItem->setItem($lastID,$newType,$newNom,$newValeur,$idEfficacite,1);
                 $this->_bdd->commit();
                 return $newItem;
             }
@@ -154,7 +171,7 @@
 
         /** Return le Lien d'Image */
         public function getImgItem(){
-            $tab = $this->getType();
+            $tab = $this->getTypeItem();
             if(!is_null($tab)){
                 return $tab['imgItem'];
             }

@@ -7,7 +7,7 @@
         private $_imgMap;
         private $_x;
         private $_y;
-        private $_type;
+        private $_type; // Vérifier : Inutilisé - Prévu pour faire des zones non-PVP
         private $idUserDecouverte;
         private $_position=0;
         Private $listItems=array();
@@ -45,7 +45,6 @@
                     $tab["y"],
                     $tab["idUserDecouverte"],
                     $tab["imgMap"],
-                    $tab["type"]
                 );
             }
         }
@@ -70,8 +69,8 @@
             return $this->_y;
         }
 
-        /** Return Type */
-        public function getType(){
+        /** Return Type */ //  Voir
+        public function getTypeMap(){
             return $this->_type;
         }
 
@@ -91,7 +90,7 @@
         }
 
         /** Calcule de Distance du point 0 : Détermine le Niveau */
-        public function getlvl(){
+        public function getLvlMap(){
             $x = $this->_x;
             $y = $this->_x;
             if($x==0){
@@ -103,12 +102,12 @@
             $adjacent = $x * $x;
             $opose = $y * $y;
             $hypotenuse = sqrt($adjacent+$opose);
-            $lvl = round(sqrt($hypotenuse)/3);
-            if($lvl<1){
-                $lvl= 1;
+            $lvlMap = round(sqrt($hypotenuse)/3);
+            if($lvlMap<1){
+                $lvlMap= 1;
             }
             // Plus on s'éloigne et plus il est difficile de trouver un lvl supérieur (??? À Vérifier)
-            return $lvl;
+            return $lvlMap;
         }
 
         /** Return char des Coordonées XY */
@@ -131,7 +130,7 @@
         }
 
         // Optimiser et refaire
-        public function setMap($idMap,$nameMap,$position,$mapNord,$mapSud,$mapEst,$mapOuest,$x,$y,$idUserDecouverte,$image,$type){
+        public function setMap($idMap,$nameMap,$position,$mapNord,$mapSud,$mapEst,$mapOuest,$x,$y,$idUserDecouverte,$image){
             $this->_idMap = $idMap;
             $this->_nameMap = $nameMap;
             $this->_position = $position;
@@ -160,14 +159,14 @@
             }
             //select les Personnages vivant
             $this->listPersonnages = array();
-            $req = "SELECT idEntite FROM `Entite` WHERE idMap='".$idMap."' AND healthNow > 0 AND type='1'";
+            $req = "SELECT idEntite FROM `Entite` WHERE idMap='".$idMap."' AND healthNow > 0 AND idTypeEntite='1'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($this->listPersonnages,$tab[0]);
             }
             //select les Monsters déjà présent
             $this->listMonsters = array();
-            $req = "SELECT idEntite FROM `Entite` WHERE idMap='".$idMap."' AND type='2'";
+            $req = "SELECT idEntite FROM `Entite` WHERE idMap='".$idMap."' AND idTypeEntite='0'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($this->listMonsters,$tab[0]);
@@ -316,15 +315,15 @@
 
         /** Add un lien entre Item et Map */
         public function addItem($newItem){
-            array_push($this->listItems,$newItem->getIdObject());
-            $req = "INSERT INTO `MapItems`(`idMap`, `idItem`) VALUES ('".$this->getIdMap()."','".$newItem->getIdObject()."')";
+            array_push($this->listItems,$newItem->getIdItem());
+            $req = "INSERT INTO `MapItems`(`idMap`, `idItem`) VALUES ('".$this->getIdMap()."','".$newItem->getIdItem()."')";
             $this->_bdd->query($req);
         }
 
         /** Add un lien entre Équipements et Map */
         public function addEquipement($newEquipement){
-            array_push($this->listEquipements,$newEquipement->getIdObject());
-            $req = "INSERT INTO `MapEquipements`(`idMap`, `idEquipement`) VALUES ('".$this->getIdMap()."','".$newEquipement->getIdObject()."')";
+            array_push($this->listEquipements,$newEquipement->getIdEquipement());
+            $req = "INSERT INTO `MapEquipements`(`idMap`, `idEquipement`) VALUES ('".$this->getIdMap()."','".$newEquipement->getIdEquipement()."')";
             $this->_bdd->query($req);
         }
 
@@ -511,7 +510,7 @@
         /** Charge Map ou Crée si non existante, Cardialité = d'où on vient */
         public function loadMap($position,$Cardinalite,$Joueur1){
             //on va vérifier qu'il n'est pas trop looin par rapport à son niveau
-            $lvlPerso = $Joueur1->getPersonnage()->getLvl();
+            $lvlPerso = $Joueur1->getPersonnage()->getLvlEntite();
             if(isset($position) && isset($Cardinalite)){
                 //todo voir si le spam générate est controlé 
                 if($position === "Generate"){
@@ -523,7 +522,7 @@
                     if(is_null($listMonster) || count($listMonster) == 0){
                         $map = $map->Create($map,$_GET["cardinalite"],$Joueur1->getIdUser());
                     }
-                    $lvlMap = $map->getlvl();
+                    $lvlMap = $map->getLvlMap();
                     if($lvlPerso<$lvlMap){
                         ?>
                             <p class="error">Ton lvl n'est pas assez haut pour venir ici.</p>
@@ -544,7 +543,7 @@
                     $ancienPosition=$this->getPosition();
                     $mapVisite = new Map($this->_bdd);
                     $mapVisite->setMapByPosition($position);
-                    $lvlMap = $mapVisite->getlvl();
+                    $lvlMap = $mapVisite->getLvlMap();
                     if($lvlPerso<$lvlMap){
                         ?>
                             <p class="error">Ton lvl n'est pas assez haut pour venir ici.</p>
@@ -638,7 +637,7 @@
         /** Return Texte InforMap */
         public function getInfoMap(){
             ?>
-                <b><?= $this->getNameMap() ?></b>, <?= $this->getCoordonne() ?>, lvl <?= $this->getlvl() ?>, découvert par <?= $this->getPersonnageDecouvreur()->getPseudo() ?> et ses Heros.
+                <b><?= $this->getNameMap() ?></b>, <?= $this->getCoordonne() ?>, lvl <?= $this->getLvlMap() ?>, découvert par <?= $this->getPersonnageDecouvreur()->getPseudo() ?> et ses Heros.
             <?php
         }
 
@@ -766,16 +765,14 @@
         
         /** Génére un Nom de Map */
         public function generateCarte(){
-            $nameMap = "";
-            $req = "Select * from TypeMap";
+            $req = "SELECT * FROM TypeMap";
             $Result = $this->_bdd->query($req);
-            $typemap=array();
+            $TypeMap=array();
             while($tab=$Result->fetch()){
-                array_push($typemap,$tab);
+                array_push($TypeMap,$tab);
             }
-            $choixAleatoire= array_rand($typemap, 1);
-            $type =  $typemap[$choixAleatoire];
-            $nameMap = $type['nomFr'];
+            $choixAleatoire = array_rand($TypeMap, 1);
+            $TypeMap = $TypeMap[$choixAleatoire];
             $Adjectif = "";
             switch(rand(0,20)){
                 case 0:
@@ -1150,9 +1147,9 @@
                     $Nom = "Treoweth";
             }
             //la premiere case et le type en anglais pour une recherche d'image
-            $tab[0]=$type['id'];
-            $tab[1]=$type['nom'];
-            $tab[2]=$Nom." ". $Adjectif." ".$Nom;
+            $tab[0] = $TypeMap['idTypeMap'];
+            $tab[1] = $TypeMap['nameTypeMapFr'];
+            $tab[2] = $Nom." ". $Adjectif;
             return $tab;
         }
 

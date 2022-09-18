@@ -7,7 +7,7 @@
     include "../session.php"; 
     $reponse[0]=0;
     if($access){
-        if(isset($_GET["id"]) && isset($_GET["type"])){
+        if(isset($_GET["idEntite"]) && isset($_GET["idTypeEntite"])){
             //on récupere la force du perso en cours
             //un joueur est un USER
             $Attaquant = $Joueur1->getPersonnage();
@@ -18,9 +18,9 @@
             $healthAttaquant=$Attaquant->getHealthNow();
             $healthMaxAttaquant=$Attaquant->getHealthMax();
             //attaque sur perso
-            if($_GET["type"]==0 ){
+            if($_GET["idTypeEntite"] == 1 ){
                 $Deffensseur = new Personnage($mabase);
-                $Deffensseur->setPersonnageByIdWithoutMap($_GET["id"]);
+                $Deffensseur->setPersonnageByIdWithoutMap($_GET["idEntite"]);
                 $healthMax=$Deffensseur->getHealthMax();
                 $healthNow=$Deffensseur->getHealthNow();
                 //on verrifie que le perso n'est pas mort
@@ -39,8 +39,8 @@
                             $message .= " Ton personnage est mort.";
                         }
                         if($healthNow==0){
-                            $lvl = $Deffensseur->getLvl();
-                            $Attaquant->addXP($lvl*rand(8,10));
+                            $lvlEntite = $Deffensseur->getLvlEntite();
+                            $Attaquant->addXP($lvlEntite*rand(8,10));
                             $message .= " Tu as tué ".$Deffensseur->getNameEntite();
                         }
                     }
@@ -53,9 +53,9 @@
                 }
             }
             //attaque sur Monster
-            if($_GET["type"]==1){
+            if($_GET["idTypeEntite"] == 0){
                 $DeffensseurMonster = new Monster($mabase);
-                $DeffensseurMonster->setMonsterByIdWithMap($_GET["id"]);
+                $DeffensseurMonster->setMonsterByIdWithMap($_GET["idEntite"]);
                 $healthMax=$DeffensseurMonster->getHealthMax();
                 $healthNow=$DeffensseurMonster->getHealthNow();
                 if($DeffensseurMonster->getHealthNow()>0){
@@ -81,8 +81,8 @@
                         }
                         //si le perso tu le Monster il faut envoyer un message
                         if($healthNow<=0){
-                            $lvl = $DeffensseurMonster->getLvl();
-                            $Attaquant->addXP($lvl*rand(8,10)*$DeffensseurMonster->getCoefXp());
+                            $lvlEntite = $DeffensseurMonster->getLvlEntite();
+                            $Attaquant->addXP($lvlEntite*rand(8,10)*$DeffensseurMonster->getCoefXp());
                             $message .= "Tu as participé à la capture de ce monstre.";
                         }
                     }
@@ -94,7 +94,7 @@
                     $message .= "Ce monstre est déjà capturé.";
                 }
             }
-            $reponse[0]=$_GET["id"];
+            $reponse[0]=$_GET["idEntite"];
             $reponse[1]=$healthNow;
             $reponse[2]=$healthMax;
             $reponse[3]=$healthAttaquant;

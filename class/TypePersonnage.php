@@ -35,10 +35,10 @@
         }
         
         // Return TypePersonnage by Id
-        public function setTypePersonnageById($id){
+        public function setTypePersonnageById($idTypePersonnage){
             //select les info personnage
             $req = "SELECT * FROM `TypePersonnage`
-            WHERE idTypePerso = '".$id."'";
+            WHERE idTypePerso = '".$idTypePersonnage."'";
             $Result = $this->_bdd->query($req);
             if($tab=$Result->fetch()){
                 $this->_idTypePerso = $tab['idTypePerso'];

@@ -12,9 +12,9 @@
         }
 
         /** Récupère la Faction by ID */
-        public function setFactionById($id){
+        public function setFactionById($idFaction){
             // Sélection des personnages de la faction
-            $req = "SELECT * FROM `Faction` WHERE idFaction = '".$id."'";
+            $req = "SELECT * FROM `Faction` WHERE idFaction = '".$idFaction."'";
             $Result = $this->_bdd->query($req);
             if($tab=$Result->fetch()){
                 $this->_idFaction   = $tab['idFaction'];

@@ -5,15 +5,15 @@
         }
 
         /** Return le nombre d'équipement par Efficacité : À vérifier */
-        public function nbequipement(){
-            $Result = $this->_bdd->query("SELECT COUNT(*) FROM `equipement`WHERE efficacite=".$value."");
+        public function nbequipement($idEfficacite){
+            $Result = $this->_bdd->query("SELECT COUNT(*) FROM `equipement`WHERE idEfficacite=".$idEfficacite."");
             $nbequipement = $Result->fetch();
             echo $nbequipement['COUNT(*)'];
         }
 
         /** Return le nombre d'équipement par Type : À vérifier */
-        public function nbitemtype(){
-            $Result = $this->_bdd->query("SELECT COUNT(*) FROM `equipement` WHERE type=".$value."");
+        public function nbitemtype($idTypeEquipement){
+            $Result = $this->_bdd->query("SELECT COUNT(*) FROM `equipement` WHERE type=".$idTypeEquipement."");
             $nbitemtype = $Result->fetch();
             echo $nbitemtype['COUNT(*)'];
         }
@@ -27,15 +27,15 @@
         }
 
         /** Return le nombre d'items par Type : À vérifier */
-        public function nbitem(){
-            $Result = $this->_bdd->query("SELECT COUNT(*) FROM `item` WHERE type=".$value."");
+        public function nbitem($idTypeItem){
+            $Result = $this->_bdd->query("SELECT COUNT(*) FROM `item` WHERE type=".$idTypeItem."");
             $nbitem = $Result->fetch();
             echo $nbitem;
         }
 
         /** Return le nombre d'items par Éfficacité : À vérifier */
         public function nbefficatite(){
-            $Result = $this->_bdd->query("SELECT COUNT(*) FROM `item` WHERE efficacite=".$value."");
+            $Result = $this->_bdd->query("SELECT COUNT(*) FROM `item` WHERE idEfficacite=".$idEfficacite."");
             $nbefficatite = $Result->fetch();
             echo $nbefficatite;
         }
@@ -86,7 +86,7 @@
 
         /** Return Nombre de Personnages Humains */
         public function nbpersonnage(){
-            $Result = $this->_bdd->query("SELECT COUNT(*) FROM `Entite` WHERE type=`1`");
+            $Result = $this->_bdd->query("SELECT COUNT(*) FROM `Entite` WHERE idEntite=`1`");
             $nbperso = $Result->fetch();
             echo $nbperso['COUNT(*)'];
         }
@@ -100,8 +100,8 @@
 
         /** Retur Nombre User by idFaction */
         public function nbUserFaction(){
-            $userfaction = $this->_bdd->query("SELECT COUNT(*) FROM faction, typepersonnage WHERE faction.id = typepersonnage.idFaction");
-            $nbuserfaction = $user->fetch();
+            $userfaction = $this->_bdd->query("SELECT COUNT(*) FROM faction, typepersonnage WHERE faction.idFaction = typepersonnage.idFaction");
+            $nbuserfaction = $userfaction->fetch();
             echo $nbuserfaction['COUNT(*)'];
         }
     }

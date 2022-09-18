@@ -159,8 +159,8 @@
         e3.setAttribute('onclick',"CallApiRemoveEquipementEntite("+idNouvelArmure+")");
     }
 
-    function AttaquerPerso(idPerso,type, event){
-        attaquer(idPerso,type)
+    function AttaquerPerso(idPerso,idTypeEntite, event){
+        attaquer(idPerso,idTypeEntite)
     }
 
     function useEquipement(idEquipement){
@@ -236,23 +236,23 @@
         }
     }
 
-    //le type est 0 = person 1 = Monster
-    function attaquer(idPerso,type){
+    //le idTypeEntite est 0 = Monstre / 1 = Personnage
+    function attaquer(idPerso,idTypeEntite){
         hitAnimation(event);
         //supprimer temporairement l'attaque pour le cooldown
-        if(type==0){
-            var li = document.getElementById("PersoEnCours"+idPerso);
-            var a = document.getElementById("aPerso"+idPerso);
-        }
-        else{
+        if(idTypeEntite==0){
             var li = document.getElementById("Monster"+idPerso);
             var a = document.getElementById("aMonster"+idPerso);
+        }
+        else{
+            var li = document.getElementById("PersoEnCours"+idPerso);
+            var a = document.getElementById("aPerso"+idPerso);
         }
         li.classList.add("busy");
         let theclick =a.onclick;
         a.onclick ='';
         //pour appeler une API on utilise la méthode fetch()
-        fetch('api/attaquer.php?id='+idPerso+'&type='+type).then(
+        fetch('api/attaquer.php?idEntite='+idPerso+'&idTypeEntite='+idTypeEntite).then(
             (resp) => resp.json()
         )
         .then(function(data){

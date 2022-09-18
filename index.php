@@ -58,6 +58,7 @@
                                         // Formulaire création Personnage
                                         $Joueur1->CreatNewPersonnage();
                                     }
+                                    $ObjectPersonnage = $Joueur1->getPersonnage();
                                     ?>
                                         <div class="divAction">
                                             <p><a href="combat.php">Viens combattre avec <?= $ObjectPersonnage->getNameEntite() ?></a></p>

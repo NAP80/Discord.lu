@@ -1,95 +1,107 @@
 <?php
-    class Equipement extends Objet{
+    class Equipement extends Efficacite{
         protected $_idCategorie; //1 = Arme / 2 = Armure / 3 = Sort / 4 = Bouclcier
-        protected $coolDownMS_;
-        protected $LastUse_;
+        protected $_coolDownMS;
+        protected $_LastUse;
+        protected $_lvlEquipement;
 
         public function __construct($bdd){
             $this->_bdd = $bdd;
+            Parent::__construct($bdd);
         }
 
         /** Récupère un Équipement by ID */
-        public function setEquipementByID($id){
-            $req="SELECT Equipement.id,
-                        Equipement.type,
-                        Equipement.nom,
+        public function setEquipementByID($idEquipement){
+            $req = "SELECT Equipement.idEquipement,
+                        Equipement.idTypeEquipement,
+                        Equipement.nameEquipement,
                         Equipement.valeur,
-                        Equipement.efficacite,
-                        Equipement.lvl,
+                        Equipement.idEfficacite,
+                        Equipement.lvlEquipement,
                         Equipement.coolDownMS,
                         Equipement.LastUse,
-                        Categorie.id as idCategorie
-                FROM Equipement,TypeEquipement,Categorie WHERE Equipement.id='".$id."'
-                AND TypeEquipement.id = Equipement.type
-                AND Categorie.id = TypeEquipement.idCategorie
+                        Categorie.idCategorie
+                FROM Equipement,TypeEquipement,Categorie WHERE Equipement.idEquipement='".$idEquipement."'
+                AND TypeEquipement.idTypeEquipement = Equipement.idTypeEquipement
+                AND Categorie.idCategorie = TypeEquipement.idCategorie
             ";
             $Result = $this->_bdd->query($req);
             if($tab = $Result->fetch()){
                 $this->setEquipement(
-                    $tab["id"],
-                    $tab["type"],
-                    $tab["nom"],
+                    $tab["idEquipement"],
+                    $tab["idTypeEquipement"],
+                    $tab["nameEquipement"],
                     $tab["valeur"],
-                    $tab["efficacite"],
-                    $tab["lvl"],
+                    $tab["idEfficacite"],
+                    $tab["lvlEquipement"],
                     $tab["coolDownMS"],
-                    $tab["LastUse"]
+                    $tab["LastUse"],
+                    $tab["idCategorie"]
                 );
-                $this->_idCategorie = $tab["idCategorie"];
-            }
-        }
-        //retourne un tableau avec id , bool attaque , bool defense , bool magie , nom
-        public function getCategorie(){
-            if(!is_null($this->_idCategorie)){
-                $req="SELECT * From Categorie where id = '".$this->_idCategorie."'";
-                $Result = $this->_bdd->query($req);
-                if($tab = $Result->fetch()){
-                    return $tab;
-                }
-            }
-            else{
-                return null;
             }
         }
 
+        /** Return Id Equipement */
+        public function getIdEquipement(){
+            return $this->_idEquipement;
+        }
+
+        /** Return Name Equipement */
+        public function getNameEquipement(){
+            return $this->_nameEquipement;
+        }
+
+        /** Return Id Equipement */
+        public function getLvlEquipement(){
+            return $this->_lvlEquipement;
+        }
+
+        //retourne un tableau toutes les infos
+        public function getIdCategorie(){
+            return $this->_idCategorie;
+        }
+
         public function desequipeEntite($Entite){
-            $sql = "UPDATE `EntiteEquipement` SET `equipe`='0' WHERE `idEntite`='".$Entite->getIdEntite()."' AND `idEquipement`='".$this->_id."'";
+            $sql = "UPDATE `EntiteEquipement` SET `equipe`='0' WHERE `idEntite`='".$Entite->getIdEntite()."' AND `idEquipement`='".$this->_idEquipement."'";
             $this->_bdd->query($sql);
-            $Entite->removeEquipeBydId($this->_id);
+            $Entite->removeEquipeBydId($this->_idEquipement);
         }
 
         public function equipeEntite($Entite){
             //TODO il faut vérifier qu'il n'y a pas d'autre équipement en cours sinon il faut les retirer
             $sql = "UPDATE `EntiteEquipement`,`TypeEquipement`,`Equipement` SET `equipe`='0'
             WHERE `idEntite`='1'
-            AND EntiteEquipement.idEquipement = Equipement.id
-            AND Equipement.type = TypeEquipement.id
+            AND EntiteEquipement.idEquipement = Equipement.idEquipement
+            AND Equipement.idTypeEquipement = TypeEquipement.idTypeEquipement
             AND TypeEquipement.idCategorie = '".$this->_idCategorie."'";
             $this->_bdd->query($sql);
-            $Entite->addEquipeById($this->_id);
-            $sql = "UPDATE `EntiteEquipement` SET `equipe`='1' WHERE `idEntite`='".$Entite->getIdEntite()."' AND `idEquipement`='".$this->_id."'";
+            $Entite->addEquipeById($this->_idEquipement);
+            $sql = "UPDATE `EntiteEquipement` SET `equipe`='1' WHERE `idEntite`='".$Entite->getIdEntite()."' AND `idEquipement`='".$this->_idEquipement."'";
             $this->_bdd->query($sql);
         }
 
-        public function setEquipement($id,$type,$nom,$valeur,$efficacite,$lvl,$coolDownMS,$LastUse){
-            $this->_id = $id;
-            $this->_nom = $nom;
-            $this->_type = $type;
+        public function setEquipement($idEquipement,$idTypeEquipement,$nameEquipement,$valeur,$idEfficacite,$lvlEquipement,$coolDownMS,$LastUse,$idCategorie){
+            $this->_idEquipement = $idEquipement;
+            $this->_nameEquipement = $nameEquipement;
+            $this->_idTypeEquipement = $idTypeEquipement;
             $this->_valeur = $valeur;
-            $this->_efficacite = $efficacite;
-            $this->_lvl = $lvl;
-            $this->coolDownMS_ = $coolDownMS;
-            $this->LastUse_ = $LastUse;
+            $this->_idEfficacite = $idEfficacite;
+            $this->_lvlEquipement = $lvlEquipement;
+            $this->_coolDownMS = $coolDownMS;
+            $this->_LastUse = $LastUse;
+            $this->_idCategorie = $idCategorie;
+            Parent::setEfficaciteById($this->_idEfficacite);
         }
 
-        public function deleteEquipement($id){
+        public function deleteEquipement($idEquipement){
             //TODO AVEC LES CONTRAINTE RELATIONNEL IL DFAUT VERIDIER QU'ELLE EST PAS UTILISER AILLEUR
-            $req="DELETE FROM Equipement WHERE id='".$this->_id."' ";
+            $req = "DELETE FROM Equipement WHERE idEquipement='".$idEquipement."' ";
             $Result = $this->_bdd->query($req);
         }
-        //retourn un tableau avec id information nom rarete
-        public function getType(){
-            $req="SELECT * FROM TypeEquipement WHERE id='".$this->_type."'";
+
+        //retourn un tableau les info
+        public function getTypeEquipement(){
+            $req = "SELECT * FROM TypeEquipement WHERE idTypeEquipement = '".$this->_idTypeEquipement."'";
             $Result = $this->_bdd->query($req);
             if($tab = $Result->fetch()){
                 return $tab;
@@ -101,7 +113,7 @@
 
         /** Return le lien Image de l'équipement */
         public function getImgEquipement(){
-            $tab = $this->getType();
+            $tab = $this->getTypeEquipement();
             if(!is_null($tab)){
                 return $tab['imgEquipement'];
             }
@@ -112,7 +124,7 @@
 
         /** Return la couleur de rareté de l'équipement */
         public function getClassRarete(){
-            $req="SELECT rarete FROM TypeEquipement where id = '".$this->_type."'";
+            $req="SELECT rarete FROM TypeEquipement WHERE idTypeEquipement = '".$this->_idTypeEquipement."'";
             $Result = $this->_bdd->query($req);
             $colorRarete = "background-color : rgba(";
             if($tab = $Result->fetch()){
@@ -156,8 +168,8 @@
             $newTypeNom='cuillère ';
             while($tab=$Result->fetch()){
                 if(rand(0,$tab['chance'])==1){
-                    $newType = $tab['id'];
-                    $newTypeNom = $tab['nom'];
+                    $newType = $tab['idTypeEquipement'];
+                    $newTypeNom = $tab['nameTypeEquipement'];
                     $coef=$tab['rarete'];
                     $coolDown=$tab['coolDown'];
                     break;
@@ -165,12 +177,12 @@
             }
             $getEfficace = $this->getEfficaceAleatoire();
             $newNom = $newTypeNom." ".$getEfficace['adjectif'];
-            $efficacite = $getEfficace['id'];
+            $idEfficacite = $getEfficace['idEfficacite'];
             $newValeur = rand(5,10)*$rarete*$getEfficace['coef'];
             $coolDown = $coolDown*$getEfficace['coef'];
             $this->_bdd->beginTransaction();
-            $req="INSERT INTO `Equipement`( `type`, `nom`, `valeur`, `efficacite`,`lvl`,`coolDownMS`)
-             VALUES ('".$newType."','".$newNom."','".$newValeur."','".$efficacite."',1,'".$coolDown."')";
+            $req="INSERT INTO `Equipement`( `idTypeEquipement`, `nameEquipement`, `valeur`, `idEfficacite`,`lvlEquipement`,`coolDownMS`)
+             VALUES ('".$newType."','".$newNom."','".$newValeur."','".$idEfficacite."',1,'".$coolDown."')";
             $Result = $this->_bdd->query($req);
             $lastID = $this->_bdd->lastInsertId();
             if($lastID){
@@ -189,46 +201,46 @@
             //on doit vérifier en base si le cooldwn est terminé
             //sinon on renvoi -1
             $timeReel = microtime(true)*100;
-            $timeLastUes= intval($this->LastUse_);
-            $cooldown = intval($this->coolDownMS_);
+            $timeLastUes= intval($this->_LastUse);
+            $cooldown = intval($this->_coolDownMS);
         
             if($timeReel < ($timeLastUes+$cooldown)){
                 return -1;
             }
             else{
-                return $this->coolDownMS_;
+                return $this->_coolDownMS;
             }
             
         }
 
         public function resetCoolDown(){
             $timems = microtime(true)*100;
-            $req="UPDATE  Equipement set LastUse = '".$timems."' WHERE id='".$this->_id."' ";
+            $req="UPDATE  Equipement SET LastUse = '".$timems."' WHERE idEquipement='".$this->_idEquipement."' ";
             $Result = $this->_bdd->query($req);
         }
 
         //retourne la fusion si c'est réussi des 2 items
         public function fusionEquipement($Entite,&$TabIDRemoved){
-            $req="SELECT Equipement.id,Equipement.lvl FROM EntiteEquipement,Equipement
-                WHERE Equipement.id = EntiteEquipement.idEquipement
+            $req="SELECT Equipement.idEquipement,Equipement.lvlEquipement FROM EntiteEquipement,Equipement
+                WHERE Equipement.idEquipement = EntiteEquipement.idEquipement
                 AND idEntite = '".$Entite->getIdEntite()."'
-                AND Equipement.nom = '".$this->getNameObject()."'
-                AND Equipement.lvl = '".$this->getlvl()."'
-                AND Equipement.type = '".$this->getType()['id']."'
-                AND Equipement.id <> '".$this->getIdObject()."'
+                AND Equipement.nameEquipement = '".$this->getNameEquipement()."'
+                AND Equipement.lvlEquipement = '".$this->getLvlEquipement()."'
+                AND Equipement.idTypeEquipement = '".$this->getTypeEquipement()['idTypeEquipement']."'
+                AND Equipement.idEquipement <> '".$this->getIdEquipement()."'
             ";
             $result = $this->_bdd->query($req);
             if($tab=$result->fetch()){
-                array_push($TabIDRemoved,$this->getIdObject());
+                array_push($TabIDRemoved,$this->getIdEquipement());
                 //maj du lvl
-                $this->_lvl ++;
-                $req="UPDATE `Equipement` SET `lvl`='".$this->_lvl."' WHERE `id` = '".$tab['id']."'";
+                $this->_lvlEquipement ++;
+                $req="UPDATE `Equipement` SET `lvlEquipement`='".$this->_lvlEquipement."' WHERE `idEquipement` = '".$tab['idEquipement']."'";
                 $this->_bdd->query($req);
                 //et suppresion de l'ancien item
-                $req="DELETE FROM `Equipement` WHERE `id` = '".$this->getIdObject()."'";
+                $req="DELETE FROM `Equipement` WHERE `idEquipement` = '".$this->getIdEquipement()."'";
                 $this->_bdd->query($req);
                 //on met ajout son id fusionné
-                $this->_id = $tab['id'];
+                $this->_idEquipement = $tab['idEquipement'];
                 //fonction recursif tant qu'on peut fusionner on fusionne
                 $this->fusionEquipement($Entite,$TabIDRemoved);
             }

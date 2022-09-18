@@ -36,7 +36,7 @@
     margin-top: 20px;
     padding: 20px;
 }
-.divObjets{
+.divObjects{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -86,7 +86,7 @@
     justify-content: center;
 }
 
-.divObjets p, .divEntity p{
+.divObjects p, .divEntity p{
     margin-top:0px;
     margin-bottom:0px;
 }

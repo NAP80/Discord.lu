@@ -23,22 +23,20 @@
             }
             //une fois que j'ai mes objet je vérifie que le perso possède bien equipement
             foreach ($Perso->getEquipements()  as $equipement) {
-                if($_GET["idEquipement"]==$equipement->getIdObject()){
-                    //selon l'id du type on fait un truc différent
-                    $type = $equipement->getCategorie();
-                    switch ($type['id']) {
+                if($_GET["idEquipement"]==$equipement->getIdEquipement()){
+                    switch($equipement->getIdCategorie()) {
                         case 1: //1 représente les armes dans la table categorie
                             //il faut changer d'arme
                             //on retire donc l'arme en cours ( equipe = 0 dans la table entite equipement)
                             if(!is_null($Perso->getArme())){
                                 $reponse[6]=$_GET["idEquipement"];
-                                $reponse[5] = $equipement->getNameObject().' lvl '.$equipement->getLvl();
+                                $reponse[5] = $equipement->getNameEquipement().' lvl '.$equipement->getLvlEquipement();
                                 $equipement->desequipeEntite($Perso);
-                                $message.= 'retire de '.$equipement->getNameObject();
+                                $message.= 'retire de '.$equipement->getNameEquipement();
                                 $reponse[7] =1;
                             }
                             else{
-                                $message.= 'vous n\‘avez pas bien reussi à retirer  '.$equipement->getNameObject();
+                                $message.= 'vous n\‘avez pas bien reussi à retirer  '.$equipement->getNameEquipement();
                                 $reponse[7] =0;
                             }
                         break;
@@ -47,14 +45,14 @@
                             //on retire donc l'armure en cours ( equipe = 0 dans la table entite equipement)
                             if(!is_null($Perso->getArmure())){
                                 $reponse[6]=$_GET["idEquipement"];
-                                $reponse[5] = $equipement->getNameObject().' lvl '.$equipement->getLvl();
+                                $reponse[5] = $equipement->getNameEquipement().' lvl '.$equipement->getLvlEquipement();
                                 $equipement->desequipeEntite($Perso);
-                                $message.= 'retire de '.$equipement->getNameObject();
+                                $message.= 'retire de '.$equipement->getNameEquipement();
                                 
                                 $reponse[7] =2;//2 est la categorie de l'armure
                             }
                             else{
-                                $message.= 'vous n\‘avez pas bien reussi à retirer  '.$equipement->getNameObject();
+                                $message.= 'vous n\‘avez pas bien reussi à retirer  '.$equipement->getNameEquipement();
                                 $reponse[7] =0;
                             }
                         break;
@@ -63,13 +61,13 @@
                             //on retire donc l'armure en cours ( equipe = 0 dans la table entite equipement)
                             if(!is_null($Perso->getPouvoir())){
                                 $reponse[6]=$_GET["idEquipement"];
-                                $reponse[5] = $equipement->getNameObject().' lvl '.$equipement->getLvl();
+                                $reponse[5] = $equipement->getNameEquipement().' lvl '.$equipement->getLvlEquipement();
                                 $equipement->desequipeEntite($Perso);
-                                $message.= 'retire de '.$equipement->getNameObject();
+                                $message.= 'retire de '.$equipement->getNameEquipement();
                                 $reponse[7] =3;//3 est la categorie du pouvoir
                             }
                             else{
-                                $message.= 'vous n\‘avez pas bien reussi à retirer  '.$equipement->getNameObject();
+                                $message.= 'vous n\‘avez pas bien reussi à retirer  '.$equipement->getNameEquipement();
                                 $reponse[7] =0;
                             }
                         break;
@@ -78,13 +76,13 @@
                             //on retire donc l'armure en cours ( equipe = 0 dans la table entite equipement)
                             if(!is_null($Perso->getBouclier())){
                                 $reponse[6]=$_GET["idEquipement"];
-                                $reponse[5] = $equipement->getNameObject().' lvl '.$equipement->getLvl();
+                                $reponse[5] = $equipement->getNameEquipement().' lvl '.$equipement->getLvlEquipement();
                                 $equipement->desequipeEntite($Perso);
-                                $message.= 'retire de '.$equipement->getNameObject();
+                                $message.= 'retire de '.$equipement->getNameEquipement();
                                 $reponse[7] =4;//4 est la categorie du Bouclier
                             }
                             else{
-                                $message.= 'vous n\‘avez pas bien reussi à retirer '.$equipement->getNameObject();
+                                $message.= 'vous n\‘avez pas bien reussi à retirer '.$equipement->getNameEquipement();
                                 $reponse[7] =0;
                             }
                         break;

@@ -15,10 +15,10 @@
         }
 
         /** Set TypeUser by Id TypeUser */
-        public function setTypeUserById($id){
+        public function setTypeUserById($idTypeUser){
             $req  = "SELECT *
             FROM `TypeUser`
-            WHERE idTypeUser='".$id."'";
+            WHERE idTypeUser='".$idTypeUser."'";
             $Result = $this->_bdd->query($req);
             if($tab=$Result->fetch()){
                 $this->_idTypeUser = $tab['idTypeUser'];
@@ -31,11 +31,11 @@
         }
 
         /** Set TypeUser by Id User */
-        public function setTypeUserByIdUser($id){
+        public function setTypeUserByIdUser($idUser){
             $req  = "SELECT *
             FROM `TypeUser`,`User`
-            WHERE `TypeUser`.idTypeUser = `User`.typeUser
-            AND `User`.id='".$id."'";
+            WHERE `TypeUser`.idTypeUser = `User`.idTypeUser
+            AND `User`.idUser='".$idUser."'";
             $Result = $this->_bdd->query($req);
             if($tab=$Result->fetch()){
                 $this->_idTypeUser = $tab['idTypeUser'];

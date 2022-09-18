@@ -6,29 +6,28 @@
             if(count($listEquipements) > 0){
                 foreach($listEquipements as $Equipement){
                      $class = "standard";
-                     $idcat = $Equipement->getCategorie()['id'];
-                        switch ($idcat) {
+                        switch ($Equipement->getIdCategorie()){
                             case 1:
-                                $class =  "standard";
+                                $class = "standard";
                                 break;
                             case 2:
-                                $class =  "standard";
+                                $class = "standard";
                                 break;
                             case 3:
-                                $class =  "magic";
+                                $class = "magic";
                                 break;
                             case 4:
-                                $class =  "magic";
+                                $class = "magic";
                                 break;
                             default:
-                                $class =  "standard";
+                                $class = "standard";
                         }
                     ?>
-                        <li id="equipementSac<?= $Equipement->getIdObject() ?>" class='<?= $class;?>'>
-                            <a onclick="useEquipement(<?= $Equipement->getIdObject() ?>)">
+                        <li id="equipementSac<?= $Equipement->getIdEquipement() ?>" class='<?= $class;?>'>
+                            <a onclick="useEquipement(<?= $Equipement->getIdEquipement() ?>)">
                                 <img class='imgEquipementSac' src='<?= $Equipement->getImgEquipement(); ?>'/>
                                 <span class='spanEquipementSac'>
-                                    <?= $Equipement->getNameObject() ?> lvl <?= $Equipement->getLvl() ?>
+                                    <?= $Equipement->getNameEquipement() ?> lvl <?= $Equipement->getLvlEquipement() ?>
                                 </span>
                             </a>
                         </li>

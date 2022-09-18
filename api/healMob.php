@@ -4,12 +4,12 @@
     include '../map.php';
     if($access){
         //Recupère l'id du monstre a soigné depuis l'url
-        $id = $_GET['id'];
+        $idEntite = $_GET['idEntite'];
         //Créer un Monster et lui donne comme id celui du monstre a charger
         $cible = New Monster($mabase);
-        $cible->setMonsterById($id);
+        $cible->setMonsterById($idEntite);
         //Soigne le Monster
-        $cible->healMonsterspawn($id);
+        $cible->healMonsterspawn($idEntite);
         //Recupère la healthNow et la healthMax du monstre
         $healthNow = $cible->getHealthNow();
         $healthMax = $cible->getHealthNow();

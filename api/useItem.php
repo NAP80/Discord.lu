@@ -19,19 +19,19 @@
             }
             //une fois que j'ai mes objet je vérifie que le perso possède bien item
             foreach ($Perso->getItems()  as $item) {
-                if($_GET["idItem"]==$item->getIdObject()){
+                if($_GET["idItem"]==$item->getIdItem()){
                     //on retire l'item du perso
-                    $Perso->removeItemById($item->getIdObject());
+                    $Perso->removeItemById($item->getIdItem());
                     //selon l'id du type on fait un truc différent
-                    $type = $item->getType();
-                    switch ($type['id']) {
+                    $type = $item->getTypeItem();
+                    switch ($type['idTypeItem']) {
                         case 2:
-                            $calcul = $item->getEfficacite()*$item->getLvl()*$item->getValeur();
+                            $calcul = $item->getEfficacite()*$item->getLvlItem()*$item->getValeur();
                             $valeur = $Perso->SoinPourcentage($calcul);
                             $message = $Perso->getNameEntite()." à été soigné de ".$valeur."pts de vie avec une efficacite de ".$calcul."%";
                             break;
                         default:
-                            $healthmore=round($item->getValeur()/2)*$item->getLvl();
+                            $healthmore=round($item->getValeur()/2)*$item->getLvlItem();
                             if($healthmore<2){
                                 $healthmore =2;
                             }

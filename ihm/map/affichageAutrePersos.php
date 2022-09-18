@@ -13,7 +13,7 @@
                             if($Perso->getIdEntite()!=$PersoJoueur->getIdEntite()){
                                 ?>
                                     <li class="liAdverse" onmouseover="afficheDivPerso(event)" onmouseout="cacheDivPerso(event)">
-                                        <a id="aPerso<?= $Perso->getIdEntite() ?>" onclick="AttaquerPerso(<?= $Perso->getIdEntite() ?>,0, event)">
+                                        <a id="aPerso<?= $Perso->getIdEntite() ?>" onclick="AttaquerPerso(<?= $Perso->getIdEntite() ?>,<?= $Perso->getIdTypeEntite() ?>, event)">
                                             <?php $Perso->renderHTML() ?>
                                         </a>
                                     </li>

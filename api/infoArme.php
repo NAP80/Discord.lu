@@ -3,13 +3,13 @@
     session_start();
     include '../session.php';
     if($access){
-        // Création du ableau de réponse
+        // Création du tableau de réponse
         $reponse = array();
         $Personnage = $Joueur1->getPersonnage();
         //Recupération du type d'arme
         if($tab = $Personnage->getArme()){
-            $tab = $tab->getType();
-            $reponse["arme"] = $tab["nom"];
+            $tab = $tab->getTypeEquipement();
+            $reponse["arme"] = $tab["nameEquipement"];
             //Recupération du cooldown de l'arme
             $reponse["cooldown"] = $tab["Cooldown"];
             //Envoie du tableau de réponse

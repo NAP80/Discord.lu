@@ -2,20 +2,20 @@
     // Beaucoup de Similitude entre Personnage/Entité -> Refactoriser avec héritage
     class Monster extends TypeMonster{
         private $_coefXP;
-        private $_typeMonster;
+        private $_idTypeMonster;
 
         public function __construct($bdd){
             Parent::__construct($bdd);
         }
 
-        public function setMonsterById($id){
-            Parent::setEntiteByIdWithoutMap($id);
-            $this->initInfo($id);
+        public function setMonsterById($idEntite){
+            Parent::setEntiteByIdWithoutMap($idEntite);
+            $this->initInfo($idEntite);
         }
 
-        public function setMonsterByIdWithMap($id){
-            Parent::setEntiteById($id);
-            $this->initInfo($id);
+        public function setMonsterByIdWithMap($idEntite){
+            Parent::setEntiteById($idEntite);
+            $this->initInfo($idEntite);
         }
 
         /** Return CoefXp */
@@ -25,19 +25,19 @@
 
         /** Return Type Monster */
         public function getTypeMonster(){
-            return $this->_typeMonster;
+            return $this->_idTypeMonster;
         }
 
-        private function initInfo($id){
+        private function initInfo($idEntite){
             //select les info personnage
-            $req  = "SELECT * FROM `Monster` WHERE id='".$id."'";
+            $req = "SELECT * FROM `Monster` WHERE idEntite='".$idEntite."'";
             $Result = $this->_bdd->query($req);
             if($tab=$Result->fetch()){
-                $this->_typeMonster  = $tab['type'];
+                $this->_idTypeMonster  = $tab['idTypeMonster'];
                 $this->_coefXP  = $tab['coefXp'];
             }
             else{
-                $req  = "INSERT  INTO `Monster` (id,type,coefXp) VALUE ('".$id."','0','1')";
+                $req  = "INSERT  INTO `Monster` (idEntite,idTypeMonster,coefXp) VALUE ('".$idEntite."','0','1')";
                 $Result = $this->_bdd->query($req);
             }
         }
@@ -89,7 +89,7 @@
                     $Result = $this->_bdd->query($req);
                 }
                 //on va rechercher l'historique
-                $req  = "SELECT * FROM `AttaquePersoMonster` where idMonster = '".$this->_idEntite."' and idPersonnage = '".$Entite->getIdEntite()."'";
+                $req  = "SELECT * FROM `AttaquePersoMonster` WHERE idMonster = '".$this->_idEntite."' and idPersonnage = '".$Entite->getIdEntite()."'";
                 $Result = $this->_bdd->query($req);
                 $tabAttaque['nbCoup']=0;
                 $tabAttaque['DegatsDonnes']=0;
@@ -121,7 +121,7 @@
 
         /** Return Historique d'ataque */
         public function getHistoriqueAttaque(){
-            $req  = "SELECT * FROM `AttaquePersoMonster` where idMonster = '".$this->_idEntite."'";
+            $req  = "SELECT * FROM `AttaquePersoMonster` WHERE idMonster = '".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($this->HistoriqueAttaque,$tab);
@@ -146,21 +146,21 @@
         /** Création d'un Monsters Aléatoire */
         public function CreateMonsterAleatoire($map){
                 $newMonster = new Monster($this->_bdd);
-                $type = $this->getTypeAleatoire();
-                $lvl = $map->getlvl();
+                $typeMonster = $this->getTypeAleatoire();
+                $lvlMap = $map->getLvlMap();
                 $coefAbuseHealth = rand(20,50);
                 $coefAbuseArme = rand(2,20);
-                $healthNow = $coefAbuseHealth*$type[2]*$lvl*$lvl*$lvl;
-                $degat = $coefAbuseArme*$type[2]*$lvl*$lvl;
+                $healthNow = $coefAbuseHealth*$typeMonster[2]*$lvlMap;
+                $degat = $coefAbuseArme*$typeMonster[2]*$lvlMap;
                 // Menhir
-                if($type[1]==0){
-                    $healthNow = $coefAbuseHealth*20*$lvl*$lvl;
-                    $degat = 1*$lvl*$lvl;
+                if($typeMonster[1]==0){
+                    $healthNow = $coefAbuseHealth*20*$lvlMap;
+                    $degat = 1*$lvlMap;
                 }
-                $newMonster = $newMonster->CreateEntite($this->generateName($type[0]), $healthNow, $degat, $map->getIdMap(),$healthNow,$type[3],null,2,$lvl);
+                $newMonster = $newMonster->CreateEntite($this->generateName($typeMonster[0]), $healthNow, $degat, $map->getIdMap(),$healthNow,$typeMonster[3],null,0,$lvlMap);
                 if(!is_null($newMonster)){
-                    $req="INSERT INTO `Monster`(`coefXp`, `id` ,`type` )
-                    VALUES ('".$type[2]."','".$newMonster->getIdEntite()."','".$type[1]."')";
+                    $req="INSERT INTO `Monster`(`idTypeMonster`, `idEntite` ,`coefXp` )
+                    VALUES ('".$typeMonster[1]."','".$newMonster->getIdTypeEntite()."','".$typeMonster[2]."')";
                     $Result = $this->_bdd->query($req);
                     if($newMonster->getIdEntite()){
                         $newMonster->setEntiteById( $newMonster->getIdEntite());
@@ -180,7 +180,7 @@
                 }
         }
 
-        //retour un tableau avec le nom du type et id dy type
+        //retour un tableau
         //$tab[0]=$newTypeNom;
         //$tab[1]=$newType;
         //$tab[2]=$coef;
@@ -212,7 +212,7 @@
 
         /** Génére et Return un Nom en fonction du Type */
         public function GenerateName($type){
-            $nom = $type;
+            $NameType = $type;
             $Adjectif = "";
             switch (rand(0,20)){
                 case 0:
@@ -886,7 +886,7 @@
                 default:
                     $Nom = "Asteus";
             }
-            return $nom." ".$Adjectif." ".$Nom;
+            return $NameType." ".$Adjectif." ".$Nom;
         }
 
         /** Génére et Return un lien d'image en fonction du Type */
@@ -913,8 +913,8 @@
         }
 
         /** Reset HealthNow de Monster by ID */
-        public function healMonsterspawn($id){
-            $this->_bdd->query("UPDATE `Entite` SET `healthNow` = '".$this->healthMax."' WHERE `idEntite` = $id");
+        public function healMonsterspawn($idEntite){
+            $this->_bdd->query("UPDATE `Entite` SET `healthNow` = '".$this->healthMax."' WHERE `idEntite` = $idEntite");
         }
     }
 ?>

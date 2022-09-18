@@ -130,13 +130,13 @@
         /** Set Object Personnage */
         public function setPersonnage($Perso){
             $this->_infoPerso = $Perso;
-            $req ="UPDATE `User` SET `idPersonnage`='".$Perso->getIdUser()."' WHERE `idUser` = '".$this->_idUser."'";
+            $req ="UPDATE `User` SET `idPersonnage`='".$Perso->getIdEntite()."' WHERE `idUser` = '".$this->_idUser."'";
             $Result = $this->_bdd->query($req);
         }
 
         /** Get Nombres de Personnages */
         public function getNbPersonnages(){
-            $req ="SELECT COUNT(*) FROM `entite` WHERE `type`=1 AND `idUser` = '".$this->_idUser."'";
+            $req ="SELECT COUNT(*) FROM `entite` WHERE `idTypeEntite`=1 AND `idUser` = '".$this->_idUser."'";
             $Result = $this->_bdd->query($req);
             $Count = $Result->fetch();
             return $Count['COUNT(*)'];
@@ -185,14 +185,13 @@
                 $newperso = new Personnage($this->_bdd);
                 $newperso = $newperso->CreateEntite($_POST['Name'], 100, 10, 1,100,$_POST['image'],$this->getIdUser(),1,1);
                 $idTypePersonnage = $_POST['TypePerso'];
-                $req="INSERT INTO `Personnage`(`idPersonnage`,`xp`,`idTypePersonnage`) VALUES ('".$newperso->getIdEntite()."','1','".$idTypePersonnage."')";
+                $req="INSERT INTO `Personnage`(`idPersonnage`,`idTypePersonnage`,`idMapSpawnPersonnage`) VALUES ('".$newperso->getIdEntite()."','".$idTypePersonnage."',1)";
                 $Result = $this->_bdd->query($req);
                 $newperso->setEntiteById($newperso->getIdEntite());
-                // Assignation du Personnage à l'User
                 $this->setPersonnage($newperso);
                 // Redirection - À patch le fait qu'il faut actuliser la page pour avoir son perso... Truc Temporaire
                 ?>
-                    <script>window.location.replace("./combat.php");</script>
+                    <!--<script>window.location.replace("./combat.php");</script>-->
                 <?php
             }
         }
@@ -280,7 +279,7 @@
         /** Return List de tout Monster Capturé par ID User */
         public function getAllMyMonsterIds(){
             $listMonster=array();
-            $req="SELECT `idEntite` FROM `Entite` WHERE `idUser` in (SELECT `idEntite` FROM `Entite` WHERE `idUser` = '".$this->_idUser."') AND Type=2";
+            $req="SELECT `idEntite` FROM `Entite` WHERE `idUser` in (SELECT `idEntite` FROM `Entite` WHERE `idUser` = '".$this->_idUser."') AND idTypeEntite=0";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($listMonster,$tab[0]);
@@ -725,7 +724,7 @@
                     }
                 }
             }
-            $Result = $this->_bdd->query("SELECT * FROM `Entite` where idUser='".$this->getIdUser()."' AND type=1");
+            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE idUser='".$this->getIdUser()."' AND idTypeEntite=1");
             ?>
                 <p>Choisir un personnage :</p>
                 <form action="" method="post" class="formChangePerso">
@@ -734,7 +733,7 @@
                             ?>
                                 <div class="listTypePerso">
                                     <input type="radio" name="IdPerso" id="Perso<?= $Personnage['idEntite'] ?>" value="<?= $Personnage['idEntite'] ?>">
-                                    <label for="Perso<?= $Personnage['idEntite'] ?>"><?= $Personnage['nom'] ?></label>
+                                    <label for="Perso<?= $Personnage['idEntite'] ?>"><?= $Personnage['nameEntite'] ?></label>
                                 </div>
                             <?php
                         }
