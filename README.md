@@ -9,12 +9,9 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 ## En cours :
 - Ajouts Commentaires,
 - Uniformisation Code,
-- Uniformisation Variable et BDD,
 - Refonte Entitée,
 - Refonte Monster,
 - Refonte Personnage,
-- Bug déplacement Map : Non affichage de l'origine de déplacement quand refresh,
-- Bug JS ? : Non refresh si mort après une attaque.
 
 ## Todo List :
 - Vérification JS Inscription FRONT,
@@ -51,6 +48,12 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Ajouter des effets Personnage,
 - Refaire RenderHTML.
 
+# Todo Patch :
+- Map BDD/PHP : Remettre en place Zone Non-PVP,
+- PHP : Déplacement Map : Non affichage de l'origine de déplacement quand refresh si Monster,
+- JS/API : Non refresh si mort après une attaque,
+- PHP : Vérification Id TypePersonnage lors de Création Personnage.
+
 ## Fait :
 - Récupération du projet,
 - Mise à jours des crédits,
@@ -65,4 +68,6 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Ajouter Sécurité sur l'idPersonnage User,
 - Mise à jours Boolen User Admin -> TypeUser,
 - Mise à jours TypePersonnage,
-- Mise à jours TypeMonsters.
+- Mise à jours TypeMonsters,
+- Uniformisation Variable et BDD,
+- Refonte Class Objet -> Efficacite.

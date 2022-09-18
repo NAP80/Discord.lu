@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : sam. 10 sep. 2022 à 07:00
+-- Généré le : Dim 18 sep. 2022 à 11:30
 -- Version du serveur :  8.0.21
 -- Version de PHP : 7.3.21
 
@@ -24,18 +24,18 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `attaquepersomob`
+-- Structure de la table `attaquepersomonster`
 --
 
-DROP TABLE IF EXISTS `attaquepersomob`;
-CREATE TABLE IF NOT EXISTS `attaquepersomob` (
-  `idMob` int NOT NULL,
+DROP TABLE IF EXISTS `attaquepersomonster`;
+CREATE TABLE IF NOT EXISTS `attaquepersomonster` (
+  `idMonster` int NOT NULL,
   `idPersonnage` int NOT NULL,
   `nbCoup` int NOT NULL,
   `coupFatal` tinyint NOT NULL,
   `DegatsDonnes` int NOT NULL,
   `DegatsReçus` int NOT NULL,
-  KEY `idMob` (`idMob`),
+  KEY `idMob` (`idMonster`),
   KEY `idPersonnage` (`idPersonnage`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -47,19 +47,19 @@ CREATE TABLE IF NOT EXISTS `attaquepersomob` (
 
 DROP TABLE IF EXISTS `categorie`;
 CREATE TABLE IF NOT EXISTS `categorie` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `idCategorie` int NOT NULL AUTO_INCREMENT,
   `Attaque` tinyint NOT NULL,
   `Defense` tinyint NOT NULL,
   `Magie` int NOT NULL,
-  `nom` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
+  `nameCategorie` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`idCategorie`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `categorie`
 --
 
-INSERT INTO `categorie` (`id`, `Attaque`, `Defense`, `Magie`, `nom`) VALUES
+INSERT INTO `categorie` (`idCategorie`, `Attaque`, `Defense`, `Magie`, `nameCategorie`) VALUES
 (1, 1, 0, 0, 'Arme'),
 (2, 0, 1, 0, 'Armure'),
 (3, 1, 0, 1, 'Pouvoir'),
@@ -73,12 +73,12 @@ INSERT INTO `categorie` (`id`, `Attaque`, `Defense`, `Magie`, `nom`) VALUES
 
 DROP TABLE IF EXISTS `efficacite`;
 CREATE TABLE IF NOT EXISTS `efficacite` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `idEfficacite` int NOT NULL AUTO_INCREMENT,
   `adjectif` varchar(50) NOT NULL,
   `coef` float NOT NULL,
   `ordre` int NOT NULL,
   `chance` int NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`idEfficacite`),
   UNIQUE KEY `ordre` (`ordre`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -86,8 +86,8 @@ CREATE TABLE IF NOT EXISTS `efficacite` (
 -- Déchargement des données de la table `efficacite`
 --
 
-INSERT INTO `efficacite` (`id`, `adjectif`, `coef`, `ordre`, `chance`) VALUES
-(1, 'assé', 0.7, 1, 1),
+INSERT INTO `efficacite` (`idEfficacite`, `adjectif`, `coef`, `ordre`, `chance`) VALUES
+(1, 'cassé', 0.7, 1, 1),
 (2, 'pourri', 0.7, 2, 2),
 (3, 'tout mou', 0.8, 3, 4),
 (4, 'moisie', 0.8, 4, 8),
@@ -112,20 +112,20 @@ INSERT INTO `efficacite` (`id`, `adjectif`, `coef`, `ordre`, `chance`) VALUES
 
 DROP TABLE IF EXISTS `entite`;
 CREATE TABLE IF NOT EXISTS `entite` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `idEntite` int NOT NULL AUTO_INCREMENT,
   `idMap` int NOT NULL,
   `idUser` int DEFAULT NULL,
-  `vie` int NOT NULL,
-  `vieMax` int NOT NULL,
-  `lienImage` varchar(500) NOT NULL,
-  `nom` varchar(200) NOT NULL,
-  `type` int NOT NULL,
+  `healthNow` int NOT NULL,
+  `healthMax` int NOT NULL,
+  `imgEntite` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nameEntite` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `idTypeEntite` int NOT NULL,
   `degat` int NOT NULL,
-  `lvl` int NOT NULL,
-  PRIMARY KEY (`id`),
+  `lvlEntite` int NOT NULL,
+  PRIMARY KEY (`idEntite`),
   KEY `idMap` (`idMap`),
   KEY `idUser` (`idUser`),
-  KEY `type` (`type`)
+  KEY `type` (`idTypeEntite`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
@@ -151,16 +151,16 @@ CREATE TABLE IF NOT EXISTS `entiteequipement` (
 
 DROP TABLE IF EXISTS `equipement`;
 CREATE TABLE IF NOT EXISTS `equipement` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nom` varchar(100) NOT NULL,
-  `type` int NOT NULL,
-  `efficacite` float NOT NULL,
+  `idEquipement` int NOT NULL AUTO_INCREMENT,
+  `nameEquipement` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `idTypeEquipement` int NOT NULL,
+  `idEfficacite` float NOT NULL,
   `valeur` int NOT NULL,
-  `lvl` int NOT NULL,
+  `lvlEquipement` int NOT NULL,
   `coolDownMS` int NOT NULL DEFAULT '100',
   `LastUse` bigint NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `type` (`type`)
+  PRIMARY KEY (`idEquipement`),
+  KEY `type` (`idTypeEquipement`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -183,10 +183,10 @@ CREATE TABLE IF NOT EXISTS `faction` (
 --
 
 INSERT INTO `faction` (`idFaction`, `nameFaction`, `descFaction`, `logoFaction`) VALUES
-(1, 'Albion', 'La faction Albion.', '1_faction'),
-(2, 'Alterna', 'La faction Alterna.', '2_faction'),
-(3, 'Menos', 'La faction Menos.', '3_faction'),
-(4, 'Initir', 'La faction Initir.', '4_faction');
+(1, 'Albion', 'La faction Albion.\r\nRaces : ', '1_faction'),
+(2, 'Alterna', 'La faction Alterna.\r\nRaces : ', '2_faction'),
+(3, 'Menos', 'La faction Menos.\r\nRaces : ', '3_faction'),
+(4, 'Initir', 'La faction Initir.\r\nRaces : ', '4_faction');
 
 -- --------------------------------------------------------
 
@@ -196,14 +196,14 @@ INSERT INTO `faction` (`idFaction`, `nameFaction`, `descFaction`, `logoFaction`)
 
 DROP TABLE IF EXISTS `item`;
 CREATE TABLE IF NOT EXISTS `item` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `type` int NOT NULL,
-  `nom` varchar(50) NOT NULL,
+  `idItem` int NOT NULL AUTO_INCREMENT,
+  `idTypeItem` int NOT NULL,
+  `nameItem` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `valeur` int NOT NULL,
-  `efficacite` float NOT NULL,
-  `lvl` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `type` (`type`)
+  `idEfficacite` float NOT NULL,
+  `lvlItem` int NOT NULL,
+  PRIMARY KEY (`idItem`),
+  KEY `type` (`idTypeItem`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
@@ -214,8 +214,8 @@ CREATE TABLE IF NOT EXISTS `item` (
 
 DROP TABLE IF EXISTS `map`;
 CREATE TABLE IF NOT EXISTS `map` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nom` varchar(50) NOT NULL,
+  `idMap` int NOT NULL AUTO_INCREMENT,
+  `nameMap` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `position` varchar(50) NOT NULL,
   `mapNord` int DEFAULT NULL,
   `mapSud` int DEFAULT NULL,
@@ -224,9 +224,11 @@ CREATE TABLE IF NOT EXISTS `map` (
   `idUserDecouverte` int NOT NULL,
   `x` int NOT NULL,
   `y` int NOT NULL,
-  `lienImage` text NOT NULL,
+  `imgMap` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `type` int NOT NULL,
-  PRIMARY KEY (`id`),
+  `idTypeMap` int NOT NULL,
+  `idTypeBatiment` int NOT NULL,
+  PRIMARY KEY (`idMap`),
   UNIQUE KEY `Position` (`position`),
   KEY `mapNord` (`mapNord`),
   KEY `mapSud` (`mapSud`),
@@ -239,16 +241,16 @@ CREATE TABLE IF NOT EXISTS `map` (
 -- Déchargement des données de la table `map`
 --
 
-INSERT INTO `map` (`id`, `nom`, `position`, `mapNord`, `mapSud`, `mapEst`, `mapOuest`, `idUserDecouverte`, `x`, `y`, `lienImage`, `type`) VALUES
-(1, 'Discord-City - Centre', 'spawn', 4, 8, 2, 6, 0, 0, 0, 'https://img.freepik.com/photos-gratuite/beau-village-medieval-montagne-caccamo-sicile-italie_287743-1168.jpg?w=996', 1),
-(2, 'Discord-City - Est', 'spawn-est', 3, 9, NULL, 1, 1, 1, 0, 'https://img.freepik.com/photos-gratuite/beau-village-medieval-montagne-caccamo-sicile-italie_287743-1168.jpg?w=996', 1),
-(3, 'Discord-City - Nord-Est', 'spawn-nord-est', NULL, 2, NULL, 4, 1, 1, 1, 'https://images.unsplash.com/photo-1583849215500-75387d55ea81?w=600', 1),
-(4, 'Discord-City - Nord', 'spawn-nord', NULL, 1, 3, 5, 1, 0, 1, 'https://images.unsplash.com/photo-1577705482890-4d66c7d557be?w=600', 1),
-(5, 'Discord-City - Nord-Ouest', 'spawn-nord-ouest', NULL, 6, 4, NULL, 1, -1, 1, 'https://images.unsplash.com/photo-1452665536397-024866ff6d36?w=600', 1),
-(6, 'Discord-City - Ouest', 'spawn-ouest', 5, 7, 1, NULL, 1, -1, 0, 'https://images.unsplash.com/photo-1594477232357-32644df09d0e?w=600', 1),
-(7, 'Discord-City - Sud-Ouest', 'spawn-sud-ouest', 6, NULL, 8, NULL, 1, -1, -1, 'https://images.unsplash.com/photo-1595370637810-cd38573b94fb?w=600', 1),
-(8, 'Discord-City - Sud', 'spawn-sud', 1, NULL, 9, 7, 1, 0, -1, 'https://images.unsplash.com/photo-1516473174726-95151fe079af?w=600', 1),
-(9, 'Discord-City - Sud-Est', 'spawn-sud-est', 2, NULL, NULL, 8, 1, 1, -1, 'https://images.unsplash.com/photo-1604087267014-7f29ba0127d7?w=600', 1);
+INSERT INTO `map` (`idMap`, `nameMap`, `position`, `mapNord`, `mapSud`, `mapEst`, `mapOuest`, `idUserDecouverte`, `x`, `y`, `imgMap`, `type`, `idTypeMap`, `idTypeBatiment`) VALUES
+(1, 'Discord-City - Centre', 'spawn', 4, 8, 2, 6, 0, 0, 0, 'https://img.freepik.com/photos-gratuite/beau-village-medieval-montagne-caccamo-sicile-italie_287743-1168.jpg?w=996', 1, 0, 0),
+(2, 'Discord-City - Est', 'spawn-est', 3, 9, NULL, 1, 1, 1, 0, 'https://img.freepik.com/photos-gratuite/beau-village-medieval-montagne-caccamo-sicile-italie_287743-1168.jpg?w=996', 1, 0, 0),
+(3, 'Discord-City - Nord-Est', 'spawn-nord-est', NULL, 2, NULL, 4, 1, 1, 1, 'https://images.unsplash.com/photo-1583849215500-75387d55ea81?w=600', 1, 0, 0),
+(4, 'Discord-City - Nord', 'spawn-nord', NULL, 1, 3, 5, 1, 0, 1, 'https://images.unsplash.com/photo-1577705482890-4d66c7d557be?w=600', 1, 0, 0),
+(5, 'Discord-City - Nord-Ouest', 'spawn-nord-ouest', NULL, 6, 4, NULL, 1, -1, 1, 'https://images.unsplash.com/photo-1452665536397-024866ff6d36?w=600', 1, 0, 0),
+(6, 'Discord-City - Ouest', 'spawn-ouest', 5, 7, 1, NULL, 1, -1, 0, 'https://images.unsplash.com/photo-1594477232357-32644df09d0e?w=600', 1, 0, 0),
+(7, 'Discord-City - Sud-Ouest', 'spawn-sud-ouest', 6, NULL, 8, NULL, 1, -1, -1, 'https://images.unsplash.com/photo-1595370637810-cd38573b94fb?w=600', 1, 0, 0),
+(8, 'Discord-City - Sud', 'spawn-sud', 1, NULL, 9, 7, 1, 0, -1, 'https://images.unsplash.com/photo-1516473174726-95151fe079af?w=600', 1, 0, 0),
+(9, 'Discord-City - Sud-Est', 'spawn-sud-est', 2, NULL, NULL, 8, 1, 1, -1, 'https://images.unsplash.com/photo-1604087267014-7f29ba0127d7?w=600', 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -280,13 +282,13 @@ CREATE TABLE IF NOT EXISTS `mapitems` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `mob`
+-- Structure de la table `monster`
 --
 
-DROP TABLE IF EXISTS `mob`;
-CREATE TABLE IF NOT EXISTS `mob` (
-  `id` int NOT NULL,
-  `type` int NOT NULL,
+DROP TABLE IF EXISTS `monster`;
+CREATE TABLE IF NOT EXISTS `monster` (
+  `idEntite` int NOT NULL,
+  `idTypeMonster` int NOT NULL,
   `coefXp` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -298,10 +300,15 @@ CREATE TABLE IF NOT EXISTS `mob` (
 
 DROP TABLE IF EXISTS `personnage`;
 CREATE TABLE IF NOT EXISTS `personnage` (
-  `id` int NOT NULL,
-  `xp` int NOT NULL,
+  `idPersonnage` int NOT NULL,
   `idTypePersonnage` int NOT NULL,
-  KEY `idTypePersonnage` (`idTypePersonnage`)
+  `levelPersonnage` int NOT NULL DEFAULT '1',
+  `expPersonnage` int NOT NULL DEFAULT '0',
+  `moneyPersonnage` int NOT NULL DEFAULT '0',
+  `effectPersonnage` varchar(500) DEFAULT NULL,
+  `idMapSpawnPersonnage` int NOT NULL,
+  UNIQUE KEY `idPersonnage` (`idPersonnage`),
+  KEY `idTypePersonnage` (`expPersonnage`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -344,27 +351,69 @@ INSERT INTO `tooltip` (`id`, `tooltip`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `typeclassmonster`
+--
+
+DROP TABLE IF EXISTS `typeclassmonster`;
+CREATE TABLE IF NOT EXISTS `typeclassmonster` (
+  `idTypeClassMonster` int NOT NULL AUTO_INCREMENT,
+  `nameTypeClassMonster` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `posTypeMonster` int NOT NULL,
+  `percentAttaque` int NOT NULL,
+  `percentDefense` int NOT NULL,
+  `percentMagique` int NOT NULL,
+  `percentRessMagique` int NOT NULL,
+  `spawnTypeMonster` int NOT NULL,
+  PRIMARY KEY (`idTypeClassMonster`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `typeclassmonster`
+--
+
+INSERT INTO `typeclassmonster` (`idTypeClassMonster`, `nameTypeClassMonster`, `posTypeMonster`, `percentAttaque`, `percentDefense`, `percentMagique`, `percentRessMagique`, `spawnTypeMonster`) VALUES
+(1, 'Bébé', 0, 0, 0, 0, 0, 15),
+(3, 'Jeune', 0, 0, 0, 0, 0, 55),
+(5, 'Mature', 1, 0, 0, 0, 0, 26),
+(6, 'Adulte', 1, 0, 0, 0, 0, 60),
+(12, 'Vénérable', 0, 0, 0, 0, 0, 12),
+(13, 'Ancien', 0, 0, 0, 0, 0, 8),
+(9, 'Maître', 0, 0, 0, 0, 0, 22),
+(11, 'Vieux', 0, 0, 0, 0, 0, 15),
+(15, 'Légendaire', 1, 0, 0, 0, 0, 3),
+(8, 'Mage', 0, 0, 0, 0, 0, 25),
+(7, 'Guerrier', 0, 0, 0, 0, 0, 33),
+(16, 'Divin', 1, 0, 0, 0, 0, 1),
+(0, '', 1, 100, 100, 100, 100, 230),
+(14, 'Majeur', 1, 0, 0, 0, 0, 5),
+(4, 'Immature', 1, 0, 0, 0, 0, 20),
+(10, 'Sage', 0, 0, 0, 0, 0, 15),
+(2, 'Enfant', 0, 0, 0, 0, 0, 25);
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `typeequipement`
 --
 
 DROP TABLE IF EXISTS `typeequipement`;
 CREATE TABLE IF NOT EXISTS `typeequipement` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `idTypeEquipement` int NOT NULL AUTO_INCREMENT,
   `information` text NOT NULL,
-  `lienImage` varchar(500) NOT NULL,
-  `nom` varchar(100) NOT NULL,
+  `imgEquipement` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nameTypeEquipement` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `rarete` int NOT NULL,
   `idCategorie` int NOT NULL,
   `chance` int NOT NULL,
   `coolDown` int NOT NULL DEFAULT '500',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`idTypeEquipement`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `typeequipement`
 --
 
-INSERT INTO `typeequipement` (`id`, `information`, `lienImage`, `nom`, `rarete`, `idCategorie`, `chance`, `coolDown`) VALUES
+INSERT INTO `typeequipement` (`idTypeEquipement`, `information`, `imgEquipement`, `nameTypeEquipement`, `rarete`, `idCategorie`, `chance`, `coolDown`) VALUES
 (1, '', 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Uncrossed_gladius.jpg/280px-Uncrossed_gladius.jpg', 'Glaive', 1, 1, 1, 500),
 (2, '', 'https://th.bing.com/th/id/OIP.5wkIkkD56nrd6jF0gR2kWwHaHa?w=186&h=186&c=7&r=0&o=5&pid=1.7', 'Baguette Magic', 2, 3, 10, 500),
 (3, '', 'https://th.bing.com/th/id/OIP.HIpuL__dWylILgUXtwpaTgHaJ1?w=142&h=189&c=7&r=0&o=5&pid=1.7', 'Parapluie', 3, 4, 20000000, 500),
@@ -394,20 +443,20 @@ INSERT INTO `typeequipement` (`id`, `information`, `lienImage`, `nom`, `rarete`,
 
 DROP TABLE IF EXISTS `typeitem`;
 CREATE TABLE IF NOT EXISTS `typeitem` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nom` varchar(50) NOT NULL,
+  `idTypeItem` int NOT NULL AUTO_INCREMENT,
+  `nameTypeItem` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `rarete` int NOT NULL,
-  `lienImage` text NOT NULL,
+  `imgItem` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `information` varchar(200) NOT NULL,
   `chance` int NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`idTypeItem`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `typeitem`
 --
 
-INSERT INTO `typeitem` (`id`, `nom`, `rarete`, `lienImage`, `information`, `chance`) VALUES
+INSERT INTO `typeitem` (`idTypeItem`, `nameTypeItem`, `rarete`, `imgItem`, `information`, `chance`) VALUES
 (1, 'Pierre', 2, 'https://image.noelshack.com/fichiers/2019/21/5/1558680066-rock.png', 'Permet d\'améliorer ses armures', 3),
 (2, 'Fruit', 1, 'https://img.icons8.com/color/452/group-of-fruits.png', 'Permet de reprendre de la vie', 1),
 (3, 'Fiole', 13, 'https://www.icone-png.com/png/42/42072.png', 'Permet d\'immuniser un montre', 2000),
@@ -432,17 +481,17 @@ INSERT INTO `typeitem` (`id`, `nom`, `rarete`, `lienImage`, `information`, `chan
 
 DROP TABLE IF EXISTS `typemap`;
 CREATE TABLE IF NOT EXISTS `typemap` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nom` varchar(50) NOT NULL,
-  `nomFr` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
+  `idTypeMap` int NOT NULL AUTO_INCREMENT,
+  `nameTypeMapEn` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nameTypeMapFr` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`idTypeMap`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `typemap`
 --
 
-INSERT INTO `typemap` (`id`, `nom`, `nomFr`) VALUES
+INSERT INTO `typemap` (`idTypeMap`, `nameTypeMapEn`, `nameTypeMapFr`) VALUES
 (1, 'Plain', 'Plaine'),
 (2, 'Foret', 'Fôret'),
 (3, 'Mountain', 'Montagne'),
@@ -465,36 +514,40 @@ INSERT INTO `typemap` (`id`, `nom`, `nomFr`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `typemob`
+-- Structure de la table `typemonster`
 --
 
-DROP TABLE IF EXISTS `typemob`;
-CREATE TABLE IF NOT EXISTS `typemob` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nom` varchar(50) NOT NULL,
-  `rarete` int NOT NULL,
-  `chance` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+DROP TABLE IF EXISTS `typemonster`;
+CREATE TABLE IF NOT EXISTS `typemonster` (
+  `idTypeMonster` int NOT NULL AUTO_INCREMENT,
+  `nameTypeMonster` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `baseAttaque` int NOT NULL,
+  `baseDefense` int NOT NULL,
+  `baseMagique` int NOT NULL,
+  `baseRessMagique` int NOT NULL,
+  `baseGainMoney` int NOT NULL,
+  `baseGainExp` int NOT NULL,
+  `factionTypeMonster` int NOT NULL,
+  `spawnTypeMonster` int NOT NULL,
+  PRIMARY KEY (`idTypeMonster`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Déchargement des données de la table `typemob`
+-- Déchargement des données de la table `typemonster`
 --
 
-INSERT INTO `typemob` (`id`, `nom`, `rarete`, `chance`) VALUES
-(1, 'Bandit', 1, 1),
-(2, 'Loup', 2, 3),
-(3, 'Géant', 3, 5),
-(4, 'Vampire', 3, 10),
-(5, 'Pirate', 5, 20),
-(6, 'Viking', 5, 25),
-(7, 'Démon', 6, 100),
-(8, 'Ange', 6, 100),
-(9, 'Dragon', 7, 200),
-(10, 'Archidémon', 8, 600),
-(11, 'Archange', 8, 600),
-(12, 'Idole', 9, 1500),
-(13, 'Divinité', 10, 3000);
+INSERT INTO `typemonster` (`idTypeMonster`, `nameTypeMonster`, `baseAttaque`, `baseDefense`, `baseMagique`, `baseRessMagique`, `baseGainMoney`, `baseGainExp`, `factionTypeMonster`, `spawnTypeMonster`) VALUES
+(2, 'Loup', 0, 0, 0, 0, 0, 0, 0, 3),
+(3, 'Géant', 0, 0, 0, 0, 0, 0, 0, 5),
+(4, 'Vampire', 0, 0, 0, 0, 0, 0, 0, 10),
+(7, 'Démon', 0, 0, 0, 0, 0, 0, 0, 100),
+(8, 'Ange', 0, 0, 0, 0, 0, 0, 0, 100),
+(9, 'Dragon', 0, 0, 0, 0, 0, 0, 0, 200),
+(10, 'Archidémon', 0, 0, 0, 0, 0, 0, 0, 600),
+(11, 'Archange', 0, 0, 0, 0, 0, 0, 0, 600),
+(12, 'Idole', 0, 0, 0, 0, 0, 0, 0, 1500),
+(13, 'Divinité', 0, 0, 0, 0, 0, 0, 0, 3000),
+(14, 'Cyclope', 0, 0, 0, 0, 0, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -504,42 +557,38 @@ INSERT INTO `typemob` (`id`, `nom`, `rarete`, `chance`) VALUES
 
 DROP TABLE IF EXISTS `typepersonnage`;
 CREATE TABLE IF NOT EXISTS `typepersonnage` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nom` varchar(50) NOT NULL DEFAULT 'humain',
-  `coefAttaque` float NOT NULL DEFAULT '1',
-  `coefDefense` float NOT NULL DEFAULT '1',
-  `coefBouclier` float NOT NULL DEFAULT '1',
-  `coefCoolDown` int NOT NULL DEFAULT '1',
-  `distance` tinyint NOT NULL DEFAULT '0',
-  `lienImage` varchar(200) NOT NULL,
+  `idTypePerso` int NOT NULL AUTO_INCREMENT,
+  `nameTypePerso` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `statsAttaque` int NOT NULL,
+  `statsDefense` int NOT NULL,
+  `statsMagique` int NOT NULL,
+  `statsRessMagique` int NOT NULL,
+  `imgTypePerso` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `idFaction` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`idTypePerso`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `typepersonnage`
 --
 
-INSERT INTO `typepersonnage` (`id`, `nom`, `coefAttaque`, `coefDefense`, `coefBouclier`, `coefCoolDown`, `distance`, `lienImage`, `idFaction`) VALUES
-(1, 'Humain - 3', 1, 1, 1, 1, 0, 'https://media.sciencephoto.com/c0/39/51/80/c0395180-800px-wm.jpg', 3),
-(2, 'Naruto Humain', 1, 1, 1, 1, 0, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcomkY3FAt3ObQPsLCKb828ltFy1BNS-rtFQ&usqp=CAU', 1),
-(3, 'Humain - 2', 1, 1, 1, 1, 0, 'https://static.wikia.nocookie.net/batman/images/e/e5/Martha_Wayne.jpg/revision/latest/top-crop/width/360/height/450?cb=20100425181617', 2),
-(4, 'Humain - 4', 1, 1, 1, 1, 0, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEi9QxhJpudHqzdfOQH-OpDH0o5L-B6uAcjg&usqp=CAU', 4),
-(5, 'Dbz - Sayen', 1.5, 1, 0.7, 1, 0, '', 1),
-(6, 'Dbz - Humain', 1, 1, 0.7, 1, 0, '', 1),
-(7, 'DbZ - Sorcier', 1, 1, 0.7, 1, 0, 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoGCBMTERcTExMXGBcZFxoaGhoXGhoYGxwZGhcfGhobGhkaHysjHB8oHxodJTYlKCwuMjMyGSE3PDcxOysxMi4BCwsLDw4PHRERHTEoISg7MTExMTMuMS4xMTMxMTEzOTQxMTExMTExOTMxM', 1),
-(8, 'Batman - Humain', 1, 1, 1, 1, 0, '', 2),
-(9, 'Batman - Magicien', 0.8, 1, 1, 1, 0, '', 2),
-(10, 'Flash - Magicien', 0.8, 1, 1, 1, 0, '', 2),
-(11, 'Hulk - Magicen', 1, 0.8, 1, 1, 0, '', 2),
-(12, 'Alien - Alien', 1, 1, 1, 1, 0, '', 3),
-(13, 'Alien - Marines', 1, 1, 1, 1, 0, '', 3),
-(14, 'Alien - Humain', 1, 1, 1, 1, 0, '', 3),
-(15, 'Starwars - jedi', 1, 1, 1, 1, 0, '', 3),
-(16, 'Starwars - sith', 1, 1, 1, 1, 0, '', 3),
-(17, 'League Of Legend - Assassin', 1, 1, 1, 1, 0, '', 4),
-(18, 'League Of Legend - Tank', 1, 1, 1, 1, 0, '', 4),
-(19, 'Humain - π', 10, 10, 10, 1, 10, 'https://i.pinimg.com/originals/d3/b0/6b/d3b06b0479de8fd88e5b1bd8df1068cd.jpg', 5);
+INSERT INTO `typepersonnage` (`idTypePerso`, `nameTypePerso`, `statsAttaque`, `statsDefense`, `statsMagique`, `statsRessMagique`, `imgTypePerso`, `idFaction`) VALUES
+(1, 'Haut Elfe', 1, 1, 1, 1, '', 1),
+(2, 'Halfelin', 1, 1, 1, 1, '', 1),
+(3, 'Mage', 1, 1, 1, 1, '', 1),
+(4, 'Héliade', 1, 1, 1, 1, '', 1),
+(5, 'Elfe Sylvain', 1, 1, 1, 1, '', 2),
+(6, 'Korrigan', 1, 1, 1, 1, '', 2),
+(7, 'Nain', 1, 1, 1, 1, '', 2),
+(8, 'Hobbit', 1, 1, 1, 1, '', 2),
+(9, 'Sirène', 1, 1, 1, 1, '', 3),
+(10, 'Tritons', 1, 1, 1, 1, '', 3),
+(11, 'Homme-Lézard', 1, 1, 1, 1, '', 3),
+(12, 'Hydriade', 1, 1, 1, 1, '', 3),
+(13, 'Elfe Noir', 1, 1, 1, 1, '', 4),
+(14, 'Orc', 1, 1, 1, 1, '', 4),
+(15, 'Duergars', 1, 1, 1, 1, '', 4),
+(16, 'Sorcier', 1, 1, 1, 1, '', 4);
 
 -- --------------------------------------------------------
 
@@ -549,28 +598,29 @@ INSERT INTO `typepersonnage` (`id`, `nom`, `coefAttaque`, `coefDefense`, `coefBo
 
 DROP TABLE IF EXISTS `typeuser`;
 CREATE TABLE IF NOT EXISTS `typeuser` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
+  `idTypeUser` int NOT NULL AUTO_INCREMENT,
+  `nameTypeUser` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `admin` tinyint NOT NULL,
-  `Staff` tinyint NOT NULL,
+  `staff` tinyint NOT NULL,
   `bypass` tinyint NOT NULL,
-  `visibility` tinyint NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `view` tinyint NOT NULL,
+  PRIMARY KEY (`idTypeUser`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `typeuser`
 --
 
-INSERT INTO `typeuser` (`id`, `name`, `admin`, `Staff`, `bypass`, `visibility`) VALUES
+INSERT INTO `typeuser` (`idTypeUser`, `nameTypeUser`, `admin`, `staff`, `bypass`, `view`) VALUES
 (12, 'Administrateur', 1, 1, 1, 0),
 (11, 'Opérateur', 1, 1, 1, 0),
 (10, 'Modérateur', 0, 1, 1, 0),
 (3, 'Joueur Expérimenté', 0, 0, 0, 1),
 (2, 'Joueur Vérifié', 0, 0, 0, 1),
 (1, 'Joueur', 0, 0, 0, 1),
-(0, 'Ban', 0, 0, 0, 0),
-(-1, 'Testeur', 0, 0, 1, 0);
+(-1, 'Ban', 0, 0, 0, 0),
+(9, 'Testeur', 0, 0, 1, 0),
+(0, 'Sanctionné', 0, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -580,7 +630,7 @@ INSERT INTO `typeuser` (`id`, `name`, `admin`, `Staff`, `bypass`, `visibility`) 
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `idUser` int NOT NULL AUTO_INCREMENT,
   `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `pseudo` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `password_hash` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -588,8 +638,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `idPersonnage` int DEFAULT NULL,
   `idFaction` int DEFAULT NULL,
   `dateUser` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `admin` tinyint NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
+  `typeUser` int NOT NULL DEFAULT '1',
+  PRIMARY KEY (`idUser`),
   UNIQUE KEY `login` (`email`),
   KEY `idPersonnage` (`idPersonnage`),
   KEY `idFaction` (`idFaction`)
