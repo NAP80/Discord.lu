@@ -53,10 +53,13 @@
                                     <?php
                                     // Récupération Objet Personnage
                                     $ObjectPersonnage = $Joueur1->getPersonnage();
-                                    $Joueur1->getChoixPersonnage(); // Fonction de selection du personnage
                                     if($NbPersonnage < 10){
                                         // Formulaire création Personnage
                                         $Joueur1->CreatNewPersonnage();
+                                    }
+                                    if($NbPersonnage > 1){
+                                        // Selection Personnage
+                                        $Joueur1->getChoixPersonnage();
                                     }
                                     $ObjectPersonnage = $Joueur1->getPersonnage();
                                     ?>

@@ -130,6 +130,7 @@
         /** Set Object Personnage */
         public function setPersonnage($Perso){
             $this->_infoPerso = $Perso;
+            $this->_idPersonnage = $Perso->getIdEntite();
             $req ="UPDATE `User` SET `idPersonnage`='".$Perso->getIdEntite()."' WHERE `idUser` = '".$this->_idUser."'";
             $Result = $this->_bdd->query($req);
         }
@@ -154,7 +155,7 @@
                         $imageUrl = $personnage->generateImage($TypePerso->getNameTypePerso());
                         ?>
                             <form action="" method="post" class="formCreatPerso">
-                                <p>Créez un personnage :</p>
+                                <h3>Créez un personnage :</h3>
                                 <input type="text" name="Name" required>
                                 <?php
                                     // En fait là on récupère les type de personnages en fonction de son ID de Faction
@@ -192,10 +193,6 @@
                     $Result = $this->_bdd->query($req);
                     $newperso->setEntiteById($newperso->getIdEntite());
                     $this->setPersonnage($newperso);
-                    // Redirection - À patch le fait qu'il faut actuliser la page pour avoir son perso... Truc Temporaire
-                    ?>
-                        <script>window.location.replace("./combat.php");</script>
-                    <?php
                 }
                 else{
                     return $RepMSG = "Vous ne pouvez prendre qu'un Type de Personnage de votre Faction.";
@@ -731,11 +728,16 @@
                     }
                 }
             }
-            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE idUser='".$this->getIdUser()."' AND idTypeEntite=1");
+            $MainPersonnage = New Personnage($this->_bdd);
+            $MainPersonnage->setPersonnageById($this->getIdPersonnage());
+            $TypePersonnage = New TypePersonnage($this->_bdd);
+            $TypePersonnage->setTypePersonnageByIdPerso($this->getIdPersonnage());
             ?>
-                <p>Choisir un personnage :</p>
+                <h3>Choisir un personnage :</h3>
+                <p>Votre Personnage actuel est <?= $MainPersonnage->getNameEntite() ?> (<?= $TypePersonnage->getNameTypePerso() ?>).</p>
                 <form action="" method="post" class="formChangePerso">
                     <?php
+                        $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE idUser='".$this->getIdUser()."' AND idTypeEntite=1 AND idEntite<>'".$this->getIdPersonnage()."'");
                         while($Personnage = $Result->fetch()){
                             ?>
                                 <div class="listTypePerso">
