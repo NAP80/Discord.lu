@@ -15,7 +15,7 @@
             $this->_bdd = $bdd;
         }
 
-        // Return TypePersonnage by Id Perso
+        /** Return TypePersonnage by Id Personnage */
         public function setTypePersonnageByIdPerso($idPersonnage){
             $req = "SELECT *
             FROM `TypePersonnage`,`Personnage`
@@ -34,7 +34,7 @@
             }
         }
         
-        // Return TypePersonnage by Id
+        /** Return TypePersonnage by Id TypePersonnage*/
         public function setTypePersonnageById($idTypePersonnage){
             //select les info personnage
             $req = "SELECT * FROM `TypePersonnage`
