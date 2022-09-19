@@ -181,18 +181,25 @@
                     ?>
                 </div>
             <?php
-            if(isset($_POST["createPerso"]) && isset($_POST["TypePerso"]) &&isset($_POST["Name"]) && isset($_POST["image"]) && !is_null($idFactionUser)){
-                $newperso = new Personnage($this->_bdd);
-                $newperso = $newperso->CreateEntite($_POST['Name'], 100, 10, 1,100,$_POST['image'],$this->getIdUser(),1,1);
-                $idTypePersonnage = $_POST['TypePerso'];
-                $req="INSERT INTO `Personnage`(`idPersonnage`,`idTypePersonnage`,`idMapSpawnPersonnage`) VALUES ('".$newperso->getIdEntite()."','".$idTypePersonnage."',1)";
-                $Result = $this->_bdd->query($req);
-                $newperso->setEntiteById($newperso->getIdEntite());
-                $this->setPersonnage($newperso);
-                // Redirection - À patch le fait qu'il faut actuliser la page pour avoir son perso... Truc Temporaire
-                ?>
-                    <!--<script>window.location.replace("./combat.php");</script>-->
-                <?php
+            if(isset($_POST["createPerso"]) && isset($_POST["TypePerso"]) && is_numeric($_POST["TypePerso"]) && isset($_POST["Name"]) && isset($_POST["image"]) && !is_null($idFactionUser)){
+                $TypePersonnage = new TypePersonnage($this->_bdd);
+                $TypePersonnage->setTypePersonnageById($_POST["TypePerso"]);
+                if($TypePersonnage->getIdFaction() == $this->_idFaction){
+                    $newperso = new Personnage($this->_bdd);
+                    $newperso = $newperso->CreateEntite($_POST['Name'], 100, 10, 1,100,$_POST['image'],$this->getIdUser(),1,1);
+                    $idTypePersonnage = $_POST['TypePerso'];
+                    $req="INSERT INTO `Personnage`(`idPersonnage`,`idTypePersonnage`,`idMapSpawnPersonnage`) VALUES ('".$newperso->getIdEntite()."','".$idTypePersonnage."',1)";
+                    $Result = $this->_bdd->query($req);
+                    $newperso->setEntiteById($newperso->getIdEntite());
+                    $this->setPersonnage($newperso);
+                    // Redirection - À patch le fait qu'il faut actuliser la page pour avoir son perso... Truc Temporaire
+                    ?>
+                        <script>window.location.replace("./combat.php");</script>
+                    <?php
+                }
+                else{
+                    return $RepMSG = "Vous ne pouvez prendre qu'un Type de Personnage de votre Faction.";
+                }
             }
         }
 

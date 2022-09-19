@@ -52,7 +52,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Map BDD/PHP : Remettre en place Zone Non-PVP,
 - PHP : Déplacement Map : Non affichage de l'origine de déplacement quand refresh si Monster,
 - JS/API : Non refresh si mort après une attaque,
-- PHP : Vérification Id TypePersonnage lors de Création Personnage.
+- PHP : Création Personnage -> Avoir le personnage dès la création.
 
 ## Fait :
 - Récupération du projet,
