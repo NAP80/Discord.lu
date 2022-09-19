@@ -236,11 +236,11 @@
         }
     }
 
-    //le idTypeEntite est 0 = Monstre / 1 = Personnage
+    // idTypeEntite : 0 = Monstre / 1 = Personnage
     function attaquer(idPerso,idTypeEntite){
         hitAnimation(event);
-        //supprimer temporairement l'attaque pour le cooldown
-        if(idTypeEntite==0){
+        // Supprimer temporairement l'attaque pour le cooldown
+        if(idTypeEntite == 0){
             var li = document.getElementById("Monster"+idPerso);
             var a = document.getElementById("aMonster"+idPerso);
         }
@@ -251,21 +251,30 @@
         li.classList.add("busy");
         let theclick =a.onclick;
         a.onclick ='';
-        //pour appeler une API on utilise la méthode fetch()
+        // Pour appeler une API on utilise la méthode fetch()
         fetch('api/attaquer.php?idEntite='+idPerso+'&idTypeEntite='+idTypeEntite).then(
             (resp) => resp.json()
         )
         .then(function(data){
             // code for handling the data you get from the API
             console.log(data);
-                UpdateHealth("healthEntiteValeur"+data[0],data[1],data[2],data[3],data[4],"healthEntiteValeur"+data[5],data[6]);
-                //data[7]c'est xp
-                if(data[1] <= 0){
-                    //si Monster mort on doit recharger le server
-                    //Todo toruver une alternative à un refrech de page
-                    location.reload();
+                // If Personnage
+                if(idTypeEntite == 1){
+                    UpdateHealth("healthEntiteValeur"+data[0],data[1],data[2],data[3],data[4],"healthEntiteValeur"+data[5],data[6],1);
+                    // Si Personnage Mort -> Actualisation
+                    if(data[1] <= 0 || data[3] <= 0){
+                        location.reload();
+                    }
                 }
-                a.onclick =theclick;
+                // If Monster
+                if(idTypeEntite == 0){
+                    UpdateHealth("healthEntiteValeur"+data[0],data[1],data[2],data[3],data[4],"healthEntiteValeur"+data[5],data[6],0);
+                    // Si Monster Mort -> Actualisation
+                    if(data[1] <= 0 || data[3] <= 0){
+                        location.reload();
+                    }
+                }
+                a.onclick = theclick;
                 li.classList.remove("busy");
         })
         .catch(function(error){
@@ -319,7 +328,7 @@
         }
     }
 
-    function UpdateHealth(id,healthNow,healthMax,healthEntite2,healthMaxEntite2,id2,message){
+    function UpdateHealth(id,healthNow,healthMax,healthEntite2,healthMaxEntite2,id2,message,idTypeEntite){
         var e1 = document.getElementById(id);
         if(e1!="undefine"){
             let pourcentage = healthNow/healthMax*100;
@@ -338,10 +347,19 @@
                 const clearID = id.match(/(\d+)/);
                 if(!clearID)
                     return;
-                var Monster = document.getElementById(`Monster${clearID[0]}`);
-                Monster.classList.add("Captured")
-                Monster.classList.remove("adverse")
-                Monster.querySelector('a').setAttribute("onclick", `SoinMonster(${clearID[0]}, 1)`);
+                // Si Personnage
+                if(idTypeEntite == 1){
+                    var Personnage = document.getElementById(`Perso${clearID[0]}`);
+                    Personnage.classList.add("PersoDead")
+                    Personnage.classList.remove("liAdverse")
+                }
+                // Si Monster
+                if(idTypeEntite == 0){
+                    var Monster = document.getElementById(`Monster${clearID[0]}`);
+                    Monster.classList.add("Captured")
+                    Monster.classList.remove("liAdverse")
+                    //Monster.querySelector('a').setAttribute("onclick", `SoinMonster(${clearID[0]}, 1)`);
+                }
             }
         }
     }

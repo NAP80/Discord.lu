@@ -46,12 +46,12 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Intégrer les différent display/affichage.php dans l'objet PHP Map,
 - Ajouter une "fouille" avant de faire apparaitre des items,
 - Ajouter des effets Personnage,
+- Ajouter Fonction JS SoinsMonster,
 - Refaire RenderHTML.
 
 # Todo Patch :
 - Map BDD/PHP : Remettre en place Zone Non-PVP,
-- PHP : Déplacement Map : Non affichage de l'origine de déplacement quand refresh si Monster,
-- JS/API : Non refresh si mort après une attaque,
+- PHP : Déplacement Map : Non affichage de l'origine de déplacement quand refresh si Monster.
 
 ## Fait :
 - Récupération du projet,
@@ -69,4 +69,5 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Mise à jours TypePersonnage,
 - Mise à jours TypeMonsters,
 - Uniformisation Variable et BDD,
-- Refonte Class Objet -> Efficacite.
+- Refonte Class Objet -> Efficacite,
+- Patch PHP/JS Multiples.

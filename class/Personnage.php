@@ -117,16 +117,16 @@
 
         /** Personnage Take dammage by Personnage*/
         public function SubitDegatByPersonnage($dammage){
-            $dammage -=  ($dammage*$this->getDefense()) / 100;
+            $dammage -= ($dammage*$this->getDefense()) / 100;
             $dammage = round($dammage);
             if($dammage<0){
                 $dammage = 0;
             }
             $this->_healthNow = $this->_healthNow - $dammage;
-            if($this->_healthNow < 1){
-                $this->_healthNow = 1;
+            if($this->_healthNow < 0){
+                $this->_healthNow = 0;
             }
-            $req  = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow ."' WHERE `idEntite` = '".$this->_idEntite ."'";
+            $req = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow ."' WHERE `idEntite` = '".$this->_idEntite ."'";
             $Result = $this->_bdd->query($req);
             return $this->_healthNow;
         }

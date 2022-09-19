@@ -34,7 +34,7 @@
                             $Monster->setMonsterById($MonsterID);
                             ?>
                                 <li id="Monster<?= $Monster->getIdEntite() ?>" class="liCaptured">
-                                    <a id="aMonster<?= $Monster->getIdEntite() ?>" onclick="SoinMonster(<?= $Monster->getIdEntite() ?>,1)">
+                                    <a id="aMonster<?= $Monster->getIdEntite() ?>" onclick="/*SoinMonster(<?= $Monster->getIdEntite() ?>,1)*/">
                                         <?php
                                             $Monster->renderHTML();
                                         ?>
