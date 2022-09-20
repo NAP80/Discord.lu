@@ -258,24 +258,20 @@
         .then(function(data){
             // code for handling the data you get from the API
             console.log(data);
-                // If Personnage
-                if(idTypeEntite == 1){
-                    UpdateHealth("healthEntiteValeur"+data[0],data[1],data[2],data[3],data[4],"healthEntiteValeur"+data[5],data[6],1);
-                    // Si Personnage Mort -> Actualisation
-                    if(data[1] <= 0 || data[3] <= 0){
-                        location.reload();
-                    }
-                }
-                // If Monster
-                if(idTypeEntite == 0){
-                    UpdateHealth("healthEntiteValeur"+data[0],data[1],data[2],data[3],data[4],"healthEntiteValeur"+data[5],data[6],0);
-                    // Si Monster Mort -> Actualisation
-                    if(data[1] <= 0 || data[3] <= 0){
-                        location.reload();
-                    }
-                }
-                a.onclick = theclick;
-                li.classList.remove("busy");
+            // If Personnage ou Monster Mort
+            if(data[1] <= 0 || data[3] <= 0){
+                location.reload();
+            }
+            // If Personnage
+            if(idTypeEntite == 1){
+                UpdateHealth("healthEntiteValeur"+data[0],data[1],data[2],data[3],data[4],"healthEntiteValeur"+data[5],data[6],1);
+            }
+            // If Monster
+            if(idTypeEntite == 0){
+                UpdateHealth("healthEntiteValeur"+data[0],data[1],data[2],data[3],data[4],"healthEntiteValeur"+data[5],data[6],0);
+            }
+            a.onclick = theclick;
+            li.classList.remove("busy");
         })
         .catch(function(error){
             // This is where you run code if the server returns any errors
