@@ -7,7 +7,7 @@
         private $_imgMap;
         private $_x;
         private $_y;
-        private $_type; // Vérifier : Inutilisé - Prévu pour faire des zones non-PVP
+        private $_PVP;
         private $idUserDecouverte;
         private $_position=0;
         Private $listItems=array();
@@ -45,6 +45,7 @@
                     $tab["y"],
                     $tab["idUserDecouverte"],
                     $tab["imgMap"],
+                    $tab["PvP"],
                 );
             }
         }
@@ -69,9 +70,9 @@
             return $this->_y;
         }
 
-        /** Return Type */ //  Voir
-        public function getTypeMap(){
-            return $this->_type;
+        /** Return PvP */
+        public function getPvP(){
+            return $this->_PvP;
         }
 
         /** Return ImgMap */
@@ -130,7 +131,7 @@
         }
 
         // Optimiser et refaire
-        public function setMap($idMap,$nameMap,$position,$mapNord,$mapSud,$mapEst,$mapOuest,$x,$y,$idUserDecouverte,$image){
+        public function setMap($idMap,$nameMap,$position,$mapNord,$mapSud,$mapEst,$mapOuest,$x,$y,$idUserDecouverte,$image,$PvP){
             $this->_idMap = $idMap;
             $this->_nameMap = $nameMap;
             $this->_position = $position;
@@ -138,6 +139,7 @@
             $this->_y = $y;
             $this->_imgMap = $image;
             $this->idUserDecouverte = $idUserDecouverte;
+            $this->_PvP = $PvP;
             //je place les id pour ne pas que l'objet racupère en récurciv toute les maps inclu dans elle meme
             (is_null($mapNord))?$this->mapNord = null:$this->mapNord = $mapNord;
             (is_null($mapSud))?$this->mapSud = null:$this->mapSud = $mapSud;

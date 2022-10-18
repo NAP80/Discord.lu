@@ -227,7 +227,7 @@
         /** Affiche le rendu HTML du personnage */ // À Refaire
         public function renderHTML(){
         ?>
-            <div class="perso" id="PersoEnCours<?= $this->_idEntite ?>">
+            <div class="perso" id="Perso<?= $this->_idEntite ?>">
                 <div class="persoXP">
                     <?= $this->_expPersonnage?> (Exp)
                 </div>

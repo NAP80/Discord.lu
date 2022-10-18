@@ -145,43 +145,11 @@
 
         /** Affiche Formulaire Création Personnage */
         public function CreatNewPersonnage(){
-            ?>
-                <div class="divCreatPerso">
-                    <?php 
-                        $idFactionUser = $this->getIdFaction();
-                        $TypePersos = $this->getAllTypePersonnage($idFactionUser);
-                        $TypePerso = $TypePersos[rand(0,count($TypePersos)-1)];
-                        $personnage = new Personnage($this->_bdd);
-                        $imageUrl = $personnage->generateImage($TypePerso->getNameTypePerso());
-                        ?>
-                            <form action="" method="post" class="formCreatPerso">
-                                <h3>Créez un personnage :</h3>
-                                <input type="text" name="Name" required>
-                                <?php
-                                    // En fait là on récupère les type de personnages en fonction de son ID de Faction
-                                    $TypePersos = $this->getAllTypePersonnage($idFactionUser);
-                                    ?>
-                                        <div class="listTypePerso">
-                                            <?php
-                                                foreach($TypePersos as $TypePerso){
-                                                    ?>
-                                                        <div class="listTypePerso">
-                                                            <input type="radio" name="TypePerso" id="Type<?= $TypePerso->getIdTypePerso() ?>" value="<?= $TypePerso->getIdTypePerso() ?>">
-                                                            <label for="Type<?= $TypePerso->getIdTypePerso() ?>"><?= $TypePerso->getNameTypePerso() ?></label>
-                                                            <input type="hidden" name="image" value="<?= $imageUrl ?>">
-                                                        </div>
-                                                    <?php
-                                                }
-                                            ?>
-                                        </div>
-                                        <input type="submit" value="Creer" name="createPerso">
-                                    <?php
-                                ?>
-                            </form>
-                        <?php
-                    ?>
-                </div>
-            <?php
+            $idFactionUser = $this->getIdFaction();
+            $TypePersos = $this->getAllTypePersonnage($idFactionUser);
+            $TypePerso = $TypePersos[rand(0,count($TypePersos)-1)];
+            $personnage = new Personnage($this->_bdd);
+            $imageUrl = $personnage->generateImage($TypePerso->getNameTypePerso());
             if(isset($_POST["createPerso"]) && isset($_POST["TypePerso"]) && is_numeric($_POST["TypePerso"]) && isset($_POST["Name"]) && isset($_POST["image"]) && !is_null($idFactionUser)){
                 $TypePersonnage = new TypePersonnage($this->_bdd);
                 $TypePersonnage->setTypePersonnageById($_POST["TypePerso"]);
@@ -197,6 +165,36 @@
                 else{
                     return $RepMSG = "Vous ne pouvez prendre qu'un Type de Personnage de votre Faction.";
                 }
+            }
+            if($this->getNbPersonnages() <= 10){
+                ?>
+                    <div class="divCreatPerso">
+                        <form action="" method="post" class="formCreatPerso">
+                            <h3>Créez un personnage :</h3>
+                            <input type="text" name="Name" required>
+                            <?php
+                                // En fait là on récupère les type de personnages en fonction de son ID de Faction
+                                $TypePersos = $this->getAllTypePersonnage($idFactionUser);
+                                ?>
+                                    <div class="listTypePerso">
+                                        <?php
+                                            foreach($TypePersos as $TypePerso){
+                                                ?>
+                                                    <div class="listTypePerso">
+                                                        <input type="radio" name="TypePerso" id="Type<?= $TypePerso->getIdTypePerso() ?>" value="<?= $TypePerso->getIdTypePerso() ?>">
+                                                        <label for="Type<?= $TypePerso->getIdTypePerso() ?>"><?= $TypePerso->getNameTypePerso() ?></label>
+                                                        <input type="hidden" name="image" value="<?= $imageUrl ?>">
+                                                    </div>
+                                                <?php
+                                            }
+                                        ?>
+                                    </div>
+                                    <input type="submit" value="Creer" name="createPerso">
+                                <?php
+                            ?>
+                        </form>
+                    </div>
+                <?php
             }
         }
 

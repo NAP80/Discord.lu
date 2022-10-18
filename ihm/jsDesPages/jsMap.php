@@ -245,14 +245,14 @@
             var a = document.getElementById("aMonster"+idPerso);
         }
         else{
-            var li = document.getElementById("PersoEnCours"+idPerso);
+            var li = document.getElementById("Perso"+idPerso);
             var a = document.getElementById("aPerso"+idPerso);
         }
         li.classList.add("busy");
-        let theclick =a.onclick;
+        let theclick = a.onclick;
         a.onclick ='';
         // Pour appeler une API on utilise la méthode fetch()
-        fetch('api/attaquer.php?idEntite='+idPerso+'&idTypeEntite='+idTypeEntite).then(
+        fetch('api/attaquer.php?idEntite='+idPerso).then(
             (resp) => resp.json()
         )
         .then(function(data){
@@ -260,23 +260,16 @@
             console.log(data);
             // If Personnage ou Monster Mort
             if(data[1] <= 0 || data[3] <= 0){
-                location.reload();
+                //location.reload();
             }
-            // If Personnage
-            if(idTypeEntite == 1){
-                UpdateHealth("healthEntiteValeur"+data[0],data[1],data[2],data[3],data[4],"healthEntiteValeur"+data[5],data[6],1);
-            }
-            // If Monster
-            if(idTypeEntite == 0){
-                UpdateHealth("healthEntiteValeur"+data[0],data[1],data[2],data[3],data[4],"healthEntiteValeur"+data[5],data[6],0);
-            }
+            UpdateHealth("healthEntiteValeur"+data[0],data[1],data[2],data[3],data[4],"healthEntiteValeur"+data[5],data[6],data[9]);
             a.onclick = theclick;
             li.classList.remove("busy");
         })
         .catch(function(error){
             // This is where you run code if the server returns any errors
             console.log(error);
-            a.onclick =theclick;
+            a.onclick = theclick;
             li.classList.remove("busy");
         });
     }
