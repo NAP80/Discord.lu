@@ -131,8 +131,7 @@
             return $this->_healthNow;
         }
 
-        //todo peut etre factoriser dans la class mère Entite
-        /** Personnage Take dammage by Personnage*/
+        /** Personnage Take dammage by Personnage*/ // Voir pour Mettre dans Entite
         public function SubitDegatByMonster($Monster){
             //Attente de pull qui marche
             //Si le Monster attaquant a plus de O PV, il attaque
@@ -213,7 +212,7 @@
             $this->changeMap($maporigine);
         }
 
-        //retourne un entier de toutes ses valeurs
+        // Return Valeur
         public function getValeur(){
             $valeur = 0;
             foreach ($this->getItems() as $value){

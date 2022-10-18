@@ -14,9 +14,9 @@
         public $_idTypeEntite; // 0 = Monster / 1 = Personnage
         public $map;
         public $_bdd;
-        //dans le cas d'un perso
+
         public $_idTypePersonnage;
-        public $typePersonnage;
+        public $TypePersonnage;
 
         public function __construct($bdd){
             $this->_bdd = $bdd;
@@ -34,12 +34,45 @@
             $this->_idUser = $idUser;
 
             if($this->_idTypeEntite == 1){
-                if(is_null($this->typePersonnage)){
+                if(is_null($this->TypePersonnage)){
                     $TypePersonnage = new TypePersonnage($this->_bdd);
                     $TypePersonnage->setTypePersonnageByIdPerso($this->_idEntite);
-                    $this->typePersonnage = $TypePersonnage;
+                    $this->TypePersonnage = $TypePersonnage;
                     $this->_idTypePersonnage = $TypePersonnage->getIdTypePerso();
                 }
+            }
+        }
+
+        /** Récupère l'entitée par ID */
+        public function setEntiteById($idEntite){
+            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `idEntite`='".$idEntite."'");
+            if($tab = $Result->fetch()){
+                $this->setEntite($tab["idEntite"],$tab["nameEntite"],$tab["healthNow"],$tab["degat"],$tab["healthMax"],$tab["imgEntite"],$tab["idTypeEntite"],$tab["lvlEntite"],$tab["idUser"]);
+                //recherche de sa position
+                $map = new map($this->_bdd);
+                $map->setMapByID($tab["idMap"]);
+                $this->map = $map;
+                //select les equipements déjà présent
+                $req = "SELECT idEquipement FROM `EntiteEquipement` WHERE idEntite='".$idEntite."'";
+                $Result = $this->_bdd->query($req);
+                while($tab=$Result->fetch()){
+                    array_push($this->sacEquipements,$tab[0]);
+                }
+                //select les Equipement déjà présent
+                $req = "SELECT idEquipement,equipe FROM `EntiteEquipement` WHERE idEntite='".$idEntite."' AND equipe='1'";
+                $Result = $this->_bdd->query($req);
+                while($tab=$Result->fetch()){
+                    if($tab['equipe']==1){
+                        array_push($this->sacEquipe,$tab['idEquipement']);
+                    }
+                }
+            }
+        }
+
+        public function setEntiteByIdWithoutMap($idEntite){
+            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `idEntite`='".$idEntite."'");
+            if($tab = $Result->fetch()){
+                $this->setEntite($tab["idEntite"],$tab["nameEntite"],$tab["healthNow"],$tab["degat"],$tab["healthMax"],$tab["imgEntite"],$tab["idTypeEntite"],$tab["lvlEntite"],$tab["idUser"]);
             }
         }
 
@@ -83,43 +116,27 @@
             return $this->_idUser;
         }
 
-        /** Remove Équipement by ID */
-        public function removeEquipementByID($EquipementID){
-            $idindex = array_search($EquipementID, $this->sacEquipements);
-            if($idindex  >= 0){
-                unset($this->sacEquipements[ $idindex ]);
-                $req="DELETE FROM `EntiteEquipement` WHERE idEntite='".$this->getIdEntite()."' AND idEquipement='".$EquipementID."'";
-                $this->_bdd->query($req);
-
-                //todo retirer un equipement ne doit pas etre une suppression
-                //todo la suppression peut etre déjà faite à la fusion
-                $req="DELETE FROM `Equipement` WHERE idEquipement='".$EquipementID."'";
-                $this->_bdd->query($req);
-            }
-        }
-
-        //ajoute un lien entre item et la personnage en bdd 
-        //et accroche l'item dans la collection itemID dans le sac du perso
-        public function addEquipement($newEquipement){
-            //on va vérifier ici que l'équipement n'est pas déjà présent de meme niveau sinon fusion.
-            //exemple 2 epée lvl 2 = epée lvl 3 avec un boost de fusions dans Efficacite
-            //la fusion est récursive un lvl passé lvl 2 peut ausis fusioné avec un lvl3
-            $TabIDRemoved = array(); // tableau des id supprimé aprés fusion pour les envoyer au front 
-            $newEquipement->fusionEquipement($this,$TabIDRemoved);
-            if(count($TabIDRemoved)>0 ){
-                foreach ($TabIDRemoved as $idSup) {
-                    $this->removeEquipementByID($idSup);
-                }
-                array_push($this->sacEquipements,$newEquipement->getIdEquipement());
-                return $TabIDRemoved;
+        /** Create Entite */
+        public function CreateEntite($nameEntite, $healthNow, $degat, $idMap,$healthMax,$imgEntite,$idUser,$idTypeEntite,$lvlEntite){
+            $newperso = new Entite($this->_bdd);
+            $this->_nameEntite=htmlentities($nameEntite, ENT_QUOTES);
+            $this->_lvlEntite = $lvlEntite;
+            $this->_imgEntite=$imgEntite;
+            $req="INSERT INTO `Entite`(`nameEntite`, `healthNow`, `degat`, `idMap`,`healthMax`,`imgEntite`,`idUser`,`idTypeEntite`,`lvlEntite`)
+            VALUES ('".$this->_nameEntite."','.$healthNow.','.$degat.','.$idMap.','.$healthMax.','".$this->_imgEntite."','".$idUser."','.$idTypeEntite.','.$lvlEntite.')";
+            $this->_bdd->beginTransaction();
+            $Result = $this->_bdd->query($req);
+            $this->_idEntite = $this->_bdd->lastInsertId();
+            if($this->_idEntite){
+                $newperso->setEntiteById($this->_idEntite);
+                $this->_bdd->commit();
+                return $newperso;
             }
             else{
-                $req="INSERT INTO `EntiteEquipement`(`idEntite`, `idEquipement`) VALUES ('".$this->getIdEntite()."','".$newEquipement->getIdEquipement()."')";
-                $this->_bdd->query($req);
-                array_push($this->sacEquipements,$newEquipement->getIdEquipement());
-                //retourne 0 si ya pas eu de fusion d'équipement
-                return 0;
+                $this->_bdd->rollback();
+                return null;
             }
+            return null;
         }
 
         /** Affichage de HealthNow en Bar*/
@@ -135,146 +152,6 @@
                     </div>
                 </div>
             <?php
-        }
-
-        //Equipe l'item au personnage
-        //cette methode doit etre appelé que par Equipemement
-        public function addEquipeById($EquipementID){
-            //la mise a jout en base et fait 
-            array_push($this->sacEquipe,$EquipementID);
-        }
-
-        //Déséquipe l'item au personnage
-        //cette methode doit etre appelé que par Equipemement
-        public function removeEquipeBydId($idEquipement){
-            //la mise a jout en base et fait dans l'equipement
-            $idEquipement = array_search($idEquipement, $this->sacEquipe);
-            if($idEquipement >= 0){
-                unset($this->sacEquipe[$idEquipement]);
-            }
-        }
-
-        /** Return les équipements non portés */
-        public function getEquipementNonPorte(){
-            //compare les 2tableau et retourne ce qui est pas commun
-            $tab1 = $this->sacEquipements;
-            $tab2 = $this->sacEquipe;
-            //attention l'ordre des param est important 
-            $tab3 = array_diff($tab1,$tab2);
-            //compare les 2tableau et retourne ce qui est commun
-            $lists=array();
-            foreach($tab3 as $EquipementId){
-                $newEquipement = new Equipement($this->_bdd);
-                $newEquipement->setEquipementByID($EquipementId);
-                array_push($lists,$newEquipement);
-            }
-            return $lists;
-        }
-
-        /** Return les équipements */
-        public function getEquipements(){
-            $lists = array();
-            foreach($this->sacEquipements as $EquipementId){
-                $newEquipement = new Equipement($this->_bdd);
-                $newEquipement->setEquipementByID($EquipementId);
-                array_push($lists,$newEquipement);
-            }
-            return $lists;
-        }
-
-        //Retour un objet de type arme
-        public function getArme(){
-            $Arme = null;
-            foreach($this->sacEquipe as $EquipementId){
-                $EntiteEquipe = new Equipement($this->_bdd);
-                $EntiteEquipe->setEquipementByID($EquipementId);
-                //Le chiffre 1 et id de la categorie Armure à vérifier en base
-                if($EntiteEquipe->getIdCategorie()==1){
-                    $Arme = new Arme($this->_bdd);
-                    $Arme->setEquipementByID($EntiteEquipe->getIdEquipement());
-                    return $Arme;
-                }
-            }
-            return $Arme;
-        }
-
-        //Retour un objet de type armure 
-        public function getArmure(){
-            $Armure = null;
-            foreach($this->sacEquipe as $EquipementId){
-                $EntiteEquipe = new Equipement($this->_bdd);
-                $EntiteEquipe->setEquipementByID($EquipementId);
-                //Le chiffre 2 et id de la categorie Armure à vérifier en base
-                if($EntiteEquipe->getIdCategorie()==2){
-                    $Armure = new Armure($this->_bdd);
-                    $Armure->setEquipementByID($EntiteEquipe->getIdEquipement());
-                    return $Armure;
-                }
-            }
-            return $Armure;
-        }
-
-        //Retour un objet de type pouvoir
-        public function getPouvoir(){
-            $Pouvoir = null;
-            foreach($this->sacEquipe as $EquipementId){
-                $EntiteEquipe = new Equipement($this->_bdd);
-                $EntiteEquipe->setEquipementByID($EquipementId);
-                //Le chiffre 1 et id de la categorie Pouvoir à vérifier en base
-                if($EntiteEquipe->getIdCategorie()==3){
-                    $Pouvoir = new Pouvoir($this->_bdd);
-                    $Pouvoir->setEquipementByID($EntiteEquipe->getIdEquipement());
-                    return $Pouvoir;
-                }
-            }
-            return $Pouvoir;
-        }
-
-        //Retour un objet de type bouclier
-        public function getBouclier(){
-            $Pouvoir = null;
-            foreach($this->sacEquipe as $EquipementId){
-                $EntiteEquipe = new Equipement($this->_bdd);
-                $EntiteEquipe->setEquipementByID($EquipementId);
-                //Le chiffre 1 et id de la categorie Pouvoir à vérifier en base
-                if($EntiteEquipe->getIdCategorie()==4){
-                    $Bouclier = new Bouclier($this->_bdd);
-                    $Bouclier->setEquipementByID($EntiteEquipe->getIdEquipement());
-                    return $Bouclier;
-                }
-            }
-        }
-
-        /** Déséquipe Arme */
-        public function desequipeArme(){
-            $arme = $this->getArme();
-            if(!is_null($arme)){
-                $arme->desequipeEntite($this);
-            }
-        }
-
-        /** Déséquipe Armure */
-        public function desequipeArmure(){
-            $armure = $this->getArmure();
-            if(!is_null($armure)){
-                $armure->desequipeEntite($this);
-            }
-        }
-
-        /** Déséquipe Pouvoir */
-        public function desequipePouvoir(){
-            $pouvoir = $this->getPouvoir();
-            if(!is_null($pouvoir)){
-                $pouvoir->desequipeEntite($this);
-            }
-        }
-
-        /** Déséquipe Bouclier */
-        public function desequipeBouclier(){
-            $bouclier = $this->getBouclier();
-            if(!is_null($bouclier)){
-                $bouclier->desequipeEntite($this);
-            }
         }
 
         /** Fonction d'attaque */
@@ -322,6 +199,173 @@
             return $cooldown;
         }
 
+        /** Remove Équipement by ID */
+        public function removeEquipementByID($EquipementID){
+            $idindex = array_search($EquipementID, $this->sacEquipements);
+            if($idindex  >= 0){
+                unset($this->sacEquipements[$idindex]);
+                $req="DELETE FROM `EntiteEquipement` WHERE idEntite='".$this->getIdEntite()."' AND idEquipement='".$EquipementID."'";
+                $this->_bdd->query($req);
+
+                //todo retirer un equipement ne doit pas etre une suppression
+                //todo la suppression peut etre déjà faite à la fusion
+                $req="DELETE FROM `Equipement` WHERE idEquipement='".$EquipementID."'";
+                $this->_bdd->query($req);
+            }
+        }
+
+        /** Add Equipement au Personnage et crée un lien en BDD */
+        public function addEquipement($newEquipement){
+            // Vérification si Fusion possible
+            $TabIdRemoved = array();
+            $newEquipement->fusionEquipement($this,$TabIdRemoved);
+            if(count($TabIdRemoved) > 0){
+                foreach($TabIdRemoved as $idSup){
+                    $this->removeEquipementByID($idSup);
+                }
+                array_push($this->sacEquipements,$newEquipement->getIdEquipement());
+                return $TabIdRemoved;
+            }
+            else{
+                $req="INSERT INTO `EntiteEquipement`(`idEntite`, `idEquipement`) VALUES ('".$this->getIdEntite()."','".$newEquipement->getIdEquipement()."')";
+                $this->_bdd->query($req);
+                array_push($this->sacEquipements,$newEquipement->getIdEquipement());
+                return 0;
+            }
+        }
+
+        /** Equipe un Equipement */
+        public function addEquipeById($EquipementID){
+            array_push($this->sacEquipe,$EquipementID);
+        }
+
+        /** Déséquipe un Equipement */
+        public function removeEquipeBydId($idEquipement){
+            $idEquipement = array_search($idEquipement, $this->sacEquipe);
+            if($idEquipement >= 0){
+                unset($this->sacEquipe[$idEquipement]);
+            }
+        }
+
+        /** Return les équipements non portés */
+        public function getEquipementNonPorte(){
+            //compare les 2tableau et retourne ce qui est pas commun
+            $tab1 = $this->sacEquipements;
+            $tab2 = $this->sacEquipe;
+            //attention l'ordre des param est important 
+            $tab3 = array_diff($tab1,$tab2);
+            //compare les 2tableau et retourne ce qui est commun
+            $lists=array();
+            foreach($tab3 as $EquipementId){
+                $newEquipement = new Equipement($this->_bdd);
+                $newEquipement->setEquipementByID($EquipementId);
+                array_push($lists,$newEquipement);
+            }
+            return $lists;
+        }
+
+        /** Return les équipements */
+        public function getEquipements(){
+            $listEquipement = array();
+            foreach($this->sacEquipements as $EquipementId){
+                $newEquipement = new Equipement($this->_bdd);
+                $newEquipement->setEquipementByID($EquipementId);
+                array_push($listEquipement,$newEquipement);
+            }
+            return $listEquipement;
+        }
+
+        //Retour un objet de type arme
+        public function getArme(){
+            $Arme = null;
+            foreach($this->sacEquipe as $EquipementId){
+                $EntiteEquipe = new Equipement($this->_bdd);
+                $EntiteEquipe->setEquipementByID($EquipementId);
+                if($EntiteEquipe->getIdCategorie() == 1){// Arme = 1
+                    $Arme = new Arme($this->_bdd);
+                    $Arme->setEquipementByID($EntiteEquipe->getIdEquipement());
+                    return $Arme;
+                }
+            }
+            return $Arme;
+        }
+
+        //Retour un objet de type armure 
+        public function getArmure(){
+            $Armure = null;
+            foreach($this->sacEquipe as $EquipementId){
+                $EntiteEquipe = new Equipement($this->_bdd);
+                $EntiteEquipe->setEquipementByID($EquipementId);
+                if($EntiteEquipe->getIdCategorie() ==2 ){// Armure = 2
+                    $Armure = new Armure($this->_bdd);
+                    $Armure->setEquipementByID($EntiteEquipe->getIdEquipement());
+                    return $Armure;
+                }
+            }
+            return $Armure;
+        }
+
+        //Retour un objet de type pouvoir
+        public function getPouvoir(){
+            $Pouvoir = null;
+            foreach($this->sacEquipe as $EquipementId){
+                $EntiteEquipe = new Equipement($this->_bdd);
+                $EntiteEquipe->setEquipementByID($EquipementId);
+                if($EntiteEquipe->getIdCategorie() == 3){ // Pouvoir = 3
+                    $Pouvoir = new Pouvoir($this->_bdd);
+                    $Pouvoir->setEquipementByID($EntiteEquipe->getIdEquipement());
+                    return $Pouvoir;
+                }
+            }
+            return $Pouvoir;
+        }
+
+        //Retour un objet de type bouclier
+        public function getBouclier(){
+            $Pouvoir = null;
+            foreach($this->sacEquipe as $EquipementId){
+                $EntiteEquipe = new Equipement($this->_bdd);
+                $EntiteEquipe->setEquipementByID($EquipementId);
+                if($EntiteEquipe->getIdCategorie() == 4){ // Bouclier = 4
+                    $Bouclier = new Bouclier($this->_bdd);
+                    $Bouclier->setEquipementByID($EntiteEquipe->getIdEquipement());
+                    return $Bouclier;
+                }
+            }
+        }
+
+        /** Déséquipe Arme */
+        public function desequipeArme(){
+            $arme = $this->getArme();
+            if(!is_null($arme)){
+                $arme->desequipeEntite($this);
+            }
+        }
+
+        /** Déséquipe Armure */
+        public function desequipeArmure(){
+            $armure = $this->getArmure();
+            if(!is_null($armure)){
+                $armure->desequipeEntite($this);
+            }
+        }
+
+        /** Déséquipe Pouvoir */
+        public function desequipePouvoir(){
+            $pouvoir = $this->getPouvoir();
+            if(!is_null($pouvoir)){
+                $pouvoir->desequipeEntite($this);
+            }
+        }
+
+        /** Déséquipe Bouclier */
+        public function desequipeBouclier(){
+            $bouclier = $this->getBouclier();
+            if(!is_null($bouclier)){
+                $bouclier->desequipeEntite($this);
+            }
+        }
+
         //Fonction Sort utilise un Pouvoir
         public function getSort(){
             //ici on affiche les dégats Maximun du joueur avec Arme
@@ -357,10 +401,10 @@
             if($this->_idTypeEntite == 1){
                 $TypePersonnage = $this->getTypePersonnage();
                 if(!is_null($armure)){
-                 $coef = $coef*$TypePersonnage->getStatsDefense();
+                    $coef = $coef*$TypePersonnage->getStatsDefense();
                 }
                 if(!is_null($bouclier)){
-                 $coef = $coef*$TypePersonnage->getStatsRessMagique();
+                    $coef = $coef*$TypePersonnage->getStatsRessMagique();
                 }
             }
             $val = $coef * $forceArmure ;
@@ -486,12 +530,12 @@
         /** Return Type Personnage */
         public function getTypePersonnage(){
             if(!is_null($this->_idTypePersonnage)){
-                if(is_null($this->typePersonnage)){
+                if(is_null($this->TypePersonnage)){
                     $TypePersonnage = new TypePersonnage($this->_bdd);
                     $TypePersonnage->setTypePersonnageByIdPerso($this->_idEntite);
-                    $this->typePersonnage = $TypePersonnage;
+                    $this->TypePersonnage = $TypePersonnage;
                 }
-                return $this->typePersonnage;
+                return $this->TypePersonnage;
             }
             else{
                 return null; // Ne devrait pas avoir lieu
@@ -508,11 +552,13 @@
             $this->_healthNow=$healthMax;
             $this->_healthMax=$healthMax;
             $this->_degat=$attaque;
-            $maporigine = new Map($this->_bdd);
-            // TODO : Récupérer point de Spawn du personnage pour pouvoir le changer à chaque ville.
-            $Personnage_Spawn = 1;
-            $maporigine->setMapByID($Personnage_Spawn);
-            $this->changeMap($maporigine);
+            if($this->_idTypeEntite == 1){
+                $Personnage = new Personnage($this->_bdd);
+                $Personnage->setPersonnageById($this->_idEntite);
+                $maporigine = new Map($this->_bdd);
+                $maporigine->setMapByID($Personnage->getIdMapSpawnPersonnage());
+                $this->changeMap($maporigine);
+            }
         }
 
         //retourne un entier de toutes ses valeurs
@@ -662,130 +708,32 @@
             $this->_bdd->query($sql);
         }
 
-        /** Déplacement de l'entitée sur la Map : Appliqué aux joueux */
+        /** Déplacement de l'entitée sur la Map */
         public function changeMap($NewMap){
             $this->map = $NewMap;
-            //on mémorise çà en base
             $sql = "UPDATE `Entite` SET `idMap`='".$NewMap->getIdMap()."' WHERE `idEntite`='".$this->_idEntite."'";
             $this->_bdd->query($sql);
         }
 
-        /** Récupère l'entitée par ID */
-        public function setEntiteById($idEntite){
-            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `idEntite`='".$idEntite."'");
-            if($tab = $Result->fetch()){
-                $this->setEntite($tab["idEntite"],$tab["nameEntite"],$tab["healthNow"],$tab["degat"],$tab["healthMax"],$tab["imgEntite"],$tab["idTypeEntite"],$tab["lvlEntite"],$tab["idUser"]);
-                //recherche de sa position
-                $map = new map($this->_bdd);
-                $map->setMapByID($tab["idMap"]);
-                $this->map = $map;
-                //select les equipements déjà présent
-                $req = "SELECT idEquipement FROM `EntiteEquipement` WHERE idEntite='".$idEntite."'";
-                $Result = $this->_bdd->query($req);
-                while($tab=$Result->fetch()){
-                    array_push($this->sacEquipements,$tab[0]);
-                }
-                //select les Equipement déjà présent
-                $req = "SELECT idEquipement,equipe FROM `EntiteEquipement` WHERE idEntite='".$idEntite."' AND equipe='1'";
-                $Result = $this->_bdd->query($req);
-                while($tab=$Result->fetch()){
-                    if($tab['equipe']==1){
-                        array_push($this->sacEquipe,$tab['idEquipement']);
-                    }
-                }
-            }
-        }
-
-        public function setEntiteByIdWithoutMap($idEntite){
-            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `idEntite`='".$idEntite."'");
-            if($tab = $Result->fetch()){
-                $this->setEntite($tab["idEntite"],$tab["nameEntite"],$tab["healthNow"],$tab["degat"],$tab["healthMax"],$tab["imgEntite"],$tab["idTypeEntite"],$tab["lvlEntite"],$tab["idUser"]);
-            }
-        }
-
-        //Retourne un formulaire HTML pourcreer un entite
-        //et permet d'attribuer automatiquement à user
-        // retour un objet entite
-        public function CreateEntite($nameEntite, $healthNow, $degat, $idMap,$healthMax,$imgEntite,$idUser,$idTypeEntite,$lvlEntite){
-            $newperso = new Entite($this->_bdd);
-            $this->_nameEntite=htmlentities($nameEntite, ENT_QUOTES);
-            $this->_lvlEntite = $lvlEntite;
-            $this->_imgEntite=$imgEntite;
-            $req="INSERT INTO `Entite`(`nameEntite`, `healthNow`, `degat`, `idMap`,`healthMax`,`imgEntite`,`idUser`,`idTypeEntite`,`lvlEntite`)
-            VALUES ('".$this->_nameEntite."','.$healthNow.','.$degat.','.$idMap.','.$healthMax.','".$this->_imgEntite."','".$idUser."','.$idTypeEntite.','.$lvlEntite.')";
-            $this->_bdd->beginTransaction();
-            $Result = $this->_bdd->query($req);
-            $this->_idEntite = $this->_bdd->lastInsertId();
-            if($this->_idEntite){
-                $newperso->setEntiteById($this->_idEntite);
-                $this->_bdd->commit();
-                return $newperso;
-            }
-            else{
-                $this->_bdd->rollback();
-                return null;
-            }
-            return null;
-        }
-
-        //Retourne une liste HTML de tous les entites
-        //et permet d'attribuer un perso à un user
-        // retour un objet entite
-        public function getChoixEntite($idUser){
-            if(isset($_POST["idEntite"])){
-                $this->setEntiteById($_POST["idEntite"]);
-                if($this->_healthNow==0){
-                    $this->resurection();
-                }
-                //si le entite est mort on le place ne origine 0,0
-            }
-            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE idUser='".$idUser."'");
-            ?>
-                <form action="" method="post" onchange="this.submit()">
-                    <select name="idEntite" id="idEntite">
-                        <option value="">Choisir un entite</option>
-                        <?php
-                            while($tab=$Result->fetch()){
-                                ($tab['idEntite']==$this->_idEntite)?$selected='selected':$selected='';
-                                ?>
-                                    <option value="<?= $tab["idEntite"] ?>" <?= $selected ?>>
-                                        <?= $tab["nameEntite"] ?>
-                                    </option>
-                                <?php
-                            }
-                        ?>
-                    </select>
-                </form>
-            <?php
-            return $this;
-        }
-
-        public function generateImage($Nom){
+        public function generateImage($Nom){ // A check
             $space = array(" ", ".", "_", "-", "%");
             $onlyconsonants = str_replace($space, "+", $Nom);
             $topic='+personage+'.$onlyconsonants.'+fanart';
             $ofs=mt_rand(0, 100);
             $geturl='https://www.bing.com/images/search?q=' . $topic . '&first=' . $ofs . '&tsc=ImageHoverTitle';
-            
             $data=file_get_contents($geturl);
             //echo $data;
             //partialString1 is bigger link.. in it will be a scr for the beginning of the url
             $f1='<div class="img_cont hoff">';
             $pos1=strpos($data, $f1)+strlen($f1);
             $partialString1 = substr($data, $pos1);
-
             $f1bis='src="';
             $pos1=strpos($partialString1, $f1bis)+strlen($f1bis);
             $partialString1 = substr($partialString1, $pos1);
-
-            
-
             //PartialString3 ends the url when it sees the "&amp;"
             $f3='"';
             $urlLength=strpos($partialString1, $f3);
             $partialString3 = substr($partialString1, 0, $urlLength);
-
-            
             return $partialString3;
         }
     }
