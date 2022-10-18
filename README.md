@@ -51,13 +51,13 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Ajouts de Logs persistant sur les maps,
 - - Refonte de la Map,
 - - Intégration des Pouvoirs,
+- - Système de Code/Bonus,
 - - Intégration Bâtiments,
 - - - Forge,
 - - - Marché,
 - - - Cachette,
 
 # Todo Patch :
-- Map BDD/PHP : Remettre en place Zone Non-PVP,
 - PHP : Déplacement Map : Non affichage de l'origine de déplacement quand refresh si Monster.
 
 ## Fait :
@@ -77,4 +77,5 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Mise à jours TypeMonsters,
 - Uniformisation Variable et BDD,
 - Refonte Class Objet -> Efficacite,
-- Patch PHP/JS Multiples.
+- Patch PHP/JS Multiples
+- Zone Non-PVP et Vérification Attaque.
