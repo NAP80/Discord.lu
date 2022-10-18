@@ -8,6 +8,7 @@
         private $_admin;
         private $_staff;
         private $_bypass;
+        private $_play;
         private $_view;
 
         public function __construct($bdd){
@@ -26,6 +27,7 @@
                 $this->_admin=$tab['admin'];
                 $this->_staff=$tab['staff'];
                 $this->_bypass=$tab['bypass'];
+                $this->_play=$tab['play'];
                 $this->_view=$tab['view'];
             }
         }
@@ -38,11 +40,12 @@
             AND `User`.idUser='".$idUser."'";
             $Result = $this->_bdd->query($req);
             if($tab=$Result->fetch()){
-                $this->_idTypeUser = $tab['idTypeUser'];
+                $this->_idTypeUser=$tab['idTypeUser'];
                 $this->_nameTypeUser=$tab['nameTypeUser'];
                 $this->_admin=$tab['admin'];
                 $this->_staff=$tab['staff'];
                 $this->_bypass=$tab['bypass'];
+                $this->_play=$tab['play'];
                 $this->_view=$tab['view'];
             }
         }
@@ -70,6 +73,11 @@
         /** Return Permision Bypass */
         public function getPermBypass(){
             return $this->_bypass;
+        }
+
+        /** Return Permision View */
+        public function getPermPlay(){
+            return $this->_play;
         }
 
         /** Return Permision View */

@@ -289,5 +289,36 @@
                 </form>
             <?php
         }
+
+        /** Display les Actions Personnages Possibles */
+        public function getActionsPerso($User){
+            $TypeUser = new TypeUser($this->_bdd);
+            $TypeUser->setTypeUserByIdUser($User->getIdUser());
+            if($TypeUser->getPermPlay()){
+                ?>
+                    <b class="">Actions :</b>
+                <?php
+            }
+            else{
+                ?>
+                    <b class="">Vous ne pouvez rien faire.</b>
+                <?php
+            }
+            if($TypeUser->getPermAdmin()){
+                ?>
+                    <b class="">Admin :</b>
+                <?php
+            }
+            if($TypeUser->getPermStaff()){
+                ?>
+                    <b class="">Staff :</b>
+                <?php
+            }
+            if($TypeUser->getPermBypass()){
+                ?>
+                    <b class="">ByPass :</b>
+                <?php
+            }
+        }
     }
 ?>

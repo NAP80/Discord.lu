@@ -10,7 +10,7 @@
         private $_idPersonnage;
         private $_idFaction;
         private $_dateUser;
-        private $_typeUser;
+        private $_idTypeUser;
 
         private $_infoPerso; // Information du personnage en cours
 
@@ -20,7 +20,7 @@
         }
 
         /** Récupère User */
-        public function setUser($idUser,$email,$pseudo,$password_hash,$token,$idPersonnage,$idFaction,$dateUser,$typeUser){
+        public function setUser($idUser,$email,$pseudo,$password_hash,$token,$idPersonnage,$idFaction,$dateUser,$idTypeUser){
             $this->_idUser = $idUser;
             $this->_email = $email;
             $this->_pseudo = $pseudo;
@@ -29,8 +29,8 @@
             $this->_idPersonnage = $idPersonnage;
             $this->_idFaction = $idFaction;
             $this->_dateUser = $dateUser;
-            $this->_typeUser = $typeUser;
-            $this->setTypeUserById($typeUser);
+            $this->_idTypeUser = $idTypeUser;
+            $this->setTypeUserById($idTypeUser);
         }
 
         /** Return ID */
@@ -73,9 +73,9 @@
             return $this->_dateUser;
         }
 
-        /** Return TypeUser User */
-        public function getTypeUser(){
-            return $this->_typeUser;
+        /** Return IdTypeUser User */
+        public function getIdTypeUser(){
+            return $this->idTypeUser;
         }
 
         /** Return Nom du personnage en cours de l'User : À dégager */
@@ -99,7 +99,7 @@
             $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `token`='".$token."'"); // Optimisable en récupérant aussi le TypeUser
             // Authentification si Correct et à jours.
             if($tab = $Result->fetch()){
-                $this->setUser($tab["idUser"],$tab["email"],$tab["pseudo"],$tab["password_hash"],$tab["token"],$tab["idPersonnage"],$tab["idFaction"],$tab["dateUser"],$tab["typeUser"]);
+                $this->setUser($tab["idUser"],$tab["email"],$tab["pseudo"],$tab["password_hash"],$tab["token"],$tab["idPersonnage"],$tab["idFaction"],$tab["dateUser"],$tab["idTypeUser"]);
                 // Set son Personnage
                 $personnage = new Personnage($this->_bdd);
                 $personnage->setPersonnageById($tab["idPersonnage"]);
@@ -119,7 +119,7 @@
         public function setUserById($idUser){
             $Result = $this->_bdd->query("SELECT * FROM `User` WHERE `idUser`='".$idUser."'");
             if($tab = $Result->fetch()){
-                $this->setUser($tab["idUser"],$tab["email"],$tab["pseudo"],$tab["password_hash"],$tab["token"],$tab["idPersonnage"],$tab["idFaction"],$tab["dateUser"],$tab["typeUser"]);
+                $this->setUser($tab["idUser"],$tab["email"],$tab["pseudo"],$tab["password_hash"],$tab["token"],$tab["idPersonnage"],$tab["idFaction"],$tab["dateUser"],$tab["idTypeUser"]);
                 // Set son Personnage
                 $personnage = new Personnage($this->_bdd);
                 $personnage->setPersonnageById($tab["idPersonnage"]);

@@ -94,6 +94,9 @@
                                     <div class="divInfoMap">
                                         <?= $map->getInfoMap() ?>
                                     </div>
+                                    <div class="divActionsPerso">
+                                        <?= $Personnage->getActionsPerso($Joueur1) ?>
+                                    </div>
                                 </div>
                             </div>
                             <div class="divMapContent">
