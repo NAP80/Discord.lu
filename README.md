@@ -22,6 +22,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Intégration Panel Admin,
 - - Sécurisation Injection SQL,
 - - Intégrer les différent display/affichage.php dans l'objet PHP Map,
+- - Dégager Bing,
 - Style :
 - - Patch CSS Décalage Dialog,
 - - Le putain de footer,
@@ -32,13 +33,12 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Mettre des CGU ou un truc légal,
 - Jeu :
 - - Système d'Actions Personnages,
+- - Ajouter une "fouille" avant de faire apparaitre des items,
 - - Système d'Amis,
-- - Système de Ville,
 - - Amélioration du système de Faction,
 - - Réalisation du système de Classe,
-- - Intégration Système de Ban,
 - - Intégration Hiérarchie Utilisateur,
-- - Ajouter une "fouille" avant de faire apparaitre des items,
+- - Intégration Système de Ban,
 - - Ajouter des effets Personnage,
 - - Refonte des objets,
 - - Refonte des équipements,
@@ -55,7 +55,6 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - - Forge,
 - - - Marché,
 - - - Cachette,
-
 
 # Todo Patch :
 - Map BDD/PHP : Remettre en place Zone Non-PVP,

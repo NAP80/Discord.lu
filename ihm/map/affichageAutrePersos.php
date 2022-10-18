@@ -10,10 +10,10 @@
                     <?php
                         $PersoJoueur = $Joueur1->getPersonnage();
                         foreach($listPersos as $Perso){
-                            if($Perso->getIdEntite()!=$PersoJoueur->getIdEntite()){
+                            if($Perso->getIdEntite() != $PersoJoueur->getIdEntite()){
                                 ?>
                                     <li class="liAdverse" onmouseover="afficheDivPerso(event)" onmouseout="cacheDivPerso(event)">
-                                        <a id="aPerso<?= $Perso->getIdEntite() ?>" onclick="AttaquerPerso(<?= $Perso->getIdEntite() ?>,<?= $Perso->getIdTypeEntite() ?>, event)">
+                                        <a id="aPerso<?= $Perso->getIdEntite() ?>"<?php if(($PersoJoueur->getIdUser() !== $Perso->getIdUser()) && ($map->getPvP())){?>onclick="AttaquerPerso(<?= $Perso->getIdEntite() ?>,<?= $Perso->getIdTypeEntite() ?>, event)"<?php } ?>>
                                             <?php $Perso->renderHTML() ?>
                                         </a>
                                     </li>
