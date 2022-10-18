@@ -11,7 +11,7 @@
             }
         }
 
-        public function acheter($entite, $idMap, $idEntite){
+        public function acheter($Personnage, $idMap, $idPersonnage){
             $req = "SELECT mapequipements.idEquipement, equipement.nameEquipement, equipement.valeur FROM `mapequipements`, `equipement` WHERE equipement.idEquipement = mapequipements.idEquipement AND `idMap` = $idMap";
             $RequetStatement = $this->_bdd->query($req);
             ?>
@@ -34,7 +34,7 @@
             <?php
 
             // Récupère l'argent du user // Refaire complètement
-            $req = "SELECT user.money FROM `user`, `entite` WHERE user.idPersonnage=entite.idEntite AND entite.idEntite = $idEntite";
+            $req = "SELECT user.money FROM `user`, `entite` WHERE user.idPersonnage=entite.idEntite AND entite.idEntite = $idPersonnage";
             $RequetStatement = $this->_bdd->query($req);
             while($Tab=$RequetStatement->fetch()){
                 $money = $Tab[0];
@@ -51,19 +51,19 @@
                     <?php
                 }
                 else{
-                    $entite->addEquipement($equipement);
+                    $Personnage->addEquipement($equipement);
                     $this->removeEquipementById($checkId);
                     $money -= $valeur;
-                    $req = "UPDATE `personnage`, `entite` SET personnage.moneyPersonnage = $money WHERE personnage.idPersonnage=entite.idEntite AND personnage.idEntite = $idEntite";
+                    $req = "UPDATE `personnage`, `entite` SET personnage.moneyPersonnage = $money WHERE personnage.idPersonnage=entite.idEntite AND personnage.idEntite = $idPersonnage";
                     $RequetStatement = $this->_bdd->query($req);
                 }
             }
         }
 
-        public function vendre($entite, $idEntite){
-            $req = "SELECT Entiteequipement.idEquipement, Equipement.nameEquipement, Equipement.valeur FROM `Entiteequipement`, `Equipement` WHERE Equipement.idEquipement = entiteequipement.idEquipement AND `equipe` != 1 AND `idEntite` = $idEntite";
+        public function vendre($Personnage, $idPersonnage){
+            $req = "SELECT Entiteequipement.idEquipement, Equipement.nameEquipement, Equipement.valeur FROM `Entiteequipement`, `Equipement` WHERE Equipement.idEquipement = entiteequipement.idEquipement AND `equipe` != 1 AND `idEntite` = $idPersonnage";
             $RequetStatement = $this->_bdd->query($req);
-            $equipements = $entite->getEquipementNonPorte();
+            $equipements = $Personnage->getEquipementNonPorte();
             ?>
                 <form method="post">
                     <table>
@@ -84,7 +84,7 @@
             <?php
 
             // Récupère l'argent du user
-            $req = "SELECT user.money FROM `user`, `entite` WHERE user.idPersonnage=entite.idEntite AND entite.idEntite = $idEntite";
+            $req = "SELECT user.money FROM `user`, `entite` WHERE user.idPersonnage=entite.idEntite AND entite.idEntite = $idPersonnage";
             $RequetStatement = $this->_bdd->query($req);
             while($Tab=$RequetStatement->fetch()){
                 $money = $Tab[0];
@@ -94,11 +94,11 @@
                     $equipement = new equipement($this->_bdd);
                     $equipement->setEquipementById($checkId);
                     $valeur = $equipement->getValeur($checkId);
-                    $equipements = $entite->removeEquipementByID($checkId);
+                    $equipements = $Personnage->removeEquipementByID($checkId);
                     $money += $valeur;
                 }
             }
-            $req = "UPDATE `user`, `entite` SET user.money = $money WHERE user.idPersonnage=entite.idEntite AND entite.idEntite = $idEntite";
+            $req = "UPDATE `user`, `entite` SET user.money = $money WHERE user.idPersonnage=entite.idEntite AND entite.idEntite = $idPersonnage";
             $RequetStatement = $this->_bdd->query($req);
         }
 

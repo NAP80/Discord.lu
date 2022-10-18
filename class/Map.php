@@ -634,10 +634,10 @@
             return $this;
         }
 
-        /** Return Texte InforMap */
+        /** Return Texte InforMap */ // Refaire Propre en forme
         public function getInfoMap(){
             ?>
-                <b><?= $this->getNameMap() ?></b>, <?= $this->getCoordonne() ?>, lvl <?= $this->getLvlMap() ?>, découvert par <?= $this->getPersonnageDecouvreur()->getPseudo() ?> et ses Heros.
+                <b><?= $this->getNameMap() ?></b>, <?= $this->getCoordonne() ?>, lvl <?= $this->getLvlMap() ?>, découvert par <?= $this->getPersonnageDecouvreur()->getPseudo() ?> et ses Héros.
             <?php
         }
 
