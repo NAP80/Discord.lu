@@ -45,22 +45,18 @@
                             }
                             // Si Faction Non Null et inférieur ou égale à 4 (Donc qu'on a une faction valide)
                             else{
-                                // Si un Personnage est assigné
-                                if($Joueur1->getIdPersonnage() !== NULL){
-                                    $NbPersonnage = $Joueur1->getNbPersonnages();
-                                    ?>
-                                        <p class="NbPersonnage">Vous avez <?= $NbPersonnage ?> personnages sur 10.</p>
-                                    <?php
-                                    // Récupération Objet Personnage
-                                    $ObjectPersonnage = $Joueur1->getPersonnage();
-                                    if($NbPersonnage < 10){
-                                        // Formulaire création Personnage
-                                        $Joueur1->CreatNewPersonnage();
-                                    }
-                                    if($NbPersonnage > 1){
-                                        // Selection Personnage
-                                        $Joueur1->getChoixPersonnage();
-                                    }
+                                $NbPersonnage = $Joueur1->getNbPersonnages();
+                                if($NbPersonnage < 10){
+                                    // Formulaire création Personnage
+                                    $Joueur1->CreatNewPersonnage();
+                                }
+                                $NbPersonnage = $Joueur1->getNbPersonnages();
+                                ?>
+                                    <p class="NbPersonnage">Vous avez <?= $NbPersonnage ?> personnages sur 10.</p>
+                                <?php
+                                if($NbPersonnage > 1){
+                                    // Selection Personnage
+                                    $Joueur1->getChoixPersonnage();
                                     $ObjectPersonnage = $Joueur1->getPersonnage();
                                     ?>
                                         <div class="divAction">
@@ -68,10 +64,13 @@
                                         </div>
                                     <?php
                                 }
-                                // Si aucun Personnage choisis.
                                 else{
-                                    // Formulaire création Personnage
-                                    $Joueur1->CreatNewPersonnage();
+                                    $ObjectPersonnage = $Joueur1->getPersonnage();
+                                    ?>
+                                        <div class="divAction">
+                                            <p><a href="combat.php">Viens combattre avec <?= $ObjectPersonnage->getNameEntite() ?></a></p>
+                                        </div>
+                                    <?php
                                 }
                             }
                         ?>
