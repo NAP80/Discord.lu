@@ -776,10 +776,7 @@
             $choixAleatoire = array_rand($TypeMap, 1);
             $TypeMap = $TypeMap[$choixAleatoire];
             $Adjectif = "";
-            switch(rand(0,20)){
-                case 0:
-                    $Adjectif = "Poisseux";
-                break;
+            switch(rand(1,20)){
                 case 1:
                     $Adjectif = "Luxuriant";
                 break;
