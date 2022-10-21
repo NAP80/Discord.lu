@@ -25,13 +25,13 @@
             // Vérification que Personnage n'est pas EntiteCible ou le même User.
             if(($EntiteCible->getIdEntite() !== $Personnage->getIdEntite()) && ($EntiteCible->getIdUser() !== $Personnage->getIdUser())){
                 // Vérification Personnage & EntiteCible sur la même map
-                if($EntiteCible->getMap() == $Personnage->getMap()){
+                if($EntiteCible->getMapEntite() == $Personnage->getMapEntite()){
                     // vérification que Map PVP
-                    if($Personnage->getMap()->getPvP()){
+                    if($Personnage->getMapEntite()->getPvP()){
                         // Attaque sur perso
                         if($idTypeEntite == 1){
                             $CiblePersonnage = new Personnage($mabase);
-                            $CiblePersonnage->setPersonnageByIdWithoutMap($_GET["idEntite"]);
+                            $CiblePersonnage->setPersonnageById($_GET["idEntite"]);
                             $healthMaxCible=$CiblePersonnage->getHealthMax();
                             $healthNowCible=$CiblePersonnage->getHealthNow();
                             //on verrifie que le perso n'est pas mort
@@ -67,7 +67,7 @@
                         // Attaque sur Monster
                         if($idTypeEntite == 0){
                             $CibleMonster = new Monster($mabase);
-                            $CibleMonster->setMonsterByIdWithMap($_GET["idEntite"]);
+                            $CibleMonster->setMonsterById($_GET["idEntite"]);
                             $healthMaxCible=$CibleMonster->getHealthMax();
                             $healthNowCible=$CibleMonster->getHealthNow();
                             if($CibleMonster->getHealthNow()>0){

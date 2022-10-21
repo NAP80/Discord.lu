@@ -258,7 +258,7 @@
             $lists=array();
             foreach($this->listMonsters as $MonsterID){
                 $Monster = new Monster($this->_bdd);
-                $Monster->setMonsterByIdWithMap($MonsterID);
+                $Monster->setMonsterById($MonsterID);
                 array_push($lists,$Monster);
             }
             return $lists;
@@ -518,7 +518,7 @@
                 if($position === "Generate"){
                     //la cardinalité permet de lui dire d'ou on vient
                     //on va
-                    $map = $Joueur1->getPersonnage()->getMap();
+                    $map = $Joueur1->getPersonnage()->getMapEntite();
                     //on vérifie si un Monster est présent la ou on est car on est bloqué normalement
                     $listMonster = $map->getAllMonsterContre($Joueur1);
                     if(is_null($listMonster) || count($listMonster) == 0){

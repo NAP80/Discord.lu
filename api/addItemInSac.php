@@ -16,7 +16,7 @@
                 $Perso->resurection();
                 $reponse[1]="Ton personnage est mort.";
             }
-            $map=$Perso->getMap();
+            $map = $Perso->getMapEntite();
             //une fois que j'ai mes objet je vérifie que le perso est bien sur la map
             $idmap = $map->getIdMap();
             //que l'item est bien dans la map si ya un Monster on peut pas le prendre

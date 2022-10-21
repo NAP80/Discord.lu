@@ -1,5 +1,5 @@
 <?php
-    $map = $Personnage->getMap();
+    $map = $Personnage->getMapEntite();
     $TelportationPositionDepart = $map->getPosition();
     // Gestion de la téléportation
     $cardinalite = '';
@@ -13,7 +13,7 @@
         else{
             if($Personnage->getHealthNow() == 0){
                 $Personnage->resurection();
-                $map = $Personnage->getMap();
+                $map = $Personnage->getMapEntite();
             }
             $map = $map->loadMap($map->getPosition(),'nord',$Joueur1);
         }

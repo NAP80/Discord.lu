@@ -503,7 +503,7 @@
 
         /** Affiche la Map HTML */ // À Migrer sur la page Map
         public function getVisitesHTML($taille){
-            $Map = $this->getPersonnage()->getMap();
+            $Map = $this->getPersonnage()->getMapEntite();
             $maxX=$Map->getX()+$taille;
             $minX=$Map->getX()-$taille;
             $maxY=$Map->getY()+$taille;
@@ -553,7 +553,7 @@
             $HY = $LX = round($taille/$LargeurX);
             $taille = $LX*$LargeurX;
             //permet de réadapter la taille en fonction de l'arondi qui a grossi les div
-            $Map = $this->getPersonnage()->getMap();
+            $Map = $this->getPersonnage()->getMapEntite();
             $MapScan = new Map($this->_bdd);
             $style = 'style="width:'.$taille.'px"';
             $styleCellule = 'style="width:'.$LX.'px;height:'.$HY.'px"';
