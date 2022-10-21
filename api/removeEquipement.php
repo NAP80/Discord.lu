@@ -8,7 +8,7 @@
     $reponse[5]=0; //sera le nom de l'equipement retire ou pas
     $reponse[6]=0; //sera l'ancienne Arme id
     $reponse[4]='';
-    $reponse[7]=0;// permet de savoir si c'est utilisation d'une arme ou d'un bouclier ect çà retourne la catégorie de l'equipement
+    $reponse[7]=0;// permet de savoir si c'est utilisation d'une arme ou d'une armure, retourne la catégorie de l'equipement
     if($access){
         if(isset($_GET["idEquipement"])){
             //on doit toujours vérifier en bdd la posibilité de l'appel de API
@@ -53,36 +53,6 @@
                             }
                             else{
                                 $message.= 'vous n\‘avez pas bien reussi à retirer  '.$equipement->getNameEquipement();
-                                $reponse[7] =0;
-                            }
-                        break;
-                        case 3: //3 représente les pouvoir dans la table categorie
-                            //il faut changer d'armure
-                            //on retire donc l'armure en cours ( equipe = 0 dans la table entite equipement)
-                            if(!is_null($Perso->getPouvoir())){
-                                $reponse[6]=$_GET["idEquipement"];
-                                $reponse[5] = $equipement->getNameEquipement().' lvl '.$equipement->getLvlEquipement();
-                                $equipement->desequipeEntite($Perso);
-                                $message.= 'retire de '.$equipement->getNameEquipement();
-                                $reponse[7] =3;//3 est la categorie du pouvoir
-                            }
-                            else{
-                                $message.= 'vous n\‘avez pas bien reussi à retirer  '.$equipement->getNameEquipement();
-                                $reponse[7] =0;
-                            }
-                        break;
-                        case 4: //4 représente les Bouclier dans la table categorie
-                            //il faut changer d'armure
-                            //on retire donc l'armure en cours ( equipe = 0 dans la table entite equipement)
-                            if(!is_null($Perso->getBouclier())){
-                                $reponse[6]=$_GET["idEquipement"];
-                                $reponse[5] = $equipement->getNameEquipement().' lvl '.$equipement->getLvlEquipement();
-                                $equipement->desequipeEntite($Perso);
-                                $message.= 'retire de '.$equipement->getNameEquipement();
-                                $reponse[7] =4;//4 est la categorie du Bouclier
-                            }
-                            else{
-                                $message.= 'vous n\‘avez pas bien reussi à retirer '.$equipement->getNameEquipement();
                                 $reponse[7] =0;
                             }
                         break;

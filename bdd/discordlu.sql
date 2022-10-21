@@ -61,9 +61,7 @@ CREATE TABLE IF NOT EXISTS `categorie` (
 
 INSERT INTO `categorie` (`idCategorie`, `Attaque`, `Defense`, `Magie`, `nameCategorie`) VALUES
 (1, 1, 0, 0, 'Arme'),
-(2, 0, 1, 0, 'Armure'),
-(3, 1, 0, 1, 'Pouvoir'),
-(4, 0, 1, 1, 'Bouclier');
+(2, 0, 1, 0, 'Armure');
 
 -- --------------------------------------------------------
 

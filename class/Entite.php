@@ -135,7 +135,6 @@
         /** Fonction d'attaque */
         public function getAttaque(){
             $arme = $this->getArme();
-            $pouvoir = $this->getPouvoir();
             $coef = 1;
             $lvlEquipement = 1;
             $forceArme = 0;
@@ -143,11 +142,6 @@
                 $coef = $arme->getEfficacite();
                 $forceArme = $arme->getForce();
                 $lvlEquipement = $arme->getLvlEquipement();
-            }
-            if(!is_null($pouvoir)){// Si utilise la magie
-                $coef = $pouvoir->getEfficacite();
-                $forcePourvoir = $pouvoir->getForce();
-                $lvlEquipement = $pouvoir->getLvlEquipement();
             }
             //application des coef si il y a nu type de personnage
             if($this->_idTypeEntite == 1){// Si n'utilise rien
@@ -163,13 +157,9 @@
         /** Aucune idée de ce que c'est */
         public function getCoolDownAttaque(){
             $arme = $this->getArme();
-            $pouvoir = $this->getPouvoir();
             $cooldown = -1;
             if(!is_null($arme)){
                 $cooldown =$arme->getCoolDown();
-            }
-            else if(!is_null($pouvoir)){
-                $cooldown = $pouvoir->getCoolDown();
             }
             else{
                 $cooldown = 500;
@@ -283,35 +273,6 @@
             return $Armure;
         }
 
-        //Retour un objet de type pouvoir
-        public function getPouvoir(){
-            $Pouvoir = null;
-            foreach($this->sacEquipe as $EquipementId){
-                $EntiteEquipe = new Equipement($this->_bdd);
-                $EntiteEquipe->setEquipementByID($EquipementId);
-                if($EntiteEquipe->getIdCategorie() == 3){ // Pouvoir = 3
-                    $Pouvoir = new Pouvoir($this->_bdd);
-                    $Pouvoir->setEquipementByID($EntiteEquipe->getIdEquipement());
-                    return $Pouvoir;
-                }
-            }
-            return $Pouvoir;
-        }
-
-        //Retour un objet de type bouclier
-        public function getBouclier(){
-            $Pouvoir = null;
-            foreach($this->sacEquipe as $EquipementId){
-                $EntiteEquipe = new Equipement($this->_bdd);
-                $EntiteEquipe->setEquipementByID($EquipementId);
-                if($EntiteEquipe->getIdCategorie() == 4){ // Bouclier = 4
-                    $Bouclier = new Bouclier($this->_bdd);
-                    $Bouclier->setEquipementByID($EntiteEquipe->getIdEquipement());
-                    return $Bouclier;
-                }
-            }
-        }
-
         /** Déséquipe Arme */
         public function desequipeArme(){
             $arme = $this->getArme();
@@ -328,79 +289,24 @@
             }
         }
 
-        /** Déséquipe Pouvoir */
-        public function desequipePouvoir(){
-            $pouvoir = $this->getPouvoir();
-            if(!is_null($pouvoir)){
-                $pouvoir->desequipeEntite($this);
-            }
-        }
-
-        /** Déséquipe Bouclier */
-        public function desequipeBouclier(){
-            $bouclier = $this->getBouclier();
-            if(!is_null($bouclier)){
-                $bouclier->desequipeEntite($this);
-            }
-        }
-
-        //Fonction Sort utilise un Pouvoir
-        public function getSort(){
-            //ici on affiche les dégats Maximun du joueur avec Arme
-            $pouvoir = $this->getPouvoir();
-            $coef = 1;
-            $lvlEquipement = 1;
-            $forcePouvoir = 0;
-            if(!is_null($pouvoir)){
-                $coef = $pouvoir->getEfficacite();
-                $forcePourvoir = $pouvoir->getForce();
-                $lvlEquipement = $pouvoir->getLvlEquipement();
-            }
-            $val = round(($this->_degat+$forcePouvoir)*$coef);
-            return $val;
-        }
-
         //Fonction Défense utilise une Armure
         public function getDefense(){
             //cas 
             //ici on affiche les dégats Maximun Absorbé avec une armure
             $armure = $this->getArmure();
-            $bouclier = $this->getBouclier();
             $coef = 1;
             $forceArmure = 0;
             if(!is_null($armure)){
                 $coef = $armure->getEfficacite();
                 $forceArmure = $armure->getForce();
             }
-            if(!is_null($bouclier)){
-                $coef = $bouclier->getEfficacite();
-                $forceBouclier = $bouclier->getForce();
-            }
             if($this->_idTypeEntite == 1){
                 $TypePersonnage = $this->getTypePersonnage();
                 if(!is_null($armure)){
                     $coef = $coef*$TypePersonnage->getStatsDefense();
                 }
-                if(!is_null($bouclier)){
-                    $coef = $coef*$TypePersonnage->getStatsRessMagique();
-                }
             }
             $val = $coef * $forceArmure ;
-            return round($val,1);//arrondi à 1 chiffre aprés la virgul
-        }
-
-        //Fonction Parer utilise un bouclier
-        public function getParer(){
-            //ici on affiche les dégats Maximun Absorbé avec une armure
-            $bouclier = $this->getBouclier();
-            $coef = 1;
-            $forceBouclier = 0;
-            if(!is_null($bouclier)){
-                $coef = $bouclier->getEfficacite();
-                $forceBouclier = $bouclier->getForce();
-            }
-            //alors Todo Je sais pas ... evaluer la valeur d'une armure
-            $val = $coef * $forceBouclier ;
             return round($val,1);//arrondi à 1 chiffre aprés la virgul
         }
 
@@ -494,15 +400,9 @@
 
         public function resetCoolDown(){
             $arme = $this->getArme();
-            $pouvoir = $this->getPouvoir();
-            
             if(!is_null($arme)){
                 $cooldown =$arme->resetCoolDown();
             }
-            else if(!is_null($pouvoir)){
-                $cooldown = $pouvoir->resetCoolDown();
-            }
-            
         }
 
         /** Return Type Personnage */

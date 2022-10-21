@@ -8,7 +8,7 @@
     $reponse[5]=0; //sera le nom de la nouvel arme
     $reponse[6]=0; //sera l'ancienne Arme id
     $reponse[4]='';
-    $reponse[7]=0;// permet de savoir si c'est utilisation d'une arme ou d'un bouclier ect çà retourne la catégorie de Equipement
+    $reponse[7]=0;// permet de savoir si c'est utilisation d'une arme ou armure, retourne la catégorie de Equipement
     $reponse[8]=0;//sera le coeficient de defence
     if($access){
         if(isset($_GET["idEquipement"])){
@@ -34,10 +34,6 @@
                                 $reponse[6]=$Perso->getArme()->getIdEquipement();
                                 $Perso->desequipeArme();
                             }
-                            if(!is_null($Perso->getPouvoir())){
-                                $reponse[6]=$Perso->getPouvoir()->getIdEquipement();
-                                $Perso->desequipePouvoir();
-                            }
                             //$equipement->desequipeEntite($Perso);
                             $equipement->equipeEntite($Perso);
                             $reponse[5] = $equipement->getNameEquipement()." lvl".$equipement->getLvlEquipement();
@@ -51,46 +47,10 @@
                                 $reponse[6]=$Perso->getArmure()->getIdEquipement();
                                 $Perso->desequipeArmure();
                             }
-                            if(!is_null($Perso->getBouclier())){
-                                $reponse[6]=$Perso->getBouclier()->getIdEquipement();
-                                $Perso->desequipeBouclier();
-                            }
                             $equipement->equipeEntite($Perso);
                             $reponse[5] = $equipement->getNameEquipement()." lvl".$equipement->getLvlEquipement();
                             $message.= 's\'équipe de '.$equipement->getNameEquipement();
                             $reponse[7] =2;//2 est la categorie l'Armure;
-                            break;
-                        case 3: //3 représente les AttaqueMagic dans la table categorie
-                            //il faut changer d'ararmureme
-                            //on retire donc l'armure en cours ( equipe = 0 dans la table entite equipement)
-                            if(!is_null($Perso->getArme())){
-                                $reponse[6]=$Perso->getArme()->getIdEquipement();
-                                $Perso->desequipeArme();
-                            }
-                            if(!is_null($Perso->getPouvoir())){
-                                $reponse[6]=$Perso->getPouvoir()->getIdEquipement();
-                                $Perso->desequipePouvoir();
-                            }
-                            $equipement->equipeEntite($Perso);
-                            $reponse[5] = $equipement->getNameEquipement()." lvl".$equipement->getLvlEquipement();
-                            $message.= 's\'équipe de '.$equipement->getNameEquipement();
-                            $reponse[7] =3;//3 est la categorie du pouvoir magic;
-                            break;
-                        case 4: //4 représente les bouclierMagic dans la table categorie
-                            //il faut changer d'ararmureme
-                            //on retire donc l'armure en cours ( equipe = 0 dans la table entite equipement)
-                            if(!is_null($Perso->getArmure())){
-                                $reponse[6]=$Perso->getArmure()->getIdEquipement();
-                                $Perso->desequipeArmure();
-                            }
-                            if(!is_null($Perso->getBouclier())){
-                                $reponse[6]=$Perso->getBouclier()->getIdEquipement();
-                                $Perso->desequipeBouclier();
-                            }
-                            $equipement->equipeEntite($Perso);
-                            $reponse[5] = $equipement->getNameEquipement()." lvl".$equipement->getLvlEquipement();
-                            $message.= 's\'équipe de '.$equipement->getNameEquipement();
-                            $reponse[7] =4;//4 est la categorie du bouclier magic;
                             break;
                         default:
                             //on retire l'equipement du perso pour le transformer un statsuplementaire

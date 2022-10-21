@@ -34,12 +34,6 @@ ul .perso{
 .magic{
     background-color:rgba(0, 114, 214, 0.726);
     background-image:url('https://www.icone-png.com/png/46/45737.png');
- 
-}
-.bouclier{
-    background-color:rgba(50, 0, 214, 0.42);
-   
- 
 }
 
 
@@ -91,12 +85,6 @@ li.liAdverse{
 }
 
 .classEpee{
-    background-image:url('https://static.wikia.nocookie.net/minecraft_fr_gamepedia/images/b/b1/Épée_en_or.png/revision/latest/scale-to-width-down/150?cb=20180527151432');
-    background-size:cover;
-    background-repeat:no-repeat;
-}
-
-.bouclier{
     background-image:url('https://static.wikia.nocookie.net/minecraft_fr_gamepedia/images/b/b1/Épée_en_or.png/revision/latest/scale-to-width-down/150?cb=20180527151432');
     background-size:cover;
     background-repeat:no-repeat;

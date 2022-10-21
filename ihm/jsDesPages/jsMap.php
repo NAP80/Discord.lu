@@ -103,23 +103,6 @@
                     setEquipementInSac(data[6],data[5]);
                     lvlUp(data[0],data[1],data[2],data[3],data[8]);
                 }
-                if(data[7]==4){
-                    //cas de bouclier
-                    var e3 = document.getElementById("Armure"+data[6]);
-                    e3.setAttribute('id',"ArmurePerso"+<?php echo $Personnage->getIdEntite()?>);
-                    e3.innerHTML='';
-                    //data 5 c'est l'ancien nom de equipement
-                    setEquipementInSac(data[6],data[5]);
-                    lvlUp(data[0],data[1],data[2],data[3],data[8]);
-                }
-                if(data[7]==3){ //cas de pouvoir
-                    var e3 = document.getElementById("Arme"+data[6]);
-                    e3.setAttribute('id',"ArmePerso"+<?php echo $Personnage->getIdEntite()?>);
-                    e3.innerHTML='';
-                    //data 5 c'est l'ancien nom de equipement
-                    setEquipementInSac(data[6],data[5]);
-                    lvlUp(data[0],data[1],data[2],data[3],data[8]);
-                }
             }
             else{
                 log("Vous n'avez pas réussi à retirer l equipement."+data[2]);
@@ -188,14 +171,6 @@
                 //si c'est une armure
                 if(data[7]==2){
                     UpdateArmure(data[5],data[6],idEquipement,"standard");
-                }//si c'est un pouvoir
-                if(data[7]==3){
-                    divAtta.classList.add("magic");
-                    UpdateArme(data[5],data[6],idEquipement,"magic");
-                }
-                //si c'est un bouclier
-                if(data[7]==4){
-                    UpdateArmure(data[5],data[6],idEquipement,"bouclier");
                 }
             }
         })

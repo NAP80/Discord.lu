@@ -17,8 +17,6 @@
         include "class/Equipement.php";
         include "class/Arme.php";
         include "class/Armure.php";
-        include "class/Bouclier.php";
-
     //  GESTION DE LA BASE
         $mabase = null;
         $access = null;

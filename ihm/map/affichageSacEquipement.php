@@ -13,12 +13,13 @@
                             case 2:
                                 $class = "standard";
                                 break;
-                            case 3:
+                            // Sans doute une merde en rapport avec Pouvoir/Bouclier ou une connerie du style // À Patch
+                            /*case 3:
                                 $class = "magic";
                                 break;
                             case 4:
                                 $class = "magic";
-                                break;
+                                break;*/
                             default:
                                 $class = "standard";
                         }
