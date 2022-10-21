@@ -18,7 +18,6 @@
     <body class="bodyAccueil">
         <?php
             include "session.php";
-
             // Vérifie que la Session est Valide avec le bon Mot de Passe.
             if($access === true){
                 $access = $Joueur1->DeconnectToi();
@@ -26,9 +25,8 @@
             // Vérifie qu'il ne s'est pas déconnecté.
             if($access === true){
                 include "ihm/fonction-web/menu.php";
-
-                $personnage = $Joueur1->getPersonnage();
-                if(is_null($personnage->getIdEntite())){
+                $Personnage = $Joueur1->getPersonnage();
+                if(is_null($Personnage->getIdEntite())){
                     ?>
                         <div class="divMainPage">
                             <p>Il faut créer un personnage d'abord.</p>
@@ -40,17 +38,17 @@
                     ?>
                         <div class="divMainPage">
                             <?php
-                                $personnage->getListPersonnage($Joueur1);
-                                $map = $personnage->getMap();
+                                $Personnage->getListPersonnage($Joueur1);
+                                $map = $Personnage->getMapEntite();
                                 $tabDirection = $map->getMapAdjacenteLienHTML('nord',$Joueur1); 
                                 ?>
                                     <?= $tabDirection['nord'] ?>
                                     <p class="pWelcome">Bienvenue <?= $Joueur1->getPseudo() ?></p>
-                                    <p class="pChoixCombattant">Tu as décidé de combattre avec <?= $Joueur1->getNomPersonnage() ?>, il a une fortune de <?= $personnage->getValeur() ?>§</p>
+                                    <p class="pChoixCombattant">Tu as décidé de combattre avec <?= $Joueur1->getNomPersonnage() ?>, il a une fortune de <?= $Personnage->getValeur() ?>§</p>
                                     <!-- AFFICHAGE EN-TÊTE PERSONNAGE ET SAC -->
                                     <div class="divEntete">
                                         <div class="divAvatar">
-                                            <?php $personnage->renderHTML() ?>
+                                            <?php $Personnage->displayHTML() ?>
                                         </div>
                                         <div class="divSac">
                                             <p class="pTitleSac">Sacoche</p>
@@ -62,27 +60,30 @@
                                         </div>
                                     </div>
                                     <div class="divInfoCombat">
-                                        <p class="pPositionCombattant">Ton combattant est sur la position : <?= $map->getNameMap() ?> </p>
-                                        <p>Tu peux maintenant ramasser des conneries par terre.</p>
-                                        <p>Si tu en trouves qui sont parfaitement identiques, elles prennent de la valeur 😄 !</p>
-                                        <p>But du jeu : Capture le "Super Jedi Légendaire".</p>
+                                        <p class="pPositionCombattant">Ton combattant est sur la position : <?= $map->getNameMap() ?> (<?= $map->getX() ?>/<?= $map->getY() ?>) </p>
                                     </div>
-                                    <div class="divAllMonsterCaptured">
+                                    <div class="BoxMonsterCaptured ulMonster">
                                         <p class="pTitleMonsterCaptured">Voici tes monstres capturés :</p>
-                                        <?php
-                                            $MysMonster = new Monster($mabase);
-                                            foreach($Joueur1->getAllMyMonsterIds() as $Monster){
-                                                ?>
-                                                    <div class="divMonsterCaptured">
-                                                        <?php
-                                                            $MysMonster->setMonsterById($Monster);
-                                                            $MysMonster->renderHTML();
-                                                        ?>
-                                                    </div>
-                                                <?php
-                                            }
-                                        ?>
-                                        <p class="pMonsterCapturedInfo">Seul un certain pouvoir peut protéger tes monstres d'une capture...</p>
+                                        <ul class="ulMonster">
+                                            <?php
+                                                $MyMonster = new Monster($mabase);
+                                                foreach($Joueur1->getAllMyMonsterIds() as $Monster){
+                                                    $MyMonster->setMonsterById($Monster);
+                                                    $MapMonster = $MyMonster->getMapEntite();
+                                                    ?>
+                                                        <li id="Monster<?= $MyMonster->getIdEntite() ?>" class="liCaptured" style="ho">
+                                                            <a id="aMonster<?= $MyMonster->getIdEntite() ?>">
+                                                                <?php
+                                                                    $MyMonster->displayHTML();
+                                                                ?>
+                                                            </a>
+                                                        </li>
+                                                        <?php  ?>
+                                                        <p class="hoverMonsterCaptured"><?= $MapMonster->getNameMap() ?> (<?= $MapMonster->getX() ?>/<?= $MapMonster->getY() ?>)</p>
+                                                    <?php
+                                                }
+                                            ?>
+                                        </ul>
                                     </div>
                                     <p><a href="index.php" >Créer un autre personnage.</a></p>
                                 <?php

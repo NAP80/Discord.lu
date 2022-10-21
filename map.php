@@ -61,7 +61,7 @@
                                 ?>
                                     <div class='divEntete'>
                                         <div class="divAvatar" id="divAvatar">
-                                            <?php $Personnage->renderHTML() ?>
+                                            <?php $Personnage->displayHTML() ?>
                                         </div>
                                         <div class="divSac">
                                             <p class="pTitleSac">Sacoche</p>

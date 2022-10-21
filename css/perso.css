@@ -10,7 +10,7 @@
     -webkit-box-shadow:2px 2px 2px rgb(0, 0, 0);
 }
 .ulMonster li{
-    padding:5px;
+    padding:6px;
     margin:10px;
 }
 
@@ -23,16 +23,6 @@ ul .perso{
     -webkit-box-shadow:2px 2px 2px rgb(37,124,41);
 }
 
-.attaque{
-    background-image:url('https://www.pngmart.com/files/16/Power-Hand-Punch-PNG-Clipart.png');
-    float:left;
-    color:rgb(250,212,0);
-    background-size:22px;
-    background-repeat:no-repeat;
-    padding-left:20px;
-    height:26px;
-    background-color:rgb(240, 129, 246);
-}
 .coef{
     font-size: 8px;
     float:left;
@@ -92,7 +82,7 @@ li.liAdverse{
     border:1px solid gray;
     box-shadow:2px 2px 2px gray;
     -webkit-box-shadow:2px 2px 2px gray;
-    width:170px;
+    width:166px;
 }
 
 .ulMonster .liAdverse:hover{
@@ -112,7 +102,6 @@ li.liAdverse{
     background-repeat:no-repeat;
 }
 
-
 .Perso img{
     height:100px;
 }
@@ -122,11 +111,6 @@ img .Personnage{
     width:135px;
 }
 
-
 .persoXP{
-    float:left;
-}
-
-.MonsterCoef{
     float:left;
 }

@@ -1,32 +1,33 @@
 .healthBar{
-    width:170px;
-    height:26px;
-    display:block;
+    display:flex;
     float:left;
     background-color:darkgray;
-    text-align: left;
+    height:26px;
 }
 
 .healthNow{
+    flex:auto;
     float:left;
-    white-space:nowrap;
     background:rgb(34,190,34);
 }
 
-img.Entite{
-    height:150px;
-    width:150px;
+
+.divimgEntite{
+    display: flex;
+}
+.imgEntite{
+    flex: auto;
+    height:158px;
+    width:158px;
 }
 
 .Arme{
     float:left;
     white-space:nowrap;
-    
     height:20px;
     padding:3px;
     font-size:smaller;
 }
-
 
 .ArmureNom{
     float:left;
@@ -36,21 +37,36 @@ img.Entite{
     font-size:smaller;
 }
 
-.armureAll{
-    float:right;
-    width:100%;
-    margin-top:-26px;
+.Monster, .Personnage{
+    display:flex;
+    flex-direction:column;
+    padding: 4px;
 }
 
-.armure{
-    float:right;
-    padding-top:5px;
-    padding-right:35px;
-    height:21px;
-    text-align:right;
-    background-color:rgba(177,255,0,0.53);
-    /*background-image:url(https://got-wic.ovh/wp-content/uploads/2019/09/game-of-thrones-winter-is-coming-arumure-champion.png);*/
-    background-size:20px;
-    background-repeat:no-repeat;
-    background-position:right;
+.valueEntite, .backgroundAttaque, .backgroundArmor, .healthNow{
+    display:flex;
+    flex-direction:row;
+    align-items: center;
+    color:white;
+}
+
+.imgAttaque, .imgArmor{
+    width:22px;
+    padding-right:4px;
+}
+
+.valueAttaque, .valueArmor{
+    color:white;
+}
+.backgroundAttaque, .backgroundArmor{
+    padding-left:4px;
+    padding-right:8px;
+    height:26px;
+}
+
+.backgroundAttaque{
+    background-color:rgb(26, 90, 191);
+}
+.backgroundArmor{
+    background-color:rgb(141, 23, 194);
 }

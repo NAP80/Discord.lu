@@ -7,12 +7,12 @@
         public $_healthMax;
         public $_degat;
         public $_imgEntite;
-        public $_lvlEntite;
+        public $_lvlEntite; // À dégager
         public $_idUser;
         public $sacEquipements=array();
         public $sacEquipe=array();
         public $_idTypeEntite; // 0 = Monster / 1 = Personnage
-        public $map;
+        public $_mapEntite;
         public $_bdd;
 
         public $_idTypePersonnage;
@@ -49,9 +49,9 @@
             if($tab = $Result->fetch()){
                 $this->setEntite($tab["idEntite"],$tab["nameEntite"],$tab["healthNow"],$tab["degat"],$tab["healthMax"],$tab["imgEntite"],$tab["idTypeEntite"],$tab["lvlEntite"],$tab["idUser"]);
                 //recherche de sa position
-                $map = new map($this->_bdd);
-                $map->setMapByID($tab["idMap"]);
-                $this->map = $map;
+                $mapEntite = new map($this->_bdd);
+                $mapEntite->setMapByID($tab["idMap"]);
+                $this->_mapEntite = $mapEntite;
                 //select les equipements déjà présent
                 $req = "SELECT idEquipement FROM `EntiteEquipement` WHERE idEntite='".$idEntite."'";
                 $Result = $this->_bdd->query($req);
@@ -66,13 +66,6 @@
                         array_push($this->sacEquipe,$tab['idEquipement']);
                     }
                 }
-            }
-        }
-
-        public function setEntiteByIdWithoutMap($idEntite){
-            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `idEntite`='".$idEntite."'");
-            if($tab = $Result->fetch()){
-                $this->setEntite($tab["idEntite"],$tab["nameEntite"],$tab["healthNow"],$tab["degat"],$tab["healthMax"],$tab["imgEntite"],$tab["idTypeEntite"],$tab["lvlEntite"],$tab["idUser"]);
             }
         }
 
@@ -96,9 +89,9 @@
             return $this->_idEntite;
         }
 
-        /** Return l'ID de sa position Map */
-        public function getMap(){
-            return $this->map;
+        /** Return son Objet Map */
+        public function getMapEntite(){
+            return $this->_mapEntite;
         }
 
         /** Return Lvl */
@@ -137,21 +130,6 @@
                 return null;
             }
             return null;
-        }
-
-        /** Affichage de HealthNow en Bar*/
-        public function getHealthBar(){
-            $pourcentage = round(100*$this->_healthNow/$this->_healthMax);
-            ?>
-                <div class="EntitePrincipalBarreHealth">
-                    <div class="attaque" id="attaqueEntiteValeur<?= $this->_idEntite ;?>"> <?= $this->_degat ;?>  </div> 
-                    <div class="healthBar" id="healthEntite<?= $this->_idEntite ;?>">
-                        <div class="healthNow" id="healthEntiteValeur<?= $this->_idEntite ;?>" style="width:<?= $pourcentage?>%;">
-                            ♥️<?= $this->_healthNow ?>
-                        </div>
-                    </div>
-                </div>
-            <?php
         }
 
         /** Fonction d'attaque */
@@ -561,7 +539,7 @@
             }
         }
 
-        //retourne un entier de toutes ses valeurs
+        //retourne un entier de toutes ses valeurs // À dégager
         public function getValeur(){
             $valeur = 0;
             foreach($this->getEquipements() as $value){
@@ -569,127 +547,6 @@
             }
             //$valeur = 100;
             return $valeur;
-        }
-
-        /** Affiche le rendu HTML de l'entité */ // À Dégager et faire une version pour Monstre et une pour Personnage
-        public function renderHTML(){
-            if($this->_healthMax<0 || $this->_healthMax=="0"){
-                $this->_healthMax=10;
-            }
-            $pourcentage = round(100*$this->_healthNow/$this->_healthMax);
-            $arme = $this->getArme();
-            $pouvoir = $this->getPouvoir();
-            if($this->_idTypeEntite == 1){
-                $TypePersonnage = $this->getTypePersonnage();
-            }
-            ?>
-                <div class="EntiteInfo">
-                    <div class="EntiteName">
-                        <?= $this->getNameEntite() ?>
-                    </div>
-                    <div class="EntiteValeur">
-                        (<?= $this->getValeur() ?> $) LV <?= $this->_lvlEntite ?>
-                    </div>
-                </div>
-                <div>
-                    <img class="Entite" src="<?= $this->_imgEntite;?>">
-                </div>
-            <?php 
-            if(!is_null($arme)){
-                ?>
-                    <div class="attaque standard" id="attaqueEntiteValeur<?= $this->_idEntite ;?>"> <?= $this->getAttaque()?>
-                        <div class="coef">
-                            (*<?php 
-                                if(!is_null($TypePersonnage)){
-                                    echo $TypePersonnage->getStatsAttaque();
-                                }
-                                else{
-                                    echo "1";
-                                }
-                            ?>)
-                        </div>
-                    </div>
-                    <div id="Arme<?= $arme->getIdEquipement() ?>" class="Arme standard" onclick="CallApiRemoveEquipementEntite(<?= $arme->getIdEquipement() ?>)"><?= $arme->getNameEquipement() ?> lvl <?= $arme->getLvlEquipement() ?></div>
-                <?php
-            }
-            else{
-                ?>
-                    <div class="attaque" id="attaqueEntiteValeur<?= $this->_idEntite ;?>">
-                        <?= $this->getAttaque()?>
-                    </div>
-                    <div id="ArmePerso<?= $this->_idEntite ?>" class="Arme">
-                    </div>
-                <?php
-            }
-            $armure = $this->getArmure();
-            $bouclier = $this->getBouclier();
-            if(!is_null($armure)){
-                ?>
-                    <div id ="Armure<?= $armure->getIdEquipement() ?>" class="ArmureNom standard" onclick="CallApiRemoveEquipementEntite(<?= $armure->getIdEquipement() ?>)"><?= $armure->getNameEquipement() ?> lvl <?= $armure->getLvlEquipement() ?>
-                        <div class="coef">
-                            (*<?php 
-                                if(!is_null($TypePersonnage)){
-                                    echo $TypePersonnage->getStatsDefense();
-                                }
-                                else{
-                                    echo "1";
-                                }
-                            ?>)
-                        </div>
-                    </div>
-                <?php
-            }
-            else if(!is_null($bouclier)){
-                ?>
-                <div id ="Armure<?= $bouclier->getIdEquipement() ?>" class="ArmureNom magic" onclick="CallApiRemoveEquipementEntite(<?= $bouclier->getIdEquipement() ?>)"><?= $bouclier->getNameEquipement() ?> lvl <?= $bouclier->getLvlEquipement() ?>
-                    <div class="coef">
-                        (*<?php 
-                            if(!is_null($TypePersonnage)){
-                                echo $TypePersonnage->getStatsRessMagique();
-                            }
-                            else{
-                                echo "1";
-                            }
-                        ?>
-                    )</div>
-                </div>
-                <?php
-            }
-            else{
-                ?>
-                    <div id ="ArmurePerso<?= $this->_idEntite ?>" class="ArmureNom"></div>
-                <?php
-            }
-            ?>
-                <div class="healthBar" id="healthEntite<?= $this->_idEntite ?>">
-                    <div class="healthNow" id="healthEntiteValeur<?= $this->_idEntite ?>" style="width:<?= $pourcentage ?>%;">♥️<?= $this->_healthNow ?>
-                    </div>
-                    <div class="armureAll">
-                        <div class="armure" id="defenseEntiteValeur<?= $this->_idEntite ?>"
-                            <?php
-                                if(!is_null($armure)){
-                                    ?>
-                                        style="width:<?= $this->getDefense() ?>%;"><?= $this->getDefense() ?>
-                                    <?php
-                                }
-                                else{
-                                    ?>
-                                        >
-                                    <?php
-                                }
-                            ?>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <?php 
-                        if($this->_idTypeEntite == 1){
-                            $TypePersonnage = $this->getTypePersonnage();
-                            echo $TypePersonnage->getNameTypePerso();
-                        }
-                    ?>
-                </div>
-            <?php
         }
 
         public function lvlupAttaque($attaque){
@@ -710,7 +567,7 @@
 
         /** Déplacement de l'entitée sur la Map */
         public function changeMap($NewMap){
-            $this->map = $NewMap;
+            $this->_mapEntite = $NewMap;
             $sql = "UPDATE `Entite` SET `idMap`='".$NewMap->getIdMap()."' WHERE `idEntite`='".$this->_idEntite."'";
             $this->_bdd->query($sql);
         }

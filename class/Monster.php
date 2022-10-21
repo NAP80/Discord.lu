@@ -1,7 +1,7 @@
 <?php
     // Beaucoup de Similitude entre Personnage/Entité -> Refactoriser avec héritage
     class Monster extends TypeMonster{
-        private $_coefXP;
+        private $_coefXP; // À dégager
         private $_idTypeMonster;
 
         public function __construct($bdd){
@@ -9,16 +9,11 @@
         }
 
         public function setMonsterById($idEntite){
-            Parent::setEntiteByIdWithoutMap($idEntite);
-            $this->initInfo($idEntite);
-        }
-
-        public function setMonsterByIdWithMap($idEntite){
             Parent::setEntiteById($idEntite);
             $this->initInfo($idEntite);
         }
 
-        /** Return CoefXp */
+        /** Return CoefXp */ // À dégager
         public function getCoefXp(){
             return $this->_coefXP;
         }
@@ -129,20 +124,6 @@
             return $this->HistoriqueAttaque;
         }
 
-        //retourne toute la mécanique d'affichage d'un Monster
-        public function renderHTML(){
-            ?>
-                <div class="Monster">
-                    <div class="MonsterCoef">
-                        Coef <?php echo $this->_coefXP ?>
-                    </div>
-                    <?php
-                        Parent::renderHTML();
-                    ?>
-                </div>
-            <?php
-        }
-
         /** Création d'un Monsters Aléatoire */
         public function CreateMonsterAleatoire($map){
                 $newMonster = new Monster($this->_bdd);
@@ -214,10 +195,7 @@
         public function GenerateName($type){
             $NameType = $type;
             $Adjectif = "";
-            switch (rand(0,20)){
-                case 0:
-                    $Adjectif = "Poisseux";
-                break;
+            switch (rand(1,20)){
                 case 1:
                     $Adjectif = "Luxuriant";
                 break;
@@ -276,7 +254,7 @@
                     $Adjectif = "Banal";
                 break;   
                 default:
-                    $Adjectif = "Haineu";
+                    $Adjectif = "Haineux";
             }
             $Nom = "";
             switch (rand(0,201)){
@@ -915,6 +893,36 @@
         /** Reset HealthNow de Monster by ID */
         public function healMonsterspawn($idEntite){
             $this->_bdd->query("UPDATE `Entite` SET `healthNow` = '".$this->healthMax."' WHERE `idEntite` = $idEntite");
+        }
+
+        /** Affiche le rendu HTML du Monster */
+        public function displayHTML(){
+            $Pourcentage = round(100*$this->_healthNow/$this->_healthMax); // Remettre en place le % de vie visible via le style
+            ?>
+                <div class="Monster">
+                    <div class="EntiteInfo">
+                        <div class="EntiteName">
+                            <p><?= $this->getNameEntite() ?></p>
+                        </div>
+                    </div>
+                    <div class="divimgEntite">
+                        <img class="imgEntite" src="<?= $this->_imgEntite;?>">
+                    </div>
+                    <div class="valueEntite">
+                        <div class="backgroundAttaque" id="attaqueEntiteValeur<?= $this->_idEntite ?>">
+                            <img class="imgAttaque" src="./css/epee.cur"/><p><?= $this->getAttaque() ?></p>
+                        </div>
+                        <div class="backgroundArmor" id="defenseEntiteValeur<?= $this->_idEntite ?>">
+                            <img class="imgArmor" src="./assets/image/armor.png"/><p><?= $this->getDefense() ?></p>
+                        </div>
+                    </div>
+                    <div class="healthBar" id="healthEntite<?= $this->_idEntite ?>">
+                        <div class="healthNow" id="healthEntiteValeur<?= $this->_idEntite ?>">
+                            <p>♥️ <?= $this->_healthNow ?> / <?= $this->_healthMax ?></p>
+                        </div>
+                    </div>
+                </div>
+            <?php
         }
     }
 ?>

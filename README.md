@@ -9,6 +9,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 ## En cours :
 - Ajouts Commentaires,
 - Uniformisation Code,
+- Refonte DisplayHTML,
 - Système d'Actions Personnages,
 - Refonte Entitée,
 - Refonte Monster,
@@ -23,6 +24,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Sécurisation Injection SQL,
 - - Intégrer les différent display/affichage.php dans l'objet PHP Map,
 - - Dégager Bing,
+- - Séparer Attaque Base/Magique et idem avec Défense/Résistance,
 - Style :
 - - Patch CSS Décalage Dialog,
 - - Le putain de footer,
@@ -31,6 +33,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Site :
 - - Page de présentation du site (Inscription),
 - - Mettre des CGU ou un truc légal,
+- - Page Profil,
 - Jeu :
 - - Système d'Actions Personnages,
 - - Ajouter une "fouille" avant de faire apparaitre des items,
@@ -43,7 +46,6 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Refonte des objets,
 - - Refonte des équipements,
 - - Refonte des combats,
-- - Refaire RenderHTML,
 - - Refonte des déplacements MAP (Retrait du délire de TP, système de direction pour les déplacements),
 - - Mécanique de Gains d'Argent lors d'une capture de monstre,
 - - Mécanique de monstre Innofensif pour X heure une fois capturé,
@@ -59,6 +61,8 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 
 # Todo Patch :
 - PHP : Déplacement Map : Non affichage de l'origine de déplacement quand refresh si Monster.
+- PHP : Bug déplacement lors de changement personnage.
+- PHP : Vérifier que Mobs déja capturé ne peut pas être attaqué.
 
 ## Fait :
 - Récupération du projet,

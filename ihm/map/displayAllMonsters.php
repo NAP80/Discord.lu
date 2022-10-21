@@ -22,7 +22,7 @@
                                 <li id="Monster<?= $Monster->getIdEntite() ?>" class="liAdverse" onmouseover="afficheDivPerso(event)" onmouseout="cacheDivPerso(event)">
                                     <a id="aMonster<?= $Monster->getIdEntite() ?>" onclick="AttaquerPerso(<?= $Monster->getIdEntite() ?>,<?= $Monster->getIdTypeEntite() ?>, event)">
                                         <?php
-                                            $Monster->renderHTML();
+                                            $Monster->displayHTML();
                                         ?>
                                     </a>
                                 </li>
@@ -36,7 +36,7 @@
                                 <li id="Monster<?= $Monster->getIdEntite() ?>" class="liCaptured">
                                     <a id="aMonster<?= $Monster->getIdEntite() ?>" onclick="/*SoinMonster(<?= $Monster->getIdEntite() ?>,1)*/">
                                         <?php
-                                            $Monster->renderHTML();
+                                            $Monster->displayHTML();
                                         ?>
                                     </a>
                                 </li>

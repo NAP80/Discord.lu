@@ -24,6 +24,7 @@
 
 .divEntete{
     display: flex;
+    flex-direction: row;
 }
 
 .divEntity{
@@ -99,13 +100,11 @@
 }
 
 .ulPersonnages{
-   
     justify-content: center;
     margin: 5px;
     padding: 0px;
 }
 .ulMonster{
-    
     flex-wrap: wrap;
     justify-content: center;
     margin: 5px;

@@ -34,21 +34,6 @@
             }
         }
 
-        /** Set Personnage by ID Personnage sur Map */
-        public function setPersonnageByIdWithoutMap($idPersonnage){
-            Parent::setEntiteByIdWithoutMap($idPersonnage);
-            $req = "SELECT * FROM `Personnage` WHERE idPersonnage='".$idPersonnage."'";
-            $Result = $this->_bdd->query($req);
-            if($tab=$Result->fetch()){
-                $this->_idTypePersonnage    = $tab['idTypePersonnage'];
-                $this->_levelPersonnage     = $tab['levelPersonnage'];
-                $this->_expPersonnage       = $tab['expPersonnage'];
-                $this->_moneyPersonnage     = $tab['moneyPersonnage'];
-                $this->_idMapSpawnPersonnage= $tab['idMapSpawnPersonnage'];
-                $this->_effectPersonnage    = $tab['effectPersonnage'];
-            }
-        }
-
         /** Return id Type Personnage */
         public function getIdTypePersonnage(){
             return $this->_idTypePersonnage;
@@ -224,20 +209,6 @@
             return $valeur;
         }
 
-        /** Affiche le rendu HTML du personnage */ // À Refaire
-        public function renderHTML(){
-        ?>
-            <div class="perso" id="Perso<?= $this->_idEntite ?>">
-                <div class="persoXP">
-                    <?= $this->_expPersonnage?> (Exp)
-                </div>
-                <?php
-                    Parent::renderHTML();
-                ?>
-            </div>
-        <?php
-        }
-
         /** Return List Items */
         public function getItems(){
             $lists=array();
@@ -319,6 +290,133 @@
                     <b class="">ByPass :</b>
                 <?php
             }
+        }
+
+        public function displayHTML(){
+            ?>
+                <div class="perso" id="Perso<?= $this->_idEntite ?>">
+                    <div class="persoXP">
+                        <?= $this->_expPersonnage?> (Exp)
+                    </div>
+                    <?php
+                        $this->displayPersonnageHTML();
+                    ?>
+                </div>
+            <?php
+        }
+
+        /** Affiche le rendu HTML du Personnage */
+        public function displayPersonnageHTML(){
+            $pourcentage = round(100*$this->_healthNow/$this->_healthMax);
+            $arme = $this->getArme();
+            $pouvoir = $this->getPouvoir();
+            $TypePersonnage = $this->getTypePersonnage();
+            ?>
+                <div class="EntiteInfo">
+                    <div class="EntiteName">
+                        <?= $this->getNameEntite() ?>
+                    </div>
+                    <div class="EntiteValeur">
+                        (<?= $this->getValeur() ?> $) LV <?= $this->_lvlEntite ?>
+                    </div>
+                </div>
+                <div>
+                    <img class="Entite" src="<?= $this->_imgEntite;?>">
+                </div>
+            <?php 
+            if(!is_null($arme)){
+                ?>
+                    <div class="backgroundAttaque standard" id="attaqueEntiteValeur<?= $this->_idEntite ;?>"> <?= $this->getAttaque()?>
+                        <div class="coef">
+                            (*<?php 
+                                if(!is_null($TypePersonnage)){
+                                    echo $TypePersonnage->getStatsAttaque();
+                                }
+                                else{
+                                    echo "1";
+                                }
+                            ?>)
+                        </div>
+                    </div>
+                    <div id="Arme<?= $arme->getIdEquipement() ?>" class="Arme standard" onclick="CallApiRemoveEquipementEntite(<?= $arme->getIdEquipement() ?>)"><?= $arme->getNameEquipement() ?> lvl <?= $arme->getLvlEquipement() ?></div>
+                <?php
+            }
+            else{
+                ?>
+                    <div class="backgroundAttaque" id="attaqueEntiteValeur<?= $this->_idEntite ;?>">
+                        <?= $this->getAttaque()?>
+                    </div>
+                    <div id="ArmePerso<?= $this->_idEntite ?>" class="Arme">
+                    </div>
+                <?php
+            }
+            $armure = $this->getArmure();
+            $bouclier = $this->getBouclier();
+            if(!is_null($armure)){
+                ?>
+                    <div id ="Armure<?= $armure->getIdEquipement() ?>" class="ArmureNom standard" onclick="CallApiRemoveEquipementEntite(<?= $armure->getIdEquipement() ?>)"><?= $armure->getNameEquipement() ?> lvl <?= $armure->getLvlEquipement() ?>
+                        <div class="coef">
+                            (*<?php 
+                                if(!is_null($TypePersonnage)){
+                                    echo $TypePersonnage->getStatsDefense();
+                                }
+                                else{
+                                    echo "1";
+                                }
+                            ?>)
+                        </div>
+                    </div>
+                <?php
+            }
+            else if(!is_null($bouclier)){
+                ?>
+                <div id ="Armure<?= $bouclier->getIdEquipement() ?>" class="ArmureNom magic" onclick="CallApiRemoveEquipementEntite(<?= $bouclier->getIdEquipement() ?>)"><?= $bouclier->getNameEquipement() ?> lvl <?= $bouclier->getLvlEquipement() ?>
+                    <div class="coef">
+                        (*<?php 
+                            if(!is_null($TypePersonnage)){
+                                echo $TypePersonnage->getStatsRessMagique();
+                            }
+                            else{
+                                echo "1";
+                            }
+                        ?>
+                    )</div>
+                </div>
+                <?php
+            }
+            else{
+                ?>
+                    <div id ="ArmurePerso<?= $this->_idEntite ?>" class="ArmureNom"></div>
+                <?php
+            }
+            ?>
+                <div class="healthBar" id="healthEntite<?= $this->_idEntite ?>">
+                    <div class="healthNow" id="healthEntiteValeur<?= $this->_idEntite ?>" style="width:<?= $pourcentage ?>%;">♥️<?= $this->_healthNow ?>
+                    </div>
+                    <div class="ArmureAll">
+                        <div class="backgroundArmor" id="defenseEntiteValeur<?= $this->_idEntite ?>"
+                            <?php
+                                if(!is_null($armure)){
+                                    ?>
+                                        style="width:<?= $this->getDefense() ?>%;"><?= $this->getDefense() ?>
+                                    <?php
+                                }
+                                else{
+                                    ?>
+                                        >
+                                    <?php
+                                }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <?php 
+                        $TypePersonnage = $this->getTypePersonnage();
+                        echo $TypePersonnage->getNameTypePerso();
+                    ?>
+                </div>
+            <?php
         }
     }
 ?>
