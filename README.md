@@ -7,13 +7,9 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 # Avancement :
 
 ## En cours :
-- Ajouts Commentaires,
 - Uniformisation Code,
-- Refonte DisplayHTML,
+- Refonte Entitée/Monster/Personnage,
 - Système d'Actions Personnages,
-- Refonte Entitée,
-- Refonte Monster,
-- Refonte Personnage,
 
 ## Todo List :
 - Dev :
@@ -30,21 +26,23 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Le putain de footer,
 - - Refaire l'intégralité du CSS,
 - - Refaire le Menu,
+- JS :
+- - Afficher Coord des Monsters Captured dans Combat,
+- - Faire la partie JS du changement d'équipement,
 - Site :
 - - Page de présentation du site (Inscription),
 - - Mettre des CGU ou un truc légal,
 - - Page Profil,
 - Jeu :
 - - Système d'Actions Personnages,
-- - Ajouter une "fouille" avant de faire apparaitre des items,
-- - Système d'Amis,
 - - Amélioration du système de Faction,
 - - Réalisation du système de Classe,
 - - Intégration Hiérarchie Utilisateur,
 - - Intégration Système de Ban,
-- - Ajouter des effets Personnage,
-- - Refonte des objets,
-- - Refonte des équipements,
+- - Ajouter une "fouille" avant de faire apparaitre des items,
+- - Refonte des objets / équipements,
+- - - Retirer les LVL Objets,
+- - - Refonte Inventaire,
 - - Refonte des combats,
 - - Refonte des déplacements MAP (Retrait du délire de TP, système de direction pour les déplacements),
 - - Mécanique de Gains d'Argent lors d'une capture de monstre,
@@ -54,6 +52,8 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Refonte de la Map,
 - - Intégration des Pouvoirs,
 - - Système de Code/Bonus,
+- - Ajouter des effets Personnage,
+- - Système d'Amis,
 - - Intégration Bâtiments,
 - - - Forge,
 - - - Marché,
@@ -66,6 +66,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 
 ## Fait :
 - Récupération du projet,
+- Ajouts Commentaires,
 - Mise à jours des crédits,
 - Hash des MDP en BDD,
 - Refonte Form Choix Faction,
@@ -81,5 +82,6 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Mise à jours TypeMonsters,
 - Uniformisation Variable et BDD,
 - Refonte Class Objet -> Efficacite,
-- Patch PHP/JS Multiples
-- Zone Non-PVP et Vérification Attaque.
+- Patch PHP/JS Multiples,
+- Zone Non-PVP et Vérification Attaque,
+- Refonte DisplayHTML Monster/Personnage - Patch CSS.

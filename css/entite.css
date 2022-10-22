@@ -3,6 +3,7 @@
     float:left;
     background-color:darkgray;
     height:26px;
+    width:100%;
 }
 
 .healthNow{
@@ -21,20 +22,13 @@
     width:158px;
 }
 
-.Arme{
-    float:left;
+.Arme, .ArmureNom{
+    display:flex;
+    font-size:small;
+    height:100%;
+    width: 100%;
     white-space:nowrap;
-    height:20px;
-    padding:3px;
-    font-size:smaller;
-}
-
-.ArmureNom{
-    float:left;
-    white-space:nowrap;
-    width:100%;
-    background:rgba(247,232,25,0.555);
-    font-size:smaller;
+    align-items:center;
 }
 
 .Monster, .Personnage{
@@ -42,12 +36,14 @@
     flex-direction:column;
     padding: 4px;
 }
+.valuePerso{
+    display:flex;
+    flex-direction:column;
+}
 
-.valueEntite, .backgroundAttaque, .backgroundArmor, .healthNow{
+.valueEntite{
     display:flex;
     flex-direction:row;
-    align-items: center;
-    color:white;
 }
 
 .imgAttaque, .imgArmor{
@@ -58,10 +54,16 @@
 .valueAttaque, .valueArmor{
     color:white;
 }
-.backgroundAttaque, .backgroundArmor{
+.healthNow, .backgroundAttaque, .backgroundArmor{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    height:26px;
+    color:white;
+}
+.healthNow p, .backgroundAttaque p, .backgroundArmor p{
     padding-left:4px;
     padding-right:8px;
-    height:26px;
 }
 
 .backgroundAttaque{

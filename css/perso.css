@@ -1,22 +1,19 @@
 .perso{
-    display: block;
-    width:150px;
+    width: 166px;
     background-color:rgb(195, 206, 207);
-    padding:5px;
-    margin:10px;
     border:2px solid rgb(109, 107, 107);
     border-radius: 10px;
     box-shadow:2px 2px 2px rgb(0, 0, 0);
     -webkit-box-shadow:2px 2px 2px rgb(0, 0, 0);
 }
-.ulMonster li{
+.ulMonster li, .perso{
     padding:6px;
     margin:10px;
 }
 
 ul .perso{
-    display: inline-block;
-    width:170px;
+    display:flex;
+    flex-direction:column;
     background-color:rgb(151,161,137);
     border:1px solid rgb(219,184,25);
     box-shadow:2px 2px 2px rgb(133,228,145);
@@ -27,15 +24,6 @@ ul .perso{
     font-size: 8px;
     float:left;
 }
-.standard{
-    background-image:url('https://findicons.com/files/icons/286/legendora/256/sword.png');
-    background-color:rgba(136, 104, 0, 0.642);
-}
-.magic{
-    background-color:rgba(0, 114, 214, 0.726);
-    background-image:url('https://www.icone-png.com/png/46/45737.png');
-}
-
 
 .divAvatar .perso{
     float:left;
@@ -62,12 +50,6 @@ ul .AutrePersos li{
 ul .perso:hover{
     cursor:url('epee.cur'),pointer;
     background-color:rgb(206, 171, 90);
-}
-
-li.liAdverse{
-    width: 170px;
-    margin-left:30px;
-    margin-right:30px;
 }
 
 .ulMonster li{

@@ -24,9 +24,9 @@
                                 $class = "standard";
                         }
                     ?>
-                        <li id="equipementSac<?= $Equipement->getIdEquipement() ?>" class='<?= $class;?>'>
+                        <li id="equipementSac<?= $Equipement->getIdEquipement() ?>" class='<?= $class ?>'>
                             <a onclick="useEquipement(<?= $Equipement->getIdEquipement() ?>)">
-                                <img class='imgEquipementSac' src='<?= $Equipement->getImgEquipement(); ?>'/>
+                                <img class='imgEquipementSac' src='<?= $Equipement->getImgEquipement() ?>'/>
                                 <span class='spanEquipementSac'>
                                     <?= $Equipement->getNameEquipement() ?> lvl <?= $Equipement->getLvlEquipement() ?>
                                 </span>

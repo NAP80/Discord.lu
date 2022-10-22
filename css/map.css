@@ -99,14 +99,11 @@
     margin-right: 5px;
 }
 
-.ulPersonnages{
-    justify-content: center;
-    margin: 5px;
-    padding: 0px;
+.perso p, .Monster p{
+    margin: 0px;
 }
-.ulMonster{
-    flex-wrap: wrap;
-    justify-content: center;
+
+.ulMonster, .ulPersonnages{
     margin: 5px;
     padding: 0px;
 }

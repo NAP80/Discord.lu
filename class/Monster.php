@@ -906,7 +906,7 @@
                         </div>
                     </div>
                     <div class="divimgEntite">
-                        <img class="imgEntite" src="<?= $this->_imgEntite;?>">
+                        <img class="imgEntite" src="<?= $this->_imgEntite ?>">
                     </div>
                     <div class="valueEntite">
                         <div class="backgroundAttaque" id="attaqueEntiteValeur<?= $this->_idEntite ?>">
