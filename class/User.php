@@ -270,7 +270,7 @@
         public function getAllTypePersonnage($idFactionUser){
             $ListPerso = array();
             $Result = $this->_bdd->query("SELECT * FROM `TypePersonnage` WHERE idFaction = '".$idFactionUser."'");
-            while($tab=$Result->fetch()){
+            while($tab = $Result->fetch()){
                 $TypePerso = new TypePersonnage($this->_bdd);
                 $TypePerso->setTypePersonnageById($tab['idTypePerso']);
                 array_push($ListPerso,$TypePerso);
@@ -280,10 +280,10 @@
 
         /** Return List de tout Monster Capturé par ID User */
         public function getAllMyMonsterIds(){
-            $listMonster=array();
-            $req="SELECT `idEntite` FROM `Entite` WHERE `idUser` in (SELECT `idEntite` FROM `Entite` WHERE `idUser` = '".$this->_idUser."') AND idTypeEntite=0";
+            $listMonster = array();
+            $req    = "SELECT `idEntite` FROM `Entite` WHERE `idUser` = '".$this->_idUser."' AND `idTypeEntite` = 0";
             $Result = $this->_bdd->query($req);
-            while($tab=$Result->fetch()){
+            while($tab = $Result->fetch()){
                 array_push($listMonster,$tab[0]);
             }
             return $listMonster;

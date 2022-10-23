@@ -16,43 +16,39 @@
             $EntiteCible->setEntiteById($_GET["idEntite"]);
             $healthMaxCible=$EntiteCible->getHealthMax();
             $healthNowCible=$EntiteCible->getHealthNow();
-            if($EntiteCible->getIdUser() == 0){
-                $idTypeEntite = 0;
-            }
-            else{
-                $idTypeEntite = 1;
-            }
-            // Vérification que Personnage n'est pas EntiteCible ou le même User.
-            if(($EntiteCible->getIdEntite() !== $Personnage->getIdEntite()) && ($EntiteCible->getIdUser() !== $Personnage->getIdUser())){
+            $IdUserPersonnage = $Personnage->getIdUser();
+            $IdUserEntite = $EntiteCible->getIdUser();
+            $idTypeEntite = $EntiteCible->getIdTypeEntite();
+            // Vérification que Entite est ennemie.
+            if($IdUserEntite !== $IdUserPersonnage){ // Todo Ajouter Amis/Guilde/Autre
                 // Vérification Personnage & EntiteCible sur la même map
                 if($EntiteCible->getMapEntite() == $Personnage->getMapEntite()){
-                    // vérification que Map PVP
+                    // Vérification que Map PVP
                     if($Personnage->getMapEntite()->getPvP()){
-                        // Attaque sur perso
+                        // Attaque Personnage
                         if($idTypeEntite == 1){
                             $CiblePersonnage = new Personnage($mabase);
                             $CiblePersonnage->setPersonnageById($_GET["idEntite"]);
-                            $healthMaxCible=$CiblePersonnage->getHealthMax();
-                            $healthNowCible=$CiblePersonnage->getHealthNow();
-                            //on verrifie que le perso n'est pas mort
-                            if($CiblePersonnage->getHealthNow()>0){
-                                if($healthPersonnage!=0){
+                            $healthMaxCible = $CiblePersonnage->getHealthMax();
+                            $healthNowCible = $CiblePersonnage->getHealthNow();
+                            if($CiblePersonnage->getHealthNow() > 0){
+                                if($healthPersonnage > 0){
                                     $healthNowCible = $CiblePersonnage->SubitDegatByPersonnage($Personnage->getAttaque());
                                     $healthMaxCible = $CiblePersonnage->getHealthMax();
                                     $CiblePersonnage->addXP(1);
                                     //on va retirer le coup d'attaque de base de Cible
                                     //car une attaque n'est pas gratuite
                                     $healthAvant = $Personnage->getHealthNow();
-                                    $healthPersonnage=$Personnage->SubitDegatByPersonnage($CiblePersonnage->getAttaque());
+                                    $healthPersonnage = $Personnage->SubitDegatByPersonnage($CiblePersonnage->getAttaque());
                                     $perte = $healthAvant-$healthPersonnage;
                                     $message .= "Vous avez subit ".$perte." pts de degat. ";
                                     $Personnage->addXP(2); // À dégager
-                                    if($healthPersonnage==0){
+                                    if($healthPersonnage == 0){
                                         $message .= "Votre personnage est mort. ";
                                     }
                                     if($healthNowCible==0){
                                         $lvlEntite = $CiblePersonnage->getLvlEntite();
-                                        $Personnage->addXP($lvlEntite*rand(8,10));
+                                        $Personnage->addXP($lvlEntite * rand(8,10));
                                         $message .= "Vous avez tué ".$CiblePersonnage->getNameEntite().". ";
                                     }
                                 }
@@ -64,24 +60,22 @@
                                 $message .= "Ce personnage est déjà mort. ";
                             }
                         }
-                        // Attaque sur Monster
+                        // Attaque Monster
                         if($idTypeEntite == 0){
                             $CibleMonster = new Monster($mabase);
                             $CibleMonster->setMonsterById($_GET["idEntite"]);
-                            $healthMaxCible=$CibleMonster->getHealthMax();
-                            $healthNowCible=$CibleMonster->getHealthNow();
-                            if($CibleMonster->getHealthNow()>0){
-                                if($healthPersonnage!=0){
-                                    //Utilisation méthode pour attaquer le Monster
+                            $healthMaxCible = $CibleMonster->getHealthMax();
+                            $healthNowCible = $CibleMonster->getHealthNow();
+                            if($CibleMonster->getHealthNow() > 0){
+                                if($healthPersonnage > 0){
+                                    // Attaque -> Cible Subit Dégat
                                     $SubitDegat = $CibleMonster->SubitDegat($Personnage);
-                                    //healthNow du Monster renvoyer après avoir subit l attaque du joueur
                                     $healthNowCible = $SubitDegat[0];
                                     $healthMaxCible = $CibleMonster->getHealthMax();
-                                    //Si le Monster as de la healthNow, il attaque. Sinon, rien ne se passe
-                                    if($healthNowCible>0 && $SubitDegat[1]!='coolDown'){
+                                    // Si Monster Vivant -> Attaque
+                                    if($healthNowCible > 0 && $SubitDegat[1] != 'coolDown'){
                                         $healthAvant = $Personnage->getHealthNow();
-                                        //Sinon : retour de bâton le deffenseur aussi attaque
-                                        $healthPersonnage=$Personnage->SubitDegatByMonster($CibleMonster);
+                                        $healthPersonnage = $Personnage->SubitDegatByMonster($CibleMonster);
                                         $perte = $healthAvant-$healthPersonnage;
                                         $message .= "Vous avez subit ".$perte." pts de degat. ";
                                         $Personnage->addXP(2); // À dégager
@@ -89,13 +83,13 @@
                                     //Affichage d'un message avec les dégats ingligé + info de si c'est un cout critique
                                     //Si vous voulez retirer le popup, c'est ici; Gros Chien.
                                     $message .= $SubitDegat[1];
-                                    if($healthPersonnage==0){
+                                    if($healthPersonnage == 0){
                                         $message .= " Votre personnage est mort. ";
                                     }
                                     //si le perso tue le Monster il faut envoyer un message
-                                    if($healthNowCible<=0){
+                                    if($healthNowCible <= 0){
                                         $lvlEntite = $CibleMonster->getLvlEntite();
-                                        $Personnage->addXP($lvlEntite*rand(8,10)*$CibleMonster->getCoefXp());
+                                        $Personnage->addXP($lvlEntite*rand(8,10) * $CibleMonster->getCoefXp());
                                         $message .= "Tu as participé à la capture de ce monstre. ";
                                     }
                                 }
@@ -104,7 +98,7 @@
                                 }
                             }
                             else{
-                                $message .= "Ce monstre est déjà capturé. ";
+                                $message .= "Ce monstre est déjà mort. ";
                             }
                         }
                     }
@@ -117,7 +111,7 @@
                 }
             }
             else{
-                $message .= "Vous ne pouvez pas vous attaquer vous même. ";
+                $message .= "Vous ne pouvez attaquer que vos ennemies. ";
             }
             $reponse[0] = $_GET["idEntite"];
             $reponse[1] = $healthNowCible;

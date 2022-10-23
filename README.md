@@ -62,7 +62,6 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 # Todo Patch :
 - PHP : Déplacement Map : Non affichage de l'origine de déplacement quand refresh si Monster.
 - PHP : Bug déplacement lors de changement personnage.
-- PHP : Vérifier que Mobs déja capturé ne peut pas être attaqué.
 
 ## Fait :
 - Récupération du projet,
@@ -84,4 +83,5 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Refonte Class Objet -> Efficacite,
 - Patch PHP/JS Multiples,
 - Zone Non-PVP et Vérification Attaque,
-- Refonte DisplayHTML Monster/Personnage - Patch CSS.
+- Refonte DisplayHTML Monster/Personnage - Patch CSS,
+- Patch PHP Divers.

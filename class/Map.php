@@ -147,28 +147,28 @@
             (is_null($mapOuest))?$this->mapOuest = null:$this->mapOuest = $mapOuest;
             //select les items déjà présent
             $this->listItems = array();
-            $req = "SELECT idItem FROM `MapItems` WHERE idMap='".$idMap."'";
+            $req = "SELECT idItem FROM `MapItems` WHERE idMap = '".$idMap."'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($this->listItems,$tab[0]);
             }
             //select les Equipements déjà présent
             $this->listEquipements = array();
-            $req = "SELECT idEquipement FROM `MapEquipements` WHERE idMap='".$idMap."'";
+            $req = "SELECT idEquipement FROM `MapEquipements` WHERE idMap = '".$idMap."'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($this->listEquipements,$tab[0]);
             }
             //select les Personnages vivant
             $this->listPersonnages = array();
-            $req = "SELECT idEntite FROM `Entite` WHERE idMap='".$idMap."' AND healthNow > 0 AND idTypeEntite='1'";
+            $req = "SELECT idEntite FROM `Entite` WHERE idMap = '".$idMap."' AND healthNow > 0 AND idTypeEntite = '1'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($this->listPersonnages,$tab[0]);
             }
             //select les Monsters déjà présent
             $this->listMonsters = array();
-            $req = "SELECT idEntite FROM `Entite` WHERE idMap='".$idMap."' AND idTypeEntite='0'";
+            $req = "SELECT idEntite FROM `Entite` WHERE idMap = '".$idMap."' AND idTypeEntite = '0'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
                 array_push($this->listMonsters,$tab[0]);
@@ -280,7 +280,7 @@
             return $tab3;
         }
 
-        /** Return Nom du Découvreur de Map */
+        /** Return Objet User du Découvreur de Map */
         public function getPersonnageDecouvreur(){
             $User = new User($this->_bdd);
             $User->setUserById($this->idUserDecouverte);

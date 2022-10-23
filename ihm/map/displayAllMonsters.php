@@ -29,8 +29,8 @@
                             <?php
                         }
                         // Affichage des Monster Capturés
-                        $tabMonster = $map->getAllMonsterCapture($Joueur1);
-                        foreach( $tabMonster as $MonsterID){
+                        $MonsterCaptured = $map->getAllMonsterCapture($Joueur1);
+                        foreach($MonsterCaptured as $MonsterID){
                             $Monster->setMonsterById($MonsterID);
                             ?>
                                 <li id="Monster<?= $Monster->getIdEntite() ?>" class="liCaptured">

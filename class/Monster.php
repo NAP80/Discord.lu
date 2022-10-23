@@ -42,9 +42,9 @@
         public function SubitDegat($Entite){
             $Attaque = $Entite->getAttaque();
             $CoolDown = $Entite->getCoolDownAttaque();
-            $CoupCritique='coolDown';
+            $CoupCritique = 'coolDown';
             //is coolDOwn < 0 c'est que l'attaque est tjs en cours
-            if($CoolDown>0){
+            if($CoolDown > 0){
                 //l'attaque est en cours on met a jout le cooldown pour ne pas spam l'attaque
                 $Entite->resetCoolDown();
                 //Ajout Aléatoire pour coup critique PVE (15% de chance d'acctivation // 50% de dégats en plus):
@@ -72,19 +72,19 @@
                     }
                 }
                 $coupFatal = 0;
-                if($this->_healthNow<=0){
-                    $this->_healthNow=0;
-                    $coupFatal=1;
+                if($this->_healthNow <= 0){
+                    $this->_healthNow = 0;
+                    $coupFatal = 1;
                     //on va attribuer le monstre au personnage, sa healthNow revient a fond pour le propriétaire
-                    $req  = "UPDATE `Entite` SET `healthNow`='".$this->_healthMax."',`idUser`='".$Entite->getIdEntite()."' WHERE `idEntite` = '".$this->_idEntite."'";
+                    $req    = "UPDATE `Entite` SET `healthNow`='".$this->_healthMax."',`idUser`='".$Entite->getIdUser()."' WHERE `idEntite` = '".$this->_idEntite."'";
                     $Result = $this->_bdd->query($req);
                 }
                 else{
-                    $req  = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow ."' WHERE `idEntite` = '".$this->_idEntite ."'";
+                    $req    = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow ."' WHERE `idEntite` = '".$this->_idEntite ."'";
                     $Result = $this->_bdd->query($req);
                 }
                 //on va rechercher l'historique
-                $req  = "SELECT * FROM `AttaquePersoMonster` WHERE idMonster = '".$this->_idEntite."' and idPersonnage = '".$Entite->getIdEntite()."'";
+                $req    = "SELECT * FROM `AttaquePersoMonster` WHERE idMonster = '".$this->_idEntite."' and idPersonnage = '".$Entite->getIdEntite()."'";
                 $Result = $this->_bdd->query($req);
                 $tabAttaque['nbCoup']=0;
                 $tabAttaque['DegatsDonnes']=0;
@@ -96,19 +96,19 @@
                 }
                 else{
                     //insertion d'une nouvelle attaque
-                    $req="INSERT INTO `AttaquePersoMonster`(`idMonster`, `idPersonnage`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`)
+                    $req    = "INSERT INTO `AttaquePersoMonster`(`idMonster`, `idPersonnage`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`)
                     VALUES (
                         '".$this->_idEntite."','".$Entite->getIdEntite()."',1,0,0,".$tabAttaque['DegatsReçus']."
                     )";
                     $Result = $this->_bdd->query($req);
                 }
                 //update AttaquePersoMonster
-                $req="UPDATE `AttaquePersoMonster` SET
-                `nbCoup`=".$tabAttaque['nbCoup'].",
-                `coupFatal`=".$coupFatal.",
-                `DegatsReçus`=".$tabAttaque['DegatsReçus']."
-                WHERE idMonster = '".$this->getIdEntite()."' AND idPersonnage ='".$Entite->getIdEntite()."' ";
-                    $Result = $this->_bdd->query($req);
+                $req    = "UPDATE `AttaquePersoMonster` SET
+                `nbCoup` = ".$tabAttaque['nbCoup'].",
+                `coupFatal` = ".$coupFatal.",
+                `DegatsReçus` = ".$tabAttaque['DegatsReçus']."
+                WHERE idMonster = '".$this->getIdEntite()."' AND idPersonnage = '".$Entite->getIdEntite()."' ";
+                $Result = $this->_bdd->query($req);
                 usleep($CoolDown*1000);//microSeconde
             }
             return array ($this->_healthNow, $CoupCritique);
