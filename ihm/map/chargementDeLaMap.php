@@ -22,3 +22,17 @@
     }
     $BousoleDeplacement = $map->getMapAdjacenteLienHTML($cardinalite,$Joueur1);
 ?>
+<div class="divMap">
+    <?= $BousoleDeplacement['nord'] ?>
+    <img src="assets/image/Fleche-225px.png" class="NESO">
+    <div class="divMapOuest">
+        <?= $BousoleDeplacement['ouest'] ?>
+        <div class="divMapEst">
+            <div class="divMapCentre">
+                <?php $Joueur1->getVisitesHTML(6) ?>
+            </div>
+            <?= $BousoleDeplacement['est'] ?>
+        </div>
+    </div>
+    <?= $BousoleDeplacement['sud'] ?>
+</div>

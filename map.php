@@ -36,7 +36,6 @@
                     <?php
                 }
                 else{
-                    include "ihm/map/chargementDeLaMap.php";
                     ?>
                         <div class="divMapPage">
                             <?php
@@ -77,20 +76,7 @@
                             <div class="divInformation">
                                 <?php include "ihm/map/affichageTooltip.php" ?>
                                 <div class="divInformationMap">
-                                    <div class="divMap">
-                                        <?= $BousoleDeplacement['nord'] ?>
-                                        <img src="assets/image/Fleche-225px.png" class="NESO">
-                                        <div class="divMapOuest">
-                                            <?= $BousoleDeplacement['ouest'] ?>
-                                            <div class="divMapEst">
-                                                <div class="divMapCentre">
-                                                    <?php $Joueur1->getVisitesHTML(6) ?>
-                                                </div>
-                                                <?= $BousoleDeplacement['est'] ?>
-                                            </div>
-                                        </div>
-                                        <?= $BousoleDeplacement['sud'] ?>
-                                    </div>
+                                    <?php include "ihm/map/chargementDeLaMap.php" ?>
                                     <div class="divInfoMap">
                                         <?= $map->getInfoMap() ?>
                                     </div>
