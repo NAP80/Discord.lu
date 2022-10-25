@@ -20,6 +20,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Sécurisation Injection SQL,
 - - Intégrer les différent display/affichage.php dans l'objet PHP Map,
 - - Dégager Bing,
+- - - Retirer les Avatars/Fonds Aléatoires,
 - - Séparer Attaque Base/Magique et idem avec Défense/Résistance,
 - Style :
 - - Patch CSS Décalage Dialog,
@@ -43,6 +44,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Refonte des objets / équipements,
 - - - Retirer les LVL Objets,
 - - - Refonte Inventaire,
+- - Refonte des LVL,
 - - Refonte des combats,
 - - Refonte des déplacements MAP (Retrait du délire de TP, système de direction pour les déplacements),
 - - Mécanique de Gains d'Argent lors d'une capture de monstre,
@@ -61,7 +63,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 
 # Todo Patch :
 - PHP : Déplacement Map : Non affichage de l'origine de déplacement quand refresh si Monster.
-- PHP : Bug déplacement lors de changement personnage.
+- PHP : Bug déplacement lors de changement personnage (AU final c'est pas un bug mais une "feature"). À encadrer.
 
 ## Fait :
 - Récupération du projet,

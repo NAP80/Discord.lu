@@ -465,7 +465,7 @@
             $this->_bdd->query($sql);
         }
 
-        /** Déplacement de l'entitée sur la Map */
+        /** Changement de Map */
         public function changeMap($NewMap){
             $this->_mapEntite = $NewMap;
             $sql = "UPDATE `Entite` SET `idMap`='".$NewMap->getIdMap()."' WHERE `idEntite`='".$this->_idEntite."'";
