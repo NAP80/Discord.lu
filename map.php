@@ -76,7 +76,9 @@
                             <div class="divInformation">
                                 <?php include "ihm/map/affichageTooltip.php" ?>
                                 <div class="divInformationMap">
-                                    <?php include "ihm/map/chargementDeLaMap.php" ?>
+                                    <?php
+                                        include "ihm/map/affichageMap.php"
+                                    ?>
                                     <div class="divInfoMap">
                                         <?= $map->getInfoMap() ?>
                                     </div>
