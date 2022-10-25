@@ -1,11 +1,11 @@
 <div class="divAllMonsters">
     <div class='effect'></div>
     <?php
-        $listMonster = $map->getAllMonsters();
+        $listMonster = $MapPersonnage->getAllMonsters();
         if(count($listMonster) > 0){
             $Monster = new Monster($mabase);
             // Affichage des Monster Enemis
-            $MonsterContre = $map->getAllMonsterContre($Joueur1);
+            $MonsterContre = $MapPersonnage->getAllMonsterContre($Joueur1);
             if(count($MonsterContre) > 0){
                 ?>
                     <div class='divInfoMonsters'>
@@ -29,7 +29,7 @@
                             <?php
                         }
                         // Affichage des Monster Capturés
-                        $MonsterCaptured = $map->getAllMonsterCapture($Joueur1);
+                        $MonsterCaptured = $MapPersonnage->getAllMonsterCapture($Joueur1);
                         foreach($MonsterCaptured as $MonsterID){
                             $Monster->setMonsterById($MonsterID);
                             ?>

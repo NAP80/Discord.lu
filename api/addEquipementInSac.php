@@ -20,16 +20,16 @@
                 $Perso->resurection();
                 $reponse[1]="Ton personnage est mort.";
             }
-            $map=$Perso->getMapEntite();
+            $MapPersonnage = $Perso->getMapEntite();
             //une fois que j'ai mes objet je vérifie que le perso est bien sur la map
-            $idmap = $map->getIdMap();
+            $idmap = $MapPersonnage->getIdMap();
             //que l'item est bien dans la map si ya un Monster on peut pas le prendre
-            foreach ($map->getEquipements() as $item) {
+            foreach ($MapPersonnage->getEquipements() as $item) {
                 if($_GET["idEquipement"]==$item->getIdEquipement()){
                     //vérifier si ya des Monster
-                    if(count($map->getAllMonsterContre($Joueur1))==0){
+                    if(count($MapPersonnage->getAllMonsterContre($Joueur1))==0){
                         //on retire l'item de la map et on la rajoute dans le sac
-                        $map->removeEquipementById($_GET["idEquipement"]);
+                        $MapPersonnage->removeEquipementById($_GET["idEquipement"]);
                         $item = new Equipement($mabase);
                         $item->setEquipementByID($_GET["idEquipement"]);
                         $reponse[5]=$Perso->addEquipement($item); //retourne un tableau id a retirer du front

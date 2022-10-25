@@ -1,6 +1,6 @@
 <div class="divAllPerso">
     <?php
-        $listPersos = $map->getAllPersonnages();
+        $listPersos = $MapPersonnage->getAllPersonnages();
         if(count($listPersos) > 1){
             ?>
                 <div class='divInfoPlayers'>
@@ -13,7 +13,7 @@
                             if($Perso->getIdEntite() != $PersoJoueur->getIdEntite()){
                                 ?>
                                     <li class="liAdverse" onmouseover="afficheDivPerso(event)" onmouseout="cacheDivPerso(event)">
-                                        <a id="aPerso<?= $Perso->getIdEntite() ?>"<?php if(($PersoJoueur->getIdUser() !== $Perso->getIdUser()) && ($map->getPvP())){?>onclick="AttaquerPerso(<?= $Perso->getIdEntite() ?>,<?= $Perso->getIdTypeEntite() ?>, event)"<?php } ?>>
+                                        <a id="aPerso<?= $Perso->getIdEntite() ?>"<?php if(($PersoJoueur->getIdUser() !== $Perso->getIdUser()) && ($MapPersonnage->getPvP())){?>onclick="AttaquerPerso(<?= $Perso->getIdEntite() ?>,<?= $Perso->getIdTypeEntite() ?>, event)"<?php } ?>>
                                             <?php $Perso->displayHTML() ?>
                                         </a>
                                     </li>

@@ -1,26 +1,26 @@
 <?php
-    $map = $Personnage->getMapEntite();
-    $TelportationPositionDepart = $map->getPosition();
+    $TelportationPositionDepart = $MapPersonnage->getPosition();
     // Gestion de la téléportation
     $cardinalite = '';
     if(isset($_GET["cardinalite"])){
         $cardinalite = $_GET["cardinalite"];
     }
-    if($map->LogVisiteMap($Personnage) === true){
+    // 
+    if($MapPersonnage->LogVisiteMap($Personnage) === true){
         if(isset($_GET["position"]) && $Personnage->getHealthNow() > 0){
-            $map = $map->loadMap($_GET["position"],$cardinalite,$Joueur1);
+            $MapPersonnage = $MapPersonnage->loadMap($_GET["position"],$cardinalite,$Joueur1);
         }
         else{
             if($Personnage->getHealthNow() == 0){
                 $Personnage->resurection();
-                $map = $Personnage->getMapEntite();
+                $MapPersonnage = $Personnage->getMapEntite();
             }
-            $map = $map->loadMap($map->getPosition(),'nord',$Joueur1);
+            $MapPersonnage = $MapPersonnage->loadMap($MapPersonnage->getPosition(),'nord',$Joueur1);
         }
         // Puis on déplace le joueur
-        $Joueur1->getPersonnage()->ChangeMap($map);
+        $Joueur1->getPersonnage()->ChangeMap($MapPersonnage);
     }
-    $BousoleDeplacement = $map->getMapAdjacenteLienHTML($cardinalite,$Joueur1);
+    $BousoleDeplacement = $MapPersonnage->getMapAdjacenteLienHTML($cardinalite,$Joueur1);
 ?>
 <div class="divMap">
     <?= $BousoleDeplacement['nord'] ?>

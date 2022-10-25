@@ -39,10 +39,8 @@
                         <div class="divMainPage">
                             <?php
                                 $Personnage->getListPersonnage($Joueur1);
-                                $map = $Personnage->getMapEntite();
-                                $tabDirection = $map->getMapAdjacenteLienHTML('nord',$Joueur1); 
+                                $MapPersonnage = $Personnage->getMapEntite();
                                 ?>
-                                    <?= $tabDirection['nord'] ?>
                                     <p class="pWelcome">Bienvenue <?= $Joueur1->getPseudo() ?></p>
                                     <p class="pChoixCombattant">Tu as décidé de combattre avec <?= $Joueur1->getNomPersonnage() ?>, il a une fortune de <?= $Personnage->getValeur() ?>§</p>
                                     <!-- AFFICHAGE EN-TÊTE PERSONNAGE ET SAC -->
@@ -60,7 +58,7 @@
                                         </div>
                                     </div>
                                     <div class="divInfoCombat">
-                                        <p class="pPositionCombattant">Ton combattant est sur la position : <?= $map->getNameMap() ?> (<?= $map->getX() ?>/<?= $map->getY() ?>) </p>
+                                        <p class="pPositionCombattant">Ton combattant est sur la position : <?= $MapPersonnage->getNameMap() ?> (<?= $MapPersonnage->getX() ?>/<?= $MapPersonnage->getY() ?>) </p>
                                     </div>
                                     <div class="BoxMonsterCaptured ulMonster">
                                         <p class="pTitleMonsterCaptured">Voici tes monstres capturés :</p>
@@ -87,7 +85,6 @@
                                     </div>
                                     <p><a href="index.php" >Créer un autre personnage.</a></p>
                                 <?php
-                                $tabDirection = $map->getMapAdjacenteLienHTML('nord',$Joueur1);
                             ?>
                         </div>
                     <?php

@@ -27,6 +27,7 @@
                 include "ihm/fonction-web/menu.php";
                 //gestion accès map:
                 $Personnage = $Joueur1->getPersonnage();
+                $MapPersonnage = $Personnage->getMapEntite();
                 if(is_null($Personnage->getIdEntite())){
                     ?>
                         <div class="divMainPage">
@@ -80,7 +81,7 @@
                                         include "ihm/map/affichageMap.php"
                                     ?>
                                     <div class="divInfoMap">
-                                        <?= $map->getInfoMap() ?>
+                                        <?= $MapPersonnage->getInfoMap() ?>
                                     </div>
                                     <div class="divActionsPerso">
                                         <?= $Personnage->getActionsPerso($Joueur1) ?>
@@ -88,11 +89,11 @@
                                 </div>
                             </div>
                             <div class="divMapContent">
-                                <?php $map->getImageCssBack() ?>
+                                <?php $MapPersonnage->getImageCssBack() ?>
                                 <div class="divBuild">
                                     <?php
                                         // AFFICHAGE SI FORGE
-                                        if($map->isForge() === true){
+                                        if($MapPersonnage->isForge() === true){
                                             ?>
                                                 <div class="divForge">
                                                     <?php include "ihm/map/afficherForge.php.php" ?>

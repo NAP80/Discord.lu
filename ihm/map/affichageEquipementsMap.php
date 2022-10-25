@@ -1,6 +1,6 @@
 <div class="divMapEquipments">
     <?php
-        $listEquipements = $map->getEquipements();
+        $listEquipements = $MapPersonnage->getEquipements();
         if(count($listEquipements) > 0){
             ?> 
                 <div class="divInfoEquipement">
