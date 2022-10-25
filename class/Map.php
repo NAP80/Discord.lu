@@ -512,7 +512,9 @@
         /** Charge Map ou Crée si non existante, Cardialité = d'où on vient */
         public function loadMap($position,$Cardinalite,$Joueur1){
             //on va vérifier qu'il n'est pas trop looin par rapport à son niveau
+            /* À Dégager : LVL
             $lvlPerso = $Joueur1->getPersonnage()->getLvlEntite();
+            */
             if(isset($position) && isset($Cardinalite)){
                 //todo voir si le spam générate est controlé 
                 if($position === "Generate"){
@@ -524,6 +526,7 @@
                     if(is_null($listMonster) || count($listMonster) == 0){
                         $map = $map->Create($map,$_GET["cardinalite"],$Joueur1->getIdUser());
                     }
+                    /* À Dégager : LVL
                     $lvlMap = $map->getLvlMap();
                     if($lvlPerso<$lvlMap){
                         ?>
@@ -531,6 +534,7 @@
                         <?php
                         return $this;
                     }
+                    */
                     if(!is_null($map)){
                         return $map;
                     }
@@ -545,6 +549,7 @@
                     $ancienPosition=$this->getPosition();
                     $mapVisite = new Map($this->_bdd);
                     $mapVisite->setMapByPosition($position);
+                    /* À Dégager : LVL
                     $lvlMap = $mapVisite->getLvlMap();
                     if($lvlPerso<$lvlMap){
                         ?>
@@ -555,6 +560,7 @@
                     else{
                         $this->setMapByPosition($position);
                     }
+                    */
                     //chargement des Items en plus
                     $req = "SELECT `laDate` from `Visites` WHERE `idMap` = '".$this->getIdMap()."' ORDER BY `laDate` DESC";
                     $Result = $this->_bdd->query($req);
@@ -566,16 +572,16 @@
                                 $itemEnplus = new Item($this->_bdd);
                                 $nbItem = rand(0,2);
                                 for($i=0;$i<$nbItem;$i++){
-                                    if(!is_null($this->getMapNord()) && rand(0,3)==0 ){
+                                    if(!is_null($this->getMapNord()) && rand(0,3) == 0){
                                         $this->getMapNord()->addItem($itemEnplus->createItemAleatoire());
                                     }
-                                    if(!is_null($this->getMapSud()) && rand(0,3)==1){
+                                    if(!is_null($this->getMapSud()) && rand(0,3) == 1){
                                         $this->getMapSud()->addItem($itemEnplus->createItemAleatoire());
                                     }
-                                    if(!is_null($this->getMapEst()) && rand(0,3)==2){
+                                    if(!is_null($this->getMapEst()) && rand(0,3) == 2){
                                         $this->getMapEst()->addItem($itemEnplus->createItemAleatoire());
                                     }
-                                    if(!is_null($this->getMapOuest()) && rand(0,3)==3){
+                                    if(!is_null($this->getMapOuest()) && rand(0,3) == 3){
                                         $this->getMapOuest()->addItem($itemEnplus->createItemAleatoire());
                                     }
                                 }
@@ -636,10 +642,10 @@
             return $this;
         }
 
-        /** Return Texte InforMap */ // Refaire Propre en forme
+        /** Return Texte InforMap */ // Refaire Propre en forme + Mettre User à la place de Personnage
         public function getInfoMap(){
             ?>
-                <b><?= $this->getNameMap() ?></b>, <?= $this->getCoordonne() ?>, lvl <?= $this->getLvlMap() ?>, découvert par <?= $this->getPersonnageDecouvreur()->getPseudo() ?> et ses Héros.
+                <b><?= $this->getNameMap() ?></b>, <?= $this->getCoordonne() ?>, découvert par <?= $this->getPersonnageDecouvreur()->getPseudo() ?>.
             <?php
         }
 
