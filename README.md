@@ -2,7 +2,7 @@
 Refonte du projet scolaire https://github.com/EnseignantLapro/Covid.
 
 # Bugs :
-En cas de problème rencontré, n'hésitez pas à le signaler ici, de préférence avec une capture d'écrans : https://github.com/Piebleu/Discord.lu/issues
+En cas de problème rencontré, n'hésitez pas à le signaler ici, de préférence avec une capture d'écrans : https://github.com/NAP80/Discord.lu/issues
 
 # Avancement :
 
