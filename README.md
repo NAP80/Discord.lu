@@ -18,13 +18,14 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Ajout Boite de Dialog pour RepMSG,
 - - Intégration Panel Admin,
 - - Sécurisation Injection SQL,
-- - Intégrer les différent display/affichage.php dans l'objet PHP Map,
-- - Dégager Bing,
+- - Intégrer les différents display/affichage.php dans l'objet PHP Map,
+- - Retirer Bing,
 - - - Retirer les Avatars/Fonds Aléatoires,
+- - - Implémenter des Avatars/Fonds par défaults,
 - - Séparer Attaque Base/Magique et idem avec Défense/Résistance,
 - Style :
 - - Patch CSS Décalage Dialog,
-- - Le putain de footer,
+- - Patch le footer,
 - - Refaire l'intégralité du CSS,
 - - Refaire le Menu,
 - JS :
@@ -34,6 +35,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Page de présentation du site (Inscription),
 - - Mettre des CGU ou un truc légal,
 - - Page Profil,
+- - Mettre en place Top/Classement
 - Jeu :
 - - Système d'Actions Personnages,
 - - Amélioration du système de Faction,
@@ -42,11 +44,11 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Intégration Système de Ban,
 - - Ajouter une "fouille" avant de faire apparaitre des items,
 - - Refonte des objets / équipements,
-- - - Retirer les LVL Objets,
+- - - Retirer les LVL Objets -> Passage en Type,
 - - - Refonte Inventaire,
 - - Refonte des LVL,
 - - Refonte des combats,
-- - Refonte des déplacements MAP (Retrait du délire de TP, système de direction pour les déplacements),
+- - Refonte des déplacements MAP (Retrait du système de TP, système de direction pour les déplacements),
 - - Mécanique de Gains d'Argent lors d'une capture de monstre,
 - - Mécanique de monstre Innofensif pour X heure une fois capturé,
 - - Ajouter Fonction JS SoinsMonster,
@@ -63,7 +65,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 
 # Todo Patch :
 - PHP : Déplacement Map : Non affichage de l'origine de déplacement quand refresh si Monster.
-- PHP : Bug déplacement lors de changement personnage (AU final c'est pas un bug mais une "feature"). À encadrer.
+- PHP : Bug déplacement (téléporation) lors de changement personnage (Au final c'est pas un bug mais une "feature") -> À encadrer.
 
 ## Fait :
 - Récupération du projet,
