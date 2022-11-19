@@ -512,9 +512,8 @@
         /** Charge Map ou Crée si non existante, Cardialité = d'où on vient */
         public function loadMap($position,$Cardinalite,$Joueur1){
             //on va vérifier qu'il n'est pas trop looin par rapport à son niveau
-            /* À Dégager : LVL
+            // À Retirer : LVL
             $lvlPerso = $Joueur1->getPersonnage()->getLvlEntite();
-            */
             if(isset($position) && isset($Cardinalite)){
                 //todo voir si le spam générate est controlé 
                 if($position === "Generate"){
@@ -526,7 +525,7 @@
                     if(is_null($listMonster) || count($listMonster) == 0){
                         $map = $map->Create($map,$_GET["cardinalite"],$Joueur1->getIdUser());
                     }
-                    /* À Dégager : LVL
+                    // À Retirer : LVL
                     $lvlMap = $map->getLvlMap();
                     if($lvlPerso<$lvlMap){
                         ?>
@@ -534,7 +533,6 @@
                         <?php
                         return $this;
                     }
-                    */
                     if(!is_null($map)){
                         return $map;
                     }
@@ -542,14 +540,14 @@
                         return $this;
                     }
                 }
-                else if($position>=0){
+                else if($position >= 0){
                     //récupération de la map est atttribution au combatant
                     $ancienX = $this->getX();
                     $ancienY = $this->getY();
-                    $ancienPosition=$this->getPosition();
+                    $ancienPosition = $this->getPosition();
                     $mapVisite = new Map($this->_bdd);
                     $mapVisite->setMapByPosition($position);
-                    /* À Dégager : LVL
+                    // À Retirer : LVL
                     $lvlMap = $mapVisite->getLvlMap();
                     if($lvlPerso<$lvlMap){
                         ?>
@@ -560,7 +558,6 @@
                     else{
                         $this->setMapByPosition($position);
                     }
-                    */
                     //chargement des Items en plus
                     $req = "SELECT `laDate` from `Visites` WHERE `idMap` = '".$this->getIdMap()."' ORDER BY `laDate` DESC";
                     $Result = $this->_bdd->query($req);

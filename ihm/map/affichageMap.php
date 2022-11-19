@@ -5,7 +5,6 @@
     if(isset($_GET["cardinalite"])){
         $cardinalite = $_GET["cardinalite"];
     }
-    // 
     if($MapPersonnage->LogVisiteMap($Personnage) === true){
         if(isset($_GET["position"]) && $Personnage->getHealthNow() > 0){
             $MapPersonnage = $MapPersonnage->loadMap($_GET["position"],$cardinalite,$Joueur1);
