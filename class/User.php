@@ -278,15 +278,15 @@
             return $ListPerso;
         }
 
-        /** Return List de tout Monster Capturé par ID User */
-        public function getAllMyMonsterIds(){
-            $listMonster = array();
+        /** Return List de tout Creature Capturé par ID User */
+        public function getAllMyCreatureIds(){
+            $listCreature = array();
             $req    = "SELECT `idEntite` FROM `Entite` WHERE `idUser` = '".$this->_idUser."' AND `idTypeEntite` = 0";
             $Result = $this->_bdd->query($req);
             while($tab = $Result->fetch()){
-                array_push($listMonster,$tab[0]);
+                array_push($listCreature,$tab[0]);
             }
-            return $listMonster;
+            return $listCreature;
         }
 
         public function ConnectToi(){
@@ -592,18 +592,18 @@
                                                         if(!is_null($allMap[$x][$y])){
                                                             //map found check it bro
                                                             $MapScan->setMapByID($allMap[$x][$y]);
-                                                            // Si coordonné ayant un ou des Monstres Non capturés.
-                                                            if(count($MapScan->getAllMonsterContre($this))){
+                                                            // Si coordonné ayant un ou des Créatures Non capturés.
+                                                            if(count($MapScan->getAllCreatureContre($this))){
                                                                 ?>
-                                                                    <div class="mapMonster" <?= $styleCellule ?>></div>
+                                                                    <div class="mapCreature" <?= $styleCellule ?>></div>
                                                                 <?php
-                                                            // Si coordonné ayant un ou des Monstres capturés.
+                                                            // Si coordonné ayant un ou des Créatures capturés.
                                                             }
-                                                            else if(count($MapScan->getAllMonsterCapture($this))){
+                                                            else if(count($MapScan->getAllCreatureCapture($this))){
                                                                 ?>
                                                                     <div class="mapClear" <?= $styleCellule ?>></div>
                                                                 <?php
-                                                            // Si coordonné n'ayant aucun Monstres.
+                                                            // Si coordonné n'ayant aucun Créatures.
                                                             }
                                                             else{
                                                                 ?>

@@ -60,22 +60,22 @@
                                 $message .= "Ce personnage est déjà mort. ";
                             }
                         }
-                        // Attaque Monster
+                        // Attaque Creature
                         if($idTypeEntite == 0){
-                            $CibleMonster = new Monster($mabase);
-                            $CibleMonster->setMonsterById($_GET["idEntite"]);
-                            $healthMaxCible = $CibleMonster->getHealthMax();
-                            $healthNowCible = $CibleMonster->getHealthNow();
-                            if($CibleMonster->getHealthNow() > 0){
+                            $CibleCreature = new Creature($mabase);
+                            $CibleCreature->setCreatureById($_GET["idEntite"]);
+                            $healthMaxCible = $CibleCreature->getHealthMax();
+                            $healthNowCible = $CibleCreature->getHealthNow();
+                            if($CibleCreature->getHealthNow() > 0){
                                 if($healthPersonnage > 0){
                                     // Attaque -> Cible Subit Dégat
-                                    $SubitDegat = $CibleMonster->SubitDegat($Personnage);
+                                    $SubitDegat = $CibleCreature->SubitDegat($Personnage);
                                     $healthNowCible = $SubitDegat[0];
-                                    $healthMaxCible = $CibleMonster->getHealthMax();
-                                    // Si Monster Vivant -> Attaque
+                                    $healthMaxCible = $CibleCreature->getHealthMax();
+                                    // Si Creature Vivant -> Attaque
                                     if($healthNowCible > 0 && $SubitDegat[1] != 'coolDown'){
                                         $healthAvant = $Personnage->getHealthNow();
-                                        $healthPersonnage = $Personnage->SubitDegatByMonster($CibleMonster);
+                                        $healthPersonnage = $Personnage->SubitDegatByCreature($CibleCreature);
                                         $perte = $healthAvant-$healthPersonnage;
                                         $message .= "Vous avez subit ".$perte." pts de degat. ";
                                         $Personnage->addXP(2); // À dégager
@@ -86,11 +86,11 @@
                                     if($healthPersonnage == 0){
                                         $message .= " Votre personnage est mort. ";
                                     }
-                                    //si le perso tue le Monster il faut envoyer un message
+                                    //si le perso tue le Creature il faut envoyer un message
                                     if($healthNowCible <= 0){
-                                        $lvlEntite = $CibleMonster->getLvlEntite();
-                                        $Personnage->addXP($lvlEntite*rand(8,10) * $CibleMonster->getCoefXp());
-                                        $message .= "Tu as participé à la capture de ce monstre. ";
+                                        $lvlEntite = $CibleCreature->getLvlEntite();
+                                        $Personnage->addXP($lvlEntite*rand(8,10) * $CibleCreature->getCoefXp());
+                                        $message .= "Tu as participé à la capture de ce Créature. ";
                                     }
                                 }
                                 else{
@@ -98,7 +98,7 @@
                                 }
                             }
                             else{
-                                $message .= "Ce monstre est déjà mort. ";
+                                $message .= "Ce Créature est déjà mort. ";
                             }
                         }
                     }

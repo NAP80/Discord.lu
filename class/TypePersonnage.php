@@ -6,8 +6,8 @@
         private $_nameTypePerso;
         private $_statsAttaque;
         private $_statsDefense;
-        private $_statsMagique;
-        private $_statsRessMagique;
+        private $_statsDistance;
+        private $_statsRessDistance;
         private $_imgTypePerso;
         private $_idFaction;
 
@@ -27,8 +27,8 @@
                 $this->_nameTypePerso = $tab['nameTypePerso'];
                 $this->_statsAttaque = $tab['statsAttaque'];
                 $this->_statsDefense = $tab['statsDefense'];
-                $this->_statsMagique = $tab['statsMagique'];
-                $this->_statsRessMagique = $tab['statsRessMagique'];
+                $this->_statsDistance = $tab['statsDistance'];
+                $this->_statsRessDistance = $tab['statsRessDistance'];
                 $this->_imgTypePerso = $tab['imgTypePerso'];
                 $this->_idFaction = $tab['idFaction'];
             }
@@ -45,8 +45,8 @@
                 $this->_nameTypePerso = $tab['nameTypePerso'];
                 $this->_statsAttaque = $tab['statsAttaque'];
                 $this->_statsDefense = $tab['statsDefense'];
-                $this->_statsMagique = $tab['statsMagique'];
-                $this->_statsRessMagique = $tab['statsRessMagique'];
+                $this->_statsDistance = $tab['statsDistance'];
+                $this->_statsRessDistance = $tab['statsRessDistance'];
                 $this->_imgTypePerso = $tab['imgTypePerso'];
                 $this->_idFaction = $tab['idFaction'];
             }
@@ -72,14 +72,14 @@
             return $this->_statsDefense;
         }
 
-        /** Return StatsMagique */
-        public function getStatsMagique(){
-            return $this->_statsMagique;
+        /** Return StatsDistance */
+        public function getStatsDistance(){
+            return $this->_statsDistance;
         }
 
-        /** Return StatsRessMagique */
-        public function getStatsRessMagique(){
-            return $this->_statsRessMagique;
+        /** Return StatsRessDistance */
+        public function getStatsRessDistance(){
+            return $this->_statsRessDistance;
         }
 
         /** Return ImgTypePerso */

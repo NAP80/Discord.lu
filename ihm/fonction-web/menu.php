@@ -20,7 +20,7 @@
                     <li><a href="admin/index.php">Administration</a>
                         <ul class="ulSousMenu">
                             <li><a href="admin/admin-map.php">Gestion Map</a></li>
-                            <li><a href="admin/admin-mods.php">Gestion Monstre</a></li>
+                            <li><a href="admin/admin-mods.php">Gestion Créature</a></li>
                             <li><a href="admin/admin-map.php">Gestion Objet</a></li>
                             <li><a href="admin/admin-map.php">Gestion Personnage</a></li>
                             <li><a href="admin/admin-map.php">Gestion Utilisateur</a></li>

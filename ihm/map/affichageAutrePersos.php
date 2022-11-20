@@ -25,7 +25,7 @@
             <?php
         }
         else{
-            $ZoneMonsterEmpty++;
+            $ZoneCreatureEmpty++;
         }
     ?>
 </div>

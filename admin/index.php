@@ -49,8 +49,8 @@
                             <p class='TC'><a href='admin-perso.php'>Accéder au panel de Modification des Personnages.</a></p>
                         </div>
                         <div class='Div1 BG_Bleu'>
-                            <h3 class='TC'>Modification Monstres</h3>
-                            <p class='TC'><a href='admin-Monsters.php'>Accéder au panel de Modification des Monstres.</a></p>
+                            <h3 class='TC'>Modification Créatures</h3>
+                            <p class='TC'><a href='admin-Creatures.php'>Accéder au panel de Modification des Créatures.</a></p>
                         </div>
                         <div class='Div1 BG_Jaune'>
                             <h3 class='TC'>Modification Map</h3>

@@ -31,7 +31,7 @@
     align-items:center;
 }
 
-.Monster, .Personnage{
+.Creature, .Personnage{
     display:flex;
     flex-direction:column;
     padding: 4px;

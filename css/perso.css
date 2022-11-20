@@ -6,7 +6,7 @@
     box-shadow:2px 2px 2px rgb(0, 0, 0);
     -webkit-box-shadow:2px 2px 2px rgb(0, 0, 0);
 }
-.ulMonster li, .perso{
+.ulCreature li, .perso{
     padding:6px;
     margin:10px;
 }
@@ -52,7 +52,7 @@ ul .perso:hover{
     background-color:rgb(206, 171, 90);
 }
 
-.ulMonster li{
+.ulCreature li{
     background-color:rgba(201,58,58,0.705);
     border-radius:10px;
     border:1px solid gray;
@@ -61,7 +61,7 @@ ul .perso:hover{
     width:166px;
 }
 
-.ulMonster .liAdverse:hover{
+.ulCreature .liAdverse:hover{
     cursor:url('epee.cur'),pointer;
     background-color:rgb(187,37,37);
 }

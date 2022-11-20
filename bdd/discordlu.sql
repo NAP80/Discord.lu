@@ -24,11 +24,11 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `attaquepersomonster`
+-- Structure de la table `AttaquePersoCreature`
 --
 
-DROP TABLE IF EXISTS `attaquepersomonster`;
-CREATE TABLE IF NOT EXISTS `attaquepersomonster` (
+DROP TABLE IF EXISTS `AttaquePersoCreature`;
+CREATE TABLE IF NOT EXISTS `AttaquePersoCreature` (
   `idMonster` int NOT NULL,
   `idPersonnage` int NOT NULL,
   `nbCoup` int NOT NULL,
@@ -341,7 +341,7 @@ CREATE TABLE IF NOT EXISTS `tooltip` (
 --
 
 INSERT INTO `tooltip` (`id`, `tooltip`) VALUES
-(1, 'Lorsque vous terrassez un monstre, il vous appartient.'),
+(1, 'Lorsque vous terrassez un Créature, il vous appartient.'),
 (2, 'Vous pouvez reprendre votre santé en consommant des fruits.'),
 (3, 'Vous pouvez trouver des items à chaque arrivée dans un lieu, s\'il n\'a pas été visité récemment.'),
 (4, 'Dans les premières zones, il vaut mieux trouver une arme et une armure pour faire des provisions de fruits avant de se battre.');

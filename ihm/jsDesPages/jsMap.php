@@ -85,7 +85,7 @@
             if(data[0]!=0){
                 var divAtta = document.getElementById("attaqueEntiteValeur"+data[0]);
                 divAtta.classList.remove("standard");
-                divAtta.classList.remove("magic");
+                divAtta.classList.remove("distance");
                 if(data[7]==1){ //cas de l'arme
                     var e3 = document.getElementById("Arme"+data[6]);
                     e3.setAttribute('id',"ArmePerso"+<?php echo $Personnage->getIdEntite()?>);
@@ -163,7 +163,7 @@
                 //idEquipement c'est le nouvel id de arme
                 var divAtta = document.getElementById("attaqueEntiteValeur"+data[0]);
                 divAtta.classList.remove("standard");
-                divAtta.classList.remove("magic");
+                divAtta.classList.remove("distance");
                 if(data[7]==1){
                     UpdateArme(data[5],data[6],idEquipement,"standard");
                     divAtta.classList.add("standard");
@@ -211,13 +211,13 @@
         }
     }
 
-    // idTypeEntite : 0 = Monstre / 1 = Personnage
+    // idTypeEntite : 0 = Créature / 1 = Personnage
     function attaquer(idPerso,idTypeEntite){
         hitAnimation(event);
         // Supprimer temporairement l'attaque pour le cooldown
         if(idTypeEntite == 0){
-            var li = document.getElementById("Monster"+idPerso);
-            var a = document.getElementById("aMonster"+idPerso);
+            var li = document.getElementById("Creature"+idPerso);
+            var a = document.getElementById("aCreature"+idPerso);
         }
         else{
             var li = document.getElementById("Perso"+idPerso);
@@ -233,7 +233,7 @@
         .then(function(data){
             // code for handling the data you get from the API
             console.log(data);
-            // If Personnage ou Monster Mort
+            // If Personnage ou Creature Mort
             if(data[1] <= 0 || data[3] <= 0){
                 //location.reload();
             }
@@ -271,7 +271,7 @@
 
     function lvlUp(id,attaque,healthNow,healthMax,Armure){
         if(id==0){
-            log("La magie à fait chou blanc");
+            log("Un truc à fait chou blanc");
         }
         else{
             var e1 = document.getElementById("healthEntiteValeur"+id);
@@ -317,12 +317,12 @@
                     Personnage.classList.add("PersoDead")
                     Personnage.classList.remove("liAdverse")
                 }
-                // Si Monster
+                // Si Creature
                 if(idTypeEntite == 0){
-                    var Monster = document.getElementById(`Monster${clearID[0]}`);
-                    Monster.classList.add("Captured")
-                    Monster.classList.remove("liAdverse")
-                    //Monster.querySelector('a').setAttribute("onclick", `SoinMonster(${clearID[0]}, 1)`);
+                    var Creature = document.getElementById(`Creature${clearID[0]}`);
+                    Creature.classList.add("Captured")
+                    Creature.classList.remove("liAdverse")
+                    //Creature.querySelector('a').setAttribute("onclick", `SoinCreature(${clearID[0]}, 1)`);
                 }
             }
         }

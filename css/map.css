@@ -52,7 +52,7 @@
     display: flex;
     flex-direction: column;
 }
-.divAllMonsters{
+.divAllCreatures{
     display: flex;
     flex-direction: column;
 }
@@ -71,7 +71,7 @@
     flex-direction: row;
     justify-content: center;
 }
-.divInfoMonsters{
+.divInfoCreatures{
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -99,11 +99,11 @@
     margin-right: 5px;
 }
 
-.perso p, .Monster p{
+.perso p, .Creature p{
     margin: 0px;
 }
 
-.ulMonster, .ulPersonnages{
+.ulCreature, .ulPersonnages{
     margin: 5px;
     padding: 0px;
 }
@@ -220,7 +220,7 @@
     height: 20px;
     background-color:rgba(4,155,12,0.685);
 }
-.mapMonster{
+.mapCreature{
     float:left;
     width: 20px;
     height: 20px;
@@ -361,7 +361,7 @@
 .OtherPerso{
     float:left;
 }
-.AllMonsters{
+.AllCreatures{
     float:left;
 }
 

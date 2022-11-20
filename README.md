@@ -8,7 +8,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 
 ## En cours :
 - Uniformisation Code,
-- Refonte Entitée/Monster/Personnage,
+- Refonte Entitée/Creature/Personnage,
 - Système d'Actions Personnages,
 
 ## Todo List :
@@ -22,14 +22,14 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Retirer Bing,
 - - - Retirer les Avatars/Fonds Aléatoires,
 - - - Implémenter des Avatars/Fonds par défaults,
-- - Séparer Attaque Base/Magique et idem avec Défense/Résistance,
+- - Séparer Attaque Physique/Distance et idem avec Défense/Résistance,
 - Style :
 - - Patch CSS Décalage Dialog,
 - - Patch le footer,
 - - Refaire l'intégralité du CSS,
 - - Refaire le Menu,
 - JS :
-- - Afficher Coord des Monsters Captured dans Combat,
+- - Afficher Coord des Creatures Captured dans Combat,
 - - Faire la partie JS du changement d'équipement,
 - Site :
 - - Page de présentation du site (Inscription),
@@ -49,12 +49,13 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Refonte des LVL,
 - - Refonte des combats,
 - - Refonte des déplacements MAP (Retrait du système de TP, système de direction pour les déplacements),
-- - Mécanique de Gains d'Argent lors d'une capture de monstre,
-- - Mécanique de monstre Innofensif pour X heure une fois capturé,
-- - Ajouter Fonction JS SoinsMonster,
+- - Mécanique de Gains d'Argent lors d'une capture de créature,
+- - Mécanique de créature Innofensif pour X heure une fois capturé,
+- - Ajouter Fonction JS SoinsCreature,
 - - Ajouts de Logs persistant sur les maps,
 - - Refonte de la Map,
-- - Intégration des Pouvoirs,
+- - Intégration des Armes à Distances,
+- - Intégration des Capacités Spécials,
 - - Système de Code/Bonus,
 - - Ajouter des effets Personnage,
 - - Système d'Amis,
@@ -64,7 +65,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - - Cachette,
 
 # Todo Patch :
-- PHP : Déplacement Map : Non affichage de l'origine de déplacement quand refresh si Monster.
+- PHP : Déplacement Map : Non affichage de l'origine de déplacement quand refresh si Creature.
 - PHP : Bug déplacement (téléporation) lors de changement personnage (Au final c'est pas un bug mais une "feature") -> À encadrer.
 
 ## Fait :
@@ -82,10 +83,10 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Ajouter Sécurité sur l'idPersonnage User,
 - Mise à jours Boolen User Admin -> TypeUser,
 - Mise à jours TypePersonnage,
-- Mise à jours TypeMonsters,
+- Mise à jours TypeCreatures,
 - Uniformisation Variable et BDD,
 - Refonte Class Objet -> Efficacite,
 - Patch PHP/JS Multiples,
 - Zone Non-PVP et Vérification Attaque,
-- Refonte DisplayHTML Monster/Personnage - Patch CSS,
+- Refonte DisplayHTML Creature/Personnage - Patch CSS,
 - Patch PHP Divers.

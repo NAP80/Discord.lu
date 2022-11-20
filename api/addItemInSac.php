@@ -19,11 +19,11 @@
             $MapPersonnage = $Perso->getMapEntite();
             //une fois que j'ai mes objet je vérifie que le perso est bien sur la map
             $idmap = $MapPersonnage->getIdMap();
-            //que l'item est bien dans la map si ya un Monster on peut pas le prendre
+            //que l'item est bien dans la map si ya un Creature on peut pas le prendre
             foreach($MapPersonnage->getItems() as $item){
                 if($_GET["idItem"]==$item->getIdItem()){
-                    //vérifier si ya des Monster
-                    if(count($MapPersonnage->getAllMonsterContre($Joueur1))==0){
+                    //vérifier si ya des Creature
+                    if(count($MapPersonnage->getAllCreatureContre($Joueur1))==0){
                         //on retire l'item de la map et on la rajoute dans le sac
                         $MapPersonnage->removeItemById($_GET["idItem"]);
                         $item = new Item($mabase);
@@ -33,7 +33,7 @@
                         $reponse[0]=1;
                     }
                     else{
-                        $reponse[2]="On ne peut pas voler des objets s'il y a des monstres encore vivants.";
+                        $reponse[2]="On ne peut pas voler des objets s'il y a des Créatures encore vivants.";
                         $reponse[1]=0;
                         $reponse[0]=1;
                     }

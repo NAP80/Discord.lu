@@ -1,15 +1,15 @@
-p.ulMonster{
+p.ulCreature{
     margin: auto;
 }
 
-.ulMonster{
+.ulCreature{
     flex-wrap: wrap;
     justify-content: center;
     margin: 5px;
     padding: 2px;
 }
 
-.BoxMonsterCaptured{
+.BoxCreatureCaptured{
     margin-bottom:20px;
     padding:20px;
     background-color:rgba(179, 155, 19, 0.829);
@@ -22,6 +22,6 @@ p.ulMonster{
     margin-left:auto;
 }
 
-.hoverMonsterCaptured{
+.hoverCreatureCaptured{
     display:none;
 }

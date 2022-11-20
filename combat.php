@@ -60,24 +60,24 @@
                                     <div class="divInfoCombat">
                                         <p class="pPositionCombattant">Ton combattant est sur la position : <?= $MapPersonnage->getNameMap() ?> (<?= $MapPersonnage->getX() ?>/<?= $MapPersonnage->getY() ?>) </p>
                                     </div>
-                                    <div class="BoxMonsterCaptured ulMonster">
-                                        <p class="pTitleMonsterCaptured">Voici tes monstres capturés :</p>
-                                        <ul class="ulMonster">
+                                    <div class="BoxCreatureCaptured ulCreature">
+                                        <p class="pTitleCreatureCaptured">Voici tes créatures capturés :</p>
+                                        <ul class="ulCreature">
                                             <?php
-                                                $MyMonster = new Monster($mabase);
-                                                foreach($Joueur1->getAllMyMonsterIds() as $Monster){
-                                                    $MyMonster->setMonsterById($Monster);
-                                                    $MapMonster = $MyMonster->getMapEntite();
+                                                $MyCreature = new Creature($mabase);
+                                                foreach($Joueur1->getAllMyCreatureIds() as $Creature){
+                                                    $MyCreature->setCreatureById($Creature);
+                                                    $MapCreature = $MyCreature->getMapEntite();
                                                     ?>
-                                                        <li id="Monster<?= $MyMonster->getIdEntite() ?>" class="liCaptured" style="ho">
-                                                            <a id="aMonster<?= $MyMonster->getIdEntite() ?>">
+                                                        <li id="Creature<?= $MyCreature->getIdEntite() ?>" class="liCaptured" style="ho">
+                                                            <a id="aCreature<?= $MyCreature->getIdEntite() ?>">
                                                                 <?php
-                                                                    $MyMonster->displayHTML();
+                                                                    $MyCreature->displayHTML();
                                                                 ?>
                                                             </a>
                                                         </li>
                                                         <?php  ?>
-                                                        <p class="hoverMonsterCaptured"><?= $MapMonster->getNameMap() ?> (<?= $MapMonster->getX() ?>/<?= $MapMonster->getY() ?>)</p>
+                                                        <p class="hoverCreatureCaptured"><?= $MapCreature->getNameMap() ?> (<?= $MapCreature->getX() ?>/<?= $MapCreature->getY() ?>)</p>
                                                     <?php
                                                 }
                                             ?>

@@ -8,9 +8,9 @@
         include "class/Personnage.php";
         include "class/Map.php";
         include "class/Forge.php";
-        include "class/TypeClassMonster.php";
-        include "class/TypeMonster.php";
-        include "class/Monster.php";
+        include "class/TypeClassCreature.php";
+        include "class/TypeCreature.php";
+        include "class/Creature.php";
         include "class/Tooltip.php";
         include "class/Efficacite.php";
         include "class/Item.php";

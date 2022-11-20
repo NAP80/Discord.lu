@@ -13,7 +13,7 @@
         Private $listItems=array();
         Private $listEquipements=array();
         Private $listPersonnages=array();
-        Private $listMonsters=array();
+        Private $listCreatures=array();
         private $mapNord=null;
         private $mapSud=null;
         private $mapEst=null;
@@ -166,12 +166,12 @@
             while($tab=$Result->fetch()){
                 array_push($this->listPersonnages,$tab[0]);
             }
-            //select les Monsters déjà présent
-            $this->listMonsters = array();
+            //select les Creatures déjà présent
+            $this->listCreatures = array();
             $req = "SELECT idEntite FROM `Entite` WHERE idMap = '".$idMap."' AND idTypeEntite = '0'";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
-                array_push($this->listMonsters,$tab[0]);
+                array_push($this->listCreatures,$tab[0]);
             }
         }
 
@@ -254,28 +254,28 @@
         }
 
         /** Return Liste des Personnages présent Map */
-        public function getAllMonsters(){
+        public function getAllCreatures(){
             $lists=array();
-            foreach($this->listMonsters as $MonsterID){
-                $Monster = new Monster($this->_bdd);
-                $Monster->setMonsterById($MonsterID);
-                array_push($lists,$Monster);
+            foreach($this->listCreatures as $CreatureID){
+                $Creature = new Creature($this->_bdd);
+                $Creature->setCreatureById($CreatureID);
+                array_push($lists,$Creature);
             }
             return $lists;
         }
 
-        /** Return Liste des Monsters Énnemies présent Map */
-        public function getAllMonsterContre($User){
-            $tab1 = $User->getAllMyMonsterIds();
-            $tab2 = $this->listMonsters;
+        /** Return Liste des Creatures Énnemies présent Map */
+        public function getAllCreatureContre($User){
+            $tab1 = $User->getAllMyCreatureIds();
+            $tab2 = $this->listCreatures;
             $tab3 = array_diff($tab2,$tab1);
             return $tab3;
         }
 
-        /** Return Liste des Monsters Capturés présent Map */
-        public function getAllMonsterCapture($User){
-            $tab1 = $User->getAllMyMonsterIds();
-            $tab2 = $this->listMonsters;
+        /** Return Liste des Creatures Capturés présent Map */
+        public function getAllCreatureCapture($User){
+            $tab1 = $User->getAllMyCreatureIds();
+            $tab2 = $this->listCreatures;
             $tab3 = array_intersect($tab1,$tab2);
             return $tab3;
         }
@@ -473,17 +473,17 @@
                         $newmap->addEquipement($equipement1->createEquipementAleatoire());
                     }
                 }
-                //chargement d'un Monster aléatoire à la création
+                //chargement d'un Creature aléatoire à la création
                 if(rand(0,3)>1){
                     
-                    $nbMonster = rand(0,rand(2,4));
-                    for($i=0;$i<$nbMonster;$i++){
-                        //il faut passer la map($this) au créateur de Monster
-                        $Monster1 = new Monster($this->_bdd);
-                        $Monster1 = $Monster1->CreateMonsterAleatoire($newmap);
-                        if(!is_null($Monster1)){
-                            array_push($newmap->listMonsters,$Monster1->getIdEntite());
-                            //chargement d'un Item aléatoire par monstre present
+                    $nbCreature = rand(0,rand(2,4));
+                    for($i=0;$i<$nbCreature;$i++){
+                        //il faut passer la map($this) au créateur de Creature
+                        $Creature1 = new Creature($this->_bdd);
+                        $Creature1 = $Creature1->CreateCreatureAleatoire($newmap);
+                        if(!is_null($Creature1)){
+                            array_push($newmap->listCreatures,$Creature1->getIdEntite());
+                            //chargement d'un Item aléatoire par Créature present
                             if(rand(0,4)>1){
                                 $item1 = new Item($this->_bdd);
                                 $nbItem = rand(1,3);
@@ -520,9 +520,9 @@
                     //la cardinalité permet de lui dire d'ou on vient
                     //on va
                     $map = $Joueur1->getPersonnage()->getMapEntite();
-                    //on vérifie si un Monster est présent la ou on est car on est bloqué normalement
-                    $listMonster = $map->getAllMonsterContre($Joueur1);
-                    if(is_null($listMonster) || count($listMonster) == 0){
+                    //on vérifie si un Creature est présent la ou on est car on est bloqué normalement
+                    $listCreature = $map->getAllCreatureContre($Joueur1);
+                    if(is_null($listCreature) || count($listCreature) == 0){
                         $map = $map->Create($map,$_GET["cardinalite"],$Joueur1->getIdUser());
                     }
                     // À Retirer : LVL
@@ -694,7 +694,7 @@
             $affichSud = false;
             $affichEst= false;
             $affichOuest = false;
-            //si jamais il y a un Monster on va quand meme passer à true la ou l'on vient
+            //si jamais il y a un Creature on va quand meme passer à true la ou l'on vient
             switch($cardinalite){
                 case 'nord':
                     $affichNord = true;
@@ -709,7 +709,7 @@
                     $affichEst= true;
                     break;
             }
-            if(count($this->getAllMonsterContre($User))==0){
+            if(count($this->getAllCreatureContre($User))==0){
                 $affichNord = true;
                 $affichSud = true;
                 $affichEst= true;
@@ -725,7 +725,7 @@
                 }
                 $tab['sud'] .=  '</div>';
             } 
-            //si il y a un Monster la region est bloqué
+            //si il y a un Creature la region est bloqué
             if($affichNord){
                 $tab['nord'] .= '<div class="nord">';
                 if(!is_null($Mnord)){

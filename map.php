@@ -104,17 +104,17 @@
                                 </div>
                                 <div class="divEntity">
                                     <?php
-                                        $ZoneMonsterEmpty = 0;
+                                        $ZoneCreatureEmpty = 0;
                                         // AFFICHAGE AUTRES JOUEURS PRESENTS
                                             include "ihm/map/affichageAutrePersos.php";
-                                        // AFFICHAGE DES MONSTRES
-                                            include "ihm/map/displayAllMonsters.php";
-                                        // SI JOUEUR OU MONSTRE
-                                        if($ZoneMonsterEmpty == 2){
+                                        // AFFICHAGE DES CREATURES
+                                            include "ihm/map/displayAllCreatures.php";
+                                        // SI JOUEUR OU CREATURE
+                                        if($ZoneCreatureEmpty == 2){
                                             ?>
                                                 <p><i>Personne à l'horizon, peu rassurant...</i></p>
                                             <?php
-                                            $MonsterEmpty = 1 ;
+                                            $CreatureEmpty = 1 ;
                                         }
                                     ?>
                                 </div>
@@ -127,7 +127,7 @@
                                             include "ihm/map/affichageEquipementsMap.php";
                                         // SI AUCUN ITEM ET EQUIPEMENT
                                         if($ZoneObjectEmpty == 2){
-                                            if(isset($MonsterEmpty)){
+                                            if(isset($CreatureEmpty)){
                                                 ?>
                                                     <p><i>Et l'absence d'objets ne me réconforte pas dans cette solitude...</i></p>
                                                 <?php

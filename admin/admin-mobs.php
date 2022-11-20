@@ -12,17 +12,17 @@
             <link rel="stylesheet" href="../css/admin.css">
             <link rel="stylesheet" href="../css/style.css">
         <!-- Informations Générales -->
-            <title>Panel Admin - Monstres</title>
-            <meta name='description' content='Panel Admin - Monstres'>
+            <title>Panel Admin - Créatures</title>
+            <meta name='description' content='Panel Admin - Créatures'>
             <meta name='author' content='La Providence - Amiens'>
             <link rel='shortcut icon' href='favicon.ico'>
         <!-- Intégration Facebook -->
-            <meta property='og:title' content='Panel Admin - Monstres'>
-            <meta property='og:description' content='Panel Admin - Monstres'>
+            <meta property='og:title' content='Panel Admin - Créatures'>
+            <meta property='og:description' content='Panel Admin - Créatures'>
             <meta property='og:image' content='favicon.ico'>
         <!-- Intégration Twitter -->
-            <meta name='twitter:title' content='Panel Admin - Monstres'>
-            <meta name='twitter:description' content='Panel Admin - Monstres'>
+            <meta name='twitter:title' content='Panel Admin - Créatures'>
+            <meta name='twitter:description' content='Panel Admin - Créatures'>
             <meta name='twitter:image' content='favicon.ico'>
     </head>
     <body class="AdminPanel">
@@ -41,7 +41,7 @@
                             <h1 class='TITRE'>Panel Administrateur</h2>
                         </div>
                         <div class='Div1 BG_Bleu'>
-                            <h3 class='TC'>Modification Monstres</h3>
+                            <h3 class='TC'>Modification Créatures</h3>
                             <p class='TC'>Texte.</p>
                         </div>
                     <?php

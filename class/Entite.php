@@ -11,7 +11,7 @@
         public $_idUser;
         public $sacEquipements=array();
         public $sacEquipe=array();
-        public $_idTypeEntite; // 0 = Monster / 1 = Personnage
+        public $_idTypeEntite; // 0 = Creature / 1 = Personnage
         public $_mapEntite;
         public $_bdd;
 
@@ -332,11 +332,11 @@
         public function SubitDegatByEntite($Entite){
             //nouveauté 2022 JLA on va gerer les dégat selon le type d'équipement
             //get Attaque sera modifier
-            $MonsterDegatAttaqueEnvoyer=$Entite->getAttaque();
+            $CreatureDegatAttaqueEnvoyer=$Entite->getAttaque();
             //Mise en place de la defence.
-            $MonsterDegatAttaqueEnvoyer -= round(($MonsterDegatAttaqueEnvoyer * $this->getDefense())/100,1);
+            $CreatureDegatAttaqueEnvoyer -= round(($CreatureDegatAttaqueEnvoyer * $this->getDefense())/100,1);
     
-            $this->_healthNow = $this->_healthNow - $MonsterDegatAttaqueEnvoyer;
+            $this->_healthNow = $this->_healthNow - $CreatureDegatAttaqueEnvoyer;
             if($this->_healthNow<0){
                 $this->_healthNow =0;
                 //retour en zone 0,0
@@ -346,42 +346,42 @@
             return $this->_healthNow;
         }
 
-        public function getAllMyMonsterIdByMap($map){
-            $listMonster=array();
+        public function getAllMyCreatureIdByMap($map){
+            $listCreature=array();
             $req="SELECT `idEntite` FROM `Entite` WHERE `idUser` = '".$this->_idEntite."' AND `idMap` = '".$map->getIdMap()."')";
             $Result = $this->_bdd->query($req);
             while($tab=$Result->fetch()){
-                array_push($listMonster,$tab);
+                array_push($listCreature,$tab);
             }
-            return $listMonster;
+            return $listCreature;
         }
 
-        public function SubitDegatByMonster($Monster){
-            $MonsterDegatAttaqueEnvoyer=$Monster->getAttaque();
+        public function SubitDegatByCreature($Creature){
+            $CreatureDegatAttaqueEnvoyer=$Creature->getAttaque();
             //Mise en place de la defence.
-            $MonsterDegatAttaqueEnvoyer -= round(($MonsterDegatAttaqueEnvoyer * $this->getDefense())/100,1);
+            $CreatureDegatAttaqueEnvoyer -= round(($CreatureDegatAttaqueEnvoyer * $this->getDefense())/100,1);
 
             $healthAvantAttaque = $this->_healthNow;
             //on va rechercher l'historique
-            $req = "SELECT * FROM `AttaqueEntiteMonster` WHERE idMonster = '".$Monster->getIdEntite()."' and idEntite = '".$this->_idEntite."'";
+            $req = "SELECT * FROM `AttaqueEntiteCreature` WHERE idCreature = '".$Creature->getIdEntite()."' and idEntite = '".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
             $tabAttaque['nbCoup']=0;
-            $tabAttaque['DegatsDonnes']=$MonsterDegatAttaqueEnvoyer;
+            $tabAttaque['DegatsDonnes']=$CreatureDegatAttaqueEnvoyer;
             if($tab=$Result->fetch()){
                 $tabAttaque = $tab;
-                $tabAttaque['DegatsDonnes']+=$MonsterDegatAttaqueEnvoyer;
+                $tabAttaque['DegatsDonnes']+=$CreatureDegatAttaqueEnvoyer;
                 $tabAttaque['nbCoup']++;
             }
             else{
                 //insertion d'une nouvelle attaque
-                $req="INSERT INTO `AttaqueEntiteMonster`(`idMonster`, `idEntite`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`) 
+                $req="INSERT INTO `AttaqueEntiteCreature`(`idCreature`, `idEntite`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`) 
                 VALUES (
-                    '".$Monster->getIdEntite()."','".$this->_idEntite."',0,0,".$tabAttaque['DegatsReçus'].",0
+                    '".$Creature->getIdEntite()."','".$this->_idEntite."',0,0,".$tabAttaque['DegatsReçus'].",0
                 )";
                 $Result = $this->_bdd->query($req);
             }
 
-            $this->_healthNow = $this->_healthNow - $MonsterDegatAttaqueEnvoyer;
+            $this->_healthNow = $this->_healthNow - $CreatureDegatAttaqueEnvoyer;
             if($this->_healthNow<0){
                 $this->_healthNow=0;
                 //on ne peut pas donner plus de degat que la HealthNow d'un perso
@@ -390,10 +390,10 @@
             }
             $req = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow ."' WHERE `idEntite` = '".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
-            //update AttaqueEntiteMonster pour mettre a jour combien le perso a pris de degat 
-            $req="UPDATE `AttaqueEntiteMonster` SET 
+            //update AttaqueEntiteCreature pour mettre a jour combien le perso a pris de degat 
+            $req="UPDATE `AttaqueEntiteCreature` SET 
             `DegatsDonnes`=".$tabAttaque['DegatsDonnes']." 
-            WHERE idMonster = '".$Monster->getIdEntite()."' AND idEntite ='".$this->_idEntite."'";
+            WHERE idCreature = '".$Creature->getIdEntite()."' AND idEntite ='".$this->_idEntite."'";
             $Result = $this->_bdd->query($req);
             return $this->_healthNow;
         }

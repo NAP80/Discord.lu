@@ -28,7 +28,7 @@
                         <table>
                             <tr>
                                 <th>Pseudo<th>
-                                <th>Monstre capturé</th>
+                                <th>Créature capturé</th>
                                 <th>Argent</th>
                                 <th>LV</th>
                                 <th>XP</th>

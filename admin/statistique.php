@@ -68,59 +68,41 @@
                                 }
                             ?>
                           <!-- Type Personnage -->
-                            <p class='TC'>Nombre de personnage étant <b>Alien - Alien</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de personnage étant <b>Alien - Humain</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de personnage étant <b>Alien - Marines</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de personnage étant <b>Batman Humain</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de personnage étant <b>Batman Magicien</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de personnage étant <b>Dbz - Humain</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de personnage étant <b>DbZ - Magicien</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de personnage étant <b>Dbz - Sayen</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de personnage étant <b>Flash agicien</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de personnage étant <b>Hulk Magicen</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de personnage étant <b>humain - 1</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de personnage étant <b>humain - 2</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de personnage étant <b>humain - 3</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de personnage étant <b>humain - 4</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de personnage étant <b>league of legend - Assassin</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de personnage étant <b>league of legend - Tank</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de personnage étant <b>Starwars - jedi</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de personnage étant <b>Starwars - sith</b> : <?= ReturnTest() ?>.</p>
                         </div>
                         <div class='Div1 BG_Bleu'>
-                            <h3 class='TC'>Statistiques Monstre :</h3>
+                            <h3 class='TC'>Statistiques Créature :</h3>
                           <!-- Totaux -->
-                            <p class='TC'>Nombre de monstre <b>Totaux</b> : <?= ReturnTest() ?>.</p>
+                            <p class='TC'>Nombre de Créature <b>Totaux</b> : <?= ReturnTest() ?>.</p>
                           <!-- LV -->
                             <?php
                                 for($i = 1 ; $i < 4 ; $i++){
                                     ?>
-                                        <p class='TC'>Nombre de monstre de <b>LV <?= $i ?></b> : <?= ReturnTest() ?>.</p>
+                                        <p class='TC'>Nombre de Créature de <b>LV <?= $i ?></b> : <?= ReturnTest() ?>.</p>
                                     <?php
                                 }
                             ?>
-                          <!-- Type Monstre -->
-                            <p class='TC'>Nombre de monstre étant <b>Super Sith Légendaire</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de monstre étant <b>Sauron</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de monstre étant <b>Silon</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de monstre étant <b>Dragon</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de monstre étant <b>Jedi</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de monstre étant <b>Pirate</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de monstre étant <b>Géant</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de monstre étant <b>Viking</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de monstre étant <b>Alien</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de monstre étant <b>Vampire</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de monstre étant <b>Zombie</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de monstre étant <b>Loup</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre de monstre étant <b>Menir</b> : <?= ReturnTest() ?>.</p>
+                          <!-- Type Créature -->
+                            <p class='TC'>Nombre de Créature étant <b>Super Sith Légendaire</b> : <?= ReturnTest() ?>.</p>
+                            <p class='TC'>Nombre de Créature étant <b>Sauron</b> : <?= ReturnTest() ?>.</p>
+                            <p class='TC'>Nombre de Créature étant <b>Silon</b> : <?= ReturnTest() ?>.</p>
+                            <p class='TC'>Nombre de Créature étant <b>Dragon</b> : <?= ReturnTest() ?>.</p>
+                            <p class='TC'>Nombre de Créature étant <b>Jedi</b> : <?= ReturnTest() ?>.</p>
+                            <p class='TC'>Nombre de Créature étant <b>Pirate</b> : <?= ReturnTest() ?>.</p>
+                            <p class='TC'>Nombre de Créature étant <b>Géant</b> : <?= ReturnTest() ?>.</p>
+                            <p class='TC'>Nombre de Créature étant <b>Viking</b> : <?= ReturnTest() ?>.</p>
+                            <p class='TC'>Nombre de Créature étant <b>Alien</b> : <?= ReturnTest() ?>.</p>
+                            <p class='TC'>Nombre de Créature étant <b>Vampire</b> : <?= ReturnTest() ?>.</p>
+                            <p class='TC'>Nombre de Créature étant <b>Zombie</b> : <?= ReturnTest() ?>.</p>
+                            <p class='TC'>Nombre de Créature étant <b>Loup</b> : <?= ReturnTest() ?>.</p>
+                            <p class='TC'>Nombre de Créature étant <b>Menir</b> : <?= ReturnTest() ?>.</p>
                         </div>
                         <div class='Div1 BG_Jaune'>
                             <h3 class='TC'>Statistiques Map :</h3>
                           <!-- Totaux -->
                             <p class='TC'>Nombre d'emplacement de map <b>Totaux</b> : <?= ReturnTest() ?>.</p>
-                          <!-- Présence Monstre -->
-                            <p class='TC'>Nombre d'emplacement de map <b>ayant au moins un monstre</b> : <?= ReturnTest() ?>.</p>
-                            <p class='TC'>Nombre d'emplacement de map <b>sans aucun monstre</b> : <?= ReturnTest() ?>.</p>
+                          <!-- Présence Créature -->
+                            <p class='TC'>Nombre d'emplacement de map <b>ayant au moins un Créature</b> : <?= ReturnTest() ?>.</p>
+                            <p class='TC'>Nombre d'emplacement de map <b>sans aucun Créature</b> : <?= ReturnTest() ?>.</p>
                           <!-- LV Map -->
                             <?php
                                 for($i = 1 ; $i < 4 ; $i++){
@@ -180,7 +162,6 @@
                                 <p class='TC'>Nombre d'item <b>efficace</b> : <?= ReturnTest() ?>.</p>
                                 <p class='TC'>Nombre d'item <b>redoutable</b> : <?= ReturnTest() ?>.</p>
                                 <p class='TC'>Nombre d'item <b>puissant</b> : <?= ReturnTest() ?>.</p>
-                                <p class='TC'>Nombre d'item <b>magique</b> : <?= ReturnTest() ?>.</p>
                                 <p class='TC'>Nombre d'item <b>enchanté</b> : <?= ReturnTest() ?>.</p>
                                 <p class='TC'>Nombre d'item <b>en fusion</b> : <?= ReturnTest() ?>.</p>
                                 <p class='TC'>Nombre d'item <b>nucléaire</b> : <?= ReturnTest() ?>.</p>
@@ -201,7 +182,6 @@
                                 <p class='TC'>Nombre d'item de type <b>Ficelle</b> : <?= ReturnTest() ?>.</p>
                                 <p class='TC'>Nombre d'item de type <b>Gaudasse</b> : <?= ReturnTest() ?>.</p>
                                 <p class='TC'>Nombre d'item de type <b>Pain</b> : <?= ReturnTest() ?>.</p>
-                                <p class='TC'>Nombre d'item de type <b>Haricot Magique</b> : <?= ReturnTest() ?>.</p>
                             </div>
                             <div class='Div1 BG_Vert'>
                                 <h4 class='TC'>Statistiques d'Équipement :</h4>
@@ -227,7 +207,6 @@
                                 <p class='TC'>Nombre d'équipement <b>efficace</b> : <?= ReturnTest() ?>.</p>
                                 <p class='TC'>Nombre d'équipement <b>redoutable</b> : <?= ReturnTest() ?>.</p>
                                 <p class='TC'>Nombre d'équipement <b>puissant</b> : <?= ReturnTest() ?>.</p>
-                                <p class='TC'>Nombre d'équipement <b>magique</b> : <?= ReturnTest() ?>.</p>
                                 <p class='TC'>Nombre d'équipement <b>enchanté</b> : <?= ReturnTest() ?>.</p>
                                 <p class='TC'>Nombre d'équipement <b>en fusion</b> : <?= ReturnTest() ?>.</p>
                                 <p class='TC'>Nombre d'équipement <b>nucléaire</b> : <?= ReturnTest() ?>.</p>

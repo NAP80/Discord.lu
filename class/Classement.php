@@ -55,8 +55,8 @@
             return $data['COUNT(*)'];
         }
 
-        /** Return Nombre de Map ayant au moins un Monster */
-        public function getMapWithOneMonster(){
+        /** Return Nombre de Map ayant au moins un Creature */
+        public function getMapWithOneCreature(){
             $numberOfMap = 0;
             $numberUser = 0;
             $res = $this->_bdd->query("SELECT * FROM Entite GROUP BY idMap");
@@ -67,21 +67,21 @@
             while($boucle2 = $res2->fetch()){
                 $numberUser++;
             }
-            $numberOfMapWithMonster = $numberOfMap - $numberUser;
-            return $numberOfMapWithMonster;
+            $numberOfMapWithCreature = $numberOfMap - $numberUser;
+            return $numberOfMapWithCreature;
         }
 
-        /** Return Nombre de Map sans Monster */
-        public function getMapWithoutMonster(){
+        /** Return Nombre de Map sans Creature */
+        public function getMapWithoutCreature(){
             $numberOfMap = 0;
             $temp = new Classement($this->_bdd);
-            $mapWithMonster = $temp->getMapWithOneMonster();
+            $mapWithCreature = $temp->getMapWithOneCreature();
             $res = $this->_bdd->query("SELECT * FROM Entite GROUP BY idMap");
             while($boucle = $res->fetch()){
                 $numberOfMap++;
             }
-            $numberOfMapWithoutMonster = $numberOfMap - $mapWithMonster;
-            return $numberOfMapWithoutMonster;
+            $numberOfMapWithoutCreature = $numberOfMap - $mapWithCreature;
+            return $numberOfMapWithoutCreature;
         }
 
         /** Return Nombre de Personnages Humains */

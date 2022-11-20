@@ -117,38 +117,38 @@
         }
 
         /** Personnage Take dammage by Personnage*/ // Voir pour Mettre dans Entite
-        public function SubitDegatByMonster($Monster){
+        public function SubitDegatByCreature($Creature){
             //Attente de pull qui marche
-            //Si le Monster attaquant a plus de O PV, il attaque
-            if($Monster->getHealthNow() > 0){
-                $MonsterDegatAttaqueEnvoyer=$Monster->getAttaque();
+            //Si le Creature attaquant a plus de O PV, il attaque
+            if($Creature->getHealthNow() > 0){
+                $CreatureDegatAttaqueEnvoyer=$Creature->getAttaque();
                 //on réduit les déga avec armure si possible
-                $enMoins = ($MonsterDegatAttaqueEnvoyer*$this->getDefense())/100;
-                $MonsterDegatAttaqueEnvoyer-=$enMoins;
-                $MonsterDegatAttaqueEnvoyer = round($MonsterDegatAttaqueEnvoyer);
-                if($MonsterDegatAttaqueEnvoyer<0){
-                    $MonsterDegatAttaqueEnvoyer = 0;
+                $enMoins = ($CreatureDegatAttaqueEnvoyer*$this->getDefense())/100;
+                $CreatureDegatAttaqueEnvoyer-=$enMoins;
+                $CreatureDegatAttaqueEnvoyer = round($CreatureDegatAttaqueEnvoyer);
+                if($CreatureDegatAttaqueEnvoyer<0){
+                    $CreatureDegatAttaqueEnvoyer = 0;
                 }
                 $healthAvantAttaque = $this->_healthNow;
                 //on va rechercher l'historique
-                $req = "SELECT * FROM `AttaquePersoMonster` WHERE idMonster = '".$Monster->getIdEntite()."' and idPersonnage = '".$this->_idEntite."'";
+                $req = "SELECT * FROM `AttaquePersoCreature` WHERE idCreature = '".$Creature->getIdEntite()."' and idPersonnage = '".$this->_idEntite."'";
                 $Result = $this->_bdd->query($req);
                 $tabAttaque['nbCoup']=0;
-                $tabAttaque['DegatsDonnes']=$MonsterDegatAttaqueEnvoyer;
+                $tabAttaque['DegatsDonnes']=$CreatureDegatAttaqueEnvoyer;
                 if($tab=$Result->fetch()){
                     $tabAttaque = $tab;
-                    $tabAttaque['DegatsDonnes']+=$MonsterDegatAttaqueEnvoyer;
+                    $tabAttaque['DegatsDonnes']+=$CreatureDegatAttaqueEnvoyer;
                     $tabAttaque['nbCoup']++;
                 }
                 else{
                     //insertion d'une nouvelle attaque
-                    $req="INSERT INTO `AttaquePersoMonster`(`idMonster`, `idPersonnage`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`) 
+                    $req="INSERT INTO `AttaquePersoCreature`(`idCreature`, `idPersonnage`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`) 
                     VALUES (
-                        '".$Monster->getIdEntite()."','".$this->_idEntite."',0,0,".$tabAttaque['DegatsReçus'].",0
+                        '".$Creature->getIdEntite()."','".$this->_idEntite."',0,0,".$tabAttaque['DegatsReçus'].",0
                     )";
                     $Result = $this->_bdd->query($req);
                 }
-                $this->_healthNow = $this->_healthNow - $MonsterDegatAttaqueEnvoyer;
+                $this->_healthNow = $this->_healthNow - $CreatureDegatAttaqueEnvoyer;
                 if($this->_healthNow<0){
                     $this->_healthNow =0;
                     //on ne peut pas donner plus de degat que la HealthNow d'un perso
@@ -157,10 +157,10 @@
                 }
                 $req  = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow ."' WHERE `idEntite` = '".$this->_idEntite ."'";
                 $Result = $this->_bdd->query($req);
-                //update AttaquePersoMonster pour mettre a jour combien le perso a pris de degat 
-                $req="UPDATE `AttaquePersoMonster` SET 
+                //update AttaquePersoCreature pour mettre a jour combien le perso a pris de degat 
+                $req="UPDATE `AttaquePersoCreature` SET 
                 `DegatsDonnes`=".$tabAttaque['DegatsDonnes']."
-                WHERE idMonster = '".$Monster->getIdEntite()."' AND idPersonnage ='".$this->_idEntite."' ";
+                WHERE idCreature = '".$Creature->getIdEntite()."' AND idPersonnage ='".$this->_idEntite."' ";
                 $Result = $this->_bdd->query($req);
             }
             return $this->_healthNow;
