@@ -60,29 +60,35 @@
                                     <div class="divInfoCombat">
                                         <p class="pPositionCombattant">Ton combattant est sur la position : <?= $MapPersonnage->getNameMap() ?> (<?= $MapPersonnage->getX() ?>/<?= $MapPersonnage->getY() ?>) </p>
                                     </div>
-                                    <div class="BoxCreatureCaptured ulCreature">
-                                        <p class="pTitleCreatureCaptured">Voici tes créatures capturés :</p>
-                                        <ul class="ulCreature">
-                                            <?php
-                                                $MyCreature = new Creature($mabase);
-                                                foreach($Joueur1->getAllMyCreatureIds() as $Creature){
-                                                    $MyCreature->setCreatureById($Creature);
-                                                    $MapCreature = $MyCreature->getMapEntite();
-                                                    ?>
-                                                        <li id="Creature<?= $MyCreature->getIdEntite() ?>" class="liCaptured" style="ho">
-                                                            <a id="aCreature<?= $MyCreature->getIdEntite() ?>">
-                                                                <?php
-                                                                    $MyCreature->displayHTML();
-                                                                ?>
-                                                            </a>
-                                                        </li>
-                                                        <?php  ?>
-                                                        <p class="hoverCreatureCaptured"><?= $MapCreature->getNameMap() ?> (<?= $MapCreature->getX() ?>/<?= $MapCreature->getY() ?>)</p>
-                                                    <?php
-                                                }
+                                    <?php
+                                        if(count($Joueur1->getAllMyCreatureIds()) > 0){
                                             ?>
-                                        </ul>
-                                    </div>
+                                                <div class="BoxCreatureCaptured ulCreature">
+                                                    <p class="pTitleCreatureCaptured">Voici tes créatures capturés :</p>
+                                                    <ul class="ulCreature">
+                                                        <?php
+                                                            $MyCreature = new Creature($mabase);
+                                                            foreach($Joueur1->getAllMyCreatureIds() as $Creature){
+                                                                $MyCreature->setCreatureById($Creature);
+                                                                $MapCreature = $MyCreature->getMapEntite();
+                                                                ?>
+                                                                    <li id="Creature<?= $MyCreature->getIdEntite() ?>" class="liCaptured" style="ho">
+                                                                        <a id="aCreature<?= $MyCreature->getIdEntite() ?>">
+                                                                            <?php
+                                                                                $MyCreature->displayHTML();
+                                                                            ?>
+                                                                        </a>
+                                                                    </li>
+                                                                    <?php  ?>
+                                                                    <p class="hoverCreatureCaptured"><?= $MapCreature->getNameMap() ?> (<?= $MapCreature->getX() ?>/<?= $MapCreature->getY() ?>)</p>
+                                                                <?php
+                                                            }
+                                                        ?>
+                                                    </ul>
+                                                </div>
+                                            <?php
+                                        }
+                                    ?>
                                     <p><a href="index.php" >Créer un autre personnage.</a></p>
                                 <?php
                             ?>
