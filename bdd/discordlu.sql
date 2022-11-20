@@ -2,8 +2,8 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1:3306
--- Généré le : Dim 18 sep. 2022 à 11:30
+-- Hôte : 127.0.0.1
+-- Généré le : Dim 20 nov. 2022 à 01:30
 -- Version du serveur :  8.0.21
 -- Version de PHP : 7.3.21
 
@@ -24,18 +24,17 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `AttaquePersoCreature`
+-- Structure de la table `attaquepersocreature`
 --
 
-DROP TABLE IF EXISTS `AttaquePersoCreature`;
-CREATE TABLE IF NOT EXISTS `AttaquePersoCreature` (
-  `idMonster` int NOT NULL,
+DROP TABLE IF EXISTS `attaquepersocreature`;
+CREATE TABLE IF NOT EXISTS `attaquepersocreature` (
+  `idCreature` int NOT NULL,
   `idPersonnage` int NOT NULL,
   `nbCoup` int NOT NULL,
   `coupFatal` tinyint NOT NULL,
   `DegatsDonnes` int NOT NULL,
   `DegatsReçus` int NOT NULL,
-  KEY `idMob` (`idMonster`),
   KEY `idPersonnage` (`idPersonnage`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -50,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `categorie` (
   `idCategorie` int NOT NULL AUTO_INCREMENT,
   `Attaque` tinyint NOT NULL,
   `Defense` tinyint NOT NULL,
-  `Magie` int NOT NULL,
+  `Distance` int NOT NULL,
   `nameCategorie` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`idCategorie`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -59,9 +58,24 @@ CREATE TABLE IF NOT EXISTS `categorie` (
 -- Déchargement des données de la table `categorie`
 --
 
-INSERT INTO `categorie` (`idCategorie`, `Attaque`, `Defense`, `Magie`, `nameCategorie`) VALUES
-(1, 1, 0, 0, 'Arme'),
-(2, 0, 1, 0, 'Armure');
+INSERT INTO `categorie` (`idCategorie`, `Attaque`, `Defense`, `Distance`, `nameCategorie`) VALUES
+(1, 1, 0, 0, 'Arme de contact'),
+(2, 0, 1, 0, 'Armure'),
+(3, 1, 0, 1, 'Arc'),
+(4, 0, 1, 1, 'Bouclier');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `creature`
+--
+
+DROP TABLE IF EXISTS `creature`;
+CREATE TABLE IF NOT EXISTS `creature` (
+  `idEntite` int NOT NULL,
+  `idTypeCreature` int NOT NULL,
+  `coefXp` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -85,22 +99,12 @@ CREATE TABLE IF NOT EXISTS `efficacite` (
 --
 
 INSERT INTO `efficacite` (`idEfficacite`, `adjectif`, `coef`, `ordre`, `chance`) VALUES
-(1, 'cassé', 0.7, 1, 1),
-(2, 'pourri', 0.7, 2, 2),
-(3, 'tout mou', 0.8, 3, 4),
-(4, 'moisie', 0.8, 4, 8),
-(5, 'usagé ', 0.9, 5, 16),
-(6, 'moche', 0.9, 6, 32),
-(7, 'reconditionné', 0.9, 7, 64),
-(8, 'neuf', 1, 8, 128),
-(9, 'efficace', 1.1, 9, 256),
-(10, 'redoutable', 1.2, 10, 512),
-(11, 'puissant', 1.3, 11, 1024),
-(12, 'magique', 1.4, 12, 2048),
-(13, 'enchanté', 1.5, 13, 4096),
-(14, 'en fusion', 1.6, 14, 8186),
-(15, 'nucléaire', 1.7, 15, 20001),
-(16, 'infini', 1.8, 18, 40002);
+(1, 'cassé', 0.8, 1, 16),
+(2, 'usagé', 0.9, 2, 8),
+(3, 'classique', 1, 3, 128),
+(4, 'neuf', 1.1, 4, 256),
+(5, 'résistant', 1.2, 5, 512),
+(6, 'puissant', 1.3, 6, 1024);
 
 -- --------------------------------------------------------
 
@@ -181,10 +185,10 @@ CREATE TABLE IF NOT EXISTS `faction` (
 --
 
 INSERT INTO `faction` (`idFaction`, `nameFaction`, `descFaction`, `logoFaction`) VALUES
-(1, 'Albion', 'La faction Albion.\r\nRaces : ', '1_faction'),
-(2, 'Alterna', 'La faction Alterna.\r\nRaces : ', '2_faction'),
-(3, 'Menos', 'La faction Menos.\r\nRaces : ', '3_faction'),
-(4, 'Initir', 'La faction Initir.\r\nRaces : ', '4_faction');
+(1, 'Albion', 'La faction Albion.', '1_faction'),
+(2, 'Alterna', 'La faction Alterna.', '2_faction'),
+(3, 'Menos', 'La faction Menos.', '3_faction'),
+(4, 'Initir', 'La faction Initir.', '4_faction');
 
 -- --------------------------------------------------------
 
@@ -223,7 +227,7 @@ CREATE TABLE IF NOT EXISTS `map` (
   `x` int NOT NULL,
   `y` int NOT NULL,
   `imgMap` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `type` int NOT NULL,
+  `PvP` tinyint NOT NULL DEFAULT '1',
   `idTypeMap` int NOT NULL,
   `idTypeBatiment` int NOT NULL,
   PRIMARY KEY (`idMap`),
@@ -239,16 +243,16 @@ CREATE TABLE IF NOT EXISTS `map` (
 -- Déchargement des données de la table `map`
 --
 
-INSERT INTO `map` (`idMap`, `nameMap`, `position`, `mapNord`, `mapSud`, `mapEst`, `mapOuest`, `idUserDecouverte`, `x`, `y`, `imgMap`, `type`, `idTypeMap`, `idTypeBatiment`) VALUES
-(1, 'Discord-City - Centre', 'spawn', 4, 8, 2, 6, 0, 0, 0, 'https://img.freepik.com/photos-gratuite/beau-village-medieval-montagne-caccamo-sicile-italie_287743-1168.jpg?w=996', 1, 0, 0),
-(2, 'Discord-City - Est', 'spawn-est', 3, 9, NULL, 1, 1, 1, 0, 'https://img.freepik.com/photos-gratuite/beau-village-medieval-montagne-caccamo-sicile-italie_287743-1168.jpg?w=996', 1, 0, 0),
-(3, 'Discord-City - Nord-Est', 'spawn-nord-est', NULL, 2, NULL, 4, 1, 1, 1, 'https://images.unsplash.com/photo-1583849215500-75387d55ea81?w=600', 1, 0, 0),
-(4, 'Discord-City - Nord', 'spawn-nord', NULL, 1, 3, 5, 1, 0, 1, 'https://images.unsplash.com/photo-1577705482890-4d66c7d557be?w=600', 1, 0, 0),
-(5, 'Discord-City - Nord-Ouest', 'spawn-nord-ouest', NULL, 6, 4, NULL, 1, -1, 1, 'https://images.unsplash.com/photo-1452665536397-024866ff6d36?w=600', 1, 0, 0),
-(6, 'Discord-City - Ouest', 'spawn-ouest', 5, 7, 1, NULL, 1, -1, 0, 'https://images.unsplash.com/photo-1594477232357-32644df09d0e?w=600', 1, 0, 0),
-(7, 'Discord-City - Sud-Ouest', 'spawn-sud-ouest', 6, NULL, 8, NULL, 1, -1, -1, 'https://images.unsplash.com/photo-1595370637810-cd38573b94fb?w=600', 1, 0, 0),
-(8, 'Discord-City - Sud', 'spawn-sud', 1, NULL, 9, 7, 1, 0, -1, 'https://images.unsplash.com/photo-1516473174726-95151fe079af?w=600', 1, 0, 0),
-(9, 'Discord-City - Sud-Est', 'spawn-sud-est', 2, NULL, NULL, 8, 1, 1, -1, 'https://images.unsplash.com/photo-1604087267014-7f29ba0127d7?w=600', 1, 0, 0);
+INSERT INTO `map` (`idMap`, `nameMap`, `position`, `mapNord`, `mapSud`, `mapEst`, `mapOuest`, `idUserDecouverte`, `x`, `y`, `imgMap`, `PvP`, `idTypeMap`, `idTypeBatiment`) VALUES
+(1, 'Discord-City - Centre', 'spawn', 4, 8, 2, 6, 0, 0, 0, 'https://img.freepik.com/photos-gratuite/beau-village-medieval-montagne-caccamo-sicile-italie_287743-1168.jpg?w=996', 0, 0, 0),
+(2, 'Discord-City - Est', 'spawn-est', 3, 9, NULL, 1, 1, 1, 0, 'https://img.freepik.com/photos-gratuite/beau-village-medieval-montagne-caccamo-sicile-italie_287743-1168.jpg?w=996', 0, 0, 0),
+(3, 'Discord-City - Nord-Est', 'spawn-nord-est', NULL, 2, NULL, 4, 1, 1, 1, 'https://images.unsplash.com/photo-1583849215500-75387d55ea81?w=600', 0, 0, 0),
+(4, 'Discord-City - Nord', 'spawn-nord', NULL, 1, 3, 5, 1, 0, 1, 'https://images.unsplash.com/photo-1577705482890-4d66c7d557be?w=600', 0, 0, 0),
+(5, 'Discord-City - Nord-Ouest', 'spawn-nord-ouest', NULL, 6, 4, NULL, 1, -1, 1, 'https://images.unsplash.com/photo-1452665536397-024866ff6d36?w=600', 0, 0, 0),
+(6, 'Discord-City - Ouest', 'spawn-ouest', 5, 7, 1, NULL, 1, -1, 0, 'https://images.unsplash.com/photo-1594477232357-32644df09d0e?w=600', 0, 0, 0),
+(7, 'Discord-City - Sud-Ouest', 'spawn-sud-ouest', 6, NULL, 8, NULL, 1, -1, -1, 'https://images.unsplash.com/photo-1595370637810-cd38573b94fb?w=600', 0, 0, 0),
+(8, 'Discord-City - Sud', 'spawn-sud', 1, NULL, 9, 7, 1, 0, -1, 'https://images.unsplash.com/photo-1516473174726-95151fe079af?w=600', 0, 0, 0),
+(9, 'Discord-City - Sud-Est', 'spawn-sud-est', 2, NULL, NULL, 8, 1, 1, -1, 'https://images.unsplash.com/photo-1604087267014-7f29ba0127d7?w=600', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -275,19 +279,6 @@ CREATE TABLE IF NOT EXISTS `mapitems` (
   `idMap` int NOT NULL,
   `idItem` int NOT NULL,
   KEY `idMap` (`idMap`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `monster`
---
-
-DROP TABLE IF EXISTS `monster`;
-CREATE TABLE IF NOT EXISTS `monster` (
-  `idEntite` int NOT NULL,
-  `idTypeMonster` int NOT NULL,
-  `coefXp` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -341,7 +332,7 @@ CREATE TABLE IF NOT EXISTS `tooltip` (
 --
 
 INSERT INTO `tooltip` (`id`, `tooltip`) VALUES
-(1, 'Lorsque vous terrassez un Créature, il vous appartient.'),
+(1, 'Lorsque vous terrassez une créature, elle vous appartient.'),
 (2, 'Vous pouvez reprendre votre santé en consommant des fruits.'),
 (3, 'Vous pouvez trouver des items à chaque arrivée dans un lieu, s\'il n\'a pas été visité récemment.'),
 (4, 'Dans les premières zones, il vaut mieux trouver une arme et une armure pour faire des provisions de fruits avant de se battre.');
@@ -349,44 +340,82 @@ INSERT INTO `tooltip` (`id`, `tooltip`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `typeclassmonster`
+-- Structure de la table `typeclasscreature`
 --
 
-DROP TABLE IF EXISTS `typeclassmonster`;
-CREATE TABLE IF NOT EXISTS `typeclassmonster` (
-  `idTypeClassMonster` int NOT NULL AUTO_INCREMENT,
-  `nameTypeClassMonster` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `posTypeMonster` int NOT NULL,
+DROP TABLE IF EXISTS `typeclasscreature`;
+CREATE TABLE IF NOT EXISTS `typeclasscreature` (
+  `idTypeClassCreature` int NOT NULL AUTO_INCREMENT,
+  `nameTypeClassCreature` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `posTypeCreature` int NOT NULL,
   `percentAttaque` int NOT NULL,
   `percentDefense` int NOT NULL,
-  `percentMagique` int NOT NULL,
-  `percentRessMagique` int NOT NULL,
-  `spawnTypeMonster` int NOT NULL,
-  PRIMARY KEY (`idTypeClassMonster`)
+  `percentDistance` int NOT NULL,
+  `percentRessDistance` int NOT NULL,
+  `spawnTypeCreature` int NOT NULL,
+  PRIMARY KEY (`idTypeClassCreature`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Déchargement des données de la table `typeclassmonster`
+-- Déchargement des données de la table `typeclasscreature`
 --
 
-INSERT INTO `typeclassmonster` (`idTypeClassMonster`, `nameTypeClassMonster`, `posTypeMonster`, `percentAttaque`, `percentDefense`, `percentMagique`, `percentRessMagique`, `spawnTypeMonster`) VALUES
+INSERT INTO `typeclasscreature` (`idTypeClassCreature`, `nameTypeClassCreature`, `posTypeCreature`, `percentAttaque`, `percentDefense`, `percentDistance`, `percentRessDistance`, `spawnTypeCreature`) VALUES
+(0, '', 1, 100, 100, 100, 100, 230),
 (1, 'Bébé', 0, 0, 0, 0, 0, 15),
+(2, 'Enfant', 0, 0, 0, 0, 0, 25),
 (3, 'Jeune', 0, 0, 0, 0, 0, 55),
+(4, 'Immature', 1, 0, 0, 0, 0, 20),
 (5, 'Mature', 1, 0, 0, 0, 0, 26),
 (6, 'Adulte', 1, 0, 0, 0, 0, 60),
+(7, 'Guerrier', 0, 0, 0, 0, 0, 33),
+(8, 'Mage', 0, 0, 0, 0, 0, 25),
+(9, 'Maître', 0, 0, 0, 0, 0, 22),
+(10, 'Sage', 0, 0, 0, 0, 0, 15),
+(11, 'Vieux', 0, 0, 0, 0, 0, 15),
 (12, 'Vénérable', 0, 0, 0, 0, 0, 12),
 (13, 'Ancien', 0, 0, 0, 0, 0, 8),
-(9, 'Maître', 0, 0, 0, 0, 0, 22),
-(11, 'Vieux', 0, 0, 0, 0, 0, 15),
-(15, 'Légendaire', 1, 0, 0, 0, 0, 3),
-(8, 'Mage', 0, 0, 0, 0, 0, 25),
-(7, 'Guerrier', 0, 0, 0, 0, 0, 33),
-(16, 'Divin', 1, 0, 0, 0, 0, 1),
-(0, '', 1, 100, 100, 100, 100, 230),
 (14, 'Majeur', 1, 0, 0, 0, 0, 5),
-(4, 'Immature', 1, 0, 0, 0, 0, 20),
-(10, 'Sage', 0, 0, 0, 0, 0, 15),
-(2, 'Enfant', 0, 0, 0, 0, 0, 25);
+(15, 'Légendaire', 1, 0, 0, 0, 0, 3),
+(16, 'Mythique', 1, 0, 0, 0, 0, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `typecreature`
+--
+
+DROP TABLE IF EXISTS `typecreature`;
+CREATE TABLE IF NOT EXISTS `typecreature` (
+  `idTypeCreature` int NOT NULL AUTO_INCREMENT,
+  `nameTypeCreature` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `baseAttaque` int NOT NULL,
+  `baseDefense` int NOT NULL,
+  `baseDistance` int NOT NULL,
+  `baseRessDistance` int NOT NULL,
+  `baseGainMoney` int NOT NULL,
+  `baseGainExp` int NOT NULL,
+  `factionTypeCreature` int NOT NULL,
+  `spawnTypeCreature` int NOT NULL,
+  PRIMARY KEY (`idTypeCreature`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `typecreature`
+--
+
+INSERT INTO `typecreature` (`idTypeCreature`, `nameTypeCreature`, `baseAttaque`, `baseDefense`, `baseDistance`, `baseRessDistance`, `baseGainMoney`, `baseGainExp`, `factionTypeCreature`, `spawnTypeCreature`) VALUES
+(1, 'Loup', 0, 0, 0, 0, 0, 0, 0, 3),
+(2, 'Panthère', 0, 0, 0, 0, 0, 0, 0, 5),
+(3, 'Ours', 0, 0, 0, 0, 0, 0, 0, 10),
+(4, 'Puma', 0, 0, 0, 0, 0, 0, 0, 100),
+(5, 'Tigre', 0, 0, 0, 0, 0, 0, 0, 100),
+(6, 'Serpent', 0, 0, 0, 0, 0, 0, 0, 200),
+(7, 'Gorille', 0, 0, 0, 0, 0, 0, 0, 600),
+(8, 'Sanglier', 0, 0, 0, 0, 0, 0, 0, 600),
+(9, 'Corbeau', 0, 0, 0, 0, 0, 0, 0, 1500),
+(10, 'Vautour', 0, 0, 0, 0, 0, 0, 0, 3000),
+(11, 'Pigeon', 0, 0, 0, 0, 0, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -413,21 +442,21 @@ CREATE TABLE IF NOT EXISTS `typeequipement` (
 
 INSERT INTO `typeequipement` (`idTypeEquipement`, `information`, `imgEquipement`, `nameTypeEquipement`, `rarete`, `idCategorie`, `chance`, `coolDown`) VALUES
 (1, '', 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Uncrossed_gladius.jpg/280px-Uncrossed_gladius.jpg', 'Glaive', 1, 1, 1, 500),
-(2, '', 'https://th.bing.com/th/id/OIP.5wkIkkD56nrd6jF0gR2kWwHaHa?w=186&h=186&c=7&r=0&o=5&pid=1.7', 'Baguette Magic', 2, 3, 10, 500),
+(2, '', 'https://th.bing.com/th/id/OIP.5wkIkkD56nrd6jF0gR2kWwHaHa?w=186&h=186&c=7&r=0&o=5&pid=1.7', 'Baguette', 2, 3, 10, 500),
 (3, '', 'https://th.bing.com/th/id/OIP.HIpuL__dWylILgUXtwpaTgHaJ1?w=142&h=189&c=7&r=0&o=5&pid=1.7', 'Parapluie', 3, 4, 20000000, 500),
 (4, '', 'https://th.bing.com/th/id/OIP.3H6v0c5zYh8PbN8rJQhdxwHaHa?w=207&h=207&c=7&r=0&o=5&pid=1.7', 'Baton', 1, 3, 1, 500),
 (5, '', 'https://th.bing.com/th/id/OIP.zJWr_sr5yO00IwEpjOtURAHaFa?w=225&h=180&c=7&r=0&o=5&pid=1.7', 'Cotte de maille', 3, 2, 10, 500),
 (6, '', 'https://th.bing.com/th/id/R.9f29bfbc207eb97b455c75af81028097?rik=rvotqpxiglD7Fw&pid=ImgRaw&r=0', 'Pullover', 1, 2, 1, 500),
 (7, 'Le fouet traditionnel d\'indy', 'https://th.bing.com/th/id/OIP.Rz_kOstmpuf6D3fhd3CrhQHaJC?w=166&h=203&c=7&r=0&o=5&pid=1.7', 'Fouet', 3, 1, 1, 500),
-(8, '', 'https://th.bing.com/th/id/OIP.ahhiuCfXS8WGmKrdbKGyRgHaJn?w=134&h=180&c=7&r=0&o=5&pid=1.7', 'Sabre Laser', 7, 1, 1000, 500),
+(8, '', 'https://th.bing.com/th/id/OIP.ahhiuCfXS8WGmKrdbKGyRgHaJn?w=134&h=180&c=7&r=0&o=5&pid=1.7', 'Sabre', 7, 1, 1000, 500),
 (9, '', 'https://th.bing.com/th/id/OIP.rzd266etdMKMgrhsbCLTtAHaFk?w=265&h=199&c=7&r=0&o=5&pid=1.7', 'Pistolet', 6, 1, 500, 500),
 (10, '', 'https://th.bing.com/th/id/OIP.ccpZEJIVARMvIZ9N3gnTPgHaHa?w=187&h=187&c=7&r=0&o=5&pid=1.7', 'Dague', 4, 1, 30, 500),
 (11, '', 'https://th.bing.com/th/id/OIP.SwxkPeT-m8UTalZWqoXH3wHaJQ?w=206&h=258&c=7&r=0&o=5&pid=1.7', 'Crosse', 5, 1, 100, 500),
-(12, '', 'https://th.bing.com/th/id/OIP.OWL0des2smnwx-V9YoYdhQAAAA?w=115&h=220&c=7&r=0&o=5&pid=1.7', 'Cape invisible', 8, 2, 500, 500),
+(12, '', 'https://th.bing.com/th/id/OIP.OWL0des2smnwx-V9YoYdhQAAAA?w=115&h=220&c=7&r=0&o=5&pid=1.7', 'Cape', 8, 2, 500, 500),
 (13, '', 'https://th.bing.com/th/id/OIP.eEzkYTtkcEZi2bwxvsYFgQAAAA?w=135&h=187&c=7&r=0&o=5&pid=1.7', 'L\'Amour', 10, 1, 10000, 500),
 (14, '', 'https://th.bing.com/th/id/OIP.pvVmkxsiYWxj6CGB4qcnpAHaE6?w=295&h=196&c=7&r=0&o=5&pid=1.7', 'Planche en bois', 2, 2, 10, 500),
 (15, '', 'https://th.bing.com/th/id/OIP.MiASF5B3dzIkuA5MLj7ZKQHaHa?w=192&h=190&c=7&r=0&o=5&pid=1.7', 'Kevlar', 7, 2, 100, 500),
-(16, '', 'https://th.bing.com/th/id/OIP.90kI_GyywYN7ZaIZEa4cagHaHa?w=211&h=211&c=7&r=0&o=5&pid=1.7', 'Plastron Magic', 4, 4, 10, 500),
+(16, '', 'https://th.bing.com/th/id/OIP.90kI_GyywYN7ZaIZEa4cagHaHa?w=211&h=211&c=7&r=0&o=5&pid=1.7', 'Plastron', 4, 4, 10, 500),
 (17, '', 'https://th.bing.com/th/id/OIP.D94sDw7_l_cqB6Kt2XlunwHaHa?w=206&h=206&c=7&r=0&o=5&pid=1.7', 'Cuirasse', 6, 2, 50, 500),
 (18, '', 'https://th.bing.com/th/id/OIP.zuI_d5qC3MqglDYomufz8wHaOH?w=181&h=345&c=7&r=0&o=5&pid=1.7', 'Broigne', 5, 2, 10, 500),
 (19, '', 'https://th.bing.com/th/id/OIP.Zwl2Y9akC5B1dnmd2VR1NwHaHa?w=206&h=206&c=7&r=0&o=5&pid=1.7', 'Brigandine', 0, 0, 0, 500),
@@ -457,19 +486,18 @@ CREATE TABLE IF NOT EXISTS `typeitem` (
 INSERT INTO `typeitem` (`idTypeItem`, `nameTypeItem`, `rarete`, `imgItem`, `information`, `chance`) VALUES
 (1, 'Pierre', 2, 'https://image.noelshack.com/fichiers/2019/21/5/1558680066-rock.png', 'Permet d\'améliorer ses armures', 3),
 (2, 'Fruit', 1, 'https://img.icons8.com/color/452/group-of-fruits.png', 'Permet de reprendre de la vie', 1),
-(3, 'Fiole', 13, 'https://www.icone-png.com/png/42/42072.png', 'Permet d\'immuniser un montre', 2000),
+(3, 'Fiole', 13, 'https://www.icone-png.com/png/42/42072.png', 'Permet d\'immuniser une créature', 2000),
 (4, 'Mouchoir', 12, 'https://ravel-foundry.s3.eu-west-3.amazonaws.com/images/items/artisanal/mouchoir-filtrant.png', 'Permet de se soigner ', 1000),
 (5, 'Morceau de Fer', 3, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZ_ep_JR4quCLR07ra1O0tTBxfz2c04MQaZ-vjQH2y3OohelwuC5sMiAQ8TiA8_OF-8h8&usqp=CAU', 'Permet d\'améliorer ses armes', 5),
-(6, 'Pépite d&#039;Or', 11, 'https://th.bing.com/th?q=Pépite+Dor+Dessin&w=120&h=120&c=1&rs=1&qlt=90&cb=1&pid=InlineBlock&mkt=fr-FR&cc=FR&setlang=fr&adlt=moderate&t=1&mw=247', 'Permet d\'attraper un mob instantanément', 500),
-(7, 'Œuf', 5, 'https://static.wikia.nocookie.net/arksurvivalevolved_gamepedia/images/a/a3/Eggs.png/revision/latest/scale-to-width-down/1200?cb=20200807154254', 'Permet de pop un mob aléatoire là ou vous êtes', 15),
+(6, 'Pépite d&#039;Or', 11, 'https://th.bing.com/th?q=Pépite+Dor+Dessin&w=120&h=120&c=1&rs=1&qlt=90&cb=1&pid=InlineBlock&mkt=fr-FR&cc=FR&setlang=fr&adlt=moderate&t=1&mw=247', 'Permet d\'attraper une créature instantanément', 500),
+(7, 'Œuf', 5, 'https://static.wikia.nocookie.net/arksurvivalevolved_gamepedia/images/a/a3/Eggs.png/revision/latest/scale-to-width-down/1200?cb=20200807154254', 'Permet de pop une créature aléatoire là ou vous êtes', 15),
 (8, 'Bois', 1, 'https://th.bing.com/th/id/OIP.t4fE9mafaTFTU1RFBXFiwQHaE7?w=255&h=180&c=7&r=0&o=5&pid=1.7', 'Permet de réparer son armes', 2),
 (9, 'Brique', 4, 'https://th.bing.com/th/id/OIP.5Uh6vvKtk79YjfVE5_LM3AHaFj?w=245&h=184&c=7&r=0&o=5&pid=1.7', 'Permet de réparer son armures', 10),
 (10, 'Canard en plastique', 6, 'https://pullfr-4c63.kxcdn.com/pato-mm-x-mm-jkg-b.png', 'Boost les stats du personnage', 20),
 (11, 'Piece en toc', 6, 'https://www.ccopera.com/metaux-precieux/ressources/metaux/medium/20FS-A.png', 'Permet d\'acheter des equipements', 30),
 (12, 'Ficelle', 7, 'https://vikings.help/users/vikings/imgExtCatalog/big/m073.png', 'Permet de réparer son armures', 40),
 (13, 'Gaudasse', 8, 'https://nhim.splf.in/Boots.png', 'Permet d\'attaquer plus vite', 50),
-(14, 'Pain', 9, 'https://www.icone-png.com/png/13/13038.png', 'Redonne toute la vie à un perso', 80),
-(15, 'Haricot Magique', 10, 'https://www.dol-celeb.com/wp-content/uploads/2018/06/haricots-magiques.jpg', 'Redonne de la vie à une perso mort', 100);
+(14, 'Pain', 9, 'https://www.icone-png.com/png/13/13038.png', 'Redonne toute la vie à un perso', 80);
 
 -- --------------------------------------------------------
 
@@ -494,7 +522,7 @@ INSERT INTO `typemap` (`idTypeMap`, `nameTypeMapEn`, `nameTypeMapFr`) VALUES
 (2, 'Foret', 'Fôret'),
 (3, 'Mountain', 'Montagne'),
 (4, 'Path', 'Route'),
-(5, 'Dungeon', 'Donjon'),
+(5, 'Ruin', 'Ruine'),
 (6, 'Castle', 'Château'),
 (7, 'Dune', 'Dune'),
 (8, 'Sea', 'Mer'),
@@ -512,44 +540,6 @@ INSERT INTO `typemap` (`idTypeMap`, `nameTypeMapEn`, `nameTypeMapFr`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `typemonster`
---
-
-DROP TABLE IF EXISTS `typemonster`;
-CREATE TABLE IF NOT EXISTS `typemonster` (
-  `idTypeMonster` int NOT NULL AUTO_INCREMENT,
-  `nameTypeMonster` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `baseAttaque` int NOT NULL,
-  `baseDefense` int NOT NULL,
-  `baseMagique` int NOT NULL,
-  `baseRessMagique` int NOT NULL,
-  `baseGainMoney` int NOT NULL,
-  `baseGainExp` int NOT NULL,
-  `factionTypeMonster` int NOT NULL,
-  `spawnTypeMonster` int NOT NULL,
-  PRIMARY KEY (`idTypeMonster`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Déchargement des données de la table `typemonster`
---
-
-INSERT INTO `typemonster` (`idTypeMonster`, `nameTypeMonster`, `baseAttaque`, `baseDefense`, `baseMagique`, `baseRessMagique`, `baseGainMoney`, `baseGainExp`, `factionTypeMonster`, `spawnTypeMonster`) VALUES
-(2, 'Loup', 0, 0, 0, 0, 0, 0, 0, 3),
-(3, 'Géant', 0, 0, 0, 0, 0, 0, 0, 5),
-(4, 'Vampire', 0, 0, 0, 0, 0, 0, 0, 10),
-(7, 'Démon', 0, 0, 0, 0, 0, 0, 0, 100),
-(8, 'Ange', 0, 0, 0, 0, 0, 0, 0, 100),
-(9, 'Dragon', 0, 0, 0, 0, 0, 0, 0, 200),
-(10, 'Archidémon', 0, 0, 0, 0, 0, 0, 0, 600),
-(11, 'Archange', 0, 0, 0, 0, 0, 0, 0, 600),
-(12, 'Idole', 0, 0, 0, 0, 0, 0, 0, 1500),
-(13, 'Divinité', 0, 0, 0, 0, 0, 0, 0, 3000),
-(14, 'Cyclope', 0, 0, 0, 0, 0, 0, 0, 1);
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `typepersonnage`
 --
 
@@ -559,8 +549,8 @@ CREATE TABLE IF NOT EXISTS `typepersonnage` (
   `nameTypePerso` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `statsAttaque` int NOT NULL,
   `statsDefense` int NOT NULL,
-  `statsMagique` int NOT NULL,
-  `statsRessMagique` int NOT NULL,
+  `statsDistance` int NOT NULL,
+  `statsRessDistance` int NOT NULL,
   `imgTypePerso` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `idFaction` int NOT NULL,
   PRIMARY KEY (`idTypePerso`)
@@ -570,23 +560,23 @@ CREATE TABLE IF NOT EXISTS `typepersonnage` (
 -- Déchargement des données de la table `typepersonnage`
 --
 
-INSERT INTO `typepersonnage` (`idTypePerso`, `nameTypePerso`, `statsAttaque`, `statsDefense`, `statsMagique`, `statsRessMagique`, `imgTypePerso`, `idFaction`) VALUES
-(1, 'Haut Elfe', 1, 1, 1, 1, '', 1),
-(2, 'Halfelin', 1, 1, 1, 1, '', 1),
-(3, 'Mage', 1, 1, 1, 1, '', 1),
-(4, 'Héliade', 1, 1, 1, 1, '', 1),
-(5, 'Elfe Sylvain', 1, 1, 1, 1, '', 2),
-(6, 'Korrigan', 1, 1, 1, 1, '', 2),
-(7, 'Nain', 1, 1, 1, 1, '', 2),
-(8, 'Hobbit', 1, 1, 1, 1, '', 2),
-(9, 'Sirène', 1, 1, 1, 1, '', 3),
-(10, 'Tritons', 1, 1, 1, 1, '', 3),
-(11, 'Homme-Lézard', 1, 1, 1, 1, '', 3),
-(12, 'Hydriade', 1, 1, 1, 1, '', 3),
-(13, 'Elfe Noir', 1, 1, 1, 1, '', 4),
-(14, 'Orc', 1, 1, 1, 1, '', 4),
-(15, 'Duergars', 1, 1, 1, 1, '', 4),
-(16, 'Sorcier', 1, 1, 1, 1, '', 4);
+INSERT INTO `typepersonnage` (`idTypePerso`, `nameTypePerso`, `statsAttaque`, `statsDefense`, `statsDistance`, `statsRessDistance`, `imgTypePerso`, `idFaction`) VALUES
+(1, 'Aventurier', 1, 1, 1, 1, '', 1),
+(2, 'Barde', 1, 1, 1, 1, '', 1),
+(3, 'Voleur', 1, 1, 1, 1, '', 1),
+(4, 'Explorateur', 1, 1, 1, 1, '', 1),
+(5, 'Garde', 1, 1, 1, 1, '', 2),
+(6, 'Soldat', 1, 1, 1, 1, '', 2),
+(7, 'Mercenaire', 1, 1, 1, 1, '', 2),
+(8, 'Dompteur', 1, 1, 1, 1, '', 2),
+(9, 'Archéologue', 1, 1, 1, 1, '', 3),
+(10, 'Marchand', 1, 1, 1, 1, '', 3),
+(11, 'Forgeron', 1, 1, 1, 1, '', 3),
+(12, 'Médecin', 1, 1, 1, 1, '', 3),
+(13, 'Vétérinaire', 1, 1, 1, 1, '', 4),
+(14, 'Ingénieur', 1, 1, 1, 1, '', 4),
+(15, 'Chercheur', 1, 1, 1, 1, '', 4),
+(16, 'Scientifique', 1, 1, 1, 1, '', 4);
 
 -- --------------------------------------------------------
 
@@ -602,6 +592,7 @@ CREATE TABLE IF NOT EXISTS `typeuser` (
   `staff` tinyint NOT NULL,
   `bypass` tinyint NOT NULL,
   `view` tinyint NOT NULL,
+  `play` tinyint NOT NULL,
   PRIMARY KEY (`idTypeUser`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -609,16 +600,16 @@ CREATE TABLE IF NOT EXISTS `typeuser` (
 -- Déchargement des données de la table `typeuser`
 --
 
-INSERT INTO `typeuser` (`idTypeUser`, `nameTypeUser`, `admin`, `staff`, `bypass`, `view`) VALUES
-(12, 'Administrateur', 1, 1, 1, 0),
-(11, 'Opérateur', 1, 1, 1, 0),
-(10, 'Modérateur', 0, 1, 1, 0),
-(3, 'Joueur Expérimenté', 0, 0, 0, 1),
-(2, 'Joueur Vérifié', 0, 0, 0, 1),
-(1, 'Joueur', 0, 0, 0, 1),
-(-1, 'Ban', 0, 0, 0, 0),
-(9, 'Testeur', 0, 0, 1, 0),
-(0, 'Sanctionné', 0, 0, 0, 1);
+INSERT INTO `typeuser` (`idTypeUser`, `nameTypeUser`, `admin`, `staff`, `bypass`, `view`, `play`) VALUES
+(-1, 'Ban', 0, 0, 0, 0, 0),
+(0, 'Sanctionné', 0, 0, 0, 1, 1),
+(1, 'Joueur', 0, 0, 0, 1, 1),
+(2, 'Joueur Vérifié', 0, 0, 0, 1, 1),
+(3, 'Joueur Expérimenté', 0, 0, 0, 1, 1),
+(9, 'Testeur', 0, 0, 1, 0, 1),
+(10, 'Modérateur', 0, 1, 1, 0, 1),
+(11, 'Opérateur', 1, 1, 1, 0, 1),
+(12, 'Administrateur', 1, 1, 1, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -636,7 +627,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `idPersonnage` int DEFAULT NULL,
   `idFaction` int DEFAULT NULL,
   `dateUser` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `typeUser` int NOT NULL DEFAULT '1',
+  `idTypeUser` int NOT NULL DEFAULT '1',
   PRIMARY KEY (`idUser`),
   UNIQUE KEY `login` (`email`),
   KEY `idPersonnage` (`idPersonnage`),
