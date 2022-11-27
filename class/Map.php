@@ -1,5 +1,5 @@
 <?php
-    class map{
+    class map extends TypeMap{
         Private $_bdd;
 
         private $_idMap;
@@ -426,7 +426,7 @@
                 return $mapExistante;
             }
             $position = $this->generatePosition();
-            $Generate = $this->generateCarte();
+            $Generate = $this->generateNameMap();
             $nameMap = $Generate[2];
             $typeId = $Generate[0];
             $type = $Generate[1];
@@ -769,7 +769,7 @@
         }
         
         /** Génére un Nom de Map */
-        public function generateCarte(){
+        public function generateNameMap(){
             $req = "SELECT * FROM TypeMap";
             $Result = $this->_bdd->query($req);
             $TypeMap=array();
@@ -1150,7 +1150,7 @@
             }
             //la premiere case et le type en anglais pour une recherche d'image
             $tab[0] = $TypeMap['idTypeMap'];
-            $tab[1] = $TypeMap['nameTypeMapFr'];
+            $tab[1] = $TypeMap['nameTypeMap'];
             $tab[2] = $Nom." ". $Adjectif;
             return $tab;
         }
