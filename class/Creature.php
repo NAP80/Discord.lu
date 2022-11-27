@@ -177,9 +177,9 @@
             $newTypeNom='Menhir';
             while($tab=$Result->fetch()){
                 if(rand(0,$tab['spawnTypeCreature'])==1){
-                    $newType = $tab['idTypeCreature'];
+                    $newType    = $tab['idTypeCreature'];
                     $newTypeNom = $tab['nameTypeCreature'];
-                    $coef=$tab['spawnTypeCreature'];
+                    $coef       = $tab['spawnTypeCreature'];
                     break;
                 }
             }

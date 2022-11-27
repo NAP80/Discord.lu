@@ -363,7 +363,7 @@
             $newy = $map->_y;
             switch($cardinalite){
                 case "sud":
-                    $mapSud = $map->getIdMap();
+                    $mapSud = "'".$map->getIdMap()."'";
                     //on vérifie si la map n'existe pas déjà a cette cardinalité
                     if(!is_null($map->getMapNord())){
                         return $map->getMapNord();
@@ -371,21 +371,21 @@
                     $newy++;
                     break;
                 case "nord":
-                    $mapNord = $map->getIdMap();
+                    $mapNord = "'".$map->getIdMap()."'";
                     if(!is_null($map->getMapSud())){
                         return $map->getMapSud();
                     }
                     $newy--;
                     break;
                 case "est":
-                    $mapEst = $map->getIdMap();
+                    $mapEst = "'".$map->getIdMap()."'";
                     if(!is_null($map->getMapOuest())){
                         return $map->getMapOuest();
                     }
                     $newx--;
                     break;
                 case "ouest":
-                    $mapOuest = $map->getIdMap();
+                    $mapOuest = "'".$map->getIdMap()."'";
                     if(!is_null($map->getMapEst())){
                         return $map->getMapEst();
                     }
@@ -432,8 +432,7 @@
             $imgMap         = $TypeMap[2];
             $req = "INSERT INTO `map`( `nameMap`, `position`, `mapNord`, `mapSud`, `mapEst`, `mapOuest`, `x`, `y`,`idUserDecouverte`,`imgMap`, `idTypeMap`) 
                     VALUES 
-                ('".$NameMap."','".$position."','".$mapNord."','".$mapSud."','".$mapEst."','".$mapOuest."','".$newx."','".$newy."','".$idUserDecouverte."','".$imgMap."','".$idTypeMap."')";
-            print_r($req);
+                ('".$NameMap."','".$position."',".$mapNord.",".$mapSud.",".$mapEst.",".$mapOuest.",'".$newx."','".$newy."','".$idUserDecouverte."','".$imgMap."','".$idTypeMap."')";
             $Result = $this->_bdd->query($req);
             $req = "SELECT idMap FROM map WHERE position='".$position."'";
             $Result = $this->_bdd->query($req);
