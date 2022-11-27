@@ -155,8 +155,8 @@
         ?>
     </body>
     <?php
-        include "ihm/jsDesPages/jsMap.php";
-        include "ihm/jsDesPages/jsAnimation.php";
+        include "ihm/jsdespages/jsMap.php";
+        include "ihm/jsdespages/jsAnimation.php";
     ?>
     <script src="javascript/map.js"></script>
 </html>

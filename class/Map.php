@@ -45,7 +45,7 @@
                     $tab["y"],
                     $tab["idUserDecouverte"],
                     $tab["imgMap"],
-                    $tab["PvP"],
+                    $tab["PvP"]
                 );
             }
         }

@@ -54,17 +54,9 @@
                                 ?>
                                     <p class="NbPersonnage">Vous avez <?= $NbPersonnage ?> personnages sur 10.</p>
                                 <?php
-                                if($NbPersonnage > 1){
+                                if($NbPersonnage >= 1){
                                     // Selection Personnage
                                     $Joueur1->getChoixPersonnage();
-                                    $ObjectPersonnage = $Joueur1->getPersonnage();
-                                    ?>
-                                        <div class="divAction">
-                                            <p><a href="combat.php">Viens combattre avec <?= $ObjectPersonnage->getNameEntite() ?></a></p>
-                                        </div>
-                                    <?php
-                                }
-                                else{
                                     $ObjectPersonnage = $Joueur1->getPersonnage();
                                     ?>
                                         <div class="divAction">
