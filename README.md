@@ -7,6 +7,10 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 # Avancement :
 
 ## En cours :
+- Mise en ligne du Site,
+- Retirer Bing,
+- - Retirer les Avatars/Fonds Aléatoires,
+- - Implémenter des Avatars/Fonds par défaults,
 - Uniformisation Code,
 - Refonte Entitée/Creature/Personnage,
 - Système d'Actions Personnages,
@@ -19,10 +23,8 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Intégration Panel Admin,
 - - Sécurisation Injection SQL,
 - - Intégrer les différents display/affichage.php dans l'objet PHP Map,
-- - Retirer Bing,
-- - - Retirer les Avatars/Fonds Aléatoires,
-- - - Implémenter des Avatars/Fonds par défaults,
 - - Séparer Attaque Physique/Distance et idem avec Défense/Résistance,
+- - Mettre en place correctement le bouton Déco,
 - Style :
 - - Patch CSS Décalage Dialog,
 - - Patch le footer,
@@ -68,7 +70,10 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - PHP : Déplacement Map : Non affichage de l'origine de déplacement quand refresh si Creature.
 - PHP : Bug déplacement (téléporation) lors de changement personnage (Au final c'est pas un bug mais une "feature") -> À encadrer.
 - ??? : Quand Kill d'un personnage, les personnage présent au même endroit sont aussi Kill.
-- PHP : Plus aucune image n'est récupérable.
+- ??? : Quand on refresh on voit les personnages du même user présent sur une map, mais quand on se déplace, non.
+- JS  : La mise en ligne a aussi cassé le JS du changement d'arme.
+- PHP : Quand on capture un animal, on se déplace une fois la map clear.
+- PHP/BDD : Retirer les Menhir.
 
 ## Fait :
 - Récupération du projet,
@@ -91,4 +96,8 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Patch PHP/JS Multiples,
 - Zone Non-PVP et Vérification Attaque,
 - Refonte DisplayHTML Creature/Personnage - Patch CSS,
-- Patch PHP Divers.
+- Patch PHP Divers,
+- Mise en ligne sur game.Discord.lu,
+- Refonte TypeMap,
+- Refonte création Map,
+- Patch Image Map.
