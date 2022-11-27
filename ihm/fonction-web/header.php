@@ -1,7 +1,7 @@
 <?php
     // Définition des variables du site.
         $NameWebsite    = "Discord.lu";
-        $NameIcon       = "favicon.ico";
+        $NameIcon       = "favicon.png";
         $NameAutor      = "Discord.lu";
 ?>
     <!-- Compatible / UTF / Viewport-->
