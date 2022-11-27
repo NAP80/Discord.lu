@@ -4,11 +4,11 @@
 
         private $_idTypePerso;
         private $_nameTypePerso;
+        private $_defaultAvatar;
         private $_statsAttaque;
         private $_statsDefense;
         private $_statsDistance;
         private $_statsRessDistance;
-        private $_imgTypePerso;
         private $_idFaction;
 
         public function __construct($bdd){
@@ -25,11 +25,11 @@
             if($tab=$Result->fetch()){
                 $this->_idTypePerso = $tab['idTypePerso'];
                 $this->_nameTypePerso = $tab['nameTypePerso'];
+                $this->_defaultAvatar = $tab['defaultAvatar'];
                 $this->_statsAttaque = $tab['statsAttaque'];
                 $this->_statsDefense = $tab['statsDefense'];
                 $this->_statsDistance = $tab['statsDistance'];
                 $this->_statsRessDistance = $tab['statsRessDistance'];
-                $this->_imgTypePerso = $tab['imgTypePerso'];
                 $this->_idFaction = $tab['idFaction'];
             }
         }
@@ -43,11 +43,11 @@
             if($tab=$Result->fetch()){
                 $this->_idTypePerso = $tab['idTypePerso'];
                 $this->_nameTypePerso = $tab['nameTypePerso'];
+                $this->_defaultAvatar = $tab['defaultAvatar'];
                 $this->_statsAttaque = $tab['statsAttaque'];
                 $this->_statsDefense = $tab['statsDefense'];
                 $this->_statsDistance = $tab['statsDistance'];
                 $this->_statsRessDistance = $tab['statsRessDistance'];
-                $this->_imgTypePerso = $tab['imgTypePerso'];
                 $this->_idFaction = $tab['idFaction'];
             }
         }
@@ -60,6 +60,11 @@
         /** Return NameTypePerso */
         public function getNameTypePerso(){
             return $this->_nameTypePerso;
+        }
+
+        /** Return DefaultAvatar */
+        public function getDefaultAvatar(){
+            return $this->_defaultAvatar;
         }
 
         /** Return StatsAttaque */
@@ -80,11 +85,6 @@
         /** Return StatsRessDistance */
         public function getStatsRessDistance(){
             return $this->_statsRessDistance;
-        }
-
-        /** Return ImgTypePerso */
-        public function getImgTypePerso(){
-            return $this->_imgTypePerso;
         }
 
         /** Return IdFaction */

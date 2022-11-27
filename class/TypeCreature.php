@@ -4,6 +4,7 @@
 
         private $_idTypeCreature;
         private $_nameTypeCreature;
+        private $_defaultAvatar;
         private $_baseAttaque;
         private $_baseDefense;
         private $_baseDistance;
@@ -28,6 +29,7 @@
             if($tab=$Result->fetch()){
                 $this->_idTypeCreature = $tab['idTypeCreature'];
                 $this->_nameTypeCreature = $tab['nameTypeCreature'];
+                $this->_defaultAvatar = $tab['defaultAvatar'];
                 $this->_baseAttaque = $tab['baseAttaque'];
                 $this->_baseDefense = $tab['baseDefense'];
                 $this->_baseDistance = $tab['baseDistance'];
@@ -47,6 +49,7 @@
             if($tab=$Result->fetch()){
                 $this->_idTypeCreature = $tab['idTypeCreature'];
                 $this->_nameTypeCreature = $tab['nameTypeCreature'];
+                $this->_defaultAvatar = $tab['defaultAvatar'];
                 $this->_baseAttaque = $tab['baseAttaque'];
                 $this->_baseDefense = $tab['baseDefense'];
                 $this->_baseDistance = $tab['baseDistance'];
@@ -66,6 +69,11 @@
         /** Return NameTypeCreature */
         public function getNameTypeCreature(){
             return $this->_nameTypeCreature;
+        }
+
+        /** Return DefaultAvatar */
+        public function getDefaultAvatar(){
+            return $this->_defaultAvatar;
         }
 
         /** Return BaseAttaque */
