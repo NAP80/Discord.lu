@@ -363,7 +363,7 @@
             $newy = $map->_y;
             switch($cardinalite){
                 case "sud":
-                    $mapSud = "'".$map->getIdMap()."'";
+                    $mapSud = $map->getIdMap();
                     //on vérifie si la map n'existe pas déjà a cette cardinalité
                     if(!is_null($map->getMapNord())){
                         return $map->getMapNord();
@@ -371,21 +371,21 @@
                     $newy++;
                     break;
                 case "nord":
-                    $mapNord = "'".$map->getIdMap()."'";
+                    $mapNord = $map->getIdMap();
                     if(!is_null($map->getMapSud())){
                         return $map->getMapSud();
                     }
                     $newy--;
                     break;
                 case "est":
-                    $mapEst = "'".$map->getIdMap()."'";
+                    $mapEst = $map->getIdMap();
                     if(!is_null($map->getMapOuest())){
                         return $map->getMapOuest();
                     }
                     $newx--;
                     break;
                 case "ouest":
-                    $mapOuest = "'".$map->getIdMap()."'";
+                    $mapOuest = $map->getIdMap();
                     if(!is_null($map->getMapEst())){
                         return $map->getMapEst();
                     }
@@ -426,16 +426,14 @@
                 return $mapExistante;
             }
             $position = $this->generatePosition();
-            $Generate = $this->generateNameMap();
-            $nameMap = $Generate[2];
-            $typeId = $Generate[0];
-            $type = $Generate[1];
-            //insertion en base
-            //la position doit etre unique
-            $imgMap = $this->getAleatoireImage($type);
-            $req = "INSERT INTO `map`( `nameMap`, `position`, `mapNord`, `mapSud`, `mapEst`, `mapOuest`, `x`, `y`,`idUserDecouverte`,`imgMap`) 
+            $TypeMap = $this->generateNameMap();
+            $idTypeMap      = $TypeMap[0];
+            $NameMap        = $TypeMap[1];
+            $imgMap         = $TypeMap[2];
+            $req = "INSERT INTO `map`( `nameMap`, `position`, `mapNord`, `mapSud`, `mapEst`, `mapOuest`, `x`, `y`,`idUserDecouverte`,`imgMap`, `idTypeMap`) 
                     VALUES 
-                ('".$nameMap."','".$position."',".$mapNord.",".$mapSud.",".$mapEst.",".$mapOuest.",".$newx.",".$newy.",".$idUserDecouverte.",'".$imgMap."')";
+                ('".$NameMap."','".$position."','".$mapNord."','".$mapSud."','".$mapEst."','".$mapOuest."','".$newx."','".$newy."','".$idUserDecouverte."','".$imgMap."','".$idTypeMap."')";
+            print_r($req);
             $Result = $this->_bdd->query($req);
             $req = "SELECT idMap FROM map WHERE position='".$position."'";
             $Result = $this->_bdd->query($req);
@@ -475,7 +473,6 @@
                 }
                 //chargement d'un Creature aléatoire à la création
                 if(rand(0,3)>1){
-                    
                     $nbCreature = rand(0,rand(2,4));
                     for($i=0;$i<$nbCreature;$i++){
                         //il faut passer la map($this) au créateur de Creature
@@ -758,7 +755,7 @@
             }
             return $tab;
         }
-        
+
         /** Return Tab des 4 Maps Adjacentes */
         public function getMapAdjacente(){  
             $tabMapAdjacent = array();
@@ -767,17 +764,14 @@
             array_push($tabMapAdjacent, $this->mapEst);
             array_push($tabMapAdjacent, $this->mapOuest);
         }
-        
+
         /** Génére un Nom de Map */
         public function generateNameMap(){
-            $req = "SELECT * FROM TypeMap";
-            $Result = $this->_bdd->query($req);
-            $TypeMap=array();
-            while($tab=$Result->fetch()){
-                array_push($TypeMap,$tab);
-            }
-            $choixAleatoire = array_rand($TypeMap, 1);
-            $TypeMap = $TypeMap[$choixAleatoire];
+            $IdTypeMap = rand(1,13);
+            $TypeMap = new TypeMap($this->_bdd);
+            $TypeMap->setTypeMapByIdTypeMap($IdTypeMap);
+            $NameTypeMap = $TypeMap->getNameTypeMap();
+            $DefaultBackground = $TypeMap->getDefaultBackground();
             $Adjectif = "";
             switch(rand(1,20)){
                 case 1:
@@ -1149,9 +1143,9 @@
                     $Nom = "Treoweth";
             }
             //la premiere case et le type en anglais pour une recherche d'image
-            $tab[0] = $TypeMap['idTypeMap'];
-            $tab[1] = $TypeMap['nameTypeMap'];
-            $tab[2] = $Nom." ". $Adjectif;
+            $tab[0] = $IdTypeMap;
+            $tab[1] = $NameTypeMap." ".$Nom." ". $Adjectif;
+            $tab[2] = $DefaultBackground;
             return $tab;
         }
 
