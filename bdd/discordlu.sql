@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 25 nov. 2022 à 21:00
+-- Généré le : Dim 27 nov. 2022 à 10:10
 -- Version du serveur :  8.0.21
 -- Version de PHP : 7.3.21
 
@@ -384,6 +384,7 @@ DROP TABLE IF EXISTS `typecreature`;
 CREATE TABLE IF NOT EXISTS `typecreature` (
   `idTypeCreature` int NOT NULL AUTO_INCREMENT,
   `nameTypeCreature` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `defaultAvatar` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `baseAttaque` int NOT NULL,
   `baseDefense` int NOT NULL,
   `baseDistance` int NOT NULL,
@@ -399,18 +400,18 @@ CREATE TABLE IF NOT EXISTS `typecreature` (
 -- Déchargement des données de la table `typecreature`
 --
 
-INSERT INTO `typecreature` (`idTypeCreature`, `nameTypeCreature`, `baseAttaque`, `baseDefense`, `baseDistance`, `baseRessDistance`, `baseGainMoney`, `baseGainExp`, `factionTypeCreature`, `spawnTypeCreature`) VALUES
-(1, 'Loup', 0, 0, 0, 0, 0, 0, 0, 2),
-(2, 'Panthère', 0, 0, 0, 0, 0, 0, 0, 4),
-(3, 'Ours', 0, 0, 0, 0, 0, 0, 0, 6),
-(4, 'Puma', 0, 0, 0, 0, 0, 0, 0, 150),
-(5, 'Tigre', 0, 0, 0, 0, 0, 0, 0, 400),
-(6, 'Serpent', 0, 0, 0, 0, 0, 0, 0, 50),
-(7, 'Gorille', 0, 0, 0, 0, 0, 0, 0, 300),
-(8, 'Sanglier', 0, 0, 0, 0, 0, 0, 0, 100),
-(9, 'Corbeau', 0, 0, 0, 0, 0, 0, 0, 200),
-(10, 'Vautour', 0, 0, 0, 0, 0, 0, 0, 500),
-(11, 'Pigeon', 0, 0, 0, 0, 0, 0, 0, 1);
+INSERT INTO `typecreature` (`idTypeCreature`, `nameTypeCreature`, `defaultAvatar`, `baseAttaque`, `baseDefense`, `baseDistance`, `baseRessDistance`, `baseGainMoney`, `baseGainExp`, `factionTypeCreature`, `spawnTypeCreature`) VALUES
+(1, 'Pigeon', 'assets/avatar/pigeon.jpg', 0, 0, 0, 0, 0, 0, 0, 1),
+(2, 'Sanglier', 'assets/avatar/sanglier.jpg', 0, 0, 0, 0, 0, 0, 0, 3),
+(3, 'Loup', 'assets/avatar/loup.jpg', 0, 0, 0, 0, 0, 0, 0, 5),
+(4, 'Corbeau', 'assets/avatar/corbeau.jpg', 0, 0, 0, 0, 0, 0, 0, 15),
+(5, 'Serpent', 'assets/avatar/serpent.jpg', 0, 0, 0, 0, 0, 0, 0, 25),
+(6, 'Ours', 'assets/avatar/ours.jpg', 0, 0, 0, 0, 0, 0, 0, 40),
+(7, 'Panthère', 'assets/avatar/panthere.jpg', 0, 0, 0, 0, 0, 0, 0, 60),
+(8, 'Puma', 'assets/avatar/puma.jpg', 0, 0, 0, 0, 0, 0, 0, 70),
+(9, 'Tigre', 'assets/avatar/tigre.jpg', 0, 0, 0, 0, 0, 0, 0, 100),
+(10, 'Gorille', 'assets/avatar/gorille.jpg', 0, 0, 0, 0, 0, 0, 0, 150),
+(11, 'Vautour', 'assets/avatar/vautour.jpg', 0, 0, 0, 0, 0, 0, 0, 200);
 
 -- --------------------------------------------------------
 
@@ -503,34 +504,34 @@ INSERT INTO `typeitem` (`idTypeItem`, `nameTypeItem`, `rarete`, `imgItem`, `info
 DROP TABLE IF EXISTS `typemap`;
 CREATE TABLE IF NOT EXISTS `typemap` (
   `idTypeMap` int NOT NULL AUTO_INCREMENT,
-  `nameTypeMapEn` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `nameTypeMapFr` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `nameTypeMap` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `defaultBackground` varchar(100) NOT NULL,
   PRIMARY KEY (`idTypeMap`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `typemap`
 --
 
-INSERT INTO `typemap` (`idTypeMap`, `nameTypeMapEn`, `nameTypeMapFr`) VALUES
-(1, 'Plain', 'Plaine'),
-(2, 'Foret', 'Fôret'),
-(3, 'Mountain', 'Montagne'),
-(4, 'Path', 'Route'),
-(5, 'Ruin', 'Ruine'),
-(6, 'Castle', 'Château'),
-(7, 'Dune', 'Dune'),
-(8, 'Sea', 'Mer'),
-(9, 'Ocean', 'Océan'),
-(10, 'Lake', 'Lac'),
-(11, 'River', 'Rivière'),
-(12, 'Swamp', 'Marais '),
-(13, 'City', 'Ville'),
-(14, 'Town', 'Ville'),
-(15, 'Savannah', 'Savane'),
-(16, 'Coline', 'Colline'),
-(17, 'Valley', 'Vallée'),
-(18, 'Desert', 'Désert');
+INSERT INTO `typemap` (`idTypeMap`, `nameTypeMap`, `defaultBackground`) VALUES
+(1, 'Plaine', 'assets/background/plaine.jpg'),
+(2, 'Fôret', 'assets/background/foret.jpg'),
+(3, 'Montagne', 'assets/background/montagne.jpg'),
+(4, 'Savane', 'assets/background/savane.jpg'),
+(5, 'Vallée', 'assets/background/vallee.jpg'),
+(6, 'Désert', 'assets/background/desert.jpg'),
+(7, 'Dune', 'assets/background/dune.jpg'),
+(8, 'Mer', 'assets/background/mer.jpg'),
+(9, 'Plage', 'assets/background/plage.jpg'),
+(10, 'Lac', 'assets/background/lac.jpg'),
+(11, 'Rivière', 'assets/background/riviere.jpg'),
+(12, 'Marais ', 'assets/background/marais.jpg'),
+(13, 'Colline', 'assets/background/colline.jpg'),
+(14, 'Ruine', 'assets/background/ruine.jpg'),
+(15, 'Route', 'assets/background/route.jpg'),
+(16, 'Village', 'assets/background/village.jpg'),
+(17, 'Ville', 'assets/background/ville.jpg'),
+(18, 'Château', 'assets/background/chateau.jpg');
 
 -- --------------------------------------------------------
 
@@ -542,11 +543,11 @@ DROP TABLE IF EXISTS `typepersonnage`;
 CREATE TABLE IF NOT EXISTS `typepersonnage` (
   `idTypePerso` int NOT NULL AUTO_INCREMENT,
   `nameTypePerso` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `defaultAvatar` varchar(100) NOT NULL,
   `statsAttaque` int NOT NULL,
   `statsDefense` int NOT NULL,
   `statsDistance` int NOT NULL,
   `statsRessDistance` int NOT NULL,
-  `imgTypePerso` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `idFaction` int NOT NULL,
   PRIMARY KEY (`idTypePerso`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
@@ -555,23 +556,23 @@ CREATE TABLE IF NOT EXISTS `typepersonnage` (
 -- Déchargement des données de la table `typepersonnage`
 --
 
-INSERT INTO `typepersonnage` (`idTypePerso`, `nameTypePerso`, `statsAttaque`, `statsDefense`, `statsDistance`, `statsRessDistance`, `imgTypePerso`, `idFaction`) VALUES
-(1, 'Aventurier', 1, 1, 1, 1, '', 1),
-(2, 'Barde', 1, 1, 1, 1, '', 1),
-(3, 'Voleur', 1, 1, 1, 1, '', 1),
-(4, 'Explorateur', 1, 1, 1, 1, '', 1),
-(5, 'Garde', 1, 1, 1, 1, '', 2),
-(6, 'Soldat', 1, 1, 1, 1, '', 2),
-(7, 'Mercenaire', 1, 1, 1, 1, '', 2),
-(8, 'Dompteur', 1, 1, 1, 1, '', 2),
-(9, 'Archéologue', 1, 1, 1, 1, '', 3),
-(10, 'Marchand', 1, 1, 1, 1, '', 3),
-(11, 'Forgeron', 1, 1, 1, 1, '', 3),
-(12, 'Médecin', 1, 1, 1, 1, '', 3),
-(13, 'Vétérinaire', 1, 1, 1, 1, '', 4),
-(14, 'Ingénieur', 1, 1, 1, 1, '', 4),
-(15, 'Chercheur', 1, 1, 1, 1, '', 4),
-(16, 'Scientifique', 1, 1, 1, 1, '', 4);
+INSERT INTO `typepersonnage` (`idTypePerso`, `nameTypePerso`, `defaultAvatar`, `statsAttaque`, `statsDefense`, `statsDistance`, `statsRessDistance`, `idFaction`) VALUES
+(1, 'Aventurier', 'assets/avatar/aventurier.jpg', 1, 1, 1, 1, 1),
+(2, 'Barde', 'assets/avatar/barde.jpg', 1, 1, 1, 1, 1),
+(3, 'Voleur', 'assets/avatar/voleur.jpg', 1, 1, 1, 1, 1),
+(4, 'Explorateur', 'assets/avatar/explorateur.jpg', 1, 1, 1, 1, 1),
+(5, 'Garde', 'assets/avatar/garde.jpg', 1, 1, 1, 1, 2),
+(6, 'Soldat', 'assets/avatar/soldat.jpg', 1, 1, 1, 1, 2),
+(7, 'Mercenaire', 'assets/avatar/mercenaire.jpg', 1, 1, 1, 1, 2),
+(8, 'Dompteur', 'assets/avatar/dompteur.jpg', 1, 1, 1, 1, 2),
+(9, 'Archéologue', 'assets/avatar/archeologue.jpg', 1, 1, 1, 1, 3),
+(10, 'Marchand', 'assets/avatar/marchand.jpg', 1, 1, 1, 1, 3),
+(11, 'Forgeron', 'assets/avatar/forgeron.jpg', 1, 1, 1, 1, 3),
+(12, 'Médecin', 'assets/avatar/medecin.jpg', 1, 1, 1, 1, 3),
+(13, 'Vétérinaire', 'assets/avatar/veterinaire.jpg', 1, 1, 1, 1, 4),
+(14, 'Ingénieur', 'assets/avatar/ingenieur.jpg', 1, 1, 1, 1, 4),
+(15, 'Chercheur', 'assets/avatar/chercheur.jpg', 1, 1, 1, 1, 4),
+(16, 'Scientifique', 'assets/avatar/scientifique.jpg', 1, 1, 1, 1, 4);
 
 -- --------------------------------------------------------
 
