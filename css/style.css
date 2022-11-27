@@ -20,7 +20,7 @@ html,body{
 
 body{
     width:100%;
-    background-image:url('https://www.wallpaperuse.com/wallp/48-481854_m.jpg');
+    background-image:url('../assets/background/Providence1.jpg');
     background-size:cover;
     background-repeat:no-repeat;
     background-attachment:fixed;
@@ -80,7 +80,7 @@ input[value='Deco!']{
 
 /*Formulaire Login*/
 
-.formlogin{
+.formlogin, .information{
     margin:100px auto;
     padding:20px;
     width:600px;

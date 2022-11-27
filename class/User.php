@@ -372,11 +372,18 @@
                 ?>
                     <div class="formlogin">
                         <a id="Connect" class="ui-button ui-widget ui-corner-all" onclick="dialogRegister()">
-                            S'inscrire !
+                            S'inscrire
                         </a>
                         <a id="Register" class="ui-button ui-widget ui-corner-all" onclick="dialogLogin()">
-                            Se connecter !
+                            Se connecter
                         </a>
+                    </div>
+                    <div class="information">
+                        <p>Discord.lu (ex-projet-covid est à l'origine un projet de BTS réalisé en fin d'année 2021, le but étant de collaborer avec des petites équipes sur un même projet, dispatché en divers pôles.</p>
+                        <p>Par envie personnelle, j'ai ensuite décidé de reprendre le projet en l'améliorant et en corrigeant les multiples erreurs originaires dues à sa réalisation <i>(plus ou moins)</i> chaotique, mais néanmoins une excellente expérience.</p>
+                        <p>Le jeu est classique, il s'agit de se déplacer sur une carte, d'utiliser des objets, équiper des équipements et combattre des animaux dans le but de les capturer</p>
+                        <p>Le code a donc été restructuré en grande partie, réindenté et recommenté, afin d'être lisible et compréhensible pour tous. Si vous souhaitez aider ou simplement observer l'évolution du projet, n'hésitez pas à jeter un oeil au Github, accessible en bas de cette page.</p>
+                        <p>Je vous remercierais d'être tolérant si vous êtes faces à des bugs techniques, ou simplement sidéré face à l'absence de style du site web, ce n'était pas mieux avant mais je fais de mon mieux, rassurez vous.</p>
                     </div>
                 <?php
                 // Script
@@ -405,7 +412,8 @@
                                         '   </div>'+
                                         '   <div>'+
                                         '       <input type="checkbox" id="cgu" name="cgu" required>'+
-                                        '       <label for="cgu">J\'accepte les termes des CGU et de la politique de confidentialité.</label>'+
+                                        //'       <label for="cgu">J\'accepte les termes des CGU et de la politique de confidentialité.</label>'+
+                                        '       <label for="cgu">Checkbox à cocher.</label>'+
                                         '   </div>'+
                                         '   <input type="submit" id="submitRegister" tabindex="-1" style="display:none">'+
                                         '</form>';
