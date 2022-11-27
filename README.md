@@ -67,6 +67,8 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 # Todo Patch :
 - PHP : Déplacement Map : Non affichage de l'origine de déplacement quand refresh si Creature.
 - PHP : Bug déplacement (téléporation) lors de changement personnage (Au final c'est pas un bug mais une "feature") -> À encadrer.
+- ??? : Quand Kill d'un personnage, les personnage présent au même endroit sont aussi Kill.
+- PHP : Plus aucune image n'est récupérable.
 
 ## Fait :
 - Récupération du projet,
