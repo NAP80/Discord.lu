@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : Dim 20 nov. 2022 à 01:30
+-- Généré le : ven. 25 nov. 2022 à 21:00
 -- Version du serveur :  8.0.21
 -- Version de PHP : 7.3.21
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `attaquepersocreature` (
   `DegatsDonnes` int NOT NULL,
   `DegatsReçus` int NOT NULL,
   KEY `idPersonnage` (`idPersonnage`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -50,9 +50,9 @@ CREATE TABLE IF NOT EXISTS `categorie` (
   `Attaque` tinyint NOT NULL,
   `Defense` tinyint NOT NULL,
   `Distance` int NOT NULL,
-  `nameCategorie` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nameCategorie` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`idCategorie`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `categorie`
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `creature` (
   `idEntite` int NOT NULL,
   `idTypeCreature` int NOT NULL,
   `coefXp` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `efficacite` (
   `chance` int NOT NULL DEFAULT '1',
   PRIMARY KEY (`idEfficacite`),
   UNIQUE KEY `ordre` (`ordre`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `efficacite`
@@ -119,8 +119,8 @@ CREATE TABLE IF NOT EXISTS `entite` (
   `idUser` int DEFAULT NULL,
   `healthNow` int NOT NULL,
   `healthMax` int NOT NULL,
-  `imgEntite` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `nameEntite` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `imgEntite` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `nameEntite` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `idTypeEntite` int NOT NULL,
   `degat` int NOT NULL,
   `lvlEntite` int NOT NULL,
@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `entite` (
   KEY `idMap` (`idMap`),
   KEY `idUser` (`idUser`),
   KEY `type` (`idTypeEntite`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
 
@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `entiteequipement` (
   `equipe` tinyint NOT NULL,
   KEY `idEquipement` (`idEquipement`),
   KEY `idEntite` (`idEntite`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `entiteequipement` (
 DROP TABLE IF EXISTS `equipement`;
 CREATE TABLE IF NOT EXISTS `equipement` (
   `idEquipement` int NOT NULL AUTO_INCREMENT,
-  `nameEquipement` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nameEquipement` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `idTypeEquipement` int NOT NULL,
   `idEfficacite` float NOT NULL,
   `valeur` int NOT NULL,
@@ -163,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `equipement` (
   `LastUse` bigint NOT NULL,
   PRIMARY KEY (`idEquipement`),
   KEY `type` (`idTypeEquipement`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -174,11 +174,11 @@ CREATE TABLE IF NOT EXISTS `equipement` (
 DROP TABLE IF EXISTS `faction`;
 CREATE TABLE IF NOT EXISTS `faction` (
   `idFaction` int NOT NULL AUTO_INCREMENT,
-  `nameFaction` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nameFaction` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `descFaction` varchar(100) NOT NULL,
   `logoFaction` varchar(100) NOT NULL,
   PRIMARY KEY (`idFaction`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `faction`
@@ -200,13 +200,13 @@ DROP TABLE IF EXISTS `item`;
 CREATE TABLE IF NOT EXISTS `item` (
   `idItem` int NOT NULL AUTO_INCREMENT,
   `idTypeItem` int NOT NULL,
-  `nameItem` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nameItem` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `valeur` int NOT NULL,
   `idEfficacite` float NOT NULL,
   `lvlItem` int NOT NULL,
   PRIMARY KEY (`idItem`),
   KEY `type` (`idTypeItem`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
 
@@ -217,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `item` (
 DROP TABLE IF EXISTS `map`;
 CREATE TABLE IF NOT EXISTS `map` (
   `idMap` int NOT NULL AUTO_INCREMENT,
-  `nameMap` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nameMap` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `position` varchar(50) NOT NULL,
   `mapNord` int DEFAULT NULL,
   `mapSud` int DEFAULT NULL,
@@ -226,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `map` (
   `idUserDecouverte` int NOT NULL,
   `x` int NOT NULL,
   `y` int NOT NULL,
-  `imgMap` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `imgMap` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `PvP` tinyint NOT NULL DEFAULT '1',
   `idTypeMap` int NOT NULL,
   `idTypeBatiment` int NOT NULL,
@@ -237,7 +237,7 @@ CREATE TABLE IF NOT EXISTS `map` (
   KEY `mapEst` (`mapEst`),
   KEY `mapOuest` (`mapOuest`),
   KEY `idUserDecouverte` (`idUserDecouverte`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 --
 -- Déchargement des données de la table `map`
@@ -266,7 +266,7 @@ CREATE TABLE IF NOT EXISTS `mapequipements` (
   `idMap` int NOT NULL,
   KEY `idEquipement` (`idEquipement`),
   KEY `idMap` (`idMap`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -279,7 +279,7 @@ CREATE TABLE IF NOT EXISTS `mapitems` (
   `idMap` int NOT NULL,
   `idItem` int NOT NULL,
   KEY `idMap` (`idMap`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -298,7 +298,7 @@ CREATE TABLE IF NOT EXISTS `personnage` (
   `idMapSpawnPersonnage` int NOT NULL,
   UNIQUE KEY `idPersonnage` (`idPersonnage`),
   KEY `idTypePersonnage` (`expPersonnage`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -312,7 +312,7 @@ CREATE TABLE IF NOT EXISTS `persosacitems` (
   `idItem` int NOT NULL,
   KEY `idPersonnage` (`idPersonnage`),
   KEY `idItems` (`idItem`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -325,7 +325,7 @@ CREATE TABLE IF NOT EXISTS `tooltip` (
   `id` int NOT NULL AUTO_INCREMENT,
   `tooltip` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `tooltip`
@@ -346,7 +346,7 @@ INSERT INTO `tooltip` (`id`, `tooltip`) VALUES
 DROP TABLE IF EXISTS `typeclasscreature`;
 CREATE TABLE IF NOT EXISTS `typeclasscreature` (
   `idTypeClassCreature` int NOT NULL AUTO_INCREMENT,
-  `nameTypeClassCreature` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nameTypeClassCreature` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `posTypeCreature` int NOT NULL,
   `percentAttaque` int NOT NULL,
   `percentDefense` int NOT NULL,
@@ -354,7 +354,7 @@ CREATE TABLE IF NOT EXISTS `typeclasscreature` (
   `percentRessDistance` int NOT NULL,
   `spawnTypeCreature` int NOT NULL,
   PRIMARY KEY (`idTypeClassCreature`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `typeclasscreature`
@@ -368,16 +368,11 @@ INSERT INTO `typeclasscreature` (`idTypeClassCreature`, `nameTypeClassCreature`,
 (4, 'Immature', 1, 0, 0, 0, 0, 20),
 (5, 'Mature', 1, 0, 0, 0, 0, 26),
 (6, 'Adulte', 1, 0, 0, 0, 0, 60),
-(7, 'Guerrier', 0, 0, 0, 0, 0, 33),
-(8, 'Mage', 0, 0, 0, 0, 0, 25),
-(9, 'Maître', 0, 0, 0, 0, 0, 22),
-(10, 'Sage', 0, 0, 0, 0, 0, 15),
-(11, 'Vieux', 0, 0, 0, 0, 0, 15),
-(12, 'Vénérable', 0, 0, 0, 0, 0, 12),
-(13, 'Ancien', 0, 0, 0, 0, 0, 8),
-(14, 'Majeur', 1, 0, 0, 0, 0, 5),
-(15, 'Légendaire', 1, 0, 0, 0, 0, 3),
-(16, 'Mythique', 1, 0, 0, 0, 0, 1);
+(7, 'Vieux', 0, 0, 0, 0, 0, 15),
+(8, 'Ancien', 0, 0, 0, 0, 0, 8),
+(9, 'Majeur', 1, 0, 0, 0, 0, 5),
+(10, 'Légendaire', 1, 0, 0, 0, 0, 3),
+(11, 'Mythique', 1, 0, 0, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -388,7 +383,7 @@ INSERT INTO `typeclasscreature` (`idTypeClassCreature`, `nameTypeClassCreature`,
 DROP TABLE IF EXISTS `typecreature`;
 CREATE TABLE IF NOT EXISTS `typecreature` (
   `idTypeCreature` int NOT NULL AUTO_INCREMENT,
-  `nameTypeCreature` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nameTypeCreature` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `baseAttaque` int NOT NULL,
   `baseDefense` int NOT NULL,
   `baseDistance` int NOT NULL,
@@ -398,23 +393,23 @@ CREATE TABLE IF NOT EXISTS `typecreature` (
   `factionTypeCreature` int NOT NULL,
   `spawnTypeCreature` int NOT NULL,
   PRIMARY KEY (`idTypeCreature`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `typecreature`
 --
 
 INSERT INTO `typecreature` (`idTypeCreature`, `nameTypeCreature`, `baseAttaque`, `baseDefense`, `baseDistance`, `baseRessDistance`, `baseGainMoney`, `baseGainExp`, `factionTypeCreature`, `spawnTypeCreature`) VALUES
-(1, 'Loup', 0, 0, 0, 0, 0, 0, 0, 3),
-(2, 'Panthère', 0, 0, 0, 0, 0, 0, 0, 5),
-(3, 'Ours', 0, 0, 0, 0, 0, 0, 0, 10),
-(4, 'Puma', 0, 0, 0, 0, 0, 0, 0, 100),
-(5, 'Tigre', 0, 0, 0, 0, 0, 0, 0, 100),
-(6, 'Serpent', 0, 0, 0, 0, 0, 0, 0, 200),
-(7, 'Gorille', 0, 0, 0, 0, 0, 0, 0, 600),
-(8, 'Sanglier', 0, 0, 0, 0, 0, 0, 0, 600),
-(9, 'Corbeau', 0, 0, 0, 0, 0, 0, 0, 1500),
-(10, 'Vautour', 0, 0, 0, 0, 0, 0, 0, 3000),
+(1, 'Loup', 0, 0, 0, 0, 0, 0, 0, 2),
+(2, 'Panthère', 0, 0, 0, 0, 0, 0, 0, 4),
+(3, 'Ours', 0, 0, 0, 0, 0, 0, 0, 6),
+(4, 'Puma', 0, 0, 0, 0, 0, 0, 0, 150),
+(5, 'Tigre', 0, 0, 0, 0, 0, 0, 0, 400),
+(6, 'Serpent', 0, 0, 0, 0, 0, 0, 0, 50),
+(7, 'Gorille', 0, 0, 0, 0, 0, 0, 0, 300),
+(8, 'Sanglier', 0, 0, 0, 0, 0, 0, 0, 100),
+(9, 'Corbeau', 0, 0, 0, 0, 0, 0, 0, 200),
+(10, 'Vautour', 0, 0, 0, 0, 0, 0, 0, 500),
 (11, 'Pigeon', 0, 0, 0, 0, 0, 0, 0, 1);
 
 -- --------------------------------------------------------
@@ -427,14 +422,14 @@ DROP TABLE IF EXISTS `typeequipement`;
 CREATE TABLE IF NOT EXISTS `typeequipement` (
   `idTypeEquipement` int NOT NULL AUTO_INCREMENT,
   `information` text NOT NULL,
-  `imgEquipement` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `nameTypeEquipement` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `imgEquipement` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `nameTypeEquipement` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `rarete` int NOT NULL,
   `idCategorie` int NOT NULL,
   `chance` int NOT NULL,
   `coolDown` int NOT NULL DEFAULT '500',
   PRIMARY KEY (`idTypeEquipement`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `typeequipement`
@@ -471,13 +466,13 @@ INSERT INTO `typeequipement` (`idTypeEquipement`, `information`, `imgEquipement`
 DROP TABLE IF EXISTS `typeitem`;
 CREATE TABLE IF NOT EXISTS `typeitem` (
   `idTypeItem` int NOT NULL AUTO_INCREMENT,
-  `nameTypeItem` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nameTypeItem` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `rarete` int NOT NULL,
-  `imgItem` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `imgItem` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `information` varchar(200) NOT NULL,
   `chance` int NOT NULL,
   PRIMARY KEY (`idTypeItem`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `typeitem`
@@ -508,10 +503,10 @@ INSERT INTO `typeitem` (`idTypeItem`, `nameTypeItem`, `rarete`, `imgItem`, `info
 DROP TABLE IF EXISTS `typemap`;
 CREATE TABLE IF NOT EXISTS `typemap` (
   `idTypeMap` int NOT NULL AUTO_INCREMENT,
-  `nameTypeMapEn` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `nameTypeMapFr` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nameTypeMapEn` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `nameTypeMapFr` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`idTypeMap`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `typemap`
@@ -546,15 +541,15 @@ INSERT INTO `typemap` (`idTypeMap`, `nameTypeMapEn`, `nameTypeMapFr`) VALUES
 DROP TABLE IF EXISTS `typepersonnage`;
 CREATE TABLE IF NOT EXISTS `typepersonnage` (
   `idTypePerso` int NOT NULL AUTO_INCREMENT,
-  `nameTypePerso` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nameTypePerso` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `statsAttaque` int NOT NULL,
   `statsDefense` int NOT NULL,
   `statsDistance` int NOT NULL,
   `statsRessDistance` int NOT NULL,
-  `imgTypePerso` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `imgTypePerso` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `idFaction` int NOT NULL,
   PRIMARY KEY (`idTypePerso`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `typepersonnage`
@@ -587,14 +582,14 @@ INSERT INTO `typepersonnage` (`idTypePerso`, `nameTypePerso`, `statsAttaque`, `s
 DROP TABLE IF EXISTS `typeuser`;
 CREATE TABLE IF NOT EXISTS `typeuser` (
   `idTypeUser` int NOT NULL AUTO_INCREMENT,
-  `nameTypeUser` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nameTypeUser` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `admin` tinyint NOT NULL,
   `staff` tinyint NOT NULL,
   `bypass` tinyint NOT NULL,
   `view` tinyint NOT NULL,
   `play` tinyint NOT NULL,
   PRIMARY KEY (`idTypeUser`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `typeuser`
@@ -620,10 +615,10 @@ INSERT INTO `typeuser` (`idTypeUser`, `nameTypeUser`, `admin`, `staff`, `bypass`
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `idUser` int NOT NULL AUTO_INCREMENT,
-  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `pseudo` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `password_hash` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `token` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `pseudo` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `password_hash` varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `token` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `idPersonnage` int DEFAULT NULL,
   `idFaction` int DEFAULT NULL,
   `dateUser` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -632,7 +627,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `login` (`email`),
   KEY `idPersonnage` (`idPersonnage`),
   KEY `idFaction` (`idFaction`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -647,7 +642,7 @@ CREATE TABLE IF NOT EXISTS `visites` (
   `laDate` datetime NOT NULL,
   KEY `idUser` (`idPersonnage`),
   KEY `idMap` (`idMap`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
