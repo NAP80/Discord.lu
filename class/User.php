@@ -149,13 +149,13 @@
             $TypePersos = $this->getAllTypePersonnage($idFactionUser);
             $TypePerso = $TypePersos[rand(0,count($TypePersos)-1)];
             $personnage = new Personnage($this->_bdd);
-            $imageUrl = $personnage->generateImage($TypePerso->getNameTypePerso());
-            if(isset($_POST["createPerso"]) && isset($_POST["TypePerso"]) && is_numeric($_POST["TypePerso"]) && isset($_POST["Name"]) && isset($_POST["image"]) && !is_null($idFactionUser)){
+            if(isset($_POST["createPerso"]) && isset($_POST["TypePerso"]) && is_numeric($_POST["TypePerso"]) && isset($_POST["Name"]) && !is_null($idFactionUser)){
                 $TypePersonnage = new TypePersonnage($this->_bdd);
                 $TypePersonnage->setTypePersonnageById($_POST["TypePerso"]);
                 if($TypePersonnage->getIdFaction() == $this->_idFaction){
+                    $defaultAvatar = $TypePersonnage->getDefaultAvatar();
                     $newperso = new Personnage($this->_bdd);
-                    $newperso = $newperso->CreateEntite($_POST['Name'], 100, 10, 1,100,$_POST['image'],$this->getIdUser(),1,1);
+                    $newperso = $newperso->CreateEntite($_POST['Name'], 100, 10, 1,100,$defaultAvatar,$this->getIdUser(),1,1);
                     $idTypePersonnage = $_POST['TypePerso'];
                     $req="INSERT INTO `Personnage`(`idPersonnage`,`idTypePersonnage`,`idMapSpawnPersonnage`) VALUES ('".$newperso->getIdEntite()."','".$idTypePersonnage."',1)";
                     $Result = $this->_bdd->query($req);
@@ -183,7 +183,6 @@
                                                     <div class="listTypePerso">
                                                         <input type="radio" name="TypePerso" id="Type<?= $TypePerso->getIdTypePerso() ?>" value="<?= $TypePerso->getIdTypePerso() ?>">
                                                         <label for="Type<?= $TypePerso->getIdTypePerso() ?>"><?= $TypePerso->getNameTypePerso() ?></label>
-                                                        <input type="hidden" name="image" value="<?= $imageUrl ?>">
                                                     </div>
                                                 <?php
                                             }
@@ -211,7 +210,7 @@
                                 <div class="formfaction faction_<?= $tabFaction['idFaction'] ?>">
                                     <p><?= $tabFaction['nameFaction'] ?></p>
                                     <p><?= $tabFaction['descFaction'] ?></p>
-                                    <img src="./assets/image/<?= $tabFaction['logoFaction'] ?>">
+                                    <img src="./assets/image/<?= $tabFaction['logoFaction'] ?>.png">
                                     <a id="confirmFaction" class="ui-button ui-widget ui-corner-all" onclick="idFaction='<?= $tabFaction['idFaction'] ?>', nameFaction='<?= $tabFaction['nameFaction'] ?>', confirmFaction(nameFaction)">
                                         Rejoindre !
                                     </a>

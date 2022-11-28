@@ -133,11 +133,6 @@
                 $coefAbuseArme = rand(2,20);
                 $healthNow = $coefAbuseHealth*$typeCreature[2]*$lvlMap;
                 $degat = $coefAbuseArme*$typeCreature[2]*$lvlMap;
-                // Menhir
-                if($typeCreature[1]==0){
-                    $healthNow = $coefAbuseHealth*20*$lvlMap;
-                    $degat = 1*$lvlMap;
-                }
                 $newCreature = $newCreature->CreateEntite($this->generateName($typeCreature[0]), $healthNow, $degat, $map->getIdMap(),$healthNow,$typeCreature[3],null,0,$lvlMap);
                 if(!is_null($newCreature)){
                     $req="INSERT INTO `Creature`(`idTypeCreature`, `idEntite` ,`coefXp` )
@@ -167,95 +162,34 @@
         //$tab[2]=$coef;
         //$tab[3]=image
         private function getTypeAleatoire(){
-            $req="SELECT * FROM TypeCreature ORDER BY spawnTypeCreature ASC";
+            $req = "SELECT * FROM TypeCreature ORDER BY spawnTypeCreature ASC";
             $Result = $this->_bdd->query($req);
             $i = $Result->rowCount();
             $coef = 1;
             $imax = $i*3;
-            $newType = 0;// Menhir par default
+            $newType = 1;// Pigeon par default - A dégager
             $spawnTypeCreature = 1;
-            $newTypeNom='Menhir';
+            $newTypeNom = 'Pigeon';
+            $image = "assets/avatar/pigeon.jpg";
             while($tab=$Result->fetch()){
                 if(rand(0,$tab['spawnTypeCreature'])==1){
-                    $newType    = $tab['idTypeCreature'];
-                    $newTypeNom = $tab['nameTypeCreature'];
-                    $coef       = $tab['spawnTypeCreature'];
+                    $newType    =   $tab['idTypeCreature'];
+                    $newTypeNom =   $tab['nameTypeCreature'];
+                    $coef       =   $tab['spawnTypeCreature'];
+                    $image      =   $tab['defaultAvatar'];
                     break;
                 }
             }
-            $image = $this->generateImageCreature($newTypeNom);
-            $tab[0]=$newTypeNom;
-            $tab[1]=$newType;
-            $tab[2]=$coef;
-            $tab[3]=$image;
+            $tab[0] =   $newTypeNom;
+            $tab[1] =   $newType;
+            $tab[2] =   $coef;
+            $tab[3] =   $image;
             return $tab;
         }
 
         /** Génére et Return un Nom en fonction du Type */
         public function GenerateName($type){
             $NameType = $type;
-            $Adjectif = "";
-            switch (rand(1,20)){
-                case 1:
-                    $Adjectif = "Luxuriant";
-                break;
-                case 2:
-                    $Adjectif = "Immense";
-                break;
-                case 3:
-                    $Adjectif = "Enchantée";
-                break;
-                case 4:
-                    $Adjectif = "Mortel";
-                break;
-                case 5:
-                    $Adjectif = "Abandonné";
-                break;
-                case 6:
-                    $Adjectif = "Enflammé";
-                break;
-                case 7:
-                    $Adjectif = "Minuscule";
-                break;
-                case 8:
-                    $Adjectif = "Lumineux";
-                break;
-                case 9:
-                    $Adjectif = "Sombre";
-                break;
-                case 10:
-                    $Adjectif = "Bouleversant";
-                break;
-                case 11:
-                    $Adjectif = "Captivant";
-                break;
-                case 12:
-                    $Adjectif = "Divin";
-                break;
-                case 13:
-                    $Adjectif = "Épouvantable";
-                break;
-                case 14:
-                    $Adjectif = "Exaltant";
-                break;
-                case 15:
-                    $Adjectif = "Remarquable";
-                break;
-                case 16:
-                    $Adjectif = "Somptueux";
-                break;
-                case 17:
-                    $Adjectif = "Spiritueux";
-                break;
-                case 18:
-                    $Adjectif = "Vivable";
-                break;
-                case 19:
-                    $Adjectif = "Banal";
-                break;   
-                default:
-                    $Adjectif = "Haineux";
-            }
             $Nom = "";
             switch (rand(0,201)){
                 case 0:
@@ -864,7 +798,7 @@
                 default:
                     $Nom = "Asteus";
             }
-            return $NameType." ".$Adjectif." ".$Nom;
+            return $NameType." ".$Nom;
         }
 
         /** Génére et Return un lien d'image en fonction du Type */
