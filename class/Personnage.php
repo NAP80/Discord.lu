@@ -187,6 +187,7 @@
             $healthMax = round($this->_healthMax - (($this->_healthMax*10)/100));
             $attaque = round($this->_degat - (($this->_degat*15)/100));
             if($healthMax<100){$healthMax=100;}
+            if($attaque<10){$attaque=10;}
             $req = "UPDATE `Entite` SET `degat`='".$attaque."',`healthMax`='".$healthMax."',`healthNow`='".$healthMax."' WHERE `idEntite` = '".$this->_idEntite ."'";
             $Result = $this->_bdd->query($req);
             $this->_healthNow=$healthMax;
