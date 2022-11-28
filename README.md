@@ -8,9 +8,6 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 
 ## En cours :
 - Mise en ligne du Site,
-- Retirer Bing,
-- - Retirer les Avatars/Fonds Aléatoires,
-- - Implémenter des Avatars/Fonds par défaults,
 - Uniformisation Code,
 - Refonte Entitée/Creature/Personnage,
 - Système d'Actions Personnages,
@@ -73,7 +70,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - ??? : Quand on refresh on voit les personnages du même user présent sur une map, mais quand on se déplace, non.
 - JS  : La mise en ligne a aussi cassé le JS du changement d'arme.
 - PHP : Quand on capture un animal, on se déplace une fois la map clear.
-- PHP/BDD : Retirer les Menhir.
+- PHP : Refaire au propre la génération de typeCréature.
 
 ## Fait :
 - Récupération du projet,
@@ -100,4 +97,6 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Mise en ligne sur game.Discord.lu,
 - Refonte TypeMap,
 - Refonte création Map,
-- Patch Image Map.
+- Patch Image Map,
+- Retirer Bing et ses Avatars/Fonds Aléatoires,
+- Implémenter des Avatars/Fonds par défaults,
