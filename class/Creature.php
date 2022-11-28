@@ -801,29 +801,6 @@
             return $NameType." ".$Nom;
         }
 
-        /** Génére et Return un lien d'image en fonction du Type */
-        public function generateImageCreature($topic){
-            //echo '<img src="'.$partialString3.'" widht="200px">';
-            if(empty($topic)){
-                $topic='creature';
-            }
-            $ofs=mt_rand(0, 100);
-            $geturl='https://www.bing.com/images/search?q='.$topic.'&first='.$ofs.'&tsc=ImageHoverTitle';
-            $data=file_get_contents($geturl);
-            //partialString1 is bigger link.. in it will be a scr for the beginning of the url
-            $f1='<div class="img_cont hoff">';
-            $pos1=strpos($data, $f1)+strlen($f1);
-            $partialString1 = substr($data, $pos1);
-            $f1bis='src="';
-            $pos1=strpos($partialString1, $f1bis)+strlen($f1bis);
-            $partialString1 = substr($partialString1, $pos1);
-            //PartialString3 ends the url when it sees the "&amp;"
-            $f3='"';
-            $urlLength=strpos($partialString1, $f3);
-            $partialString3 = substr($partialString1, 0, $urlLength);
-            return $partialString3;
-        }
-
         /** Reset HealthNow de Creature by ID */
         public function healCreaturespawn($idEntite){
             $this->_bdd->query("UPDATE `Entite` SET `healthNow` = '".$this->healthMax."' WHERE `idEntite` = $idEntite");
