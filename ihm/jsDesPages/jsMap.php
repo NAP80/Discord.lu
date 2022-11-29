@@ -234,12 +234,28 @@
             // code for handling the data you get from the API
             console.log(data);
             // If Personnage ou Creature Mort
-            if(data[1] <= 0 || data[3] <= 0){
-                location.reload();
+            if(data[2] <= 0 || data[5] <= 0){
+                location.reload()// A optimiser pour actualiser la liste de monstre et map
             }
-            UpdateHealth("healthEntiteValeur"+data[0],data[1],data[2],data[3],data[4],"healthEntiteValeur"+data[5],data[6],data[9]);
+            UpdateHealth(data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7]);
             a.onclick = theclick;
             li.classList.remove("busy");
+            if(data[2] == 0){
+                // Si Personnage
+                if(data[1] == 1){
+                    var e1 = document.getElementById("Perso"+data[0]);
+                    e1.remove()
+                }
+                // Si Creature
+                if(data[1] == 0){
+                    var e2 = document.getElementById("Creature"+data[0]);
+                    e2.classList.add("liCaptured")
+                    e2.classList.remove("liAdverse")
+                    e2.querySelector('a').setAttribute("onclick", "");
+                    //e2.querySelector('a').setAttribute("onclick", "SoinCreature(data[0], 1)");
+                }
+            }
+            log(data[7]);
         })
         .catch(function(error){
             // This is where you run code if the server returns any errors
@@ -284,39 +300,14 @@
         }
     }
 
-    function UpdateHealth(id,healthNow,healthMax,healthEntite2,healthMaxEntite2,id2,message,idTypeEntite){
-        var e1 = document.getElementById(id);
+    function UpdateHealth(idCible,idTypeEntite,healthNowCible,healthMaxCible,idPerso,healthPersonnage,healthMaxPersonnage,message){
+        var e1 = document.getElementById("healthEntiteValeur"+idCible);
         if(e1!="undefine"){
-            let pourcentage = healthNow/healthMax*100;
-            e1.style.width = pourcentage+"%";
-            e1.innerHTML = '♥️'+healthNow+'/'+healthMax;
+            e1.innerHTML = '♥️ ' + healthNowCible + ' / ' + healthMaxCible;
         }
-        var e2 = document.getElementById(id2);
+        var e2 = document.getElementById("healthEntiteValeur"+idPerso);
         if(e2!="undefine"){
-            let pourcentage = healthEntite2/healthMaxEntite2*100;
-            e2.style.width = pourcentage+"%";
-            e2.innerHTML = '♥️'+healthEntite2+'/'+healthMaxEntite2;
-        }
-        if(healthEntite2 == 0 || message != ''){
-            log(message);
-            if(healthNow <= 0){
-                const clearID = id.match(/(\d+)/);
-                if(!clearID)
-                    return;
-                // Si Personnage
-                if(idTypeEntite == 1){
-                    var Personnage = document.getElementById(`Perso${clearID[0]}`);
-                    Personnage.classList.add("PersoDead")
-                    Personnage.classList.remove("liAdverse")
-                }
-                // Si Creature
-                if(idTypeEntite == 0){
-                    var Creature = document.getElementById(`Creature${clearID[0]}`);
-                    Creature.classList.add("Captured")
-                    Creature.classList.remove("liAdverse")
-                    //Creature.querySelector('a').setAttribute("onclick", `SoinCreature(${clearID[0]}, 1)`);
-                }
-            }
+            e2.innerHTML = '♥️ ' + healthPersonnage + ' / ' + healthMaxPersonnage;
         }
     }
 </script>

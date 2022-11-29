@@ -114,15 +114,13 @@
                 $message .= "Vous ne pouvez attaquer que vos ennemies. ";
             }
             $reponse[0] = $_GET["idEntite"];
-            $reponse[1] = $healthNowCible;
-            $reponse[2] = $healthMaxCible;
-            $reponse[3] = $healthPersonnage;
-            $reponse[4] = $healthMaxPersonnage;
-            $reponse[5] = $Personnage->getIdEntite();
-            $reponse[6] = $message;
-            $reponse[7] = $Personnage->getExpPersonnage();
-            $reponse[8] = $Personnage->getDefense();
-            $reponse[9] = $idTypeEntite;
+            $reponse[1] = $idTypeEntite;
+            $reponse[2] = $healthNowCible;
+            $reponse[3] = $healthMaxCible;
+            $reponse[4] = $Personnage->getIdEntite();
+            $reponse[5] = $healthPersonnage;
+            $reponse[6] = $healthMaxPersonnage;
+            $reponse[7] = $message;
         }
     }
     echo json_encode($reponse);
