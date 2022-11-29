@@ -820,16 +820,18 @@
                         <img class="imgEntite" src="<?= $this->_imgEntite ?>">
                     </div>
                     <div class="valueEntite">
-                        <div class="backgroundAttaque" id="attaqueEntiteValeur<?= $this->_idEntite ?>">
-                            <img class="imgAttaque" src="./css/epee.cur"/><p><?= $this->getAttaque() ?></p>
+                        <div class="backgroundAttaque">
+                            <img class="imgAttaque" src="./css/epee.cur"/>
+                            <p id="attaqueEntiteValeur<?= $this->_idEntite ?>"><?= $this->getAttaque() ?></p>
                         </div>
-                        <div class="backgroundArmor" id="defenseEntiteValeur<?= $this->_idEntite ?>">
-                            <img class="imgArmor" src="./assets/image/armor.png"/><p><?= $this->getDefense() ?></p>
+                        <div class="backgroundArmor" >
+                            <img class="imgArmor" src="./assets/image/armor.png"/>
+                            <p id="defenseEntiteValeur<?= $this->_idEntite ?>"><?= $this->getDefense() ?></p>
                         </div>
                     </div>
                     <div class="healthBar" id="healthEntite<?= $this->_idEntite ?>">
-                        <div class="healthNow" id="healthEntiteValeur<?= $this->_idEntite ?>">
-                            <p>♥️ <?= $this->_healthNow ?> / <?= $this->_healthMax ?></p>
+                        <div class="healthNow">
+                            <p id="healthEntiteValeur<?= $this->_idEntite ?>">♥️ <?= $this->_healthNow ?> / <?= $this->_healthMax ?></p>
                         </div>
                     </div>
                 </div>

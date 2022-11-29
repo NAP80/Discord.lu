@@ -310,11 +310,9 @@
                         <img class="imgEntite" src="<?= $this->_imgEntite ?>">
                     </div>
                     <div class="valuePerso">
-                        <div class="backgroundAttaque" id="attaqueEntiteValeur<?= $this->_idEntite ?>">
+                        <div class="backgroundAttaque">
                             <img class="imgAttaque" src="./css/epee.cur"/>
-                            <p>
-                                <?= $this->getAttaque() ?>
-                            </p>
+                            <p id="attaqueEntiteValeur<?= $this->_idEntite ?>"><?= $this->getAttaque() ?></p>
                             <?php
                                 if(!is_null($arme)){
                                     ?>
@@ -332,11 +330,9 @@
                                 }
                             ?>
                         </div>
-                        <div class="backgroundArmor" id="defenseEntiteValeur<?= $this->_idEntite ?>">
+                        <div class="backgroundArmor">
                             <img class="imgArmor" src="./assets/image/armor.png"/>
-                            <p>
-                                <?= $this->getDefense() ?>
-                            </p>
+                            <p id="defenseEntiteValeur<?= $this->_idEntite ?>"><?= $this->getDefense() ?></p>
                             <?php
                                 if(!is_null($armure)){
                                     ?>
@@ -356,8 +352,8 @@
                         </div>
                     </div>
                     <div class="healthBar" id="healthEntite<?= $this->_idEntite ?>">
-                        <div class="healthNow" id="healthEntiteValeur<?= $this->_idEntite ?>">
-                            <p>♥️ <?= $this->_healthNow ?> / <?= $this->_healthMax ?></p>
+                        <div class="healthNow">
+                            <p id="healthEntiteValeur<?= $this->_idEntite ?>">♥️ <?= $this->_healthNow ?> / <?= $this->_healthMax ?></p>
                         </div>
                     </div>
                 </div>

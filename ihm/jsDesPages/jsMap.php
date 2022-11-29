@@ -92,7 +92,7 @@
                     e3.innerHTML='';
                     //data 5 c'est l'ancien nom de equipement
                     setEquipementInSac(data[6],data[5]);
-                    lvlUp(data[0],data[1],data[2],data[3],data[8]);
+                    UpdateEntite(data[0],data[1],data[2],data[3],data[4]);
                 }
                 if(data[7]==2){
                     //cas de l'armure
@@ -101,7 +101,7 @@
                     e3.innerHTML='';
                     //data 5 c'est l'ancien nom de equipement
                     setEquipementInSac(data[6],data[5]);
-                    lvlUp(data[0],data[1],data[2],data[3],data[8]);
+                    UpdateEntite(data[0],data[1],data[2],data[3],data[4]);
                 }
             }
             else{
@@ -152,7 +152,7 @@
         .then(function(data){
             // code for handling the data you get from the API
             console.log(data);
-            lvlUp(data[0],data[1],data[2],data[3],data[8]);
+            UpdateEntite(data[0],data[1],data[2],data[3],data[4]);
             if(data[0]!=0){
                 var li = document.getElementById("equipementSac"+idEquipement)
                 if(li!='undefine'){
@@ -255,13 +255,12 @@
         .then(function(data){
             // code for handling the data you get from the API
             console.log(data);
-            lvlUp(data[0],data[1],data[2],data[3],data[8]);
-            if(data[0] != 0){
-                var li = document.getElementById("itemSac"+idItem)
-                if(li!='undefine'){
-                    li.remove();
-                }
+            UpdateEntite(data[0],data[1],data[2],data[3],data[4]);
+            var li = document.getElementById("itemSac"+idItem)
+            if(li!='undefine'){
+                li.remove();
             }
+            log(data[5])
         })
         .catch(function(error){
             // This is where you run code if the server returns any errors
@@ -269,26 +268,19 @@
         });
     }
 
-    function lvlUp(id,attaque,healthNow,healthMax,Armure){
-        if(id==0){
-            log("Un truc à fait chou blanc");
+    /** Mise à jours Stats Perso */
+    function UpdateEntite(id,attaque,defense,healthNow,healthMax){
+        var e1 = document.getElementById("healthEntiteValeur"+id);
+        if(e1 != "undefine"){
+            e1.innerHTML = '♥️ ' + healthNow + ' / ' + healthMax;
         }
-        else{
-            var e1 = document.getElementById("healthEntiteValeur"+id);
-            if(e1!="undefine"){
-                let pourcentage = healthNow/healthMax*100;
-                e1.style.width = pourcentage+"%";
-                e1.innerHTML = '♥️'+healthNow+'/'+healthMax;
-            }
-            var e2 = document.getElementById("attaqueEntiteValeur"+id);
-            if(e2!="undefine"){
-                e2.innerHTML = attaque;
-            }
-            var e3 = document.getElementById("defenseEntiteValeur"+id);
-            if(e3!=null){
-                e3.innerHTML = Armure;
-                e3.setAttribute('style',"width:"+Armure+"%");
-            }
+        var e2 = document.getElementById("attaqueEntiteValeur"+id);
+        if(e2 != "undefine"){
+            e2.innerHTML = attaque;
+        }
+        var e3 = document.getElementById("defenseEntiteValeur"+id);
+        if(e3 != "undefine"){
+            e3.innerHTML = defense;
         }
     }
 

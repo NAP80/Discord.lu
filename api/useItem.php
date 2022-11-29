@@ -42,12 +42,12 @@
                             $Perso->lvlupHealthMax($healthmore);
                             break;
                     }
-                    $reponse[8] = $Perso->getDefense();
-                    $reponse[4] = $message;
-                    $reponse[3] = $Perso->getHealthMax();
-                    $reponse[2] = $Perso->getHealthNow();
-                    $reponse[1] = $Perso->getAttaque();
                     $reponse[0] = $Perso->getIdEntite();
+                    $reponse[1] = $Perso->getAttaque();
+                    $reponse[2] = $Perso->getDefense();
+                    $reponse[3] = $Perso->getHealthNow();
+                    $reponse[4] = $Perso->getHealthMax();
+                    $reponse[5] = $message;
                 }
             }
         }
