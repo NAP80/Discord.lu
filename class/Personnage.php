@@ -317,7 +317,7 @@
                                 if(!is_null($arme)){
                                     ?>
                                         <div class="Arme" onclick="CallApiRemoveEquipementPerso(<?= $arme->getIdEquipement() ?>)">
-                                            <p id="Arme<?= $arme->getIdEquipement() ?>">(<?= $arme->getNameEquipement() ." LV ". $arme->getLvlEquipement() ?>)</p>
+                                            <p id="Arme<?= $arme->getIdEquipement() ?>"><?= $arme->getNameEquipement() ." LV ". $arme->getLvlEquipement() ?></p>
                                             <img id="imgArmePerso<?= $this->_idEntite ?>" class="imgHidden" src="<?= $arme->getImgEquipement() ?>"/>
                                         </div>
                                     <?php
@@ -325,7 +325,7 @@
                                 else{
                                     ?>
                                         <div class="Arme">
-                                            <p id="ArmePerso<?= $this->_idEntite ?>">(Poigts)</p>
+                                            <p id="ArmePerso<?= $this->_idEntite ?>">Poigts</p>
                                             <img id="imgArmePerso<?= $this->_idEntite ?>" class="imgHidden" src=""/>
                                         </div>
                                     <?php
@@ -339,7 +339,7 @@
                                 if(!is_null($armure)){
                                     ?>
                                         <div class="ArmureNom" onclick="CallApiRemoveEquipementPerso(<?= $armure->getIdEquipement() ?>)">
-                                            <p id="Armure<?= $armure->getIdEquipement() ?>">(<?= $armure->getNameEquipement() ." LV ". $armure->getLvlEquipement() ?>)</p>
+                                            <p id="Armure<?= $armure->getIdEquipement() ?>"><?= $armure->getNameEquipement() ." LV ". $armure->getLvlEquipement() ?></p>
                                             <img id="imgArmurePerso<?= $this->_idEntite ?>" class="imgHidden" src="<?= $armure->getImgEquipement() ?>"/>
                                         </div>
                                     <?php
@@ -347,7 +347,7 @@
                                 else{
                                     ?>
                                         <div class="ArmureNom">
-                                            <p id="ArmurePerso<?= $this->_idEntite ?>">(Tunique)</p>
+                                            <p id="ArmurePerso<?= $this->_idEntite ?>">Tunique de base</p>
                                             <img id="imgArmurePerso<?= $this->_idEntite ?>" class="imgHidden" src=""/>
                                         </div>
                                     <?php

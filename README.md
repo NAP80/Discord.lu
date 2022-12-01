@@ -44,7 +44,6 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Refonte des objets / équipements,
 - - - Retirer les LVL Objets -> Passage en Type,
 - - - Refonte Inventaire,
-- - Refonte des LVL,
 - - Refonte des combats,
 - - Refonte des déplacements MAP (Retrait du système de TP, système de direction pour les déplacements),
 - - Mécanique de Gains d'Argent lors d'une capture de créature,

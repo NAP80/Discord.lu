@@ -91,7 +91,7 @@
                 divAtta.classList.remove("distance");
                 if(data[1] == 1){// Arme
                     var e3 = document.getElementById("Arme"+data[2]);
-                    e3.setAttribute('id',"ArmePerso"+<?= $Personnage->getIdEntite()?>);
+                    e3.setAttribute('id',"ArmePerso" + <?= $Personnage->getIdEntite()?>);
                     e3.removeAttribute('onclick');
                     e3.innerHTML='(Poigts)';
                     setEquipementInSac(data[2],data[3],data[9]);
@@ -99,7 +99,7 @@
                 }
                 if(data[1] == 2){// Armure
                     var e3 = document.getElementById("Armure"+data[2]);
-                    e3.setAttribute('id',"ArmurePerso"+<?= $Personnage->getIdEntite()?>);
+                    e3.setAttribute('id',"ArmurePerso" + <?= $Personnage->getIdEntite()?>);
                     e3.removeAttribute('onclick');
                     e3.innerHTML='(Tunique)';
                     setEquipementInSac(data[2],data[3],data[9]);
@@ -123,7 +123,7 @@
         else{
             setEquipementInSac(idExArme,e3.innerText,imgArme);
         }
-        e3.innerText = "(" + nameArme + ")";
+        e3.innerText = nameArme;
         e3.setAttribute('id','Arme' + idArme);
         e3.setAttribute('onclick','CallApiRemoveEquipementPerso(' + idArme + ')');
         var e4 = document.getElementById("imgArmePerso" + <?= $Personnage->getIdEntite() ?>);
@@ -138,7 +138,7 @@
         else{
             setEquipementInSac(idExArmure,e3.innerText,imgArmure);
         }
-        e3.innerText = "(" + nameArmure + ")";
+        e3.innerText = nameArmure;
         e3.setAttribute('id','Armure' + idArmure);
         e3.setAttribute('onclick','CallApiRemoveEquipementPerso(' + idArmure + ')');
         var e4 = document.getElementById("imgArmurePerso" + <?= $Personnage->getIdEntite() ?>);
