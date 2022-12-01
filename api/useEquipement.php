@@ -42,7 +42,7 @@
                                 $Perso->desequipeArmure();
                             }
                             $equipement->equipeEntite($Perso);
-                            $reponse[2] = $equipement->getNameEquipement() + "LV" + $equipement->getLvlEquipement();
+                            $reponse[2] = $equipement->getNameEquipement() ." LV ". $equipement->getLvlEquipement();
                             $message.= 's\'équipe de '.$equipement->getNameEquipement();
                             $reponse[1] = 2;
                             break;
