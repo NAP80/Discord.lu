@@ -11,10 +11,9 @@
 
             while($tab=$Result->fetch()){
                 if(rand(0,$tab['chance'])==1){
-                $newType = $tab['idTypeEquipement'];
-                $newTypeNom = $tab['nameEquipement'];
-                $coef=$tab['rarete'];
-                break;
+                    $newType = $tab['idTypeEquipement'];
+                    $newTypeNom = $tab['nameEquipement'];
+                    break;
                 }
             }
 

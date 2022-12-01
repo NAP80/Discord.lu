@@ -111,7 +111,7 @@
             }
         }
 
-        /** Return le lien Image de l'équipement */
+        /** Return le lien Image de l'équipement */ // Optimisable
         public function getImgEquipement(){
             $tab = $this->getTypeEquipement();
             if(!is_null($tab)){

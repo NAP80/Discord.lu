@@ -10,7 +10,7 @@
                             <a onclick="useItem(<?= $Item->getIdItem() ?>)">
                             <img class='imgItemSac' src='<?= $Item->getImgItem() ?>'/>
                                 <span class='spanItemSac'>
-                                    <?= $Item->getNameItem() ?> lvl <?= $Item->getLvlItem() ?>
+                                    <?= $Item->getNameItem() ?> LV <?= $Item->getLvlItem() ?>
                                 </span>
                             </a>
                         </li>

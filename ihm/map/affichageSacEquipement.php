@@ -28,7 +28,7 @@
                             <a onclick="useEquipement(<?= $Equipement->getIdEquipement() ?>)">
                                 <img class='imgEquipementSac' src='<?= $Equipement->getImgEquipement() ?>'/>
                                 <span class='spanEquipementSac'>
-                                    <?= $Equipement->getNameEquipement() ?> lvl <?= $Equipement->getLvlEquipement() ?>
+                                    <?= $Equipement->getNameEquipement() ?> LV <?= $Equipement->getLvlEquipement() ?>
                                 </span>
                             </a>
                         </li>
