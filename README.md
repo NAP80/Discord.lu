@@ -29,7 +29,6 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Refaire le Menu,
 - JS :
 - - Afficher Coord des Creatures Captured dans Combat,
-- - Faire la partie JS du changement d'équipement,
 - Site :
 - - Page de présentation du site (Inscription),
 - - Mettre des CGU ou un truc légal,
@@ -68,7 +67,6 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - PHP : Bug déplacement (téléporation) lors de changement personnage (Au final c'est pas un bug mais une "feature") -> À encadrer.
 - ??? : Quand Kill d'un personnage, les personnage présent au même endroit sont aussi Kill.
 - ??? : Quand on refresh on voit les personnages du même user présent sur une map, mais quand on se déplace, non.
-- JS  : La mise en ligne a aussi cassé le JS du changement d'arme.
 - PHP : Quand on capture un animal, on se déplace une fois la map clear.
 - PHP : Refaire au propre la génération de typeCréature.
 
@@ -100,3 +98,5 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Patch Image Map,
 - Retirer Bing et ses Avatars/Fonds Aléatoires,
 - Implémenter des Avatars/Fonds par défaults,
+- Refonte d'une partie des API et JS,
+- Patch des erreurs JS originels du changement d'équipement.
