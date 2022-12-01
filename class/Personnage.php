@@ -316,15 +316,17 @@
                             <?php
                                 if(!is_null($arme)){
                                     ?>
-                                        <div id="Arme<?= $arme->getIdEquipement() ?>" class="Arme standard" onclick="CallApiRemoveEquipementEntite(<?= $arme->getIdEquipement() ?>)">
-                                            <p>(<?= $arme->getNameEquipement() ?>)</p>
+                                        <div class="Arme" onclick="CallApiRemoveEquipementPerso(<?= $arme->getIdEquipement() ?>)">
+                                            <p id="Arme<?= $arme->getIdEquipement() ?>">(<?= $arme->getNameEquipement() ." LV ". $arme->getLvlEquipement() ?>)</p>
+                                            <img id="imgArmePerso<?= $this->_idEntite ?>" class="imgHidden" src="<?= $arme->getImgEquipement() ?>"/>
                                         </div>
                                     <?php
                                 }
                                 else{
                                     ?>
-                                        <div id="ArmePerso<?= $this->_idEntite ?>" class="Arme">
-                                            <p>(Poigts)</p>
+                                        <div class="Arme">
+                                            <p id="ArmePerso<?= $this->_idEntite ?>">(Poigts)</p>
+                                            <img id="imgArmePerso<?= $this->_idEntite ?>" class="imgHidden" src=""/>
                                         </div>
                                     <?php
                                 }
@@ -336,15 +338,17 @@
                             <?php
                                 if(!is_null($armure)){
                                     ?>
-                                        <div id ="Armure<?= $armure->getIdEquipement() ?>" class="ArmureNom standard" onclick="CallApiRemoveEquipementEntite(<?= $armure->getIdEquipement() ?>)">
-                                            <p>(<?= $armure->getNameEquipement() ?>)</p>
+                                        <div class="ArmureNom" onclick="CallApiRemoveEquipementPerso(<?= $armure->getIdEquipement() ?>)">
+                                            <p id="Armure<?= $armure->getIdEquipement() ?>">(<?= $armure->getNameEquipement() ." LV ". $armure->getLvlEquipement() ?>)</p>
+                                            <img id="imgArmurePerso<?= $this->_idEntite ?>" class="imgHidden" src="<?= $armure->getImgEquipement() ?>"/>
                                         </div>
                                     <?php
                                 }
                                 else{
                                     ?>
-                                        <div id ="ArmurePerso<?= $this->_idEntite ?>" class="ArmureNom">
-                                            <p>(Tunique)</p>
+                                        <div class="ArmureNom">
+                                            <p id="ArmurePerso<?= $this->_idEntite ?>">(Tunique)</p>
+                                            <img id="imgArmurePerso<?= $this->_idEntite ?>" class="imgHidden" src=""/>
                                         </div>
                                     <?php
                                 }

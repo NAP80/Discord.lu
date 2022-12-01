@@ -84,3 +84,7 @@ img .Personnage{
 .persoXP{
     float:left;
 }
+
+.imgHidden{
+    display: none;
+}
