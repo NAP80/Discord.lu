@@ -9,137 +9,140 @@
     }
 
     function CallApiAddItemInSac(idItem){
-        fetch('api/addItemInSac.php?idItem='+idItem).then((resp) => resp.json()).then(function(data){
-        // data est la réponse http de notre API.
-        console.log(data);
-        if(data[0]!=0 && data[1]==1){
-            var li = document.getElementById("item"+idItem)
-            var liSac = li;
-            //changement de l'evenement onclic
-            var Aclick = li.getElementsByTagName("a")[0];
-            Aclick.setAttribute('onclick',"useItem("+idItem+")");
-            li.setAttribute('id',"itemSac"+idItem);
-            if(li!='undefine'){
-                li.remove();
+        fetch('api/addItemInSac.php?idItem='+idItem)
+        .then((resp) => resp.json())
+        .then(function(data){
+            // data est la réponse http de notre API.
+            console.log(data);
+            if(data[0]!=0 && data[1]==1){
+                var li = document.getElementById("item"+idItem)
+                var liSac = li;
+                //changement de l'evenement onclic
+                var Aclick = li.getElementsByTagName("a")[0];
+                Aclick.setAttribute('onclick',"useItem("+idItem+")");
+                li.setAttribute('id',"itemSac"+idItem);
+                if(li!='undefine'){
+                    li.remove();
+                }
+                var ul = document.getElementById("SacItem")
+                if(ul!='undefine'){
+                    ul.appendChild(liSac);
+                }
             }
-            var ul = document.getElementById("SacItem")
-            if(ul!='undefine'){
-                ul.appendChild(liSac);
+            else{
+                log("Vous n'avez pas réussi à le voler."+data[2]);
             }
-        }
-        else{
-            log("Vous n'avez pas réussi à le voler."+data[2]);
-        }
-        }).catch(function(error){
-        // This is where you run code if the server returns any errors
-        console.log(error);});
+        })
+        .catch(function(error){
+            console.log(error);
+        });
     }
 
     function CallApiAddEquipementInSac(idEquipement){
         fetch(`api/addEquipementInSac.php?idEquipement=${idEquipement}`)
-            .then((resp) => resp.json())
-            .then((data) => {
-                console.log(data);
-                if(data[0] != 0 && data[1] == 1){
-                    // —— Permet de mémoriser equipement fusioné
-                    idEquipementPop  = idEquipement;
-                    // —— Si lvlup et fusion
-                    if(Array.isArray(data[5]) && data[4] > 0){
-                        // —— L'ancien li est supprimé
-                        // —— 5 est le tableau id à supprimer 4 et l'id à garder
-                        for(let i = 0; i < data[5].length; i++){
-                            const li = document.getElementById(`equipementSac${data[5][i]}`);
-                            li && li.remove();
-                        }
-                        // —— L'ancien affichage d'item est supprimé pour etre remplacé par sa fusion
-                        idEquipementPop = data[4];
-                        const li = document.getElementById(`equipementSac${data[4]}`);
+        .then((resp) => resp.json())
+        .then((data) => {
+            console.log(data);
+            if(data[0] != 0 && data[1] == 1){
+                // —— Permet de mémoriser equipement fusioné
+                idEquipementPop  = idEquipement;
+                // —— Si lvlup et fusion
+                if(Array.isArray(data[5]) && data[4] > 0){
+                    // —— L'ancien li est supprimé
+                    // —— 5 est le tableau id à supprimer 4 et l'id à garder
+                    for(let i = 0; i < data[5].length; i++){
+                        const li = document.getElementById(`equipementSac${data[5][i]}`);
                         li && li.remove();
                     }
-                    const li    = document.getElementById(`equipement${idEquipement}`)
-                        , liSac = li;
-                    // —— Changement de l'evenement onclic
-                    const Aclick = li.getElementsByTagName("a")[0];
-                    Aclick.setAttribute('onclick', `useEquipement(${idEquipementPop})`);
-                    Aclick.innerHTML = `${data[3]} lvl ${data[2]}`;
-                    li.setAttribute('id', `equipementSac${idEquipementPop}`);
-                    if(li != "undefine")
-                        li.remove();
-                    const ul = document.getElementById("SacEquipement");
-                    ul && ul.appendChild(liSac);
+                    // —— L'ancien affichage d'item est supprimé pour etre remplacé par sa fusion
+                    idEquipementPop = data[4];
+                    const li = document.getElementById(`equipementSac${data[4]}`);
+                    li && li.remove();
                 }
-                else{
-                    log("Vous n'avez pas réussi à le voler."+data[2]);
-                }
-            }).catch((error) => {
-                // This is where you run code if the server returns any errors
-        console.log(error);});
+                const li    = document.getElementById(`equipement${idEquipement}`)
+                    , liSac = li;
+                // —— Changement de l'evenement onclic
+                const Aclick = li.getElementsByTagName("a")[0];
+                Aclick.setAttribute('onclick', `useEquipement(${idEquipementPop})`);
+                Aclick.innerHTML = `${data[3]} lvl ${data[2]}`;
+                li.setAttribute('id', `equipementSac${idEquipementPop}`);
+                if(li != "undefine")
+                    li.remove();
+                const ul = document.getElementById("SacEquipement");
+                ul && ul.appendChild(liSac);
+            }
+            else{
+                log("Vous n'avez pas réussi à le voler."+data[2]);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
-    function CallApiRemoveEquipementEntite(idEquipement){
-        fetch('api/removeEquipement.php?idEquipement='+idEquipement).then((resp) => resp.json()) .then(function(data){
-            // data est la réponse http de notre API.
+    function CallApiRemoveEquipementPerso(idEquipement){
+        fetch('api/removeEquipement.php?idEquipement='+idEquipement)
+        .then((resp) => resp.json())
+        .then(function(data){
             console.log(data);
-            //data 7 == 1 c'est une arme pour les autre types d'item il faudra faire un switch case
-            //data 6 == 1 c'est l'ancien id de equipement
-            if(data[0]!=0){
+            if(data[0] != 0){
                 var divAtta = document.getElementById("attaqueEntiteValeur"+data[0]);
                 divAtta.classList.remove("standard");
                 divAtta.classList.remove("distance");
-                if(data[7]==1){ //cas de l'arme
-                    var e3 = document.getElementById("Arme"+data[6]);
-                    e3.setAttribute('id',"ArmePerso"+<?php echo $Personnage->getIdEntite()?>);
-                    e3.innerHTML='';
-                    //data 5 c'est l'ancien nom de equipement
-                    setEquipementInSac(data[6],data[5]);
-                    UpdateEntite(data[0],data[1],data[2],data[3],data[4]);
+                if(data[1] == 1){// Arme
+                    var e3 = document.getElementById("Arme"+data[2]);
+                    e3.setAttribute('id',"ArmePerso"+<?= $Personnage->getIdEntite()?>);
+                    e3.removeAttribute('onclick');
+                    e3.innerHTML='(Poigts)';
+                    setEquipementInSac(data[2],data[3],data[9]);
+                    UpdateEntite(data[0],data[4],data[5],data[6],data[7]);
                 }
-                if(data[7]==2){
-                    //cas de l'armure
-                    var e3 = document.getElementById("Armure"+data[6]);
-                    e3.setAttribute('id',"ArmurePerso"+<?php echo $Personnage->getIdEntite()?>);
-                    e3.innerHTML='';
-                    //data 5 c'est l'ancien nom de equipement
-                    setEquipementInSac(data[6],data[5]);
-                    UpdateEntite(data[0],data[1],data[2],data[3],data[4]);
+                if(data[1] == 2){// Armure
+                    var e3 = document.getElementById("Armure"+data[2]);
+                    e3.setAttribute('id',"ArmurePerso"+<?= $Personnage->getIdEntite()?>);
+                    e3.removeAttribute('onclick');
+                    e3.innerHTML='(Tunique)';
+                    setEquipementInSac(data[2],data[3],data[9]);
+                    UpdateEntite(data[0],data[4],data[5],data[6],data[7]);
                 }
             }
             else{
-                log("Vous n'avez pas réussi à retirer l equipement."+data[2]);
+                log("Vous n'avez pas réussi à retirer l\'equipement."+data[2]);
             }
-        }).catch(function(error){
-        // This is where you run code if the server returns any errors
-        console.log(error);});
+        })
+        .catch(function(error){
+            console.log(error);
+        });
     }
 
-    function UpdateArme(nomArme,idAncienneArme,idNouvelArme,Laclass){
-        var e3 = document.getElementById("Arme"+idAncienneArme);
+    function UpdateArme(idArme,nameArme,idExArme,nameExArme,imgArme){
+        var e3 = document.getElementById("Arme" + idExArme);
         if(e3 === null){
-            e3 = document.getElementById("ArmePerso"+<?php echo $Personnage->getIdEntite()?>);
+            e3 = document.getElementById("ArmePerso" + <?= $Personnage->getIdEntite() ?>);
         }
-        //on remet l'ancien equipement dans le sac
-        setEquipementInSac(idAncienneArme,e3.innerHTML);
-        e3.innerHTML = nomArme;
-        e3.setAttribute('id',"Arme"+idNouvelArme);
-        e3.className = '';
-        e3.classList.add("Arme");
-        e3.classList.add(Laclass);
-        e3.setAttribute('onclick',"CallApiRemoveEquipementEntite("+idNouvelArme+")");
+        else{
+            setEquipementInSac(idExArme,e3.innerText,imgArme);
+        }
+        e3.innerText = "(" + nameArme + ")";
+        e3.setAttribute('id','Arme' + idArme);
+        e3.setAttribute('onclick','CallApiRemoveEquipementPerso(' + idArme + ')');
+        var e4 = document.getElementById("imgArmePerso" + <?= $Personnage->getIdEntite() ?>);
+        e4.setAttribute('src',imgArme);
     }
 
-    function UpdateArmure(nomArmure,idAncienneArmure,idNouvelArmure,Laclass){
-        var e3 = document.getElementById("Armure"+idAncienneArmure);
+    function UpdateArmure(idArmure,nameArmure,idExArmure,nameExArmure,imgArmure){
+        var e3 = document.getElementById("Armure" + idExArmure);
         if(e3 === null){
-            e3 = document.getElementById("ArmurePerso"+<?php echo $Personnage->getIdEntite()?>);
+            e3 = document.getElementById("ArmurePerso" + <?= $Personnage->getIdEntite() ?>);
         }
-        //on remet l'ancien equipement dans le sac
-        setEquipementInSac(idAncienneArmure,e3.innerHTML);
-        e3.className = '';
-        e3.classList.add("Armure");
-        e3.classList.add(Laclass);
-        e3.innerHTML = nomArmure;
-        e3.setAttribute('id',"Armure"+idNouvelArmure);
-        e3.setAttribute('onclick',"CallApiRemoveEquipementEntite("+idNouvelArmure+")");
+        else{
+            setEquipementInSac(idExArmure,e3.innerText,imgArmure);
+        }
+        e3.innerText = "(" + nameArmure + ")";
+        e3.setAttribute('id','Armure' + idArmure);
+        e3.setAttribute('onclick','CallApiRemoveEquipementPerso(' + idArmure + ')');
+        var e4 = document.getElementById("imgArmurePerso" + <?= $Personnage->getIdEntite() ?>);
+        e4.setAttribute('src',imgArmure);
     }
 
     function AttaquerPerso(idPerso,idTypeEntite, event){
@@ -147,36 +150,31 @@
     }
 
     function useEquipement(idEquipement){
-        //pour appeler une API on utilise la méthode fetch()
-        fetch('api/useEquipement.php?idEquipement='+idEquipement).then((resp) => resp.json())
+        fetch('api/useEquipement.php?idEquipement=' + idEquipement)
+        .then((resp) => resp.json())
         .then(function(data){
-            // code for handling the data you get from the API
-            console.log(data);
-            UpdateEntite(data[0],data[1],data[2],data[3],data[4]);
-            if(data[0]!=0){
-                var li = document.getElementById("equipementSac"+idEquipement)
+            console.log(data)
+            UpdateEntite(data[0],data[5],data[6],data[7],data[8])
+            if(data[0] !=0){
+                var li = document.getElementById("equipementSac"+ idEquipement)
                 if(li!='undefine'){
-                    li.remove();
+                    li.remove()
                 }
-                //5 c'est le nom de la nouvelle et
-                //6 c'est id de l'ancienne
-                //idEquipement c'est le nouvel id de arme
-                var divAtta = document.getElementById("attaqueEntiteValeur"+data[0]);
-                divAtta.classList.remove("standard");
-                divAtta.classList.remove("distance");
-                if(data[7]==1){
-                    UpdateArme(data[5],data[6],idEquipement,"standard");
-                    divAtta.classList.add("standard");
+                var divAtta = document.getElementById("attaqueEntiteValeur" + data[0])
+                if(data[1] == 1){
+                    UpdateArme(idEquipement,data[2],data[3],data[4],data[10])
+                    divAtta.classList.add("standard")
+                    divAtta.classList.remove("distance")
                 }
-                //si c'est une armure
-                if(data[7]==2){
-                    UpdateArmure(data[5],data[6],idEquipement,"standard");
+                if(data[1] == 2){
+                    UpdateArmure(idEquipement,data[2],data[3],data[4],data[10])
+                    divAtta.classList.add("standard")
+                    divAtta.classList.remove("distance")
                 }
             }
         })
         .catch(function(error){
-            // This is where you run code if the server returns any errors
-            console.log(error);
+            console.log(error)
         });
     }
 
@@ -198,16 +196,23 @@
         div.style.left = '' ;
     }
 
-    function setEquipementInSac(id,inner){
+    function setEquipementInSac(idEquipement,nameEquipement,imgEquipement){
         var ul = document.getElementById("SacEquipement")
-        if(ul!='undefine' && inner != ''){
-            var liArme = document.createElement("li");
-            liArme.setAttribute('id',"equipementSac"+id);
+        if(ul != undefined && nameEquipement != "" && imgEquipement != ""){
+            var li = document.createElement("li");
+            li.setAttribute("id","equipementSac" + idEquipement);
             var a = document.createElement("a");
-            a.setAttribute('onclick',"useEquipement("+id+")");
-            a.innerHTML =inner;
-            liArme.appendChild(a);
-            ul.appendChild(liArme);
+            a.setAttribute("onclick","useEquipement(" + idEquipement + ")");
+            var span = document.createElement("span");
+            span.setAttribute("class","spanEquipementSac");
+            span.innerText = nameEquipement;
+            var img = document.createElement("img");
+            img.setAttribute("src",imgEquipement);
+            img.setAttribute("class","imgEquipementSac");
+            ul.appendChild(li);
+            li.appendChild(a);
+            a.appendChild(img);
+            a.appendChild(span);
         }
     }
 
@@ -258,7 +263,6 @@
             log(data[7]);
         })
         .catch(function(error){
-            // This is where you run code if the server returns any errors
             console.log(error);
             a.onclick = theclick;
             li.classList.remove("busy");
@@ -279,7 +283,6 @@
             log(data[5])
         })
         .catch(function(error){
-            // This is where you run code if the server returns any errors
             console.log(error);
         });
     }
