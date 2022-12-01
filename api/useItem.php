@@ -36,7 +36,7 @@
                                 $healthmore =2;
                             }
                             $attaque=round($healthmore/2);
-                            $message = $Perso->getNameEntite()." à utilisé un objet";
+                            $message = $Perso->getNameEntite()." a utilisé un objet.";
                             $Perso->lvlupAttaque($attaque);
                             $Perso->lvlupHealthNow($healthmore);
                             $Perso->lvlupHealthMax($healthmore);
