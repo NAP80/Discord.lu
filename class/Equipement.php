@@ -12,21 +12,14 @@
 
         /** Récupère un Équipement by ID */
         public function setEquipementByID($idEquipement){
-            $req = "SELECT Equipement.idEquipement,
-                        Equipement.idTypeEquipement,
-                        Equipement.nameEquipement,
-                        Equipement.valeur,
-                        Equipement.idEfficacite,
-                        Equipement.lvlEquipement,
-                        Equipement.coolDownMS,
-                        Equipement.LastUse,
-                        Categorie.idCategorie
-                FROM Equipement,TypeEquipement,Categorie WHERE Equipement.idEquipement='".$idEquipement."'
-                AND TypeEquipement.idTypeEquipement = Equipement.idTypeEquipement
-                AND Categorie.idCategorie = TypeEquipement.idCategorie
-            ";
-            $Result = $this->_bdd->query($req);
-            if($tab = $Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT Equipement.idEquipement, Equipement.idTypeEquipement, Equipement.nameEquipement, Equipement.valeur, Equipement.idEfficacite, Equipement.lvlEquipement, Equipement.coolDownMS, Equipement.LastUse, Categorie.idCategorie
+                FROM Equipement, TypeEquipement, Categorie
+                WHERE Equipement.idEquipement=:idEquipement
+                AND TypeEquipement.idTypeEquipement=Equipement.idTypeEquipement
+                AND Categorie.idCategorie=TypeEquipement.idCategorie
+            ");
+            $req->execute(['idEquipement' => $idEquipement]);
+            if($tab = $req->fetch()){
                 $this->setEquipement(
                     $tab["idEquipement"],
                     $tab["idTypeEquipement"],
@@ -62,25 +55,25 @@
         }
 
         public function desequipeEntite($Entite){
-            $sql = "UPDATE `EntiteEquipement` SET `equipe`='0' WHERE `idEntite`='".$Entite->getIdEntite()."' AND `idEquipement`='".$this->_idEquipement."'";
-            $this->_bdd->query($sql);
+            $req = $this->_bdd->prepare("UPDATE `EntiteEquipement` SET `equipe`=0 WHERE `idEntite`=:idEntite AND `idEquipement`=:idEquipement");
+            $req->execute(['idEntite' => $Entite->getIdEntite, 'idEquipement' => $this->_idEquipement]);
             $Entite->removeEquipeBydId($this->_idEquipement);
         }
 
         public function equipeEntite($Entite){
             //TODO il faut vérifier qu'il n'y a pas d'autre équipement en cours sinon il faut les retirer
-            $sql = "UPDATE `EntiteEquipement`,`TypeEquipement`,`Equipement` SET `equipe`='0'
-            WHERE `idEntite`='1'
-            AND EntiteEquipement.idEquipement = Equipement.idEquipement
-            AND Equipement.idTypeEquipement = TypeEquipement.idTypeEquipement
-            AND TypeEquipement.idCategorie = '".$this->_idCategorie."'";
-            $this->_bdd->query($sql);
+            $req = $this->_bdd->prepare("UPDATE `EntiteEquipement`,`TypeEquipement`,`Equipement` SET `equipe`=0
+            WHERE `idEntite`=1
+            AND EntiteEquipement.idEquipement=Equipement.idEquipement
+            AND Equipement.idTypeEquipement=TypeEquipement.idTypeEquipement
+            AND TypeEquipement.idCategorie=:idCategorie");
+            $req->execute(['idCategorie' => $this->_idCategorie]);
             $Entite->addEquipeById($this->_idEquipement);
-            $sql = "UPDATE `EntiteEquipement` SET `equipe`='1' WHERE `idEntite`='".$Entite->getIdEntite()."' AND `idEquipement`='".$this->_idEquipement."'";
-            $this->_bdd->query($sql);
+            $req = $this->_bdd->prepare("UPDATE `EntiteEquipement` SET `equipe`='1' WHERE `idEntite`=:idEntite AND `idEquipement`=:idEquipement");
+            $req->execute(['idEntite' => $Entite->getIdEntite, 'idEquipement' => $this->_idEquipement]);
         }
 
-        public function setEquipement($idEquipement,$idTypeEquipement,$nameEquipement,$valeur,$idEfficacite,$lvlEquipement,$coolDownMS,$LastUse,$idCategorie){
+        public function setEquipement($idEquipement, $idTypeEquipement, $nameEquipement, $valeur, $idEfficacite, $lvlEquipement, $coolDownMS, $LastUse, $idCategorie){
             $this->_idEquipement = $idEquipement;
             $this->_nameEquipement = $nameEquipement;
             $this->_idTypeEquipement = $idTypeEquipement;
@@ -94,16 +87,15 @@
         }
 
         public function deleteEquipement($idEquipement){
-            //TODO AVEC LES CONTRAINTE RELATIONNEL IL DFAUT VERIDIER QU'ELLE EST PAS UTILISER AILLEUR
-            $req = "DELETE FROM Equipement WHERE idEquipement='".$idEquipement."' ";
-            $Result = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("DELETE FROM Equipement WHERE idEquipement=:idEquipement");
+            $req->execute(['idEquipement' => $idEquipement]);
         }
 
         //retourn un tableau les info
         public function getTypeEquipement(){
-            $req = "SELECT * FROM TypeEquipement WHERE idTypeEquipement = '".$this->_idTypeEquipement."'";
-            $Result = $this->_bdd->query($req);
-            if($tab = $Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT * FROM TypeEquipement WHERE idTypeEquipement=:idTypeEquipement");
+            $req->execute(['idTypeEquipement' => $this->_idTypeEquipement]);
+            if($tab = $req->fetch()){
                 return $tab;
             }
             else{
@@ -124,10 +116,10 @@
 
         /** Return la couleur de rareté de l'équipement */
         public function getClassRarete(){
-            $req="SELECT rarete FROM TypeEquipement WHERE idTypeEquipement = '".$this->_idTypeEquipement."'";
-            $Result = $this->_bdd->query($req);
-            $colorRarete = "background-color : rgba(";
-            if($tab = $Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT rarete FROM TypeEquipement WHERE idTypeEquipement=:idTypeEquipement");
+            $req->execute(['idTypeEquipement' => $this->_idTypeEquipement]);
+            $colorRarete = "background-color:rgba(";
+            if($tab = $req->fetch()){
                 //pour le moment les raretés vont de 1 à 16
                 //rareté de vert à rouge
                 if($tab[0]<8){
@@ -158,15 +150,15 @@
         /** Création d'un équipement aléatoire */
         public function createEquipementAleatoire(){
             $newEquipement = new Equipement($this->_bdd);
-            $req="SELECT * FROM TypeEquipement ORDER BY rarete ASC";
-            $Result = $this->_bdd->query($req);
-            $i = $Result->rowCount();
+            $req = $this->_bdd->prepare("SELECT * FROM TypeEquipement ORDER BY rarete ASC");
+            $req->execute();
+            $i = $req->rowCount();
             $imax=$i*3;
             $newType=1;
             $rarete=1;
             $coolDown=500;
             $newTypeNom='cuillère ';
-            while($tab=$Result->fetch()){
+            while($tab = $req->fetch()){
                 if(rand(0,$tab['chance'])==1){
                     $newType = $tab['idTypeEquipement'];
                     $newTypeNom = $tab['nameTypeEquipement'];
@@ -181,9 +173,9 @@
             $newValeur = rand(5,10)*$rarete*$getEfficace['coef'];
             $coolDown = $coolDown*$getEfficace['coef'];
             $this->_bdd->beginTransaction();
-            $req="INSERT INTO `Equipement`( `idTypeEquipement`, `nameEquipement`, `valeur`, `idEfficacite`,`lvlEquipement`,`coolDownMS`)
-             VALUES ('".$newType."','".$newNom."','".$newValeur."','".$idEfficacite."',1,'".$coolDown."')";
-            $Result = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("INSERT INTO `Equipement`( `idTypeEquipement`, `nameEquipement`, `valeur`, `idEfficacite`,`lvlEquipement`,`coolDownMS`)
+            VALUES (:newType, :newNom, :newValeur, :idEfficacite, 1, :coolDown)");
+            $req->execute(['newType' => $newType, 'newNom' => $newNom, 'newValeur' => $newValeur, 'idEfficacite' => $idEfficacite, 'coolDown' => $coolDown]);
             $lastID = $this->_bdd->lastInsertId();
             if($lastID){
                 $newEquipement->setEquipementByID($lastID);
@@ -215,33 +207,34 @@
 
         public function resetCoolDown(){
             $timems = microtime(true)*100;
-            $req="UPDATE  Equipement SET LastUse = '".$timems."' WHERE idEquipement='".$this->_idEquipement."' ";
-            $Result = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("UPDATE Equipement SET LastUse=:LastUse WHERE idEquipement=:idEquipement");
+            $req->execute(['LastUse' => $timems, 'idEquipement' => $this->_idEquipement]);
         }
 
         //retourne la fusion si c'est réussi des 2 items
         public function fusionEquipement($Entite,&$TabIDRemoved){
-            $req="SELECT Equipement.idEquipement,Equipement.lvlEquipement FROM EntiteEquipement,Equipement
-                WHERE Equipement.idEquipement = EntiteEquipement.idEquipement
-                AND idEntite = '".$Entite->getIdEntite()."'
-                AND Equipement.nameEquipement = '".$this->getNameEquipement()."'
-                AND Equipement.lvlEquipement = '".$this->getLvlEquipement()."'
-                AND Equipement.idTypeEquipement = '".$this->getTypeEquipement()['idTypeEquipement']."'
-                AND Equipement.idEquipement <> '".$this->getIdEquipement()."'
-            ";
-            $result = $this->_bdd->query($req);
-            if($tab=$result->fetch()){
+            $req = $this->_bdd->prepare("SELECT Equipement.idEquipement, Equipement.lvlEquipement
+                FROM EntiteEquipement,Equipement
+                WHERE Equipement.idEquipement=EntiteEquipement.idEquipement
+                AND idEntite=:idEntite
+                AND Equipement.nameEquipement=:nameEquipement
+                AND Equipement.lvlEquipement=:lvlEquipement
+                AND Equipement.idTypeEquipement=:idTypeEquipement
+                AND Equipement.idEquipement<>:idEquipement
+            ");
+            $req->execute(['idEntite' => $Entite->getIdEntite(), 'nameEquipement' => $this->getNameEquipement(), 'lvlEquipement' => $this->getLvlEquipement(), 'idTypeEquipement' => $this->getTypeEquipement()['idTypeEquipement'], 'idEquipement' => $this->getIdEquipement()]);
+            if($tab = $req->fetch()){
                 array_push($TabIDRemoved,$this->getIdEquipement());
-                //maj du lvl
+                // Update LV
                 $this->_lvlEquipement ++;
-                $req="UPDATE `Equipement` SET `lvlEquipement`='".$this->_lvlEquipement."' WHERE `idEquipement` = '".$tab['idEquipement']."'";
-                $this->_bdd->query($req);
-                //et suppresion de l'ancien item
-                $req="DELETE FROM `Equipement` WHERE `idEquipement` = '".$this->getIdEquipement()."'";
-                $this->_bdd->query($req);
-                //on met ajout son id fusionné
+                $req = $this->_bdd->prepare("UPDATE `Equipement` SET `lvlEquipement`=:lvlEquipement WHERE `idEquipement`=:idEquipement");
+                $req->execute(['lvlEquipement' => $this->_lvlEquipement, 'idEquipement' => $tab['idEquipement']]);
+                // Delet Ex Equipement
+                $req = $this->_bdd->prepare("DELETE FROM `Equipement` WHERE `idEquipement`=:idEquipement");
+                $req->execute(['idEquipement' => $this->getIdEquipement()]);
+                // Add Equipement Fusionné
                 $this->_idEquipement = $tab['idEquipement'];
-                //fonction recursif tant qu'on peut fusionner on fusionne
+                // Relance Fussion
                 $this->fusionEquipement($Entite,$TabIDRemoved);
             }
         }

@@ -45,25 +45,26 @@
 
         /** Récupère l'entitée par ID */
         public function setEntiteById($idEntite){
-            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE `idEntite`='".$idEntite."'");
-            if($tab = $Result->fetch()){
-                $this->setEntite($tab["idEntite"],$tab["nameEntite"],$tab["healthNow"],$tab["degat"],$tab["healthMax"],$tab["imgEntite"],$tab["idTypeEntite"],$tab["lvlEntite"],$tab["idUser"]);
+            $req = $this->_bdd->prepare("SELECT * FROM `Entite` WHERE `idEntite`=:idEntite");
+            $req->execute(['idEntite' => $idEntite]);
+            if($tab = $req->fetch()){
+                $this->setEntite($tab["idEntite"], $tab["nameEntite"], $tab["healthNow"], $tab["degat"], $tab["healthMax"], $tab["imgEntite"], $tab["idTypeEntite"], $tab["lvlEntite"], $tab["idUser"]);
                 //recherche de sa position
                 $mapEntite = new map($this->_bdd);
                 $mapEntite->setMapByID($tab["idMap"]);
                 $this->_mapEntite = $mapEntite;
                 //select les equipements déjà présent
-                $req = "SELECT idEquipement FROM `EntiteEquipement` WHERE idEntite='".$idEntite."'";
-                $Result = $this->_bdd->query($req);
-                while($tab=$Result->fetch()){
-                    array_push($this->sacEquipements,$tab[0]);
+                $req = $this->_bdd->prepare("SELECT idEquipement FROM `EntiteEquipement` WHERE idEntite=:idEntite");
+                $req->execute(['idEntite' => $idEntite]);
+                while($tab = $req->fetch()){
+                    array_push($this->sacEquipements, $tab[0]);
                 }
                 //select les Equipement déjà présent
-                $req = "SELECT idEquipement,equipe FROM `EntiteEquipement` WHERE idEntite='".$idEntite."' AND equipe='1'";
-                $Result = $this->_bdd->query($req);
-                while($tab=$Result->fetch()){
-                    if($tab['equipe']==1){
-                        array_push($this->sacEquipe,$tab['idEquipement']);
+                $req = $this->_bdd->prepare("SELECT idEquipement,equipe FROM `EntiteEquipement` WHERE idEntite=:idEntite AND equipe=1");
+                $req->execute(['idEntite' => $idEntite]);
+                while($tab = $req->fetch()){
+                    if($tab['equipe'] == 1){
+                        array_push($this->sacEquipe, $tab['idEquipement']);
                     }
                 }
             }
@@ -110,26 +111,22 @@
         }
 
         /** Create Entite */
-        public function CreateEntite($nameEntite, $healthNow, $degat, $idMap,$healthMax,$imgEntite,$idUser,$idTypeEntite,$lvlEntite){
+        public function CreateEntite($nameEntite, $healthNow, $degat, $idMap, $healthMax, $imgEntite, $idUser, $idTypeEntite, $lvlEntite){
             $newperso = new Entite($this->_bdd);
-            $this->_nameEntite=htmlentities($nameEntite, ENT_QUOTES);
-            $this->_lvlEntite = $lvlEntite;
-            $this->_imgEntite=$imgEntite;
-            $req="INSERT INTO `Entite`(`nameEntite`, `healthNow`, `degat`, `idMap`,`healthMax`,`imgEntite`,`idUser`,`idTypeEntite`,`lvlEntite`)
-            VALUES ('".$this->_nameEntite."','.$healthNow.','.$degat.','.$idMap.','.$healthMax.','".$this->_imgEntite."','".$idUser."','.$idTypeEntite.','.$lvlEntite.')";
-            $this->_bdd->beginTransaction();
-            $Result = $this->_bdd->query($req);
+            $this->_nameEntite  = htmlentities($nameEntite, ENT_QUOTES);
+            $this->_lvlEntite   = $lvlEntite;
+            $this->_imgEntite   = $imgEntite;
+            $req = $this->_bdd->prepare("INSERT INTO `Entite`(`nameEntite`, `healthNow`, `degat`, `idMap`,`healthMax`,`imgEntite`,`idUser`,`idTypeEntite`,`lvlEntite`)
+            VALUES (:nameEntite, :healthNow, :degat, :idMap, :healthMax, :imgEntite, :idUser, :idTypeEntite, :lvlEntite)");
+            $req->execute(['nameEntite' => $this->_nameEntite, 'healthNow' => $healthNow, 'degat' => $degat, 'idMap' => $idMap, 'healthMax' => $healthMax, 'imgEntite' => $this->_imgEntite, 'idUser' => $idUser, 'idTypeEntite' => $idTypeEntite, 'lvlEntite' => $lvlEntite]);
             $this->_idEntite = $this->_bdd->lastInsertId();
             if($this->_idEntite){
                 $newperso->setEntiteById($this->_idEntite);
-                $this->_bdd->commit();
                 return $newperso;
             }
             else{
-                $this->_bdd->rollback();
-                return null;
+                return NULL;
             }
-            return null;
         }
 
         /** Fonction d'attaque */
@@ -172,13 +169,10 @@
             $idindex = array_search($EquipementID, $this->sacEquipements);
             if($idindex  >= 0){
                 unset($this->sacEquipements[$idindex]);
-                $req="DELETE FROM `EntiteEquipement` WHERE idEntite='".$this->getIdEntite()."' AND idEquipement='".$EquipementID."'";
-                $this->_bdd->query($req);
-
-                //todo retirer un equipement ne doit pas etre une suppression
-                //todo la suppression peut etre déjà faite à la fusion
-                $req="DELETE FROM `Equipement` WHERE idEquipement='".$EquipementID."'";
-                $this->_bdd->query($req);
+                $req = $this->_bdd->prepare("DELETE FROM `EntiteEquipement` WHERE idEntite=:idEntite AND idEquipement=:idEquipement");
+                $req->execute(['idEntite' => $this->getIdEntite(), 'idEquipement' => $EquipementID]);
+                $req = $this->_bdd->prepare("DELETE FROM `Equipement` WHERE idEquipement=:idEquipement");
+                $req->execute(['idEquipement' => $EquipementID]);
             }
         }
 
@@ -195,8 +189,8 @@
                 return $TabIdRemoved;
             }
             else{
-                $req="INSERT INTO `EntiteEquipement`(`idEntite`, `idEquipement`) VALUES ('".$this->getIdEntite()."','".$newEquipement->getIdEquipement()."')";
-                $this->_bdd->query($req);
+                $req = $this->_bdd->prepare("INSERT INTO `EntiteEquipement`(`idEntite`, `idEquipement`) VALUES (:idEntite, :idEquipement)");
+                $req->execute(['idEntite' => $this->getIdEntite(), 'idEquipement' => $newEquipement->getIdEquipement()]);
                 array_push($this->sacEquipements,$newEquipement->getIdEquipement());
                 return 0;
             }
@@ -310,13 +304,11 @@
             return round($val,1);//arrondi à 1 chiffre aprés la virgul
         }
 
-        /* Fin Cauet */
-
         public function getDegat(){
             //doit retourner des degat que l'entite donne a l'instant t
             return $this->_degat;
         }
-        
+
         //il n'est possible de booster la HealthNow au dela de HealthMax
         public function SoinPourcentage($pourcentage){
             $valeur = round(($this->_healthMax*$pourcentage)/100);
@@ -324,8 +316,8 @@
             if($this->_healthNow>$this->_healthMax){
                 $this->_healthNow = $this->_healthMax;
             }
-            $req = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow."' WHERE `idEntite` = '".$this->_idEntite."'";
-            $Result = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("UPDATE `Entite` SET `healthNow`=:healthNow WHERE `idEntite`=:idEntite");
+            $req->execute(['healthNow' => $this->_healthNow, 'idEntite' => $this->_idEntite]);
             return $valeur;
         }
 
@@ -341,16 +333,16 @@
                 $this->_healthNow =0;
                 //retour en zone 0,0
             }
-            $req = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow."' WHERE `idEntite` = '".$this->_idEntite."'";
-            $Result = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("UPDATE `Entite` SET `healthNow`=:healthNow WHERE `idEntite`=:idEntite");
+            $req->execute(['healthNow' => $this->_healthNow, 'idEntite' => $this->_idEntite]);
             return $this->_healthNow;
         }
 
         public function getAllMyCreatureIdByMap($map){
             $listCreature=array();
-            $req="SELECT `idEntite` FROM `Entite` WHERE `idUser` = '".$this->_idEntite."' AND `idMap` = '".$map->getIdMap()."')";
-            $Result = $this->_bdd->query($req);
-            while($tab=$Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT `idEntite` FROM `Entite` WHERE `idUser`=:idUser AND `idMap`=:idMap)");
+            $req->execute(['idUser' => $this->_idEntite, 'idMap' => $map->getIdMap()]);
+            while($tab = $req->fetch()){
                 array_push($listCreature,$tab);
             }
             return $listCreature;
@@ -358,29 +350,22 @@
 
         public function SubitDegatByCreature($Creature){
             $CreatureDegatAttaqueEnvoyer=$Creature->getAttaque();
-            //Mise en place de la defence.
             $CreatureDegatAttaqueEnvoyer -= round(($CreatureDegatAttaqueEnvoyer * $this->getDefense())/100,1);
-
             $healthAvantAttaque = $this->_healthNow;
-            //on va rechercher l'historique
-            $req = "SELECT * FROM `AttaqueEntiteCreature` WHERE idCreature = '".$Creature->getIdEntite()."' and idEntite = '".$this->_idEntite."'";
-            $Result = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("SELECT * FROM `AttaqueEntiteCreature` WHERE idCreature=:idCreature AND idEntite=:idEntite");
+            $req->execute(['idCreature' => $Creature->getIdEntite(), 'idEntite' => $this->_idEntite]);
             $tabAttaque['nbCoup']=0;
             $tabAttaque['DegatsDonnes']=$CreatureDegatAttaqueEnvoyer;
-            if($tab=$Result->fetch()){
+            if($tab = $req->fetch()){
                 $tabAttaque = $tab;
                 $tabAttaque['DegatsDonnes']+=$CreatureDegatAttaqueEnvoyer;
                 $tabAttaque['nbCoup']++;
             }
             else{
-                //insertion d'une nouvelle attaque
-                $req="INSERT INTO `AttaqueEntiteCreature`(`idCreature`, `idEntite`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`) 
-                VALUES (
-                    '".$Creature->getIdEntite()."','".$this->_idEntite."',0,0,".$tabAttaque['DegatsReçus'].",0
-                )";
-                $Result = $this->_bdd->query($req);
+                $req = $this->_bdd->prepare("INSERT INTO `AttaqueEntiteCreature`(`idCreature`, `idEntite`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`) 
+                VALUES (:idCreature, :idEntite, 0, 0, :degatsRecus, 0)");
+                $req->execute(['idCreature' => $Creature->getIdEntite, 'idEntite' => $this->_idEntite, 'degatsRecus' => $tabAttaque['DegatsReçus']]);
             }
-
             $this->_healthNow = $this->_healthNow - $CreatureDegatAttaqueEnvoyer;
             if($this->_healthNow<0){
                 $this->_healthNow=0;
@@ -388,13 +373,10 @@
                 $tabAttaque['DegatsDonnes'] = $healthAvantAttaque;
                 //retour en zone 0,0
             }
-            $req = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow ."' WHERE `idEntite` = '".$this->_idEntite."'";
-            $Result = $this->_bdd->query($req);
-            //update AttaqueEntiteCreature pour mettre a jour combien le perso a pris de degat 
-            $req="UPDATE `AttaqueEntiteCreature` SET 
-            `DegatsDonnes`=".$tabAttaque['DegatsDonnes']." 
-            WHERE idCreature = '".$Creature->getIdEntite()."' AND idEntite ='".$this->_idEntite."'";
-            $Result = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("UPDATE `Entite` SET `healthNow`=:healthNow WHERE `idEntite`=:idEntite");
+            $req->execute(['healthNow' => $this->_healthNow, 'idEntite' => $this->_idEntite]);
+            $req = $this->_bdd->prepare("UPDATE `AttaqueEntiteCreature` SET `DegatsDonnes`=:DegatsDonnes WHERE idCreature=:idCreature AND idEntite=:idEntite");
+            $req->execute(['DegatsDonnes' => $tabAttaque['DegatsDonnes'], 'idCreature' => $Creature->getIdEntite(), 'idEntite' => $this->_idEntite]);
             return $this->_healthNow;
         }
 
@@ -425,8 +407,8 @@
             $healthMax = intdiv ($this->_healthMax,2);
             $attaque = intdiv ($this->_healthMax,2);
             if($healthMax<10){$healthMax=10;}
-            $req = "UPDATE `Entite` SET `degat`='".$attaque."',`healthMax`='".$healthMax."',`healthNow`='".$healthMax."' WHERE `idEntite` = '".$this->_idEntite."'";
-            $Result = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("UPDATE `Entite` SET `degat`=:degat, `healthMax`=:healthMax, `healthNow`=:healthNow WHERE `idEntite`=:idEntite");
+            $req->execute(['degat' => $attaque, 'healthMax' => $healthMax, 'healthNow' => $healthMax, 'idEntite' => $this->_idEntite]);
             $this->_healthNow=$healthMax;
             $this->_healthMax=$healthMax;
             $this->_degat=$attaque;
@@ -451,25 +433,25 @@
 
         public function lvlupAttaque($attaque){
             $this->_degat += $attaque;
-            $sql = "UPDATE `Entite` SET `degat`='".$this->_degat."' WHERE `idEntite`='".$this->_idEntite."'";
-            $this->_bdd->query($sql);
+            $req = $this->_bdd->prepare("UPDATE `Entite` SET `degat`=:degat WHERE `idEntite`=:idEntite");
+            $req->execute(['degat' => $this->_degat, 'idEntite' => $this->_idEntite]);
         }
         public function lvlupHealthNow($healthmore){
             $this->_healthNow += $healthmore;
-            $sql = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow."' WHERE `idEntite`='".$this->_idEntite."'";
-            $this->_bdd->query($sql);
+            $req = $this->_bdd->prepare("UPDATE `Entite` SET `healthNow`=:healthNow WHERE `idEntite`=:idEntite");
+            $req->execute(['healthNow' => $this->_healthNow, 'idEntite' => $this->_idEntite]);
         }
         public function lvlupHealthMax($healthmore){
             $this->_healthMax += $healthmore;
-            $sql = "UPDATE `Entite` SET `healthMax`='".$this->_healthMax."' WHERE `idEntite`='".$this->_idEntite."'";
-            $this->_bdd->query($sql);
+            $req = $this->_bdd->prepare("UPDATE `Entite` SET `healthMax`=:healthMax WHERE `idEntite`=:idEntite");
+            $req->execute(['healthMax' => $this->_healthMax, 'idEntite' => $this->_idEntite]);
         }
 
         /** Changement de Map */
         public function changeMap($NewMap){
             $this->_mapEntite = $NewMap;
-            $sql = "UPDATE `Entite` SET `idMap`='".$NewMap->getIdMap()."' WHERE `idEntite`='".$this->_idEntite."'";
-            $this->_bdd->query($sql);
+            $req = $this->_bdd->prepare("UPDATE `Entite` SET `idMap`=:idMap WHERE `idEntite`=:idEntite");
+            $req->execute(['idMap' => $NewMap->getIdMap(), 'idEntite' => $this->_idEntite]);
         }
     }
 ?>

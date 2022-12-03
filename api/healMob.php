@@ -9,7 +9,7 @@
         $cible = New Creature($mabase);
         $cible->setCreatureById($idEntite);
         //Soigne le Creature
-        $cible->healCreaturespawn($idEntite);
+        $cible->setCreatureHealthNow($idEntite);
         //Recupère la healthNow et la healthMax du Créature
         $healthNow = $cible->getHealthNow();
         $healthMax = $cible->getHealthNow();

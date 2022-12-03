@@ -16,9 +16,9 @@
         /** Set Personnage by Id Personnage */
         public function setPersonnageById($idPersonnage){
             Parent::setEntiteById($idPersonnage);
-            $req = "SELECT * FROM `Personnage` WHERE idPersonnage = '".$idPersonnage."'";
-            $Result = $this->_bdd->query($req);
-            if($tab=$Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT * FROM `Personnage` WHERE idPersonnage=:idPersonnage");
+            $req->execute(['idPersonnage' => $idPersonnage]);
+            if($tab = $req->fetch()){
                 $this->_idTypePersonnage    = $tab['idTypePersonnage'];
                 $this->_levelPersonnage     = $tab['levelPersonnage'];
                 $this->_expPersonnage       = $tab['expPersonnage'];
@@ -27,9 +27,9 @@
                 $this->_effectPersonnage    = $tab['effectPersonnage'];
             }
             //select les items déjà présent
-            $req = "SELECT idItem FROM `PersoSacItems` WHERE idPersonnage = '".$idPersonnage."'";
-            $Result = $this->_bdd->query($req);
-            while($tab=$Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT idItem FROM `PersoSacItems` WHERE idPersonnage=:idPersonnage");
+            $req->execute(['idPersonnage' => $idPersonnage]);
+            while($tab = $req->fetch()){
                 array_push($this->sacItems,$tab[0]);
             }
         }
@@ -111,8 +111,8 @@
             if($this->_healthNow < 0){
                 $this->_healthNow = 0;
             }
-            $req = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow ."' WHERE `idEntite` = '".$this->_idEntite ."'";
-            $Result = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("UPDATE `Entite` SET `healthNow`=:healthNow WHERE `idEntite`=:idEntite");
+            $req->execute(['healthNow' => $this->_healthNow, 'idEntite' => $this->_idEntite]);
             return $this->_healthNow;
         }
 
@@ -131,22 +131,20 @@
                 }
                 $healthAvantAttaque = $this->_healthNow;
                 //on va rechercher l'historique
-                $req = "SELECT * FROM `AttaquePersoCreature` WHERE idCreature = '".$Creature->getIdEntite()."' and idPersonnage = '".$this->_idEntite."'";
-                $Result = $this->_bdd->query($req);
+                $req = $this->_bdd->prepare("SELECT * FROM `AttaquePersoCreature` WHERE idCreature=:idCreature AND idPersonnage=:idPersonnage");
+                $req->execute(['idCreature' => $Creature->getIdEntite(), 'idPersonnage' => $this->_idEntite]);
                 $tabAttaque['nbCoup']=0;
                 $tabAttaque['DegatsDonnes']=$CreatureDegatAttaqueEnvoyer;
-                if($tab=$Result->fetch()){
+                if($tab = $req->fetch()){
                     $tabAttaque = $tab;
                     $tabAttaque['DegatsDonnes']+=$CreatureDegatAttaqueEnvoyer;
                     $tabAttaque['nbCoup']++;
                 }
                 else{
                     //insertion d'une nouvelle attaque
-                    $req="INSERT INTO `AttaquePersoCreature`(`idCreature`, `idPersonnage`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`) 
-                    VALUES (
-                        '".$Creature->getIdEntite()."','".$this->_idEntite."',0,0,".$tabAttaque['DegatsReçus'].",0
-                    )";
-                    $Result = $this->_bdd->query($req);
+                    $req = $this->_bdd->prepare("INSERT INTO `AttaquePersoCreature`(`idCreature`, `idPersonnage`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`)
+                    VALUES(:idCreature, :idPersonnage, 0, 0, :DegatsDonnes, 0)");
+                    $req->execute(['idCreature' => $Creature->getIdEntite(), 'idPersonnage' => $this->_idEntite, 'DegatsDonnes' => $tabAttaque['DegatsReçus']]);
                 }
                 $this->_healthNow = $this->_healthNow - $CreatureDegatAttaqueEnvoyer;
                 if($this->_healthNow<0){
@@ -155,13 +153,11 @@
                     $tabAttaque['DegatsDonnes'] = $healthAvantAttaque;
                     //retour en zone 0,0
                 }
-                $req  = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow ."' WHERE `idEntite` = '".$this->_idEntite ."'";
-                $Result = $this->_bdd->query($req);
+                $req = $this->_bdd->prepare("UPDATE `Entite` SET `healthNow`=:healthNow WHERE `idEntite`=:idEntite");
+                $req->execute(['healthNow' => $this->_healthNow, 'idEntite' => $this->_idEntite]);
                 //update AttaquePersoCreature pour mettre a jour combien le perso a pris de degat 
-                $req="UPDATE `AttaquePersoCreature` SET 
-                `DegatsDonnes`=".$tabAttaque['DegatsDonnes']."
-                WHERE idCreature = '".$Creature->getIdEntite()."' AND idPersonnage ='".$this->_idEntite."' ";
-                $Result = $this->_bdd->query($req);
+                $req = $this->_bdd->prepare("UPDATE `AttaquePersoCreature` SET `DegatsDonnes`=:DegatsDonnes WHERE idCreature=:idCreature AND idPersonnage=:idPersonnage");
+                $req->execute(['DegatsDonnes' => $tabAttaque['DegatsDonnes'], 'idCreature' => $Creature->getIdEntite(), 'idPersonnage' => $this->_idEntite]);
             }
             return $this->_healthNow;
         }
@@ -169,15 +165,15 @@
         /** Add de l'Experience Personnage */ // À refaire
         public function addXP($value){
             $this->_expPersonnage += $value ;
-            $req  = "UPDATE `Personnage` SET `expPersonnage`='".$this->_expPersonnage ."' WHERE `idPersonnage` = '".$this->_idEntite."'";
-            $Result = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("UPDATE `Personnage` SET `expPersonnage`=:expPersonnage WHERE `idPersonnage`=:idPersonnage");
+            $req->execute(['expPersonnage' => $this->_expPersonnage, 'idPersonnage' => $this->_idEntite]);
             //passage des Lvl suis une loi de racine carre
             /* le double etole ** c'est elevé à la puissance */
             $lvlEntite = ceil(($this->_expPersonnage/2000)**(0.7));
             if($lvlEntite >$this->_lvlEntite){
                 $this->_lvlEntite = $lvlEntite;
-                $req  = "UPDATE `Entite` SET `lvlEntite`='".$this->_lvlEntite."' WHERE `idEntite` = '".$this->_idEntite ."'";
-                $Result = $this->_bdd->query($req);
+                $req = $this->_bdd->prepare("UPDATE `Entite` SET `lvlEntite`=:lvlEntite WHERE `idEntite`=:idEntite");
+                $req->execute(['lvlEntite' => $this->_lvlEntite, 'idEntite' => $this->_idEntite]);
             }
             return $this->_expPersonnage;
         }
@@ -188,8 +184,8 @@
             $attaque = round($this->_degat - (($this->_degat*15)/100));
             if($healthMax<100){$healthMax=100;}
             if($attaque<10){$attaque=10;}
-            $req = "UPDATE `Entite` SET `degat`='".$attaque."',`healthMax`='".$healthMax."',`healthNow`='".$healthMax."' WHERE `idEntite` = '".$this->_idEntite ."'";
-            $Result = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("UPDATE `Entite` SET `degat`=:degat, `healthMax`=:healthMax, `healthNow`=:healthNow WHERE `idEntite`=:idEntite");
+            $req->execute(['degat' => $attaque, 'healthMax' => $healthMax, 'healthNow' => $healthMax, 'idEntite' => $this->_idEntite]);
             $this->_healthNow=$healthMax;
             $this->_healthMax=$healthMax;
             $this->_degat=$attaque;
@@ -224,17 +220,17 @@
         /** Supprime Item du Sac Personnage et liste Items By ID */
         public function removeItemByID($idItem){
             unset($this->sacItems[array_search($idItem, $this->sacItems)]);
-            $req="DELETE FROM `PersoSacItems` WHERE idPersonnage = '".$this->getIdEntite()."' AND idItem='".$idItem."'";
-            $this->_bdd->query($req);
-            $req="DELETE FROM `Item` WHERE idItem='".$idItem."'";
-            $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("DELETE FROM `PersoSacItems` WHERE idPersonnage=:idPersonnage AND idItem=:idItem");
+            $req->execute(['idPersonnage' => $this->getIdEntite(), 'idItem' => $idItem]);
+            $req = $this->_bdd->prepare("DELETE FROM `Item` WHERE idItem=:idItem");
+            $req->execute(['idItem' => $idItem]);
         }
 
         /** Crée Lien entre SacPersonnage et Items */
         public function addItem($newItem){
             array_push($this->sacItems,$newItem->getIdItem());
-            $req="INSERT INTO `PersoSacItems`(`idPersonnage`, `idItem`) VALUES ('".$this->getIdEntite()."','".$newItem->getIdItem()."')";
-            $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("INSERT INTO `PersoSacItems`(`idPersonnage`, `idItem`) VALUES (:idPersonnage, :idItem)");
+            $req->execute(['idPersonnage' => $this->getIdEntite(), 'idItem' => $newItem->getIdItem()]);
         }
 
         /** Return List HTML des Personnages d'un User et permet d'atribuer un perso à un User */
@@ -246,13 +242,14 @@
                     $this->resurection();
                 }
             }
-            $Result = $this->_bdd->query("SELECT * FROM `Entite` WHERE idUser='".$User->getIdUser()."' AND idTypeEntite=1");
+            $req = $this->_bdd->prepare("SELECT * FROM `Entite` WHERE idUser=:idUser AND idTypeEntite=1");
+            $req->execute(['idUser' => $User->getIdUser()]);
             ?>
                 <form action="" method="post" onchange="this.submit()">
                     <select name="idPersonnage" id="idPersonnage">
                     <option value="">Choisir un personnage</option>
                         <?php
-                            while($tab=$Result->fetch()){
+                            while($tab = $req->fetch()){
                                 ($tab['idEntite']==$this->_idEntite)?$selected='selected':$selected='';
                                 echo '<option value="'.$tab["idEntite"].'" '.$selected.'> '.$tab["nameEntite"].'</option>';
                             }

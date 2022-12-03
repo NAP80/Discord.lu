@@ -24,16 +24,15 @@
         }
 
         private function initInfo($idEntite){
-            //select les info personnage
-            $req = "SELECT * FROM `Creature` WHERE idEntite='".$idEntite."'";
-            $Result = $this->_bdd->query($req);
-            if($tab=$Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT * FROM `Creature` WHERE idEntite=:idEntite");
+            $req->execute(['idEntite' => $idEntite]);
+            if($tab = $req->fetch()){
                 $this->_idTypeCreature  = $tab['idTypeCreature'];
                 $this->_coefXP  = $tab['coefXp'];
             }
             else{
-                $req  = "INSERT  INTO `Creature` (idEntite,idTypeCreature,coefXp) VALUE ('".$idEntite."','0','1')";
-                $Result = $this->_bdd->query($req);
+                $req = $this->_bdd->prepare("INSERT INTO `Creature` (idEntite, idTypeCreature, coefXp) VALUE (:idEntite, 0, 1)");
+                $req->execute(['idEntite' => $idEntite]);
             }
         }
 
@@ -75,40 +74,31 @@
                 if($this->_healthNow <= 0){
                     $this->_healthNow = 0;
                     $coupFatal = 1;
-                    //on va attribuer le Créature au personnage, sa healthNow revient a fond pour le propriétaire
-                    $req    = "UPDATE `Entite` SET `healthNow`='".$this->_healthMax."',`idUser`='".$Entite->getIdUser()."' WHERE `idEntite` = '".$this->_idEntite."'";
-                    $Result = $this->_bdd->query($req);
+                    $req = $this->_bdd->prepare("UPDATE `Entite` SET `healthNow`=:healthMax, `idUser`=:idUser WHERE `idEntite`=:idEntite");
+                    $req->execute(['healthMax' => $this->_healthMax, 'idUser' => $Entite->getIdUser(), 'idEntite' => $this->_idEntite]);
                 }
                 else{
-                    $req    = "UPDATE `Entite` SET `healthNow`='".$this->_healthNow ."' WHERE `idEntite` = '".$this->_idEntite ."'";
-                    $Result = $this->_bdd->query($req);
+                    $req = $this->_bdd->prepare("UPDATE `Entite` SET `healthNow`=:healthNow WHERE `idEntite`=:idEntite");
+                    $req->execute(['healthNow' => $this->_healthNow, 'idEntite' => $this->_idEntite]);
                 }
-                //on va rechercher l'historique
-                $req    = "SELECT * FROM `AttaquePersoCreature` WHERE idCreature = '".$this->_idEntite."' and idPersonnage = '".$Entite->getIdEntite()."'";
-                $Result = $this->_bdd->query($req);
-                $tabAttaque['nbCoup']=0;
-                $tabAttaque['DegatsDonnes']=0;
-                $tabAttaque['DegatsReçus']=$Entite->getAttaque();
-                if($tab=$Result->fetch()){
+                $req = $this->_bdd->prepare("SELECT * FROM `AttaquePersoCreature` WHERE idCreature=:idCreature AND idPersonnage=:idEntite");
+                $req->execute(['idCreature' => $this->_idEntite, 'idEntite' => $Entite->getIdEntite()]);
+                $tabAttaque['nbCoup'] = 0;
+                $tabAttaque['DegatsDonnes'] = 0;
+                $tabAttaque['DegatsReçus'] = $Entite->getAttaque();
+                if($tab = $req->fetch()){
                     $tabAttaque = $tab;
-                    $tabAttaque['DegatsReçus']+=$Entite->getAttaque();
+                    $tabAttaque['DegatsReçus'] += $Entite->getAttaque();
                     $tabAttaque['nbCoup']++;
                 }
                 else{
-                    //insertion d'une nouvelle attaque
-                    $req    = "INSERT INTO `AttaquePersoCreature`(`idCreature`, `idPersonnage`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`)
-                    VALUES (
-                        '".$this->_idEntite."','".$Entite->getIdEntite()."',1,0,0,".$tabAttaque['DegatsReçus']."
-                    )";
-                    $Result = $this->_bdd->query($req);
+                    $req = $this->_bdd->prepare("INSERT INTO `AttaquePersoCreature` (`idCreature`, `idPersonnage`, `nbCoup`, `coupFatal`, `DegatsDonnes`, `DegatsReçus`)
+                    VALUES(:idCreature, :idPersonnage, 1, 0, 0, :degatsRecus)");
+                    $req->execute(['idCreature' => $this->_idEntite, 'idPersonnage' => $Entite->getIdEntite(), 'degatsRecus' => $tabAttaque['DegatsReçus']]);
                 }
                 //update AttaquePersoCreature
-                $req    = "UPDATE `AttaquePersoCreature` SET
-                `nbCoup` = ".$tabAttaque['nbCoup'].",
-                `coupFatal` = ".$coupFatal.",
-                `DegatsReçus` = ".$tabAttaque['DegatsReçus']."
-                WHERE idCreature = '".$this->getIdEntite()."' AND idPersonnage = '".$Entite->getIdEntite()."' ";
-                $Result = $this->_bdd->query($req);
+                $req = $this->_bdd->prepare("UPDATE `AttaquePersoCreature` SET `nbCoup`=:nbCoup, `coupFatal`=:coupFatal, `DegatsReçus`=:degatsRecus WHERE idCreature=:idEntite AND idPersonnage=:idPersonnage");
+                $req->execute(['nbCoup' => $tabAttaque['nbCoup'], 'coupFatal' => $coupFatal, 'degatsRecus' => $tabAttaque['DegatsReçus'], 'idEntite' => $this->getIdEntite(), 'idPersonnage' => $Entite->getIdEntite()]);
                 usleep($CoolDown*1000);//microSeconde
             }
             return array ($this->_healthNow, $CoupCritique);
@@ -116,9 +106,9 @@
 
         /** Return Historique d'ataque */
         public function getHistoriqueAttaque(){
-            $req  = "SELECT * FROM `AttaquePersoCreature` WHERE idCreature = '".$this->_idEntite."'";
-            $Result = $this->_bdd->query($req);
-            while($tab=$Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT * FROM `AttaquePersoCreature` WHERE idCreature=:idCreature");
+            $req->execute(['idCreature' => $this->_idEntite]);
+            while($tab = $req->fetch()){
                 array_push($this->HistoriqueAttaque,$tab);
             }
             return $this->HistoriqueAttaque;
@@ -135,9 +125,8 @@
                 $degat = $coefAbuseArme*$typeCreature[2]*$lvlMap;
                 $newCreature = $newCreature->CreateEntite($this->generateName($typeCreature[0]), $healthNow, $degat, $map->getIdMap(),$healthNow,$typeCreature[3],null,0,$lvlMap);
                 if(!is_null($newCreature)){
-                    $req="INSERT INTO `Creature`(`idTypeCreature`, `idEntite` ,`coefXp` )
-                    VALUES ('".$typeCreature[1]."','".$newCreature->getIdTypeEntite()."','".$typeCreature[2]."')";
-                    $Result = $this->_bdd->query($req);
+                    $req = $this->_bdd->prepare("INSERT INTO `Creature`(`idTypeCreature`, `idEntite` ,`coefXp`) VALUES(:idTypeCreature, :idEntite, :coefXp)");
+                    $req->execute(['idTypeCreature' => $typeCreature[1], 'idEntite' => $newCreature->getIdTypeEntite(), 'coefXp' => $typeCreature[2]]);
                     if($newCreature->getIdEntite()){
                         $newCreature->setEntiteById( $newCreature->getIdEntite());
                         return $newCreature;
@@ -162,16 +151,14 @@
         //$tab[2]=$coef;
         //$tab[3]=image
         private function getTypeAleatoire(){
-            $req = "SELECT * FROM TypeCreature ORDER BY spawnTypeCreature ASC";
-            $Result = $this->_bdd->query($req);
-            $i = $Result->rowCount();
+            $req = $this->_bdd->prepare("SELECT * FROM TypeCreature ORDER BY spawnTypeCreature ASC");
+            $req->execute();
+            $i = $req->rowCount();
             $coef = 1;
-            $imax = $i*3;
             $newType = 1;// Pigeon par default - A dégager
-            $spawnTypeCreature = 1;
             $newTypeNom = 'Pigeon';
             $image = "assets/avatar/pigeon.jpg";
-            while($tab=$Result->fetch()){
+            while($tab = $req->fetch()){
                 if(rand(0,$tab['spawnTypeCreature'])==1){
                     $newType    =   $tab['idTypeCreature'];
                     $newTypeNom =   $tab['nameTypeCreature'];
@@ -801,9 +788,10 @@
             return $NameType." ".$Nom;
         }
 
-        /** Reset HealthNow de Creature by ID */
-        public function healCreaturespawn($idEntite){
-            $this->_bdd->query("UPDATE `Entite` SET `healthNow` = '".$this->healthMax."' WHERE `idEntite` = $idEntite");
+        /** Set HealthNow de Creature by ID */ // A Dégager - N'a pas de sens de cette manière
+        public function setCreatureHealthNow($idEntite){
+            $req = $this->_bdd->prepare("UPDATE `Entite` SET `healthNow`=:healthMax WHERE `idEntite`=:idEntite");
+            $req->execute(['healthMax' => $this->healthMax, 'idEntite' => $idEntite]);
         }
 
         /** Affiche le rendu HTML du Creature */

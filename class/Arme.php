@@ -2,15 +2,14 @@
     class Arme extends Equipement{
         /** Création Aléatoire d'une arme */
         public function createArmeAleatoire(){
-            $req="SELECT * FROM TypeEquipement Where idCategorie = 1 order by rarete ASC";
-            $Result = $this->_bdd->query($req);
-
-            $newType=1;//par default une gifle c'est une attaque;
-            $rarete=1;
+            $req = $this->_bdd->prepare('SELECT * FROM TypeEquipement Where idCategorie=1 ORDER BY rarete ASC');
+            $req->execute();
+            $newType = 1;//par default une gifle c'est une attaque;
+            $rarete = 1;
             $newTypeNom='Gifle ';
 
-            while($tab=$Result->fetch()){
-                if(rand(0,$tab['chance'])==1){
+            while($tab = $req->fetch()){
+                if(rand(0, $tab['chance']) == 1){
                     $newType = $tab['idTypeEquipement'];
                     $newTypeNom = $tab['nameEquipement'];
                     break;
@@ -25,8 +24,8 @@
             $newValeur = rand(5,10)*$rarete*$getEfficace['coef'];
 
             $this->_bdd->beginTransaction();
-            $req="INSERT INTO `Equipement`( `idTypeEquipement`, `nameEquipement`, `valeur`, `idEfficacite`,`lvlEquipement`) VALUES ('".$newType."','".$newNom."','".$newValeur."','".$idEfficacite."',1)";
-            $Result = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("INSERT INTO `Equipement`( `idTypeEquipement`, `nameEquipement`, `valeur`, `idEfficacite`,`lvlEquipement`) VALUES (:newType, :newNom, :newValeur, :idEfficacite, 1)");
+            $req->execute(['newType' => $newType, 'newNom' => $newNom, 'newValeur' => $newValeur, 'idEfficacite' => $idEfficacite]);
             $lastID = $this->_bdd->lastInsertId();
             if($lastID){
                 $this->setEquipementByID($lastID);
