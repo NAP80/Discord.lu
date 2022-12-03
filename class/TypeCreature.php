@@ -21,12 +21,9 @@
 
         // Return TypeCréature by Id Creatures
         public function setTypePersonnageByIdPerso($idCreature){
-            $req = "SELECT *
-            FROM `TypeCreature`,`Entite`
-            WHERE `TypeCreature`.idTypeCreature = `Entite`.idTypeCreature
-            AND `Entite`.idEntite='".$idCreature."'";
-            $Result = $this->_bdd->query($req);
-            if($tab=$Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT * FROM `TypeCreature`,`Entite` WHERE `TypeCreature`.idTypeCreature=`Entite`.idTypeCreature AND `Entite`.idEntite=:idCreature");
+            $req->execute(['idCreature' => $idCreature]);
+            if($tab = $req->fetch()){
                 $this->_idTypeCreature = $tab['idTypeCreature'];
                 $this->_nameTypeCreature = $tab['nameTypeCreature'];
                 $this->_defaultAvatar = $tab['defaultAvatar'];
@@ -43,10 +40,9 @@
         
         // Return TypeCréature by idTypeCreature
         public function setTypePersonnageById($idTypeCreature){
-            $req = "SELECT * FROM `TypeCreature`
-            WHERE idTypeCreature='".$idTypeCreature."'";
-            $Result = $this->_bdd->query($req);
-            if($tab=$Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT * FROM `TypeCreature` WHERE idTypeCreature=:idTypeCreature");
+            $req->execute(['idTypeCreature' => $idTypeCreature]);
+            if($tab = $req->fetch()){
                 $this->_idTypeCreature = $tab['idTypeCreature'];
                 $this->_nameTypeCreature = $tab['nameTypeCreature'];
                 $this->_defaultAvatar = $tab['defaultAvatar'];

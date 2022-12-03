@@ -18,12 +18,9 @@
 
         // Return TypeClassCreature by Id Creatures
         public function setTypeClassCreatureByIdPerso($idCreature){
-            $req = "SELECT *
-            FROM `TypeClassCreature`,`Entite`
-            WHERE `TypeClassCreature`.idTypeClassCreature = `Entite`.idTypeClassCreature
-            AND `Entite`.idEntite='".$idCreature."'";
-            $Result = $this->_bdd->query($req);
-            if($tab = $Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT * FROM `TypeClassCreature`,`Entite` WHERE `TypeClassCreature`.idTypeClassCreature=`Entite`.idTypeClassCreature AND `Entite`.idEntite=:idCreature");
+            $req->execute(['idCreature' => $idCreature]);
+            if($tab = $req->fetch()){
                 $this->_idTypeClassCreature = $tab['idTypeClassCreature'];
                 $this->_nameTypeClassCreature = $tab['nameTypeClassCreature'];
                 $this->_posTypeCreature = $tab['posTypeCreature'];
@@ -37,10 +34,9 @@
         
         // Return TypeClassCreature by Id TypeClassCreature
         public function setTypePersonnageById($idTypeClassCreature){
-            $req = "SELECT * FROM `TypeClassCreature`
-            WHERE idTypeClassCreature='".$idTypeClassCreature."'";
-            $Result = $this->_bdd->query($req);
-            if($tab = $Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT * FROM `TypeClassCreature` WHERE idTypeClassCreature=:idTypeClassCreature");
+            $req->execute(['idTypeClassCreature' => $idTypeClassCreature]);
+            if($tab = $req->fetch()){
                 $this->_idTypeClassCreature = $tab['idTypeClassCreature'];
                 $this->_nameTypeClassCreature = $tab['nameTypeClassCreature'];
                 $this->_posTypeCreature = $tab['posTypeCreature'];
@@ -65,7 +61,7 @@
         /** Return Position du NameTypeClassCreature :
          *  0 = Début,
          *  1 = Fin
-         */
+        */
         public function getPosTypeCreature(){
             return $this->_posTypeCreature;
         }

@@ -12,11 +12,9 @@
 
         /** Return TypeMap by Id Map */
         public function setTypeMapByIdMap($IdMap){
-            $req = "SELECT * FROM `TypeMap`,`Map`
-            WHERE `TypeMap`.idTypeMap = `Map`.idTypeMap
-            AND `Map`.IdMap = '".$IdMap."'";
-            $Result = $this->_bdd->query($req);
-            if($tab=$Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT * FROM `TypeMap`,`Map` WHERE `TypeMap`.idTypeMap=`Map`.idTypeMap AND `Map`.IdMap:IdMap");
+            $req->execute(['IdMap' => $IdMap]);
+            if($tab = $req->fetch()){
                 $this->_idTypeMap           = $tab['idTypeMap'];
                 $this->_nameTypeMap         = $tab['nameTypeMap'];
                 $this->_defaultBackground   = $tab['defaultBackground'];
@@ -25,10 +23,9 @@
         
         /** Return TypeMap by Id TypeMap*/
         public function setTypeMapByIdTypeMap($idTypeMap){
-            $req = "SELECT * FROM `TypeMap`
-            WHERE idTypeMap = '".$idTypeMap."'";
-            $Result = $this->_bdd->query($req);
-            if($tab=$Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT * FROM `TypeMap` WHERE idTypeMap=:idTypeMap");
+            $req->execute(['idTypeMap' => $idTypeMap]);
+            if($tab = $req->fetch()){
                 $this->_idTypeMap           = $tab['idTypeMap'];
                 $this->_nameTypeMap         = $tab['nameTypeMap'];
                 $this->_defaultBackground   = $tab['defaultBackground'];

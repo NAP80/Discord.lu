@@ -11,9 +11,9 @@
 
         //retourne le text aléatoire d'un tooltip
         public function getTooltipAleatoire(){
-            $req="SELECT * From Tooltip order by rand() limit 1 ";
-            $Result = $this->_bdd->query($req);
-            if($tab=$Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT * FROM Tooltip ORDER BY rand() LIMIT 1");
+            $req->execute();
+            if($tab = $req->fetch()){
                 return $tab['tooltip'];
             }
         }
