@@ -11,9 +11,9 @@
         }
 
         public function setEfficaciteByID($idEfficacite){
-            $req = "SELECT * FROM Efficacite WHERE Efficacite.idEfficacite='".$idEfficacite."'";
-            $Result = $this->_bdd->query($req);
-            if($tab = $Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT * FROM Efficacite WHERE Efficacite.idEfficacite=:idEfficacite");
+            $req->execute(['idEfficacite' => $idEfficacite]);
+            if($tab = $req->fetch()){
                 $this->setEfficacite(
                     $tab["idEfficacite"],
                     $tab["adjectif"],
@@ -49,20 +49,20 @@
 
         /** Return Efficacité */
         public function getEfficacite(){
-            $req="SELECT * FROM Efficacite WHERE idEfficacite = '".$this->_idEfficacite."'";
-            $Result = $this->_bdd->query($req);
-            if($tab=$Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT * FROM Efficacite WHERE idEfficacite=:idEfficacite");
+            $req->execute(['idEfficacite' => $this->_idEfficacite]);
+            if($tab = $req->fetch()){
                 return $tab['coef'];
             }
             return 0;
         }
         
         protected function getEfficaceAleatoire(){
-            $req="SELECT * FROM Efficacite ORDER BY ordre ASC";
-            $Result = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("SELECT * FROM Efficacite ORDER BY ordre ASC");
+            $req->execute();
             $found = false;
-            while($tab=$Result->fetch()){
-                if(rand(0,$tab['chance'])==1){
+            while($tab = $req->fetch()){
+                if(rand(0, $tab['chance']) == 1){
                     $tabretour  = $tab;
                     $found = true;
                 }

@@ -8,9 +8,9 @@
 
         /** Récupère Item By ID */
         public function setItemByID($idItem){
-            $req = "SELECT * FROM Item WHERE idItem='".$idItem."'";
-            $Result = $this->_bdd->query($req);
-            if($tab = $Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT * FROM Item WHERE idItem=:idItem");
+            $req->execute(['idItem' => $idItem]);
+            if($tab = $req->fetch()){
                 $this->setItem(
                     $tab["idItem"],
                     $tab["idTypeItem"],
@@ -50,15 +50,15 @@
 
         /** Remove Item By ID : À vérifier si complet */
         public function deleteItem($idItem){
-            $req="DELETE FROM Item WHERE idItem='".$idItem."'";
-            $Result = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("DELETE FROM Item WHERE idItem=:idItem");
+            $req->execute(['idItem' => $idItem]);
         }
 
         /** Return Tab[ID,Information,LienIMG,Nom,Rareté] */
         public function getTypeItem(){
-            $req="SELECT * FROM TypeItem WHERE idTypeItem='".$this->_idTypeItem."'";
-            $Result = $this->_bdd->query($req);
-            if($tab = $Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT * FROM TypeItem WHERE idTypeItem=:idTypeItem");
+            $req->execute(['idTypeItem' => $this->_idTypeItem]);
+            if($tab = $req->fetch()){
                 return $tab;
             }
             else{
@@ -68,10 +68,10 @@
 
         /** Return Couleur de Rareté d'un Item */
         public function getClassRarete(){
-            $req="SELECT rarete FROM TypeItem WHERE idTypeItem = '".$this->_idTypeItem."'";
-            $Result = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("SELECT rarete FROM TypeItem WHERE idTypeItem=:idTypeItem");
+            $req->execute(['idTypeItem' => $this->_idTypeItem]);
             $colorRarete = "background-color:rgba(";
-            if($tab = $Result->fetch()){
+            if($tab = $req->fetch()){
                 //pour le moment les raretés vont de 1 à 16
                 //rareté de vert à rouge
                 if($tab[0]<8){
@@ -102,9 +102,9 @@
         /** Création d'un Item Soin Aléatoire */
         public function createItemSoinConsommable(){
             $newItem = new Item($this->_bdd);
-            $req="SELECT * FROM TypeItem WHERE idTypeItem = 2";
-            $Result = $this->_bdd->query($req);
-            if($tab=$Result->fetch()){
+            $req = $this->_bdd->prepare("SELECT * FROM TypeItem WHERE idTypeItem=2");
+            $req->execute();
+            if($tab = $req->fetch()){
                 $newType = $tab['idTypeItem'];
                 $newTypeNom = $tab['nameTypeItem'];
                 $rarete=$tab['rarete'];
@@ -113,8 +113,8 @@
                 $idEfficacite = $getEfficace['idEfficacite'];
                 $newValeur = rand(5,10)*$rarete*$getEfficace['coef'];
                 $this->_bdd->beginTransaction();
-                $req="INSERT INTO `Item`( `idTypeItem`, `nameItem`, `valeur`, `idEfficacite`,`lvlItem`) VALUES ('".$newType."','".$newNom."','".$newValeur."','".$idEfficacite."',1)";
-                $Result = $this->_bdd->query($req);
+                $req = $this->_bdd->prepare("INSERT INTO `Item`( `idTypeItem`, `nameItem`, `valeur`, `idEfficacite`,`lvlItem`) VALUES (:newType, :newNom, :newValeur, :idEfficacite,1)");
+                $req->execute(['newType' => $newType, 'newNom' => $newNom, 'newValeur' => $newValeur, 'idEfficacite' => $idEfficacite]);
                 $lastID = $this->_bdd->lastInsertId();
                 if($lastID){
                     $newItem->setItem($lastID,$newType,$newNom,$newValeur,$idEfficacite,1);
@@ -134,14 +134,14 @@
         /** Création d'un Item Aléatoire */
         public function createItemAleatoire(){
             $newItem = new Item($this->_bdd);
-            $req="SELECT * FROM TypeItem ORDER BY rarete ASC";
-            $Result = $this->_bdd->query($req);
-            $i = $Result->rowCount();
+            $req = $this->_bdd->prepare("SELECT * FROM TypeItem ORDER BY rarete ASC");
+            $req->execute();
+            $i = $req->rowCount();
             $imax=$i*3;
             $newType=0;
             $rarete=1;
             $newTypeNom='poussiere';
-            while($tab=$Result->fetch()){
+            while($tab = $req->fetch()){
                 if(rand(0,$tab['chance'])==1){
                     $newType = $tab['idTypeItem'];
                     $newTypeNom = $tab['nameTypeItem'];
@@ -154,8 +154,8 @@
             $idEfficacite = $getEfficace['idEfficacite'];
             $newValeur = rand(5,10)*$rarete*$getEfficace['coef'];
             $this->_bdd->beginTransaction();
-            $req="INSERT INTO `Item`( `idTypeItem`, `nameItem`, `valeur`, `idEfficacite`,`lvlItem`) VALUES ('".$newType."','".$newNom."','".$newValeur."','".$idEfficacite."',1)";
-            $Result = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("INSERT INTO `Item`( `idTypeItem`, `nameItem`, `valeur`, `idEfficacite`,`lvlItem`) VALUES (:newType, :newNom, :newValeur, :idEfficacite, 1)");
+            $req->execute(['newType' => $newType, 'newNom' => $newNom, 'newValeur' => $newValeur, 'idEfficacite' => $idEfficacite]);
             $lastID = $this->_bdd->lastInsertId();
             if($lastID){ 
                 $newItem->setItem($lastID,$newType,$newNom,$newValeur,$idEfficacite,1);

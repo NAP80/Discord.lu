@@ -20,9 +20,9 @@
 
         /** Return le nombre d'équipement totaux : À vérifier */
         public function getNombreEquipement($bdd){
-            $req = 'SELECT COUNT(*) FROM equipement';
-            $excuteReq = $this->_bdd->query($req);
-            $data = $excuteReq->fetch();
+            $req = $this->_bdd->prepare("SELECT COUNT(*) FROM equipement");
+            $req->execute();
+            $data = $req->fetch();
             return $data['COUNT(*)'];
         }
 
@@ -49,9 +49,9 @@
 
         /** Return le nombre d'items totaux : À vérifier */
         public function getNombreItem(){
-            $req = 'SELECT COUNT(*) FROM item';
-            $excuteReq = $this->_bdd->query($req);
-            $data = $excuteReq->fetch();
+            $req = $this->_bdd->prepare("SELECT COUNT(*) FROM item");
+            $req->execute();
+            $data = $req->fetch();
             return $data['COUNT(*)'];
         }
 

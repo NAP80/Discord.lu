@@ -12,13 +12,13 @@
         }
 
         public function acheter($entite, $idMap, $idEntite){
-            $req = "SELECT mapitems.idMap, item.nameItem, item.valeur FROM `mapitems`, `item` WHERE item.idItem = mapitems.idItem AND `idMap` = $idMap";
-            $RequetStatement = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("SELECT mapitems.idMap, item.nameItem, item.valeur FROM `mapitems`, `item` WHERE item.idItem=mapitems.idItem AND `idMap`=:idMap");
+            $req->execute(['idMap' => $idMap]);
             ?>
                 <form method="post">
                     <table>
                         <?php
-                            while($Tab=$RequetStatement->fetch()){
+                            while($Tab = $req->fetch()){
                                 ?>
                                     <tr>
                                         <td><?= $Tab[1] ?></td>
@@ -34,9 +34,9 @@
             <?php
 
             // Récupère l'argent du user
-            $req = "SELECT user.money FROM `user`, `entite` WHERE user.idPersonnage=entite.idEntite AND entite.idEntite = $idEntite";
-            $RequetStatement = $this->_bdd->query($req);
-            while($Tab=$RequetStatement->fetch()){
+            $req = $this->_bdd->prepare("SELECT user.money FROM `user`, `entite` WHERE user.idPersonnage=entite.idEntite AND entite.idEntite:idEntite");
+            $req->execute(['idEntite' => $idEntite]);
+            while($Tab = $req->fetch()){
                 $money = $Tab[0];
             }
             if(isset($_POST['radio'])){
@@ -54,20 +54,20 @@
                     $entite->addItem($item);
                     $this->removeItemByID($checkId);
                     $money -= $valeur;
-                    $req = "UPDATE `user`, `entite` SET user.money = $money WHERE user.idPersonnage=entite.idEntite AND entite.idEntite = $idEntite";
-                    $RequetStatement = $this->_bdd->query($req);
+                    $req = $this->_bdd->prepare("UPDATE `user`, `entite` SET user.money=:money WHERE user.idPersonnage=entite.idEntite AND entite.idEntite=:idEntite");
+                    $req->execute(['money' => $money, 'idEntite' => $idEntite]);
                 }
             }
         }
 
         public function vendre($entite, $idEntite){
-            $req = "SELECT persosacitems.idItem, item.nameItem, item.valeur FROM `persosacitems`, `item`, `user`, `entite` WHERE item.idItem = persosacitems.idItem AND user.idPersonnage = entite.idEntite AND entite.idEntite = $idEntite";
-            $RequetStatement = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("SELECT persosacitems.idItem, item.nameItem, item.valeur FROM `persosacitems`, `item`, `user`, `entite` WHERE item.idItem=persosacitems.idItem AND user.idPersonnage=entite.idEntite AND entite.idEntite=:idEntite");
+            $req->execute(['idEntite' => $idEntite]);
             ?>
                 <form method="post">
                     <table>
                         <?php
-                            while($Tab=$RequetStatement->fetch()){
+                            while($Tab = $req->fetch()){
                                 ?>
                                     <tr>
                                         <td><?= $Tab[1] ?></td>
@@ -82,9 +82,9 @@
                 </form>
             <?php
             // Récupère l'argent du user
-            $req = "SELECT user.money FROM `user`, `entite` WHERE user.idPersonnage=entite.idEntite AND entite.idEntite = $idEntite";
-            $RequetStatement = $this->_bdd->query($req);
-            while($Tab=$RequetStatement->fetch()){
+            $req = $this->_bdd->prepare("SELECT user.money FROM `user`, `entite` WHERE user.idPersonnage=entite.idEntite AND entite.idEntite=:idEntite");
+            $req->execute(['idEntite' => $idEntite]);
+            while($Tab = $req->fetch()){
                 $money = $Tab[0];
             }
             if(isset($_POST['checkbox'])){
@@ -96,8 +96,8 @@
                     $money += $valeur;
                 }
             }
-            $req = "UPDATE `user`, `entite` SET user.money = $money WHERE user.idPersonnage=entite.idEntite AND entite.idEntite = $idEntite";
-            $RequetStatement = $this->_bdd->query($req);
+            $req = $this->_bdd->prepare("UPDATE `user`, `entite` SET user.money=:money WHERE user.idPersonnage=entite.idEntite AND entite.idEntite:idEntite");
+            $req->execute(['money' => $money, 'idEntite' => $idEntite]);
         }
 
         /** Return Name Marché */
