@@ -8,7 +8,6 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 
 ## En cours :
 - Normalisation SQL,
-- Fix Injection SQL,
 - Mise en ligne du Site,
 - Uniformisation Code,
 - Refonte Entitée/Creature/Personnage,
@@ -20,7 +19,6 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Intégration envoie de mail et confirmation inscription,
 - - Ajout Boite de Dialog pour RepMSG,
 - - Intégration Panel Admin,
-- - Sécurisation Injection SQL,
 - - Intégrer les différents display/affichage.php dans l'objet PHP Map,
 - - Séparer Attaque Physique/Distance et idem avec Défense/Résistance,
 - - Mettre en place correctement le bouton Déco,
@@ -102,4 +100,5 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Retirer Bing et ses Avatars/Fonds Aléatoires,
 - Implémenter des Avatars/Fonds par défaults,
 - Refonte d'une partie des API et JS,
-- Patch des erreurs JS originels du changement d'équipement.
+- Patch des erreurs JS originels du changement d'équipement,
+- Sécurisation Injection SQL.
