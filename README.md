@@ -7,6 +7,8 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 # Avancement :
 
 ## En cours :
+- Normalisation SQL,
+- Fix Injection SQL,
 - Mise en ligne du Site,
 - Uniformisation Code,
 - Refonte Entitée/Creature/Personnage,
@@ -22,6 +24,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Intégrer les différents display/affichage.php dans l'objet PHP Map,
 - - Séparer Attaque Physique/Distance et idem avec Défense/Résistance,
 - - Mettre en place correctement le bouton Déco,
+- - Regex pour les MDP/Mails/Pseudo,
 - Style :
 - - Patch CSS Décalage Dialog,
 - - Patch le footer,
@@ -68,6 +71,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - ??? : Quand on refresh on voit les personnages du même user présent sur une map, mais quand on se déplace, non.
 - PHP : Quand on capture un animal, on se déplace une fois la map clear.
 - PHP : Refaire au propre la génération de typeCréature.
+- PHP : Prévoire cas de figure où joueur est sur une idMap non Existante.
 
 ## Fait :
 - Récupération du projet,
