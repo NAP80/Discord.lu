@@ -75,7 +75,7 @@
 
         /** Return IdTypeUser User */
         public function getIdTypeUser(){
-            return $this->idTypeUser;
+            return $this->_idTypeUser;
         }
 
         /** Return Nom du personnage en cours de l'User : À dégager */
