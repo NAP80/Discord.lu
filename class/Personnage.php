@@ -360,5 +360,21 @@
                 </div>
             <?php
         }
+
+        /** Return la liste ID des Entite Personnages (Pour le Classement) */
+        public function getListIdPersonnage(){
+            $req = $this->_bdd->prepare("SELECT * FROM `Entite` WHERE `idTypeEntite`=1 ORDER BY `lvlEntite`, `degat`, `healthMax`, `dateTimeEntite`");
+            $req->execute();
+            return $req;
+        }
+
+        /** Get Personnage by Id Personnage (Pour le Classement) */
+        public function GetInfoPersonnageById($idPersonnage){
+            $req = $this->_bdd->prepare("SELECT * FROM `Personnage` WHERE idPersonnage=:idPersonnage");
+            $req->execute(['idPersonnage' => $idPersonnage]);
+            if($tab = $req->fetch()){
+                return $tab;
+            }
+        }
     }
 ?>

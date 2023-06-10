@@ -87,5 +87,16 @@
         public function getIdFaction(){
             return $this->_idFaction;
         }
+
+        // Classement
+
+        /** Return NameTypePerso by IdTypePersonnage*/
+        public function getNameTypePersoById($idTypePersonnage){
+            $req = $this->_bdd->prepare("SELECT * FROM `TypePersonnage` WHERE idTypePerso=:idTypePersonnage");
+            $req->execute(['idTypePersonnage' => $idTypePersonnage]);
+            if($tab = $req->fetch()){
+                return $tab['nameTypePerso'];
+            }
+        }
     }
 ?>

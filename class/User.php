@@ -757,5 +757,30 @@
                 </form>
             <?php
         }
+
+        /** Return Pseudo User by Id */
+        public function getPseudoById($idUser){
+            $req = $this->_bdd->prepare("SELECT `pseudo` FROM `User` WHERE idUser=:idUser");
+            $req->execute(['idUser' => $idUser]);
+            if($tab = $req->fetch()){
+                return $tab['pseudo'];
+            }
+        }
+
+        /** Return la liste ID des Users Non Staff (Pour le Classement) */
+        public function getListIdPersonnage(){
+            $req = $this->_bdd->prepare("SELECT `pseudo`, `idFaction` ,`dateUser` FROM `User` WHERE `idTypeUser` IN (0, 1, 2, 3, 4) ORDER BY `dateUser`");
+            $req->execute();
+            return $req;
+        }
+
+        /** Get Nombre de Créature by Id User (Pour le Classement) */
+        public function GetNbCreatureByIdUser($idUser){
+            $req = $this->_bdd->prepare("SELECT * FROM `Entite` WHERE idUser=:idUser AND `idTypeEntite` ");
+            $req->execute(['idUser' => $idUser]);
+            if($tab = $req->fetch()){
+                return $tab;
+            }
+        }
     }
 ?>
