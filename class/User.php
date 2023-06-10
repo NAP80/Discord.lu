@@ -496,24 +496,13 @@
 
         public function DeconnectToi(){
             //traitement du formulaire
-            $afficheForm = true;
             $access = true;
             if(isset($_POST["logout"])){
                 $_SESSION["Connected"] = false;
                 session_unset();
                 session_destroy();
                 $this->ConnectToi();
-                $afficheForm = false;
                 $access = false;
-            }
-            if($afficheForm){
-                ?>
-                    <form action="" method="post">
-                        <div>
-                            <input type="submit" value="Deco!" name="logout">
-                        </div>
-                    </form>
-                <?php
             }
             return $access;
         }

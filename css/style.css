@@ -62,21 +62,13 @@ body{
     position: relative;
 }
 
-input[value='Deco!']{
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    padding: 4px 15px;
-    background-color: rgb(170, 39, 39);
-    border: solid black 1px;
-    border-radius: 10px;
-    color: white;
+input[id="unlogin"]{
+    background: none;
+    border: none;
+    color:white;
+    text-decoration: none;
+    cursor: pointer; 
 }
-
-.bodyAccueil input[value='Deco!']:hover{
-    background-color: rgb(212, 40, 40);
-}
-
 
 /*Formulaire Login*/
 
