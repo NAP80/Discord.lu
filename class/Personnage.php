@@ -363,7 +363,7 @@
 
         /** Return la liste ID des Entite Personnages (Pour le Classement) */
         public function getListIdPersonnage(){
-            $req = $this->_bdd->prepare("SELECT * FROM `Entite` WHERE `idTypeEntite`=1 ORDER BY `lvlEntite`, `degat`, `healthMax`, `dateTimeEntite`");
+            $req = $this->_bdd->prepare("SELECT * FROM `Entite` WHERE `idTypeEntite`=1 ORDER BY `lvlEntite`, `degat`, `healthMax`, `dateTimeEntite` LIMIT 100");
             $req->execute();
             return $req;
         }

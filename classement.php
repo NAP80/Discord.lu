@@ -43,7 +43,6 @@
                                     $PersonnageInfo = new Personnage($mabase);
                                     $UserPersonnage = new User($mabase);
                                     $TypePersonnage = new TypePersonnage($mabase);
-                                    // On fetch et récup tout
                                     foreach($ClassementPersonnage -> getListIdPersonnage() as $Personnage){
                                         $PersonnageInfo = new Personnage($mabase);
                                         $UserPersonnage = new User($mabase);
@@ -70,25 +69,22 @@
                             <tr>
                                 <th onclick="sortTable1(0)">Pseudo</th>
                                 <th onclick="sortTable1(1)">Faction</th>
-                                <th onclick="sortTable1(2)">Créature(s)</th>
+                                <th onclick="sortTable1(2)">Créature(s) Capturées</th>
                                 <th onclick="sortTable1(3)">Date de Création</th>
                             </tr>
                             </thead>
                             <tbody>
                                 <?php
                                     $UserPersonnage = new User($mabase);
+                                    $FactionUser = new Faction($mabase);
                                     $TypePersonnage = new TypePersonnage($mabase);
-                                    // On fetch et récup tout
                                     foreach($UserPersonnage -> getListIdPersonnage() as $UserInfo){
                                         ?>
                                             <tr>
                                                 <td><?= $UserInfo['pseudo']?></td>
-                                                <td><?= $PersonnageInfo['idTypePersonnage']?></td>
-                                                <td><?= $PersonnageInfo['levelPersonnage']?></td>
-                                                <td><?= $PersonnageInfo['expPersonnage'] ?></td>
-                                                <td><?= $PersonnageInfo['moneyPersonnage'] ?></td>
-                                                <td><?= date("d/m/Y", strtotime($Personnage['dateTimeEntite'])) ?></td>
-                                                <td><?= $UserPersonnage->getPseudoById($Personnage['idUser']) ?></td>
+                                                <td><?= $FactionUser->getNameFactionById($UserInfo['idFaction']) ?></td>
+                                                <td><?= $UserPersonnage->GetNbCreatureByIdUser($UserInfo['idUser']) ?></td>
+                                                <td><?= date("d/m/Y", strtotime($UserInfo['dateUser'])) ?></td>
                                             </tr>
                                         <?php
                                     }

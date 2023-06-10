@@ -769,17 +769,17 @@
 
         /** Return la liste ID des Users Non Staff (Pour le Classement) */
         public function getListIdPersonnage(){
-            $req = $this->_bdd->prepare("SELECT `pseudo`, `idFaction` ,`dateUser` FROM `User` WHERE `idTypeUser` IN (0, 1, 2, 3, 4) ORDER BY `dateUser`");
+            $req = $this->_bdd->prepare("SELECT `idUser`, `pseudo`, `idFaction` ,`dateUser` FROM `User` WHERE `idTypeUser` IN (0, 1, 2, 3, 4, 12) ORDER BY `dateUser` LIMIT 100");
             $req->execute();
             return $req;
         }
 
         /** Get Nombre de Créature by Id User (Pour le Classement) */
         public function GetNbCreatureByIdUser($idUser){
-            $req = $this->_bdd->prepare("SELECT * FROM `Entite` WHERE idUser=:idUser AND `idTypeEntite` ");
+            $req = $this->_bdd->prepare("SELECT COUNT(*) FROM `Entite` WHERE idUser=:idUser AND `idTypeEntite`=0");
             $req->execute(['idUser' => $idUser]);
             if($tab = $req->fetch()){
-                return $tab;
+                return $tab[0];
             }
         }
     }

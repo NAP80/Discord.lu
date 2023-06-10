@@ -43,5 +43,14 @@
         public function getLogoFaction(){
             return $this->_logoFaction;
         }
+
+        /** Récupère Name Faction by ID (Pour Classement)*/
+        public function getNameFactionById($idFaction){
+            $req = $this->_bdd->prepare("SELECT `nameFaction` FROM `Faction` WHERE idFaction=:idFaction");
+            $req->execute(['idFaction' => $idFaction]);
+            if($tab = $req->fetch()){
+                return $tab['nameFaction'];
+            }
+        }
     }
 ?>
