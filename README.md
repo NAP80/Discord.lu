@@ -35,7 +35,7 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - - Page de présentation du site (Inscription),
 - - Mettre des CGU ou un truc légal,
 - - Page Profil,
-- - Mettre en place Top/Classement
+- - Intégerer Vie/Attaque/Défense au Classement,
 - Jeu :
 - - Système d'Actions Personnages,
 - - Amélioration du système de Faction,
@@ -102,4 +102,5 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Implémenter des Avatars/Fonds par défaults,
 - Refonte d'une partie des API et JS,
 - Patch des erreurs JS originels du changement d'équipement,
-- Sécurisation Injection SQL.
+- Sécurisation Injection SQL,
+- Mettre en place Classement.
