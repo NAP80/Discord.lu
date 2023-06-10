@@ -8,6 +8,7 @@
         public $_degat;
         public $_imgEntite;
         public $_lvlEntite; // À dégager
+        public $_dateTimeEntite;
         public $_idUser;
         public $sacEquipements=array();
         public $sacEquipe=array();
@@ -22,7 +23,7 @@
             $this->_bdd = $bdd;
         }
 
-        public function setEntite($idEntite,$nameEntite,$healthNow,$degat,$healthMax,$imgEntite,$idTypeEntite,$lvlEntite,$idUser){
+        public function setEntite($idEntite,$nameEntite,$healthNow,$degat,$healthMax,$imgEntite,$idTypeEntite,$lvlEntite,$dateTimeEntite,$idUser){
             $this->_idEntite = $idEntite;
             $this->_nameEntite = $nameEntite;
             $this->_healthNow = $healthNow;
@@ -31,6 +32,7 @@
             $this->_imgEntite = $imgEntite;
             $this->_idTypeEntite = $idTypeEntite;
             $this->_lvlEntite = $lvlEntite;
+            $this->_dateTimeEntite = $dateTimeEntite;
             $this->_idUser = $idUser;
 
             if($this->_idTypeEntite == 1){
@@ -48,7 +50,7 @@
             $req = $this->_bdd->prepare("SELECT * FROM `Entite` WHERE `idEntite`=:idEntite");
             $req->execute(['idEntite' => $idEntite]);
             if($tab = $req->fetch()){
-                $this->setEntite($tab["idEntite"], $tab["nameEntite"], $tab["healthNow"], $tab["degat"], $tab["healthMax"], $tab["imgEntite"], $tab["idTypeEntite"], $tab["lvlEntite"], $tab["idUser"]);
+                $this->setEntite($tab["idEntite"], $tab["nameEntite"], $tab["healthNow"], $tab["degat"], $tab["healthMax"], $tab["imgEntite"], $tab["idTypeEntite"], $tab["lvlEntite"], $tab["dateTimeEntite"], $tab["idUser"]);
                 //recherche de sa position
                 $mapEntite = new map($this->_bdd);
                 $mapEntite->setMapByID($tab["idMap"]);
@@ -97,6 +99,11 @@
 
         /** Return Lvl */
         public function getIdTypeEntite(){
+            return $this->_idTypeEntite;
+        }
+
+        /** Return DateTime */
+        public function getIdDateTimeEntite(){
             return $this->_idTypeEntite;
         }
 
