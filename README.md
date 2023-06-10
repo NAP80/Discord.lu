@@ -16,19 +16,19 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 
 ## Todo List :
 - Dev :
+- - Refaire le délire des "Valeurs",
 - - Vérification JS Inscription FRONT,
 - - Intégration envoie de mail et confirmation inscription,
 - - Ajout Boite de Dialog pour RepMSG,
 - - Intégration Panel Admin,
 - - Intégrer les différents display/affichage.php dans l'objet PHP Map,
 - - Séparer Attaque Physique/Distance et idem avec Défense/Résistance,
-- - Mettre en place correctement le bouton Déco,
 - - Regex pour les MDP/Mails/Pseudo,
 - Style :
 - - Patch CSS Décalage Dialog,
 - - Patch le footer,
 - - Refaire l'intégralité du CSS,
-- - Refaire le Menu,
+- - Refaire le Menu (Y compris Boutton Déco),
 - JS :
 - - Afficher Coord des Creatures Captured dans Combat,
 - Site :
@@ -103,4 +103,5 @@ En cas de problème rencontré, n'hésitez pas à le signaler ici, de préféren
 - Refonte d'une partie des API et JS,
 - Patch des erreurs JS originels du changement d'équipement,
 - Sécurisation Injection SQL,
+- Mettre en place correctement le bouton Déco,
 - Mettre en place Classement.
