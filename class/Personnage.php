@@ -291,13 +291,14 @@
                                 <p  data-action="actionJ2">Des actions joueurs.</p>
                                 <script>
                                     function actionJ0() {
-                                        console.log("Action joueurs 0");
+                                        console.log("Fouiller la zone");
                                     }
                                     function actionJ1() {
-                                        console.log("Action joueurs 1");
+                                        console.log("Se cacher");
+                                        console.log("Sortir de sa cachette");
                                     }
                                     function actionJ2() {
-                                        console.log("Action joueurs 2");
+                                        console.log("Fuir");
                                     }
                                 </script>
                             <?php
@@ -306,14 +307,14 @@
                         if($TypeUser->getPermBypass()){
                             ?>
                                 <b class="">ByPass :</b>
-                                <p data-action="actionB0">Des actions ByPass.</p>
-                                <p data-action="actionB1">Des actions ByPass.</p>
+                                <p data-action="actionB0">Régénérer Vie.</p>
+                                <p data-action="actionB1">Régénérer Déplacement.</p>
                                 <script>
                                     function actionB0() {
-                                        console.log("Action ByPass 0");
+                                        console.log("Régénérer Vie");
                                     }
                                     function actionB1() {
-                                        console.log("Action ByPass 1");
+                                        console.log("Régénérer Déplacement");
                                     }
                                 </script>
                             <?php
@@ -338,14 +339,26 @@
                         if($TypeUser->getPermAdmin()){
                             ?>
                                 <b class="">Admin :</b>
-                                <p data-action="actionA0">Des actions Admin.</p>
-                                <p data-action="actionA1">Des actions Admin.</p>
+                                <p data-action="actionA0">Tuer tout les joueurs.</p>
+                                <p data-action="actionA1">Tuer tout les monstres.</p>
+                                <p data-action="actionA2">Détruire Objet au sol.</p>
+                                <p data-action="actionA3">Se cacher (Admin).</p>
+                                <p data-action="actionA4">Sortir Cachette (Admin).</p>
                                 <script>
                                     function actionA0() {
-                                        console.log("Action Admin 0");
+                                        console.log("Tuer tout les joueurs");
                                     }
                                     function actionA1() {
-                                        console.log("Action Admin 1");
+                                        console.log("Tuer tout les monstres");
+                                    }
+                                    function actionA2() {
+                                        console.log("Détruire Objet au sol");
+                                    }
+                                    function actionA3() {
+                                        console.log("Se cacher (Admin)");
+                                    }
+                                    function actionA4() {
+                                        console.log("Sortir Cachette (Admin)");
                                     }
                                 </script>
                             <?php
