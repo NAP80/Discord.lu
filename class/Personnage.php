@@ -263,31 +263,135 @@
         public function getActionsPerso($User){
             $TypeUser = new TypeUser($this->_bdd);
             $TypeUser->setTypeUserByIdUser($User->getIdUser());
-            if($TypeUser->getPermPlay()){
-                ?>
-                    <b class="">Actions :</b>
-                <?php
-            }
-            else{
-                ?>
-                    <b class="">Vous ne pouvez rien faire.</b>
-                <?php
-            }
-            if($TypeUser->getPermAdmin()){
-                ?>
-                    <b class="">Admin :</b>
-                <?php
-            }
-            if($TypeUser->getPermStaff()){
-                ?>
-                    <b class="">Staff :</b>
-                <?php
-            }
-            if($TypeUser->getPermBypass()){
-                ?>
-                    <b class="">ByPass :</b>
-                <?php
-            }
+            ?>
+                <b class="">Actions :</b>
+                <div class="Actions">
+                    <?php
+                        // Action Sanction
+                        if($TypeUser->getPermPlay() == 0){
+                            ?>
+                                <p data-action="actionSJ0">Vous ne pouvez rien faire.</p>
+                                <p data-action="actionSJ1">Vous ne pouvez rien faire.</p>
+                                <script>
+                                    function actionSJ0() {
+                                        console.log("Action Sanction 0");
+                                    }
+            
+                                    function actionSJ1() {
+                                        console.log("Action Sanction 1");
+                                    }
+                                </script>
+                            <?php
+                        }
+                        // Action Joueur
+                        else{
+                            ?>
+                                <p data-action="actionJ0">Des actions joueurs.</p>
+                                <p data-action="actionJ1">Des actions joueurs.</p>
+                                <p  data-action="actionJ2">Des actions joueurs.</p>
+                                <script>
+                                    function actionJ0() {
+                                        console.log("Action joueurs 0");
+                                    }
+                                    function actionJ1() {
+                                        console.log("Action joueurs 1");
+                                    }
+                                    function actionJ2() {
+                                        console.log("Action joueurs 2");
+                                    }
+                                </script>
+                            <?php
+                        }
+                        // Action ByPass
+                        if($TypeUser->getPermBypass()){
+                            ?>
+                                <b class="">ByPass :</b>
+                                <p data-action="actionB0">Des actions ByPass.</p>
+                                <p data-action="actionB1">Des actions ByPass.</p>
+                                <script>
+                                    function actionB0() {
+                                        console.log("Action ByPass 0");
+                                    }
+                                    function actionB1() {
+                                        console.log("Action ByPass 1");
+                                    }
+                                </script>
+                            <?php
+                        }
+                        // Action Staff
+                        if($TypeUser->getPermStaff()){
+                            ?>
+                                <b class="">Staff :</b>
+                                <p data-action="actionS0">Des actions Staff.</p>
+                                <p data-action="actionS1">Des actions Staff.</p>
+                                <script>
+                                    function actionS0() {
+                                        console.log("Action Staff 0");
+                                    }
+                                    function actionS1() {
+                                        console.log("Action Staff 1");
+                                    }
+                                </script>
+                            <?php
+                        }
+                        // Action Admin
+                        if($TypeUser->getPermAdmin()){
+                            ?>
+                                <b class="">Admin :</b>
+                                <p data-action="actionA0">Des actions Admin.</p>
+                                <p data-action="actionA1">Des actions Admin.</p>
+                                <script>
+                                    function actionA0() {
+                                        console.log("Action Admin 0");
+                                    }
+                                    function actionA1() {
+                                        console.log("Action Admin 1");
+                                    }
+                                </script>
+                            <?php
+                        }
+                    ?>
+                </div>
+                <script>
+                    var actionElements = document.querySelectorAll('.Actions p');
+                    actionElements.forEach(function(element){
+                        element.addEventListener('click', function(){
+                            var action = element.getAttribute('data-action');
+                            // Apelle la fonction en suivant 
+                            window[action]();
+                        });
+                    });
+                    /*function callAction(idAction){
+                            fetch('api/useEquipement.php?idEquipement=' + idEquipement)
+                            .then((resp) => resp.json())
+                            .then(function(data){
+                                console.log(data)
+                                if(data[0] !=0){
+                                    var li = document.getElementById("equipementSac"+ idEquipement)
+                                    if(li!='undefine'){
+                                        li.remove()
+                                    }
+                                    var divAtta = document.getElementById("attaqueEntiteValeur" + data[0])
+                                    if(data[1] == 1){
+                                        UpdateArme(idEquipement,data[2],data[3],data[4],data[10])
+                                        divAtta.classList.add("standard")
+                                        divAtta.classList.remove("distance")
+                                    }
+                                    if(data[1] == 2){
+                                        UpdateArmure(idEquipement,data[2],data[3],data[4],data[10])
+                                        divAtta.classList.add("standard")
+                                        divAtta.classList.remove("distance")
+                                    }
+                                }
+                            })
+                            .catch(function(error){
+                                console.log(error)
+                            });
+                        }*/
+
+                        
+                </script>
+            <?php
         }
 
         /** Affiche le rendu HTML du Personnage */
