@@ -274,17 +274,6 @@
     margin-left: 10%;
 }
 
-.divActionsPerso{
-    padding:10px;
-    width:200px;
-    background-color:rgba(235, 225, 42, 0.85);
-    border:1px solid rgba(205, 196, 23, 0.9);
-    border-radius: 10px;
-    box-shadow:2px 2px 2px rgb(178, 170, 13);
-    -webkit-box-shadow:2px 2px 2px rgb(178, 170, 13);
-    margin-left: 10%;
-}
-
 .effect {
     position: absolute;
 }
@@ -402,4 +391,22 @@
     margin-bottom: 31px;
     margin-left: 36px;
     z-index: 1;
+}
+
+/** Actions */
+
+.divActionsPerso{
+    padding:10px;
+    width:200px;
+    background-color:rgba(235, 225, 42, 0.85);
+    border:1px solid rgba(205, 196, 23, 0.9);
+    border-radius: 10px;
+    box-shadow:2px 2px 2px rgb(178, 170, 13);
+    -webkit-box-shadow:2px 2px 2px rgb(178, 170, 13);
+    margin-left: 10%;
+}
+
+.Actions p{
+    padding:0px;
+    margin:0px;
 }
