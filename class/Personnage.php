@@ -270,139 +270,169 @@
                         // Action Sanction
                         if($TypeUser->getPermPlay() == 0){
                             ?>
-                                <p data-action="actionSJ0">Vous ne pouvez rien faire.</p>
-                                <p data-action="actionSJ1">Vous ne pouvez rien faire.</p>
-                                <script>
-                                    function actionSJ0() {
-                                        console.log("Action Sanction 0");
-                                    }
-            
-                                    function actionSJ1() {
-                                        console.log("Action Sanction 1");
-                                    }
-                                </script>
+                                <p data-action="B00">Vous ne pouvez rien faire.</p>
+                                <p data-action="B01">Vous ne pouvez rien faire.</p>
                             <?php
                         }
                         // Action Joueur
                         else{
                             ?>
-                                <p data-action="actionJ0">Des actions joueurs.</p>
-                                <p data-action="actionJ1">Des actions joueurs.</p>
-                                <p  data-action="actionJ2">Des actions joueurs.</p>
-                                <script>
-                                    function actionJ0() {
-                                        console.log("Fouiller la zone");
-                                    }
-                                    function actionJ1() {
-                                        console.log("Se cacher");
-                                        console.log("Sortir de sa cachette");
-                                    }
-                                    function actionJ2() {
-                                        console.log("Fuir");
-                                    }
-                                </script>
+                                <p data-action="J00">Fouiller</p>
+                                <p data-action="J01">Se Cacher/Sortir</p>
+                                <p data-action="J02">Fuir</p>
+                                <p data-action="J03">Se téléporter à la Maison</p>
                             <?php
                         }
                         // Action ByPass
                         if($TypeUser->getPermBypass()){
                             ?>
                                 <b class="">ByPass :</b>
-                                <p data-action="actionB0">Régénérer Vie.</p>
-                                <p data-action="actionB1">Régénérer Déplacement.</p>
-                                <script>
-                                    function actionB0() {
-                                        console.log("Régénérer Vie");
-                                    }
-                                    function actionB1() {
-                                        console.log("Régénérer Déplacement");
-                                    }
-                                </script>
+                                <p data-action="T00">Régénérer Vie.</p>
+                                <p data-action="T01">Régénérer Déplacement.</p>
                             <?php
                         }
                         // Action Staff
                         if($TypeUser->getPermStaff()){
                             ?>
                                 <b class="">Staff :</b>
-                                <p data-action="actionS0">Des actions Staff.</p>
-                                <p data-action="actionS1">Des actions Staff.</p>
-                                <script>
-                                    function actionS0() {
-                                        console.log("Action Staff 0");
-                                    }
-                                    function actionS1() {
-                                        console.log("Action Staff 1");
-                                    }
-                                </script>
+                                <p data-action="S00">Des actions Staff.</p>
+                                <p data-action="S01">Des actions Staff.</p>
                             <?php
                         }
                         // Action Admin
                         if($TypeUser->getPermAdmin()){
                             ?>
                                 <b class="">Admin :</b>
-                                <p data-action="actionA0">Tuer tout les joueurs.</p>
-                                <p data-action="actionA1">Tuer tout les monstres.</p>
-                                <p data-action="actionA2">Détruire Objet au sol.</p>
-                                <p data-action="actionA3">Se cacher (Admin).</p>
-                                <p data-action="actionA4">Sortir Cachette (Admin).</p>
-                                <script>
-                                    function actionA0() {
-                                        console.log("Tuer tout les joueurs");
-                                    }
-                                    function actionA1() {
-                                        console.log("Tuer tout les monstres");
-                                    }
-                                    function actionA2() {
-                                        console.log("Détruire Objet au sol");
-                                    }
-                                    function actionA3() {
-                                        console.log("Se cacher (Admin)");
-                                    }
-                                    function actionA4() {
-                                        console.log("Sortir Cachette (Admin)");
-                                    }
-                                </script>
+                                <p data-action="A00">Tuer tout les joueurs.</p>
+                                <p data-action="A01">Tuer tout les monstres.</p>
+                                <p data-action="A02">Détruire Objet au sol.</p>
+                                <p data-action="A03">Se cacher (Admin).</p>
+                                <p data-action="A04">Sortir Cachette (Admin).</p>
+                                <p data-action="A05">Générer Objet.</p>
+                                <p data-action="A06">Générer Monstre.</p>
+                                <p data-action="A07">Se Téléporter.</p>
                             <?php
                         }
                     ?>
                 </div>
                 <script>
+                    // Mise en place des Clicks Actions
                     var actionElements = document.querySelectorAll('.Actions p');
                     actionElements.forEach(function(element){
                         element.addEventListener('click', function(){
                             var action = element.getAttribute('data-action');
-                            // Apelle la fonction en suivant 
-                            window[action]();
+                            callAction(action);
                         });
                     });
-                    /*function callAction(idAction){
-                            fetch('api/useEquipement.php?idEquipement=' + idEquipement)
-                            .then((resp) => resp.json())
-                            .then(function(data){
-                                console.log(data)
-                                if(data[0] !=0){
-                                    var li = document.getElementById("equipementSac"+ idEquipement)
-                                    if(li!='undefine'){
-                                        li.remove()
-                                    }
-                                    var divAtta = document.getElementById("attaqueEntiteValeur" + data[0])
-                                    if(data[1] == 1){
-                                        UpdateArme(idEquipement,data[2],data[3],data[4],data[10])
-                                        divAtta.classList.add("standard")
-                                        divAtta.classList.remove("distance")
-                                    }
-                                    if(data[1] == 2){
-                                        UpdateArmure(idEquipement,data[2],data[3],data[4],data[10])
-                                        divAtta.classList.add("standard")
-                                        divAtta.classList.remove("distance")
-                                    }
+                    // Fonction d'API Actions
+                    function callAction(idAction){
+                        fetch('api/useAction.php?idAction=' + idAction)
+                        .then((resp) => resp.json())
+                        // Réponse
+                        .then(function(data){
+                            console.log(data)
+                            if(data[0] != 0){
+                                switch(data[0]){
+                                    <?php 
+                                        if($TypeUser->getPermPlay() == 0){
+                                            ?>
+                                                case "B00":// Sanction 0
+                                                    if(1){
+                                                    }
+                                                    break;
+                                                case "B01":// Sanction 1
+                                                    if(1){
+                                                    }
+                                                    break;
+                                            <?php
+                                        }
+                                        if($TypeUser->getPermPlay() == 1){
+                                            ?>
+                                                case "J00":// Fouiller
+                                                    break;
+                                                case "J01":// Se cacher/Sortir
+                                                    if(1){
+                                                    }
+                                                    break;
+                                                case "J02":// Fuir
+                                                    if(1){
+                                                    }
+                                                    break;
+                                                case "J03":// Téléporte Home
+                                                    break;
+                                            <?php
+                                        }
+                                        if($TypeUser->getPermBypass()){
+                                            ?>
+                                                case "T00":// Régénérer Vie
+                                                    if(1){
+                                                    }
+                                                    break;
+                                                case "T01":// Régénérer Déplacement
+                                                    if(1){
+                                                    }
+                                                    break;
+                                            <?php
+                                        }
+                                        if($TypeUser->getPermStaff()){
+                                            ?>
+                                                case "S00":// Staff 0
+                                                    if(1){
+                                                    }
+                                                    break;
+                                                case "S01":// Staff 1
+                                                    if(1){
+                                                    }
+                                                    break;
+                                            <?php
+                                        }
+                                        if($TypeUser->getPermAdmin()){
+                                            ?>
+                                                case "A00":// Admin 0
+                                                    if(1){
+                                                    }
+                                                    break;
+                                                case "A01":// Admin 1
+                                                    if(1){
+                                                    }
+                                                    break;
+                                                case "A02":// Admin 1
+                                                    if(1){
+                                                    }
+                                                    break;
+                                                case "A03":// Admin 1
+                                                    if(1){
+                                                    }
+                                                    break;
+                                                case "A04":// Admin 1
+                                                    if(1){
+                                                    }
+                                                    break;
+                                                case "A05":// Admin 1
+                                                    if(1){
+                                                    }
+                                                    break;
+                                                case "A06":// Admin 1
+                                                    if(1){
+                                                    }
+                                                    break;
+                                                case "A07":// Admin 1
+                                                    if(1){
+                                                    }
+                                                    break;
+                                            <?php
+                                        }
+                                    ?>
+                                        default:
+                                            break;
                                 }
-                            })
-                            .catch(function(error){
-                                console.log(error)
-                            });
-                        }*/
-
-                        
+                                log(data[9])
+                            }
+                        })
+                        .catch(function(error){
+                            console.log(error)
+                        });
+                    }
                 </script>
             <?php
         }
